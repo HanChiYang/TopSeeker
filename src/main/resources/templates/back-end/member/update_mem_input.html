@@ -1,0 +1,197 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>會員資料修改</title>
+
+<head th:insert="~{/back-end/member/included-fragment}"></head>
+<style type="text/css">
+	
+	button {
+		padding: 5px;
+	}
+	form {
+		display: table;
+	}
+	form div {
+		display: table-row;
+	}
+	label, input, span, select {
+		display: table-cell;
+		margin: 5px;
+		text-align: left;		
+	}
+	input[type=text], input[type=password], select, textarea {
+		width: 200px;
+		margin: 5px;
+	}
+	form div div {
+		display: table-cell;
+	}
+	.center {
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
+		 <div align="center"> <h2>會員資料修改</h2>
+		 <h3><a class="navbar-brand" th:href="@{/member/select_page}"><img th:src="@{/images/back1.gif}">回查詢頁</a></h3></div>
+</nav>
+
+	<div align="center">
+		<h3><b>所有欄位皆為必填欄位</b></h3>
+		<form th:action="@{update}" method="post" th:object="${memberVO}" enctype="multipart/form-data">
+			
+			<div>
+			<label>會員編號:</label>
+			<input type="text" th:field="*{memNo}" style="border:0px ; font-weight: bold;" readonly /><br/>
+			</div>
+			
+			<div>
+			<label>會員姓名:</label>
+			<input type="text" th:field="*{memName}" onclick="hideContent('memName.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('memName')}" th:errors="*{memName}" class="error" id="memName.errors"></span>
+			</div>
+			
+<!-- 			<div> -->
+<!-- 			<label>性別:</label> -->
+<!-- 			<input type="text" th:field="*{memSex}" onclick="hideContent('memSex.errors');" /><br/> -->
+<!-- 			<span  th:if="${#fields.hasErrors('memSex')}" th:errors="*{memSex}" class="error" id="memSex.errors"></span> -->
+<!-- 			</div> -->
+
+			<div>
+			<label>性別:</label>
+			<input type="radio" th:field="*{memSex}" value="m" onclick="hideContent('memSex.errors');" />男
+			<input type="radio" th:field="*{memSex}" value="f" onclick="hideContent('memSex.errors');" />女<br/>
+			<span  th:if="${#fields.hasErrors('memSex')}" th:errors="*{memSex}" class="error" id="memSex.errors"></span>
+			</div>
+			
+			<div>
+			<label>電話:</label>
+			<input type="text" th:field="*{memPhone}" onclick="hideContent('memPhone.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('memPhone')}" th:errors="*{memPhone}" class="error" id="memPhone.errors"></span>
+			</div>
+			
+			<div>
+			<label>電子信箱:</label>
+			<input type="text" th:field="*{memEmail}" onclick="hideContent('memEmail.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('memEmail')}" th:errors="*{memEmail}" class="error" id="memEmail.errors"></span>
+			</div>
+			
+			<div>
+			<label>身分證字號:</label>
+			<input type="text" th:field="*{memUid}" onclick="hideContent('memUid.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('memUid')}" th:errors="*{memUid}" class="error" id="memUid.errors"></span>
+			</div>
+			
+			<div>
+			<label>生日:</label>
+			<input type="date" th:field="*{memBirthday}" onclick="hideContent('memBirthday.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('memBirthday')}" th:errors="*{memBirthday}" class="error" id="memBirthday.errors"></span>
+			</div>
+
+			<div>
+			<label>帳號:</label>
+			<input type="text" th:field="*{memAccount}" onclick="hideContent('memAccount.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('memAccount')}" th:errors="*{memAccount}" class="error" id="memAccount.errors"></span>
+			</div>
+			
+			<div>
+			<label>密碼:</label>
+			<input type="text" th:field="*{memPassword}" onclick="hideContent('memPassword.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('memPassword')}" th:errors="*{memPassword}" class="error" id="memPassword.errors"></span>
+			</div>
+			
+			
+			<div>
+			<label>照片:</label>
+			<input type="file" th:field="*{memImg}" onclick="previewImage()" multiple="multiple" />
+            <!-- 可以不修改圖片 <span  th:if="${#fields.hasErrors('upFiles')}" th:errors="*{upFiles}" class="error" id="upFiles.errors"></span> -->
+			<div id="blob_holder"><img th:src="@{/member/DBGifReader} + '?memNo=' + ${memberVO.memNo}" width="100px"></div>
+			</div>
+			
+			<div>
+			<label>狀態:</label>
+			<input type="radio" th:field="*{memStatus}" value="1" onclick="hideContent('memStatus.errors');" />已驗證
+			<input type="radio" th:field="*{memStatus}" value="0" onclick="hideContent('memStatus.errors');" />停權<br/>
+			<span  th:if="${#fields.hasErrors('memStatus')}" th:errors="*{memStatus}" class="error" id="memStatus.errors"></span>
+			</div>
+
+			
+			<div>
+				<div></div>
+				<div><button type="submit" id="submit"> 送出修改 </button></div>
+				<div></div>
+			</div>		
+		</form>
+	
+	</div>
+
+
+<!-- JavaScript part -->
+<script type="text/javascript">
+//清除提示信息
+function hideContent(d) {
+     document.getElementById(d).style.display = "none";
+}
+
+//照片上傳-預覽用
+var filereader_support = typeof FileReader != 'undefined';
+if (!filereader_support) {
+	alert("No FileReader support");
+}
+acceptedTypes = {
+		'image/png' : true,
+		'image/jpeg' : true,
+		'image/gif' : true
+};
+function previewImage() {
+	var memImg = document.getElementById("memImg");
+	memImg.addEventListener("change", function(event) {
+		var files = event.target.files || event.dataTransfer.files;
+		for (var i = 0; i < files.length; i++) {
+			previewfile(files[i])
+		}
+	}, false);
+}
+function previewfile(file) {
+	if (filereader_support === true && acceptedTypes[file.type] === true) {
+		var reader = new FileReader();
+		reader.onload = function(event) {
+			var image = new Image();
+			image.src = event.target.result;
+			image.width = 100;
+			image.height = 75;
+			image.border = 2;
+			if (blob_holder.hasChildNodes()) {
+				blob_holder.removeChild(blob_holder.childNodes[0]);
+			}
+			blob_holder.appendChild(image);
+		};
+		reader.readAsDataURL(file);
+		document.getElementById('submit').disabled = false;
+	} else {
+		blob_holder.innerHTML = "<div  style='text-align: left;'>" + "● filename: " + file.name
+				+ "<br>" + "● ContentTyp: " + file.type
+				+ "<br>" + "● size: " + file.size + "bytes"
+				+ "<br>" + "● 上傳ContentType限制: <b> <font color=red>image/png、image/jpeg、image/gif </font></b></div>";
+		document.getElementById('submit').disabled = true;
+	}
+}
+</script>
+
+</body>
+</html>

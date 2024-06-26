@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<title>後台管理首頁</title>
+
+<link rel="stylesheet" th:href="@{/css/index.css}" />
+<link rel="stylesheet" th:href="@{/out-statics/out-css/style.css}" />
+
+</head>
+<body>
+
+    <nav id="navbar">
+        <h1>後台管理首頁</h1>
+    </nav>
+
+    <div class="container">
+        <h2 class="section-title">
+            <a th:href="@{/member/select_page}" class="section-link">會員管理</a>
+        </h2>
+        <h2 class="section-title">
+            <a th:href="@{/employee/select_page}" class="section-link">員工管理</a>
+        </h2>
+        <h2 class="section-title">
+            <a th:href="@{/store/select_page}" class="section-link">商城管理</a>
+        </h2>
+        <h2 class="section-title">
+            <a th:href="@{/community/select_page}" class="section-link">社群管理</a>
+        </h2>
+        <h2 class="section-title">
+            <a th:href="@{/package/select_page}" class="section-link">套裝行程管理</a>
+        </h2>
+        <h2 class="section-title">
+            <a th:href="@{/group/select_page}" class="section-link">揪團管理</a>
+        </h2>
+    </div>
+
+<!--     <script src="./jquery/jquery-3.4.1.min.js"></script> -->
+    <script th:src="@{/out-statics/out-js/app4.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+.hello-color {color: yellow;}
+
+body {
+  padding-top: 8rem;
+  font-weight: bold;
+}
+
+.starter-template {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+h1 {
+  color: red;
+}
+
+h2 {
+  color: blue;
+  padding: 0rem 1.0rem 0rem 0rem;
+}
+
+.navbar-brand {
+  font-size: 25px;
+}
+
+a:hover, a:active {
+  color: red;
+  font-weight: bold;
+}
+
+.index-green {
+  font-size: 35px;
+  color: green;
+  font-weight: bold;
+}
+
+.container {
+  padding: 2rem;
+}
+
+.section-title {
+  margin: 1rem 0;
+}
+
+.section-link {
+  text-decoration: none;
+  color: blue;
+}
+
+.section-link:hover, .section-link:active {
+  color: red;
+  font-weight: bold;
+}
+
+#navbar{
+background-color: black;
+	
+	}
