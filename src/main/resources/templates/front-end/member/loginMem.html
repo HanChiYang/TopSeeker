@@ -23,6 +23,7 @@
             <input type="password" id="memPassword" name="memPassword" class="form-control">
         </div>
         
+        
         <!-- 顯示登入錯誤 -->
         <div th:if="${loginError}" class="alert alert-danger" role="alert">
             <span th:text="${loginError}"></span>
@@ -30,6 +31,7 @@
 
         <button type="submit" class="btn btn-primary">登入</button>
     </form>
+          <a class="nav-link" href="/member/forgetPW">忘記密碼</a>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
