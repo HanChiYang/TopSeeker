@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Mem;
 
-
 @Service("memberService")
 public class MemberService {
 
@@ -48,8 +47,29 @@ public class MemberService {
 		return HibernateUtil_CompositeQuery_Mem.getAllC(map,sessionFactory.openSession());
 	}
 	
+	//會員登入
     public Optional<MemberVO> memLogin(String memAccount, String memPassword) {
         return repository.memLogin(memAccount, memPassword);
     }
-
+    
+    //會員驗證
+    public void verifyMem(Integer memNo) {
+    	repository.verifyMem(memNo);
+    }
+    
+    //修改密碼
+    public void updatePassword(String memPassword, Integer memNo) {
+    	repository.updatePassword(memPassword, memNo);
+    }
+    
+    //修改大頭貼
+    public void updateMemImg(byte[] memImg, Integer memNo) {
+    	repository.updateMemImg(memImg, memNo);
+    }
+    
+    //忘記密碼
+	public Optional<MemberVO> findByEmail(String memEmail) {
+        return repository.findByEmail(memEmail);
+	}
+	
 }

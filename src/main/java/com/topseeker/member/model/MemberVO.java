@@ -65,6 +65,16 @@ public class MemberVO implements java.io.Serializable {
 	@Column (name = "mem_status")
 	private Byte memStatus;
 
+	public MemberVO() {
+     
+	}
+	
+	//供忘記密碼使用
+	public MemberVO(Integer memNo, String memEmail) {
+        this.memNo = memNo;
+        this.memEmail = memEmail;
+        }
+	
 	public Integer getMemNo() {
 		return memNo;
 	}
