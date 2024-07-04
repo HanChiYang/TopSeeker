@@ -16,26 +16,34 @@ import javax.servlet.http.HttpSession;
 @WebFilter(urlPatterns = { "/protected/*" })
 public class MemLoginFilter implements Filter {
 
-	@Override
-	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
-			throws IOException, ServletException {
-		HttpServletRequest httpRequest = (HttpServletRequest) req;
-		HttpServletResponse httpResponse = (HttpServletResponse) res;
-		HttpSession session = httpRequest.getSession();
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+System.out.println("filter init");
+}
 
-		// 已登入
-		if (session.getAttribute("loggedInMember") != null) {
-			chain.doFilter(req, res);
-		
-		// 未登入
-		} else {
-			//儲存欲前往的頁面於session
-			String oriURL = httpRequest.getRequestURI();
-			session.setAttribute("oriURL", oriURL);
-			
-			//重導到登入頁面
-			httpResponse.sendRedirect(httpRequest.getContextPath() + "/member/loginMem");
-		}
-	}
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+            throws IOException, ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) req;
+        HttpServletResponse httpResponse = (HttpServletResponse) res;
+        HttpSession session = httpRequest.getSession();
+        System.out.println("dofilter");
 
+        // 檢查是否已登入
+        if (session.getAttribute("loggedInMember") != null) {
+            chain.doFilter(req, res); // 已登入，繼續執行後續過濾器
+        } else {
+            // 未登入，將原始要求的 URL 儲存到 session
+            String oriURL = httpRequest.getRequestURI();
+            session.setAttribute("oriURL", oriURL);
+
+            // 重導到登入頁面
+            httpResponse.sendRedirect(httpRequest.getContextPath() + "/member/loginMem");
+        }
+    }
+
+    @Override
+    public void destroy() {
+        // 可以在這裡清理資源
+    }
 }

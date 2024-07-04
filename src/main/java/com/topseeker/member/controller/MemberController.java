@@ -2,6 +2,7 @@ package com.topseeker.member.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -50,19 +51,16 @@ public class MemberController {
 
 	@Autowired
 	TokenService tokSvc;
-	
-//	@GetMapping("addMem")
-//	public String addMem(ModelMap model) {
-//		MemberVO memberVO = new MemberVO();
-//		model.addAttribute("memberVO", memberVO);
-//		return "back-end/member/addMem";
-//	}
+
 
 	/*************************** 註冊帳號 ******************/
 
 	@PostMapping("register")
 	public String insert(@Valid MemberVO memberVO, BindingResult result, ModelMap model,
-			@RequestParam("memImg") MultipartFile[] parts, HttpSession session) throws IOException {
+			@RequestParam("memImg") MultipartFile[] parts,
+			@RequestParam("memAccount") String memAccount,
+			@RequestParam("memEmail") String memEmail,
+			@RequestParam("memUid") String memUid, HttpSession session) throws IOException {
 
 		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
 		result = removeFieldError(memberVO, result, "memImg");
@@ -81,6 +79,29 @@ public class MemberController {
 		if (result.hasErrors()) {
 			return "front-end/member/registrationMem";
 		}
+		
+		
+		
+		//檢查是否有相同名稱帳號
+		
+	    List<String> errorMessages = new LinkedList<>();
+
+
+	    if (memSvc.findByAccount(memAccount) != null) {
+	        errorMessages.add("已有相同名稱帳號");
+	    }
+	    if (memSvc.findByEmail(memEmail).isPresent()) {
+	        errorMessages.add("已有相同電子郵件");
+	    }
+	    if (memSvc.findByUid(memUid) != null) {
+	        errorMessages.add("已有相同身份證字號");
+	    }
+
+	    if (!errorMessages.isEmpty()) {
+	        model.addAttribute("errorMessages", errorMessages);
+	        return "front-end/member/registrationMem";
+	    }
+		
 		/*************************** 2.開始新增資料 ***************************************/
 		memSvc.addMem(memberVO);
 		session.setAttribute("loggedInMember", memberVO);
@@ -90,7 +111,7 @@ public class MemberController {
 	}
 
 	// 會員驗證頁面mapping
-	@PostMapping("verifyPage")
+	@PostMapping("protected/verifyPage")
 	public String verifyMem(Model model) {
 		return "front-end/member/verifyMem";
 	}
@@ -158,7 +179,7 @@ public class MemberController {
 	/*************************** 修改密碼 ******************/
 
 	// 修改密碼頁面mapping
-	@PostMapping("updatePasswordPage")
+	@PostMapping("protected/updatePasswordPage")
 	public String updatePassword(Model model) {
 		return "front-end/member/updatePasswordPage";
 	}
@@ -187,7 +208,7 @@ public class MemberController {
 	}
 
 	/*************************** 修改大頭貼 *********************/
-	@PostMapping("/updatePic")
+	@PostMapping("updatePic")
 	public String updatePic(@RequestParam("memImg") MultipartFile[] parts, HttpSession session) throws IOException {
 		MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
 
@@ -206,20 +227,20 @@ public class MemberController {
 		return "front-end/member/indexMem";
 	}
 
-	/*************************** 檢視會員資料 ******************/
-
-	@PostMapping("inspect")
-	public String getOne_For_Update(HttpSession session, Model model) {
+	/******************** 後台進入單一會員修改頁面 ******************/
+	
+	@PostMapping("backend_protected/update")
+	public String getOne_For_Update(@RequestParam("memNo") String memNo, ModelMap model) {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ******************/
 		/*************************** 2.開始查詢資料 ***************************************/
-		MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
-//		Integer loggedInMemberNo = loggedInMember.getMemNo();
-//		MemberVO memberVO = memSvc.getOneMem(Integer.valueOf(memNo));
+		MemberVO memberVO = memSvc.getOneMem(Integer.valueOf(memNo));
 
 		/*************************** 3.查詢完成,準備轉交(Send the Success view) ***********/
-		model.addAttribute("memberVO", loggedInMember);
-		return "front-end/member/inspectMem"; //
+		model.addAttribute("memberVO", memberVO);
+		return "back-end/member/update_mem_input"; 
 	}
+	
+	/******************** 後台修改會員資料 ******************/
 
 	@PostMapping("update")
 	public String update(@Valid MemberVO memberVO, BindingResult result, ModelMap model,
@@ -230,7 +251,6 @@ public class MemberController {
 		result = removeFieldError(memberVO, result, "memImg");
 
 		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的新圖片時
-//			EmpService empSvc = new EmpService();
 			byte[] memImg = memSvc.getOneMem(memberVO.getMemNo()).getMemImg();
 			memberVO.setMemImg(memImg);
 		} else {
@@ -243,14 +263,30 @@ public class MemberController {
 			return "back-end/member/update_mem_input";
 		}
 		/*************************** 2.開始修改資料 ***************************************/
-//		EmpService empSvc = new EmpService();
 		memSvc.updateMem(memberVO);
 
 		/*************************** 3.修改完成,準備轉交(Send the Success view) ***********/
 		model.addAttribute("success", "- (修改成功)");
 		memberVO = memSvc.getOneMem(Integer.valueOf(memberVO.getMemNo()));
-		model.addAttribute("memberVO", memberVO);
-		return "back-end/member/listOneMem"; // 修改成功後轉交listOneEmp.jsp
+		model.addAttribute("MemberVO", memberVO);
+		
+		return "back-end/member/listOneMem";
+    
+	}
+	
+	/*************************** 檢視會員資料 ******************/
+
+	@PostMapping("protected/inspect")
+	public String getOne_For_Inspect(HttpSession session, Model model) {
+		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ******************/
+		/*************************** 2.開始查詢資料 ***************************************/
+		MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+//		Integer loggedInMemberNo = loggedInMember.getMemNo();
+//		MemberVO memberVO = memSvc.getOneMem(Integer.valueOf(memNo));
+
+		/*************************** 3.查詢完成,準備轉交(Send the Success view) ***********/
+		model.addAttribute("memberVO", loggedInMember);
+		return "front-end/member/inspectMem"; 
 	}
 
 	@PostMapping("listMems_ByCompositeQuery")
@@ -259,6 +295,11 @@ public class MemberController {
 		List<MemberVO> list = memSvc.getAll(map);
 		model.addAttribute("memListData", list); // for listAllEmp.jsp 第85行用
 		return "back-end/member/listAllMem";
+	}
+	
+	@GetMapping("memberManagement")
+	public String memberManagement() {
+		return "back-end/member/select_page";
 	}
 
 	/*************************** 登出、登入功能 ******************/
@@ -316,7 +357,7 @@ public class MemberController {
 
 	        tokSvc.saveToken(token, memNo, memEmail);
 
-	        String url = "http//localhost:8080/member/resetPassword?token=" + token;
+	        String url = "http://localhost:8080/member/resetPassword?token=" + token;
 	        String message = "請於三分鐘內點擊超連結以重設密碼: \n" + url;
 
 	        MailManager mailManager = new MailManager(mailServerPwd, mailServerUser);
@@ -343,6 +384,7 @@ public class MemberController {
 		MemberVO resetMember = tokSvc.checkToken(token);
 
 		if (resetMember == null) {
+			System.out.println("fail");
 			return "front-end/member/resetFail";
 		} else {
 			String resetMemEmail = resetMember.getMemEmail();

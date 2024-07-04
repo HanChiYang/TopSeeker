@@ -18,11 +18,11 @@
   
 <!--     <filter> -->
 <!--     <filter-name>loginFilter</filter-name> -->
-<!--     <filter-class>com.filter.MemLoginFilter1</filter-class> -->
+<!--     <filter-class>com.topseeker.filter.MemLoginFilter</filter-class> -->
 <!--   </filter> -->
 <!--   <filter-mapping> -->
 <!--     <filter-name>loginFilter</filter-name> -->
-<!--     <url-pattern>/notification/allNoti</url-pattern> -->
+<!--     <url-pattern>/notification/protected/allNoti</url-pattern> -->
 <!--     <dispatcher>REQUEST</dispatcher> -->
 <!--     <dispatcher>FORWARD</dispatcher> -->
 <!--     <dispatcher>INCLUDE</dispatcher> -->
