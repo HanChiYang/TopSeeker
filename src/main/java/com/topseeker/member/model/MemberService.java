@@ -71,5 +71,15 @@ public class MemberService {
 	public Optional<MemberVO> findByEmail(String memEmail) {
         return repository.findByEmail(memEmail);
 	}
+
+	//註冊會員時，確認帳號是否重複時使用
+	public MemberVO findByAccount(String memAccount) {
+		Optional<MemberVO> optional = repository.findByAccount(memAccount);
+		return optional.orElse(null);
+	}
 	
+	public MemberVO findByUid(String memUid) {
+		Optional<MemberVO> optional = repository.findByAccount(memUid);
+		return optional.orElse(null);
+	}
 }

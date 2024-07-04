@@ -2,107 +2,154 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>所有通知</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+	crossorigin="anonymous">
 
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" />
 <!-- <head th:insert="~{/front-end/notifcation/included-fragment}"></head> -->
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>                                    <!-- ●●js  for jquery datatables 用 -->
-<script	src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>              <!-- ●●js  for jquery datatables 用 -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" /> <!-- ●●css for jquery datatables 用 -->
 
-<!-- ●● jquery datatables 設定 -->
-<script>
-	$(document).ready(function() {
-		$('#example').DataTable({
-			"lengthMenu": [10, 20, 50],
-			"searching": false,  //搜尋功能, 預設是開啟
-		    "paging": true,     //分頁功能, 預設是開啟
-		    "ordering": false,   //排序功能, 預設是開啟
-		    "language": {
-		        "processing": "處理中...",
-		        "loadingRecords": "載入中...",
-		        "lengthMenu": "顯示 _MENU_ 筆結果",
-		        "zeroRecords": "沒有符合的結果",
-		        "info": "顯示第 _START_ 至 _END_ 筆結果，共<font color=red> _TOTAL_ </font>筆",
-		        "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
-		        "infoFiltered": "(從 _MAX_ 筆結果中過濾)",
-		        "infoPostFix": "",
-		        "search": "搜尋:",
-		        "paginate": {
-		            "first": "第一頁",
-		            "previous": "上一頁",
-		            "next": "下一頁",
-		            "last": "最後一頁"
-		        },
-                "aria": {
-                    "sortAscending": ": 升冪排列",
-                    "sortDescending": ": 降冪排列"
-                }
-		    }
-		});
-	});
-</script>
 <style type="text/css">
+* {
+	box-sizing: border-box;
+}
+
 body {
 	margin: 1rem 12rem 2rem 12rem;
 }
 
 #example td {
-    white-space: nowrap; /* 防止单元格内容换行 */
-    overflow: hidden;    /* 隐藏溢出内容 */
-    text-overflow: ellipsis; /* 显示省略号以指示溢出内容 */
+	white-space: nowrap; /* 防止单元格内容换行 */
+	overflow: hidden; /* 隐藏溢出内容 */
+	text-overflow: ellipsis; /* 显示省略号以指示溢出内容 */
 }
 
 #example th, #example td {
-    padding: 8px; /* 调整单元格内边距 */
-    text-align: left; /* 调整单元格对齐方式 */
+	padding: 8px; /* 调整单元格内边距 */
+	text-align: left; /* 调整单元格对齐方式 */
 }
 
 #example th {
-    background-color: #CCCCFF; /* 设置表头背景颜色 */
-    position: relative; /* 相对定位以便排序箭头定位 */
+	background-color: #C1FFC1;
+	position: relative; 
 }
 
-#example th .sorting,
-#example th .sorting_asc,
-#example th .sorting_desc {
-    position: absolute;
-    right: 10px; /* 调整箭头的位置 */
+#example th .sorting, #example th .sorting_asc, #example th .sorting_desc
+	{
+	position: absolute;
+	right: 10px;
 }
 
-img {
-    max-width: 100px; /* 设置图片最大宽度 */
-    height: auto; /* 保持图片宽高比 */
+#content {
+	margin-top: 80px;
 }
+
+#example_wrapper {
+	margin-top: 20px;
+}
+
+#example > thead > tr > th:nth-child(2) {
+	width: 800px !important;
+
+}
+
+#example>thead>tr>th:nth-child(1) {
+	width: 200px !important;
+}
+
+#example_length > label {
+margin-bottom: 20px;
+}
+
+
+tr.read > td {
+background-color: #D0CFCF !important;
+}
+
+tr.unread > td {
+background-color: white !important;
+}
+
 </style>
 
 </head>
 <body>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
-		 <div align="center"> <h2>所有通知</h2>
-		 <h3><a class="navbar-brand" th:href="@{/}">回首頁<label th:text="${success}"></label></a></h3></div>
-</nav>
+	<nav th:insert="~{/front-end/navbar.html}"></nav>
+	<div id="content">
+		<h1>所有通知</h1>
 
-<table id="example" class="display" style="width: 100%">
-  <thead >
-	<tr style="background-color:#CCCCFF">
-<!-- 		<th>計數</th> -->
-		<th>時間</th>
-		<th>內容</th>
-	</tr>
-  </thead>
-	
-  <tbody>
-  
-		<th:block th:each="notificationVO : ${notiListData}">
-			<tr>
-				<td th:text="${notificationVO.notiTime}"></td>
-				<td th:text="${notificationVO.notiContent}"></td>
-			</tr>
-		</th:block>
-  </tbody>
-</table>
+		<table id="example" class="display" style="width: 100%">
+			<thead>
+				<tr style="background-color: #CCCCFF">
 
+					<th>時間</th>
+					<th>內容</th>
+				</tr>
+			</thead>
+
+			<tbody id="tdArea">
+
+				<th:block th:each="notificationVO : ${notiListData}">
+					<tr th:class="${notificationVO.notiStatus == 1 ? 'read' : 'unread'}">
+						<td	th:text="${#dates.format(notificationVO.notiTime, 'yyyy-MM-dd HH:mm')}"></td>
+						<td th:text="${notificationVO.notiContent}"></td>
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+		 <button onclick="goBack()" class="btn btn-primary">回上一頁</button>
+	</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<!-- ●●js  for jquery datatables 用 -->
+<script
+	src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+
+<!-- ●● jquery datatables 設定 -->
+<script>
+	$(document)
+			.ready(
+					function() {
+						$('#example')
+								.DataTable(
+										{
+											"lengthMenu" : [ 10, 20, 50 ],
+											"searching" : false, //搜尋功能, 預設是開啟
+											"paging" : true, //分頁功能, 預設是開啟
+											"ordering" : false, //排序功能, 預設是開啟
+											"language" : {
+												"processing" : "處理中...",
+												"loadingRecords" : "載入中...",
+												"lengthMenu" : "顯示 _MENU_ 筆結果",
+												"zeroRecords" : "沒有符合的結果",
+												"info" : "顯示第 _START_ 至 _END_ 筆結果，共<font color=red> _TOTAL_ </font>筆",
+												"infoEmpty" : "顯示第 0 至 0 筆結果，共 0 筆",
+												"infoFiltered" : "(從 _MAX_ 筆結果中過濾)",
+												"infoPostFix" : "",
+												"search" : "搜尋:",
+												"paginate" : {
+													"first" : "第一頁",
+													"previous" : "上一頁",
+													"next" : "下一頁",
+													"last" : "最後一頁"
+												},
+												"aria" : {
+													"sortAscending" : ": 升冪排列",
+													"sortDescending" : ": 降冪排列"
+												}
+											}
+										});
+					});
+    function goBack() {
+        window.history.back();
+    }
+</script>
 </body>
 </html>
