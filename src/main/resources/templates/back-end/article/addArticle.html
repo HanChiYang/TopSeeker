@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <title>討論區文章管理</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    :root {
+      --header-height: 60px;
+      --aside-width: 240px;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    img {
+      max-width: 100%;
+    }
+    /* Header */
+    header.header {
+      border: 1px solid #ccc;
+      width: 100%;
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background-color: #f0f0f0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+    /* Hamburger Button */
+    header.header button.btn_hamburger {
+      display: none;
+    }
+    header.header nav ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    header.header nav ul li {
+    position: relative;
+      margin-right: 20px;
+    }
+    header.header nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+           header.header nav ul li:hover ul {
+      display: block;
+    }
+      header.header nav ul li ul {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+     header.header nav ul li ul li {
+      margin: 0;
+    }
+    header.header nav ul li ul li a {
+      padding: 10px;
+      display: block;
+      white-space: nowrap;
+    }
+    header.header nav ul li ul li a:hover {
+      background-color: #f0f0f0;
+    }
+    /* Aside Navigation */
+    aside.aside {
+      border: 1px solid #ccc;
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      height: calc(100% - var(--header-height));
+      width: var(--aside-width);
+      background-color: #e0e0e0;
+      overflow-y: auto;
+      padding: 20px;
+      transition: all 0.3s;
+      z-index: 900;
+    }
+    /* Hamburger Button for Aside */
+    aside.aside button.btn_hamburger {
+      display: none;
+    }
+    /* Media Query for Mobile */
+    @media screen and (max-width: 767px) {
+      aside.aside {
+        top: 0;
+        height: 100%;
+        transform: translateX(-100%);
+      }
+      aside.aside.-on {
+        transform: translateX(0%);
+      }
+      header.header button.btn_hamburger, aside.aside button.btn_hamburger {
+        display: inline-block;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #ccc;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+    }
+    aside.aside > nav.nav > ul.nav_list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    aside.aside > nav.nav > ul.nav_list > li > a {
+      display: block;
+      padding: 10px;
+      text-decoration: none;
+      color: #333;
+      transition: background-color 0.3s;
+    }
+    aside.aside > nav.nav > ul.nav_list > li > a:hover {
+      background-color: #ddd;
+    }
+    /* Main Content */
+    main.main {
+      margin-left: var(--aside-width);
+      padding: 20px;
+      background-color: #fff;
+      min-height: calc(100vh - var(--header-height));
+      transition: all 0.3s;
+    }
+    /* Media Query for Mobile */
+    @media screen and (max-width: 767px) {
+      main.main {
+        width: 100%;
+        margin-left: 0;
+      }
+    }
+    /* DataTable Styles */
+    table.dataTable {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    table.dataTable thead {
+      background-color: #f0f0f0;
+    }
+    table.dataTable th, table.dataTable td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    /* Form Styles */
+    form.add-article {
+      margin-top: 20px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      background-color: #f0f0f0;
+    }
+    form.add-article label, form.add-article input, form.add-article select {
+      display: block;
+      margin-bottom: 10px;
+    }
+    form.add-article input[type=text], form.add-article select {
+      width: 100%;
+      padding: 5px;
+    }
+       /* 按鈕樣式 */
+   .add-article button {
+    padding: 12px 24px; /* 調整內邊距 */
+    cursor: pointer;
+    border: none;
+    color: black;
+    font-size: 16px; /* 調整字體大小 */
+    border-radius: 5px; /* 圓角 */
+    transition: opacity 0.3s, transform 0.3s; /* 透明度和變形過渡效果 */
+    margin-top: 10px; /* 增加上邊距 */
+  }
+
+  .btn-submit {
+    background-color: #4CAF50; /* 綠色 */
+  }
+
+  .btn-cancel {
+    background-color: #f44336; /* 紅色 */
+    margin-left: 10px; /* 增加左邊距 */
+  }
+
+  .btn-submit:hover, .btn-cancel:hover {
+    opacity: 0.9;
+    transform: scale(1.05); /* 略微放大 */
+  }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <h1>Topseeker</h1>
+  <nav>
+    <ul>
+     <li><a href="#">登山用品商城</a></li>
+      <li><a href="#">套裝行程瀏覽</a></li>
+      <li><a href="#">揪團行程瀏覽</a></li>
+      <li>
+        <a href="#">討論區</a>
+        <ul>
+          <li><a href="http://localhost:8080/article/listAllArticle">登山情報</a></li>
+          <li><a href="#">新聞分享</a></li>
+          <li><a href="#">新手知識</a></li>
+          <li><a href="#">天氣分享</a></li>
+        </ul>
+      </li>
+      <li><a href="#">會員專區</a></li>
+    </ul>
+  </nav>
+</header>
+
+<aside class="aside">
+  <nav class="nav">
+    <button type="button" class="btn_hamburger">×</button>
+    <ul class="nav_list">
+      <li><a href="#">登山情報瀏覽</a></li>
+      <li><a href="#">最新消息</a></li>
+      <li><a href="#">北部區域</a></li>
+      <li><a href="#">西部區域</a></li>
+      <li><a href="#">東部區域</a></li>
+      <li><a href="#">南部區域</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<main class="main">
+  <form class="add-article" th:action="@{insert}" method="post" th:object="${articleVO}" enctype="multipart/form-data">
+    <h2>登山情報新增</h2>
+    <div>
+      <label for="memNo">會員編號:</label>
+      <select id="memNo" name="memNo" th:field="*{memberVO.memNo}">
+        <option th:each="memberVO : ${memberListData}" th:value="${memberVO.memNo}" th:text="${memberVO.memName}" />
+      </select>
+      <span th:if="${#fields.hasErrors('memberVO.memNo')}" th:errors="*{memberVO.memNo}" class="error"></span>
+    </div>
+    <div>
+      <label for="artTitle">文章標題:</label>
+      <input type="text" id="artTitle" name="artTitle" th:field="*{artTitle}" onclick="hideContent('artTitle.errors');" />
+      <span th:if="${#fields.hasErrors('artTitle')}" th:errors="*{artTitle}" class="error"></span>
+    </div>
+    <div>
+      <label for="artContent">文章內容:</label>
+      <input type="text" id="artContent" name="artContent" th:field="*{artContent}" onclick="hideContent('artContent.errors');" />
+      <span th:if="${#fields.hasErrors('artContent')}" th:errors="*{artContent}" class="error"></span>
+    </div>
+    <div>
+      <label for="artStatus">文章狀態:</label>
+      <select id="artStatus" name="artStatus" th:field="*{artStatus}">
+        <option value="0" th:text="'隱藏'">隱藏</option>
+        <option value="1" th:text="'公開'">公開</option>
+      </select>
+      <span th:if="${#fields.hasErrors('artStatus')}" th:errors="*{artStatus}" class="error"></span>
+    </div>
+    <div>
+      <label for="artPublishTime">發布時間:</label>
+      <input type="datetime" id="artPublishTime" name="artPublishTime" th:field="*{artPublishTime}" onclick="hideContent('artPublishTime.errors');" />
+      <span th:if="${#fields.hasErrors('artPublishTime')}" th:errors="*{artPublishTime}" class="error"></span>
+    </div>
+    <div>
+      <button type="submit">送出新增</button>
+       <button type="button" onclick="cancelAdd()">取消新增</button>
+    </div>
+  </form>
+
+  <!-- Placeholder for DataTable -->
+  <div style="margin-top: 20px;">
+    <table id="example" class="display">
+      <thead>
+        <tr>
+          <th>文章編號</th>
+          <th>會員編號</th>
+          <th>文章標題</th>
+          <th>文章內容</th>
+          <th>文章狀態</th>
+          <th>發布時間</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data rows will be dynamically populated -->
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<!-- DataTables Library -->
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#example').DataTable();
+  });
+</script>
+
+<!-- JavaScript part -->
+<script type="text/javascript">
+  //清除提示信息
+  function hideContent(d) {
+    document.getElementById(d).style.display = "none";
+  }
+  function cancelAdd() {
+     // 返回上一個網頁
+     history.back();
+   }
+</script>
+
+</body>
+</html>
