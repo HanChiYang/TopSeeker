@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <title>討論區文章管理</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    :root {
+      --header-height: 60px;
+      --aside-width: 240px;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    img {
+      max-width: 100%;
+    }
+    /* Header */
+    header.header {
+      border: 1px solid #ccc;
+      width: 100%;
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background-color: #f0f0f0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+    /* Hamburger Button */
+    header.header button.btn_hamburger {
+      display: none;
+    }
+    header.header nav ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    header.header nav ul li {
+      position: relative;
+      margin-right: 20px;
+    }
+    header.header nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+    header.header nav ul li:hover ul {
+      display: block;
+    }
+    header.header nav ul li ul {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    header.header nav ul li ul li {
+      margin: 0;
+    }
+    header.header nav ul li ul li a {
+      padding: 10px;
+      display: block;
+      white-space: nowrap;
+    }
+    header.header nav ul li ul li a:hover {
+      background-color: #f0f0f0;
+    }
+    /* Aside Navigation */
+    aside.aside {
+      border: 1px solid #ccc;
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      height: calc(100% - var(--header-height));
+      width: var(--aside-width);
+      background-color: #e0e0e0;
+      overflow-y: auto;
+      padding: 20px;
+      transition: all 0.3s;
+      z-index: 900;
+    }
+    /* Hamburger Button for Aside */
+    aside.aside button.btn_hamburger {
+      display: none;
+    }
+    /* Media Query for Mobile */
+    @media screen and (max-width: 767px) {
+      aside.aside {
+        top: 0;
+        height: 100%;
+        transform: translateX(-100%);
+      }
+      aside.aside.-on {
+        transform: translateX(0%);
+      }
+      header.header button.btn_hamburger, aside.aside button.btn_hamburger {
+        display: inline-block;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #ccc;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+    }
+    aside.aside > nav.nav > ul.nav_list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    aside.aside > nav.nav > ul.nav_list > li > a {
+      display: block;
+      padding: 10px;
+      text-decoration: none;
+      color: #333;
+      transition: background-color 0.3s;
+    }
+    aside.aside > nav.nav > ul.nav_list > li > a:hover {
+      background-color: #ddd;
+    }
+    /* Main Content */
+    main.main {
+      margin-left: var(--aside-width);
+      padding: 20px;
+      background-color: #fff;
+      min-height: calc(100vh - var(--header-height));
+      transition: all 0.3s;
+    }
+    /* Media Query for Mobile */
+    @media screen and (max-width: 767px) {
+      main.main {
+        width: 100%;
+        margin-left: 0;
+      }
+    }
+    /* DataTable Styles */
+    table.dataTable {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    table.dataTable thead {
+      background-color: #f0f0f0;
+    }
+    table.dataTable th, table.dataTable td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <h1>Topseeker</h1>
+  <nav>
+    <ul>
+      <li><a href="#">登山用品商城</a></li>
+      <li><a href="#">套裝行程瀏覽</a></li>
+      <li><a href="#">揪團行程瀏覽</a></li>
+      <li>
+        <a href="#">討論區</a>
+        <ul>
+          <li><a href="http://localhost:8080/article/listAllArticle">登山情報</a></li>
+          <li><a href="#">新聞分享</a></li>
+          <li><a href="#">新手知識</a></li>
+          <li><a href="#">天氣分享</a></li>
+        </ul>
+      </li>
+      <li><a href="#">會員專區</a></li>
+    </ul>
+  </nav>
+</header>
+
+<aside class="aside">
+  <nav class="nav">
+    <button type="button" class="btn_hamburger">×</button>
+    <ul class="nav_list">
+      <li><a href="#">登山情報瀏覽</a></li>
+      <li><a href="#">最新消息</a></li>
+      <li><a href="#">北部區域</a></li>
+      <li><a href="#">西部區域</a></li>
+      <li><a href="#">東部區域</a></li>
+      <li><a href="#">南部區域</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<main class="main">
+  <!-- 旗標getOne_For_Display見EmpnoController.java的第74行 -->
+  <div class="b" th:if="${getOne_For_Display}">
+    <!--使用listOneEmp.html網頁的listOneEmp-div片段--> <!-- 見listOneEmp.html的第35行的th:fragment="listOneEmp-div" --> <!-- 使用th:replace也可 -->
+    <div th:insert="~{/back-end/article/listOneArticle :: listOneArticle-div}"></div>
+  </div>
+</main>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('#example').DataTable({
+    "lengthMenu": [3 ,5, 10, 20, 50, 100],
+    "searching": true,
+    "paging": true,
+    "ordering": true,
+    "language": {
+      "processing": "處理中...",
+      "loadingRecords": "載入中...",
+      "lengthMenu": "顯示 _MENU_ 筆結果",
+      "zeroRecords": "沒有符合的結果",
+      "info": "顯示第 _START_ 至 _END_ 筆結果，共 <strong>_TOTAL_</strong> 筆",
+      "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
+      "infoFiltered": "(從 _MAX_ 筆結果中過濾)",
+      "infoPostFix": "",
+      "search": "搜尋:",
+      "paginate": {
+        "first": "第一頁",
+        "previous": "上一頁",
+        "next": "下一頁",
+        "last": "最後一頁"
+      },
+      "aria": {
+        "sortAscending":  ": 升冪排列",
+        "sortDescending": ": 降冪排列"
+      }
+    }
+  });
+});
+</script>
+$('#btnAddArticle').on('click', function() {
+  // 在這裡添加打開新增文章表單的操作或者跳轉到新增文章頁面的操作
+  // 例如：
+  window.location.href = 'http://localhost:8080/article/addArticle'; // 跳轉到新增文章頁面
+});
+</script>
+</body>
+</html>
