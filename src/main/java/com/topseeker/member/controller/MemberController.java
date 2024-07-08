@@ -297,10 +297,33 @@ public class MemberController {
 		return "back-end/member/listAllMem";
 	}
 	
-	@GetMapping("memberManagement")
-	public String memberManagement() {
-		return "back-end/member/select_page";
-	}
+	//以下Ajax測試用
+//	@GetMapping("listAllMembyAjax")
+//	public String listAllMemAjax (Model model) {
+//		return "back-end/member/listAllMembyAjax";
+//	}
+//
+//	@PostMapping("ajaxSearch")
+//	public String ajaxSearch(HttpServletRequest req, Model model, HttpSession session) {
+//		Map<String, String[]> map = req.getParameterMap();
+//		List<MemberVO> list = memSvc.getAll(map);
+//		model.addAttribute("memListData", list); // for listAllEmp.jsp 第85行用
+//        return "back-end/member/listAllFragment :: resultsList";
+//	}
+//	
+//	//以下Ajax會員詳情測試用
+//	@PostMapping("ajaxDetail")
+//	public String ajaxDetail(@RequestParam("memNo") String memNo, HttpServletRequest req, Model model, HttpSession session) {
+//			MemberVO memberVO = (MemberVO) memSvc.getOneMem(Integer.valueOf(memNo));
+//
+//			model.addAttribute("memberVO", memberVO);
+//		return "back-end/member/inspectMemFragment :: memberDetail";
+//	}
+//	
+//	@GetMapping("memberManagement")
+//	public String memberManagement() {
+//		return "back-end/member/select_page";
+//	}
 
 	/*************************** 登出、登入功能 ******************/
 	// 1. 登入
@@ -392,22 +415,6 @@ public class MemberController {
 			return "front-end/member/updatePasswordPage";
 		}
 	}
-
-	/*************************** 刪除，未使用故註解 ******************/
-
-//	@PostMapping("delete")
-//	public String delete(@RequestParam("memNo") String memNo, ModelMap model) {
-	/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 *******************/
-
-	/*************************** 2.開始刪除資料 ***************************************/
-//		EmpService empSvc = new EmpService();
-//		memSvc.deleteMem(Integer.valueOf(memNo));
-	/*************************** 3.刪除完成,準備轉交(Send the Success view) ***********/
-//		List<MemberVO> list = memSvc.getAll();
-//		model.addAttribute("memListData", list);
-//		model.addAttribute("success", "- (刪除成功)");
-//		return "back-end/member/listAllMem"; // 刪除完成後轉交listAllEmp.jsp
-//	}
 
 	// 去除BindingResult中某個欄位的FieldError紀錄
 	public BindingResult removeFieldError(MemberVO memberVO, BindingResult result, String removedFieldname) {
