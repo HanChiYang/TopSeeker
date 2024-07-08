@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/shop/shopManagement">TopSeeker商城管理系統</a>
+    
+    <!-- Bootstrap 的展開或摺疊導航欄按鈕 -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto"> <!-- me-auto class for left alignment -->
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/shop/shopManagement/select_page}">商品管理</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">最新消息管理</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">促銷優惠管理</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">訂單管理</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/backend_protected/backEndIndex">回TopSeeker後台首頁</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

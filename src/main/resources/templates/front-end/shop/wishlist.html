@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>收藏商品</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>我的收藏</h1>
+    </header>
+    <main>
+        <div class="product-grid">
+            <div th:each="product : ${favoriteProducts}" class="product-card">
+                <img th:src="@{${product.imageUrl}}" alt="Product Image">
+                <h2 th:text="${product.name}">商品名稱</h2>
+                <p th:text="${product.price}">價格</p>
+                <button th:onclick="'removeFromFavorites(' + ${product.id} + ')'">移除收藏</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        function removeFromFavorites(productId) {
+            // 使用AJAX或表單提交的方式將商品從收藏中移除
+            // 可以通過後端控制器來實現具體的邏輯
+        }
+    </script>
+</body>
+</html>
