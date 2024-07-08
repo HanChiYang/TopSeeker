@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>商品資料 - listOneProd.html</title>
+
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+	crossorigin="anonymous">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style type="text/css">
+.navbar {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	border-bottom: solid 1px #E0E0E0;
+	z-index: 1000;
+}
+
+.shopnavbar {
+	background-color: #90c320;
+	font-size: 36px;
+	font-weight: bold;
+	border-bottom: solid 1px #E0E0E0;
+	z-index: 999;
+	position: fixed;
+	top: 56px; /* 確保位於 navbar 下方 */
+	width: 100%;
+}
+
+.sidebar {
+	position: fixed;
+	top: 112px; /* 確保位於 shopnavbar 下方 */
+	bottom: 0;
+	background-color: #f0f8e0;
+	width: 180px;
+	padding-top: 20px;
+	padding-bottom: 20px; /* 確保內容不被 bottom 覆蓋 */
+	color: #333;
+	font-size: 16px;
+	border-right: solid 1px #E0E0E0;
+	overflow-y: auto; /* 確保內容過多時可以滾動 */
+}
+
+.content {
+	flex-grow: 1;
+	padding: 20px;
+	margin-left: 200px; /* 確保不被 sidebar 遮擋 */
+	margin-top: 168px; /* 確保不被 navbar 和 shopnavbar 遮擋 */
+}
+
+input[type=text], input[type=password], select, textarea {
+	width: 200px;
+	margin: 2px;
+}
+
+a img {
+	border: none; /* 移除圖片邊框 */
+}
+
+a {
+	text-decoration: none; /* 移除超連結的底線 */
+}
+</style>
+</head>
+<body>
+
+	<nav th:insert="~{/back-end/shop/back_end_navbar.html}"></nav>
+	<nav class="shopnavbar">
+		<a th:href="@{/shop/shopManagement/select_page}"> <img id="logo"
+			th:src="@{/images/TopSeeker_logo.png}" width="80px">
+		</a>單件商品查詢
+	</nav>
+
+	<div class="sidebar">
+		<ul>
+			<li><h5>
+					<a th:href='@{/shop/shopManagement/select_page}'>查詢商品(主頁)</a>
+				</h5></li>
+			<li><h5>
+					<a th:href='@{/shop/shopManagement/listAllProd}'>檢視所有商品</a>
+				</h5></li>
+			<li><h5>
+					<a href='addProd'>新增商品</a>
+				</h5></li>
+			<li><h5>
+					<a href="#">商品圖片新增/修改</a>
+				</h5></li>
+		</ul>
+	</div>
+
+
+	<div class="content" th:fragment="listOneProd-div">
+		<!-- 此div被select_page.html第158行insert用 -->
+		<div class="card">
+			<div class="card-header text-center">
+				<h3>修改結果 :</h3>
+			</div>
+			<div class="card-body">
+				<div class="row mb-2">
+					<div class="col-sm-4 font-weight-bold">商品建立時間:</div>
+					<div class="col-sm-8" th:text="${shopProductVO.prodDate}"></div>
+				</div>
+				<div class="row mb-2">
+					<div class="col-sm-4 font-weight-bold">商品狀態:</div>
+					<div class="col-sm-8">
+						<span th:switch="${shopProductVO.prodStatus}"> <span
+							th:case="'0'">下架</span> <span th:case="'1'">上架</span>
+						</span>
+					</div>
+				</div>
+				<div class="row mb-2">
+					<div class="col-sm-4 font-weight-bold">商品類別:</div>
+					<div class="col-sm-8">
+						<span th:switch="${shopProductVO.shopProductTypeVO.prodTypeNo}">
+							<span th:case="'1'">包袋</span> <span th:case="'2'">鞋類</span> <span
+							th:case="'3'">裝備配件</span> <span th:case="'4'">服飾</span>
+						</span>
+					</div>
+				</div>
+				<div class="row mb-2">
+					<div class="col-sm-4 font-weight-bold">商品編號:</div>
+					<div class="col-sm-8" th:text="${shopProductVO.prodNo}"></div>
+				</div>
+				<div class="row mb-2">
+					<div class="col-sm-4 font-weight-bold">商品名稱:</div>
+					<div class="col-sm-8" th:text="${shopProductVO.prodName}"></div>
+				</div>
+				<div class="row mb-2">
+					<div class="col-sm-4 font-weight-bold">商品定價:</div>
+					<div class="col-sm-8" th:text="'$' + ${shopProductVO.prodPrice}"></div>
+				</div>
+
+				<div class="mb-3">
+					<label for="ProdPic" class="form-label">商品圖片:</label>
+					<div id="ProdPic">
+						<div th:each="pic, iterStat : ${shopProductVO.shopProductPics}">
+							<!--測試印出產品圖片編號 -->
+							<input type="text" th:value="${pic.prodPicNo}"
+								class="form-control mb-2" readonly> <img
+								th:src="@{/shop/DBGifReader3} + '?prodPicNo=' + ${pic.prodPicNo}"
+								class="img-thumbnail mb-2" width="150" height="150">
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<script>
+				$(document).ready(
+						function() {
+							var navbarHeight = $('.navbar').outerHeight();
+							var shopnavbarHeight = $('.shopnavbar')
+									.outerHeight();
+							$('.sidebar').css('top',
+									navbarHeight + shopnavbarHeight);
+							$('.content').css('margin-top',
+									navbarHeight + shopnavbarHeight + 20);
+						});
+			</script>
+</body>
+</html>
