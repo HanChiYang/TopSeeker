@@ -14,7 +14,6 @@ public interface NotificationRepository extends JpaRepository<NotificationVO, In
 
 	// 修改通知狀態
 	@Modifying
-//	@Transactional
 	@Query(value = "update NotificationVO n set n.notiStatus = 1 where n.notiStatus = 0 and n.memNo = ?1")
 	void readAllNoti(Integer memNo);
 

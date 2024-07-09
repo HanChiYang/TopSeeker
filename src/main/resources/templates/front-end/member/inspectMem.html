@@ -26,12 +26,17 @@
     .form-table .blob-holder {
         text-align: center;
     }
+    div.container {
+    margin-top: 75px;
+    }
 </style>
 </head>
 <body>
 <nav th:insert="~{/front-end/navbar.html}"></nav>
 
+<div class="container"></div>
 <div align="center">
+<h1>會員資料</h1>
     <table class="form-table">
         <tr>
             <td><label>大頭貼:</label></td>
@@ -76,7 +81,15 @@
             <td><span th:text="${memberVO.memStatus == 1 ? '未驗證' : '已驗證'}" class="readonly-field"></span></td>
         </tr>
     </table>
+    
+		 <button onclick="goBack()" class="btn btn-primary">回上一頁</button>
 </div>
 
 </body>
+<script>
+function goBack() {
+    window.history.back();
+}
+
+</script>
 </html>
