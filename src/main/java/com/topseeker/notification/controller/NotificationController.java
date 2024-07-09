@@ -24,13 +24,6 @@ public class NotificationController {
 	@Autowired
 	NotificationService notiSvc;
 	
-//	@PostMapping("listAllNoti")
-//	public String listAllNoti(HttpServletRequest req , Model model) {
-//		List<NotificationVO> list = notiSvc.getAll();
-//		model.addAttribute("notiListData", list);
-//		return "front-end/notification/allNoti";
-//	}
-	
 	@GetMapping("allNoti")
 	public String listAllNoti(Model model, HttpSession session) {
 		
@@ -38,13 +31,13 @@ public class NotificationController {
         MemberVO memberVO = (MemberVO) session.getAttribute("loggedInMember");
 		Integer memNo = memberVO.getMemNo();
 		
-		//修改通知狀態
-    	notiSvc.readAllNoti(memNo);
 
-    	//取得該會員所有通知
+    	//取得該會員所有通知，並先將未讀的list存起來
 		List<NotificationVO> notiListData = notiSvc.getMemNoti(memNo);
-		
 		model.addAttribute("notiListData", notiListData);
+		
+		//修改通知狀態
+		notiSvc.readAllNoti(memNo);
 		return "front-end/notification/allNoti";
 	}
 	
