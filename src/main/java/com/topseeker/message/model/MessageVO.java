@@ -20,7 +20,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.topseeker.act.model.ActVO;
 import com.topseeker.employee.model.EmployeeVO;
 import com.topseeker.member.model.MemberVO;
-
+ 
 
 @Entity  //要加上@Entity才能成為JPA的一個Entity類別
 @Table(name = "message") //代表這個class是對應到資料庫的實體table，目前對應的table是EMP2 

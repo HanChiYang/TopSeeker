@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Message;
 
-
+ 
 @Service("messageService")
 public class MessageService {
 	
