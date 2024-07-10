@@ -268,7 +268,10 @@ table.dataTable th, table.dataTable td {
        th:text="${participantVO.memberVO.memNo} + '-[' + ${participantVO.memberVO.memName} + ']'"></td>
       <td th:text="${participantVO.actJoinCount}"></td>
       <td th:text="${participantVO.actJoinTime}"></td>
-      <td th:text="${participantVO.actCommit}"></td>
+      <td th:text="${participantVO.actCommit == 0 ? '待審核' : 
+              participantVO.actCommit == 1 ? '審核通過' : 
+              participantVO.actCommit == 2 ? '審核不通過' :
+              participantVO.actCommit == 3 ? '取消' : ''}"></td>
       
       <td>
        <form method="post" th:action="@{/participant/getOne_For_Update}"
