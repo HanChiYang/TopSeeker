@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
 <title>討論區文章管理</title>
@@ -200,7 +200,13 @@ table.dataTable th, table.dataTable td {
    <ul>
     <li><a href="#">登山用品商城</a></li>
     <li><a href="#">套裝行程瀏覽</a></li>
-    <li><a href="#">揪團行程瀏覽</a></li>
+    <li><a href="#">揪團行程瀏覽</a>
+    <ul>
+      <li><a href="http://localhost:8080/article/listAllArticle">開團系統</a></li>
+      <li><a href="http://localhost:8080/participant/listAllParticipant">參團瀏覽</a></li>
+      <li><a href="http://localhost:8080/participant/listAllParticipant">參團紀錄</a></li>
+      <li><a href="#">檢舉回報</a></li>
+     </ul></li>
     <li><a href="#">討論區</a>
      <ul>
       <li><a href="	/article/listAllArticle">登山情報</a></li>
@@ -231,7 +237,7 @@ table.dataTable th, table.dataTable td {
  <div class="article-details">
   <button id="btnAddArticle" style="margin-bottom: 10px;">新增文章</button>
   <button id="btnAddArticle" style="margin-bottom: 10px;">修改文章</button>
-  <button href="#" id="btnAddArticle" style="margin-bottom: 10px;">檢舉文章</button>
+  <button id="btnlistAllArtReport" style="margin-bottom: 10px;">檢舉文章</button>
   
   <table id="example" class="display">
    <thead>
@@ -322,6 +328,12 @@ table.dataTable th, table.dataTable td {
    // 例如：
    window.location.href = 'http://localhost:8080/article/addArticle'; // 跳轉到新增文章頁面
   });
+  
+  $('#btnlistAllArtReport').on('click', function() {
+	   // 在這裡添加打開新增文章表單的操作或者跳轉到新增文章頁面的操作
+	   // 例如：
+	   window.location.href = 'http://localhost:8080/artreport/listAllArtReport'; // 跳轉到新增文章頁面
+	  });
  </script>
 </body>
 </html>
