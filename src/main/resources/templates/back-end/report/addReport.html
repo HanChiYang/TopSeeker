@@ -1,0 +1,150 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>檢舉揪團新增 - addReport.html</title>
+
+<head th:insert="~{/back-end/report/included-fragment}"></head>
+<style type="text/css">
+	
+	button {
+		padding: 5px;
+	}
+	form {
+		display: table;
+	}
+	form div {
+		display: table-row;
+	}
+	label, input, span, select {
+		display: table-cell;
+		margin: 5px;
+		text-align: left;		
+	}
+	input[type=text], input[type=password], select, textarea {
+		width: 200px;
+		margin: 5px;
+	}
+	form div div {
+		display: table-cell;
+	}
+	.center {
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
+		 <div align="center"> <h2>檢舉揪團新增 - addParticipant.html</h2>
+		 <h3><a class="navbar-brand" th:href="@{/report/select_page}"><img th:src="@{/images/back1.gif}">回查詢頁</a></h3></div>
+</nav>
+
+	<div align="center">
+		<h3><b>所有欄位皆為必填欄位</b></h3>
+		<form th:action="@{insert}" method="post" th:object="${reportVO}" enctype="multipart/form-data">
+			
+			
+			
+			<div>
+			<label>活動編號:</label>
+			<select th:field="*{actVO.actNo}">
+				<option th:each="actVO : ${actListData}" th:value="${actVO.actNo}" th:text="${actVO.actTitle}" />
+			</select>
+			<span th:if="${#fields.hasErrors('actVO.actNo')}" th:errors="*{actVO.actNo}" class="error" id="actVO.actNo.errors"></span>
+			</div>
+						
+			<div>
+			<label>會員編號:</label>
+			<select th:field="*{memberVO.memNo}">
+				<option th:each="memberVO : ${memberListData}" th:value="${memberVO.memNo}" th:text="${memberVO.memName}" />
+			</select>
+			<span th:if="${#fields.hasErrors('memberVO.memNo')}" th:errors="*{memberVO.memNo}" class="error" id="memberVO.memNo.errors"></span>
+			</div>
+			
+			
+			<div>
+			<label>檢舉事由:</label>
+			<input type="text" th:field="*{actReport}" onclick="hideContent('actReport.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('actReport')}" th:errors="*{actReport}" class="error" id="actReport.errors"></span>
+			</div>
+			
+			<div>
+			<label>檢舉內容:</label>
+			<input type="text" th:field="*{actReportText}" onclick="hideContent('actReportText.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('actReportText')}" th:errors="*{actReportText}" class="error" id="actReportText.errors"></span>
+			</div>						
+			
+			<div>
+			<label>檢舉時間:</label>
+			<input type="datetime" th:field="*{actReportTime}" onclick="hideContent('actReportTime.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('actReportTime')}" th:errors="*{actReportTime}" class="error" id="actReportTime.errors"></span>
+			</div>
+			
+			<div>
+			<label>員工編號:</label>
+			<select th:field="*{employeeVO.empNo}">
+				<option th:each="employeeVO : ${employeeListData}" th:value="${employeeVO.empNo}" th:text="${employeeVO.empName}" />
+			</select>
+			<span th:if="${#fields.hasErrors('employeeVO.empNo')}" th:errors="*{employeeVO.empNo}" class="error" id="employeeVO.empNo.errors"></span>
+			</div>	
+			
+
+			<div>
+			<label>處理時間:</label>
+			<input type="datetime" th:field="*{handleTime}" onclick="hideContent('handleTime.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('handleTime')}" th:errors="*{handleTime}" class="error" id="handleTime.errors"></span>
+			</div>
+			
+			<div>
+			<label>處理狀態:</label>
+			<input type="text" th:field="*{handleCheck}" onclick="hideContent('handleCheck.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('handleCheck')}" th:errors="*{handleCheck}" class="error" id="handleCheck.errors"></span>
+			</div>
+			
+			<div>
+			<label>處理註記:</label>
+			<input type="text" th:field="*{handleReply}" onclick="hideContent('handleReply.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('handleReply')}" th:errors="*{handleReply}" class="error" id="handleReply.errors"></span>
+			</div>
+			
+			
+			
+			
+			
+		
+			
+			<div>
+				<div></div>
+				<div><button type="submit" id="submit"> 送出新增 </button></div>
+				<div></div>
+			</div>		
+		</form>
+	
+	</div>
+
+
+<!-- JavaScript part -->
+<script type="text/javascript">
+//清除提示信息
+function hideContent(d) {
+     document.getElementById(d).style.display = "none";
+}
+
+
+
+</script>
+
+</body>
+</html>

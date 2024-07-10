@@ -1,0 +1,49 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>回覆留言資料 - listOneReplyMessage.html</title>
+
+<head th:insert="~{/back-end/replymessage/included-fragment}"></head>
+<style type="text/css">
+	
+    span {
+		display: inline-block;
+		width: 150px;
+		text-align: left;
+		font-weight: bold;
+	}
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
+		 <div align="center"> <h2>留言資料 - listOneReplyMessage.html</h2>
+		 <h3><a class="navbar-brand" th:href="@{/replymessage/select_page}"><img th:src="@{/images/back1.gif}">回查詢頁<label th:text="${success}"></label></a></h3></div>
+</nav>
+
+	<div align="center" th:fragment="listOneReplyMessage-div"> <!-- 此div被select_page.html第158行insert用 -->
+		<h3><span>查詢結果 :</span></h3>
+		<span>回覆留言編號:</span><span th:text="${replymessageVO.actMsgRpNo}"></span><br/>
+		<span>回覆留言內容:</span><span th:text="${replymessageVO.actMsgRp}"></span><br/>	
+		<span>回覆留言時間:</span><span th:text="${replymessageVO.actMsgRpTime}"></span><br/>	
+		<span>留言編號:</span><span th:text="${replymessageVO.messageVO.actMsgNo} + '-[' + ${replymessageVO.messageVO.actMsg} + ']'"></span><br/>
+		<span>會員編號:</span><span th:text="${replymessageVO.memberVO.memNo} + '-[' + ${replymessageVO.memberVO.memName} + ']'"></span><br/>		
+			
+		
+	
+	</div>
+
+
+</body>
+</html>
