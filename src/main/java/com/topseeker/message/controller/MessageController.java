@@ -30,7 +30,7 @@ import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
 import com.topseeker.message.model.MessageVO;
 import com.topseeker.message.model.MessageService;
-
+ 
 @Controller
 @Validated
 @RequestMapping("/message")

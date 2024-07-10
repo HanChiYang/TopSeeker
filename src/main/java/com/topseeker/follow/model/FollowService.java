@@ -13,7 +13,7 @@ import com.topseeker.message.model.MessageVO;
 
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Follow;
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Message;
-
+ 
 @Service("followService")
 public class FollowService {
 	

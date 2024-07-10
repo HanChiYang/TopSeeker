@@ -1,5 +1,5 @@
 package com.topseeker.replymessage.model;
-
+ 
 import java.sql.Timestamp;
 
 import javax.persistence.Column;

@@ -1,6 +1,6 @@
 package com.topseeker.follow.model;
 
-
+ 
 import com.topseeker.follow.model.FollowVO.CompositeDetail;
 
 import java.io.Serializable;

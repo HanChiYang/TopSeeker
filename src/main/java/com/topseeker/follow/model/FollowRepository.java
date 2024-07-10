@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.topseeker.follow.model.FollowVO;
 
-
+ 
 
 public interface FollowRepository extends JpaRepository<FollowVO, Integer>  {
 	

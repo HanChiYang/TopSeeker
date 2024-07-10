@@ -28,7 +28,7 @@ import com.topseeker.member.model.MemberService;
 import com.topseeker.message.model.MessageService;
 import com.topseeker.message.model.MessageVO;
 
-
+ 
 @Controller
 @Validated
 @RequestMapping("/message")

@@ -11,7 +11,7 @@ import com.topseeker.replymessage.model.ReplyMessageVO;
 
 public interface ReplyMessageRepository extends JpaRepository<ReplyMessageVO, Integer> {
 
-	
+	 
 	@Transactional
 	@Modifying
 	@Query(value = "delete from reply_message where act_msg_rp_no =?1", nativeQuery = true)
