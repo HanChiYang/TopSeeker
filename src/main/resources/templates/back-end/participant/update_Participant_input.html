@@ -1,20 +1,12 @@
-
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<title>活動資料修改 - update_partictpant_input.html</title>
-<meta name="viewport"
- content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<link rel="stylesheet"
- href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css">
- 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<head>
+<meta charset="utf-8">
+<title>討論區文章管理</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
 <style>
 * {
  box-sizing: border-box;
@@ -33,144 +25,30 @@ body {
 img {
  max-width: 100%;
 }
-/* Header */
-header.header {
- border: 1px solid #ccc;
- width: 100%;
- position: sticky;
- top: 0;
- height: var(--header-height);
- background-color: #f0f0f0;
- z-index: 1000;
- display: flex;
- justify-content: space-between;
- align-items: center;
- padding: 0 20px;
-}
-/* Hamburger Button */
-header.header button.btn_hamburger {
- display: none;
-}
 
-header.header nav ul {
- display: flex;
- list-style: none;
- padding: 0;
- margin: 0;
-}
-
-header.header nav ul li {
- position: relative;
- margin-right: 20px;
-}
-
-header.header nav ul li a {
- text-decoration: none;
- color: #333;
- font-weight: bold;
-}
-
-header.header nav ul li:hover ul {
- display: block;
-}
-
-header.header nav ul li ul {
- display: none;
- position: absolute;
- top: 100%;
- left: 0;
- background-color: #fff;
- border: 1px solid #ccc;
- list-style: none;
- padding: 0;
- margin: 0;
-}
-
-header.header nav ul li ul li {
- margin: 0;
-}
-
-header.header nav ul li ul li a {
- padding: 10px;
- display: block;
- white-space: nowrap;
-}
-
-header.header nav ul li ul li a:hover {
- background-color: #f0f0f0;
-}
-/* Aside Navigation */
-aside.aside {
- border: 1px solid #ccc;
- position: fixed;
- top: var(--header-height);
- left: 0;
- height: calc(100% - var(--header-height));
- width: var(--aside-width);
- background-color: #e0e0e0;
- overflow-y: auto;
+div.container {
+ margin-top: 100px;
+ max-width: 90%;
  padding: 20px;
- transition: all 0.3s;
- z-index: 900;
-}
-/* Hamburger Button for Aside */
-aside.aside button.btn_hamburger {
- display: none;
-}
-/* Media Query for Mobile */
-@media screen and (max-width: 767px) {
- aside.aside {
-  top: 0;
-  height: 100%;
-  transform: translateX(-100%);
- }
- aside.aside.-on {
-  transform: translateX(0%);
- }
- header.header button.btn_hamburger, aside.aside button.btn_hamburger {
-  display: inline-block;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: #ccc;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
- }
+ background-color: #fafafa;
+ border-radius: 10px;
+ box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+ margin-bottom: 20px;
+ font-size: 20px;
+ font-weight: bold; 
 }
 
-aside.aside>nav.nav>ul.nav_list {
- margin: 0;
- padding: 0;
- list-style: none;
-}
-
-aside.aside>nav.nav>ul.nav_list>li>a {
- display: block;
- padding: 10px;
- text-decoration: none;
- color: #333;
- transition: background-color 0.3s;
-}
-
-aside.aside>nav.nav>ul.nav_list>li>a:hover {
- background-color: #ddd;
-}
-/* Main Content */
-main.main {
- margin-left: var(--aside-width);
+div.article-details {
+margin-top: 50px;
+ max-width: 90%;
+ margin: 0 auto;
  padding: 20px;
- background-color: #fff;
- min-height: calc(100vh - var(--header-height));
- transition: all 0.3s;
+ background-color: #fafafa;
+ border-radius: 10px;
+ box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+ margin-bottom: 20px;
 }
-/* Media Query for Mobile */
-@media screen and (max-width: 767px) {
- main.main {
-  width: 100%;
-  margin-left: 0;
- }
-}
+
 /* DataTable Styles */
 table.dataTable {
  width: 100%;
@@ -188,208 +66,94 @@ table.dataTable th, table.dataTable td {
  padding: 10px;
  text-align: left;
 }
-/* Form Styles */
-form.add-article {
- margin-top: 20px;
- padding: 20px;
- border: 1px solid #ccc;
- background-color: #f0f0f0;
+
+/* Star Rating Styles */
+.star-rating {
+ display: flex;
+ flex-direction: row-reverse;
+ justify-content: left;
+ padding: 0;
 }
 
-form.add-article label, form.add-article input, form.add-article select
- {
- display: block;
- margin-bottom: 10px;
+.star-rating input[type="radio"] {
+ display: none;
 }
 
-form.add-article input[type=text], form.add-article select {
- width: 100%;
- padding: 5px;
-}
-/* 按鈕樣式 */
-.add-article button {
- padding: 12px 24px; /* 調整內邊距 */
+.star-rating label {
+ font-size: 2em;
+ color: #d1d1d1;
  cursor: pointer;
- border: none;
- color: black;
- font-size: 16px; /* 調整字體大小 */
- border-radius: 5px; /* 圓角 */
- transition: opacity 0.3s, transform 0.3s; /* 透明度和變形過渡效果 */
- margin-top: 10px; /* 增加上邊距 */
+ padding: 0 5px;
+ transition: color 0.2s;
 }
 
-.btn-submit {
- background-color: #4CAF50; /* 綠色 */
+.star-rating input[type="radio"]:checked ~ label {
+ color: #ffa500;
 }
 
-.btn-cancel {
- background-color: #f44336; /* 紅色 */
- margin-left: 10px; /* 增加左邊距 */
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+ color: #ffa500;
 }
-
-.btn-submit:hover, .btn-cancel:hover {
- opacity: 0.9;
- transform: scale(1.05); /* 略微放大 */
-}
-
-label, input, span, select {
- display: table-cell;
- margin: 5px;
- text-align: left;
-}
-
-input[type=text], input[type=password], select, textarea {
- width: 200px;
- margin: 5px;
-}
-
-form div div {
- display: table-cell;
-}
-
-
- .star-rating {
-        display: flex;
-        flex-direction: row-reverse;
-        justify-content: left;
-        padding: 0;
-    }
-
-    .star-rating input[type="radio"] {
-        display: none;
-    }
-
-    .star-rating label {
-        font-size: 2em;
-        color: #d1d1d1;
-        cursor: pointer;
-        padding: 0 5px;
-        transition: color 0.2s;
-    }
-
-    .star-rating input[type="radio"]:checked ~ label {
-        color: #ffa500;
-    }
-
-    .star-rating label:hover,
-    .star-rating label:hover ~ label {
-        color: #ffa500;
-    }
-
 </style>
+<link rel="stylesheet" th:href="@{/css/navbar.css}" />
+
 </head>
 <body>
+<nav th:insert="~{/front-end/navbar.html}"></nav>
 
- <header class="header">
-  <h1>Topseeker</h1>
-  <nav>
-   <ul>
-    <li><a href="#">登山用品商城</a></li>
-    <li><a href="#">套裝行程瀏覽</a></li>
-    <li><a href="#">揪團行程瀏覽</a>
-     <ul>
-      <li><a href="http://localhost:8080/article/listAllArticle">開團系統</a></li>
-      <li><a
-       href="http://localhost:8080/participant/listAllParticipant">參團瀏覽</a></li>
-      <li><a
-       href="http://localhost:8080/participant/listAllParticipant">參團紀錄</a></li>
-      <li><a href="#">檢舉回報</a></li>
-     </ul></li>
-    <li><a href="#">討論區</a>
-     <ul>
-      <li><a href="http://localhost:8080/article/listAllArticle">登山情報</a></li>
-      <li><a href="#">新聞分享</a></li>
-      <li><a href="#">新手知識</a></li>
-      <li><a href="#">天氣分享</a></li>
-     </ul></li>
-    <li><a href="#">會員專區</a></li>
-   </ul>
-  </nav>
- </header>
+<div class="container">揪團去玩</div>
 
- <aside class="aside">
-  <nav class="nav">
-   <button type="button" class="btn_hamburger">×</button>
-   <ul class="nav_list">
-    <li><a href="#">登山情報瀏覽</a></li>
-    <li><a href="#">最新消息</a></li>
-    <li><a href="#">北部區域</a></li>
-    <li><a href="#">西部區域</a></li>
-    <li><a href="#">東部區域</a></li>
-    <li><a href="#">南部區域</a></li>
-   </ul>
-  </nav>
- </aside>
-
- <main class="main">
-
-
-  <form class="add-article" th:action="@{update}" method="post"
-   th:object="${participantVO}" enctype="multipart/form-data">
+ <div class="article-details">
+  <form class="add-article" th:action="@{update}" method="post" th:object="${participantVO}" enctype="multipart/form-data">
    <div>
-    <label>參團活動編號:</label> <input type="text" th:field="*{actPartNo}"
-     style="border: 0px; font-weight: bold;" readonly /><br />
-
+    <label>參團活動編號:</label> <input type="text" th:field="*{actPartNo}" style="border: 0px; font-weight: bold;" readonly /><br />
    </div>
 
    <div>
-    <label>參團人數:</label>  <input type="text" th:field="*{actJoinCount}"
-     style="border: 0px; font-weight: bold;" readonly /></span>
+    <label>參團人數:</label>  <input type="text" th:field="*{actJoinCount}" style="border: 0px; font-weight: bold;" readonly /></span>
    </div>
    
    <div>
-    <label>報名狀態:</label>  <input type="text" th:field="*{actCommit}"
-     style="border: 0px; font-weight: bold;" readonly /></span>
+    <label>報名狀態:</label>  <input type="text" th:field="*{actCommit}" style="border: 0px; font-weight: bold;" readonly /></span>
    </div>
   
    <div>
-    <label>活動編號:</label> 
-    <input type="text" th:field="*{actVO.actNo}" readonly /> 
-     <span th:if="${#fields.hasErrors('actVO.actNo')}"
-     th:errors="*{actVO.actNo}" class="error" id="actVO.actNo.errors"></span>
+    <label>活動標題:</label> 
+    <input type="text" th:field="*{actVO.actTitle}" readonly /> 
+     <span th:if="${#fields.hasErrors('actVO.actTitle')}" th:errors="*{actVO.actTitle}" class="error" id="actVO.actTitle.errors"></span>
    </div>
 
    <div>
-    <label>會員編號:</label> <input type="text" th:field="*{memberVO.memNo}"
-     readonly /> <span th:if="${#fields.hasErrors('memberVO.memNo')}"
-     th:errors="*{memberVO.memNo}" class="error"
-     id="memberVO.memNo.errors"></span>
+    <label>會員帳號:</label> <input type="text" th:field="*{memberVO.memAccount}" readonly /> 
+    <span th:if="${#fields.hasErrors('memberVO.memAccount')}" th:errors="*{memberVO.memAccount}" class="error" id="memberVO.memAccount.errors"></span>
    </div>
 
-     <label>活動評價星星:</label>
-        <div class="star-rating">
-                    
-          <input type="radio" id="star5" name="actStar" value="5" onclick="hideContent('actStar.errors');" />
-            <label for="star5"><i class="bi bi-star"></i></label>
+   <div>
+    <label>活動評價星星:</label>
+    <div class="star-rating">
+     <input type="radio" id="star5" name="actStar" value="5" onclick="hideContent('actStar.errors');" />
+     <label for="star5"><i class="bi bi-star-fill"></i></label>
             
-            <input type="radio" id="star4" name="actStar" value="4" onclick="hideContent('actStar.errors');" />
-            <label for="star4"><i class="bi bi-star"></i></label>
+     <input type="radio" id="star4" name="actStar" value="4" onclick="hideContent('actStar.errors');" />
+     <label for="star4"><i class="bi bi-star-fill"></i></label>
 
-            <input type="radio" id="star3" name="actStar" value="3" onclick="hideContent('actStar.errors');" />
-            <label for="star3"><i class="bi bi-star"></i></label>
+     <input type="radio" id="star3" name="actStar" value="3" onclick="hideContent('actStar.errors');" />
+     <label for="star3"><i class="bi bi-star-fill"></i></label>
             
      <input type="radio" id="star2" name="actStar" value="2" onclick="hideContent('actStar.errors');" />
-            <label for="star2"><i class="bi bi-star"></i></label>
+     <label for="star2"><i class="bi bi-star-fill"></i></label>
             
-          
-   <input type="radio" id="star1" name="actStar" value="1" onclick="hideContent('actStar.errors');" />
-            <label for="star1"><i class="bi bi-star"></i></label>
-      
-        </div>
-
+     <input type="radio" id="star1" name="actStar" value="1" onclick="hideContent('actStar.errors');" />
+     <label for="star1"><i class="bi bi-star-fill"></i></label>
+    </div>
     <span th:if="${#fields.hasErrors('actStar')}" th:errors="*{actStar}" class="error" id="actStar.errors"></span>
-</div>
-
-   <div>
-    <label>活動評價內容:</label> <input type="text" th:field="*{actEva}"
-     onclick="hideContent('actEva.errors');" /><br /> <span
-     th:if="${#fields.hasErrors('actEva')}" th:errors="*{actEva}"
-     class="error" id="actEva.errors"></span>
    </div>
 
-
-
-
+   <div>
+    <label>活動評價內容:</label> <input type="text" th:field="*{actEva}" onclick="hideContent('actEva.errors');" /><br /> 
+    <span th:if="${#fields.hasErrors('actEva')}" th:errors="*{actEva}" class="error" id="actEva.errors"></span>
+   </div>
 
    <div>
     <div></div>
@@ -399,20 +163,16 @@ form div div {
     <div></div>
    </div>
   </form>
+</div>
 
-
- </main>
-
- <!-- JavaScript part -->
- <script
-  src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
  <script>
   $(document).ready(function() {
    $('#example').DataTable();
   });
  </script>
 
- <!-- JavaScript part -->
  <script type="text/javascript">
   //清除提示信息
   function hideContent(d) {
