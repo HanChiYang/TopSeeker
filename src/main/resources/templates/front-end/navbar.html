@@ -33,9 +33,24 @@
         <li class="nav-item">
           <a class="nav-link" href="/protected/member/indexMem">會員專區</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/protected/notification/allNoti">通知</a>
+		
+		<li th:if="${session.loggedInMember != null}">
+           <span th:if="${session.notiData.notiStatus == 0}">
+             <a class="nav-link">
+                 <img id="alertIcon" class="bellIcon"th:src="@{/images/alert.svg}" width="25px" th:data-new-src="@{/images/noalert.svg}" alt="Alert Icon">
+             </a>
+           </span>
         </li>
+        
+		<li th:if="${session.loggedInMember != null}">
+           <span th:if="${session.notiData.notiStatus == 1}">
+             <a class="nav-link bellIcon">
+               <img th:src="@{/images/noalert.svg}" width="25px" alt="New Notification Icon">             
+             </a>
+           </span>
+        </li>
+
+        
         <li th:if="${session.loggedInMember != null}" class="nav-item">
           <a class="nav-link" href="/member/logout">登出</a>
         </li>

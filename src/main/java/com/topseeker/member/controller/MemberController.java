@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -36,6 +38,8 @@ import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
 import com.topseeker.redisconfig.TokenService;
 
+import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Mem;
+
 @Controller
 @RequestMapping("/member")
 public class MemberController {
@@ -51,6 +55,9 @@ public class MemberController {
 
 	@Autowired
 	TokenService tokSvc;
+	
+	@Autowired
+    private SessionFactory sessionFactory;
 
 
 	/*************************** 註冊帳號 ******************/
@@ -290,40 +297,51 @@ public class MemberController {
 	}
 
 	@PostMapping("listMems_ByCompositeQuery")
-	public String listAllMems(HttpServletRequest req, Model model) {
+    public String listAllMems(HttpServletRequest req, Model model) {
+        Map<String, String[]> map = req.getParameterMap();
+        Map<String, String[]> queryParams = new HashMap<>(map);
+
+        // 處理日期區間查詢條件
+        String startDate = req.getParameter("startDate");
+        String endDate = req.getParameter("endDate");
+
+        if (startDate != null && !startDate.trim().isEmpty() && endDate != null && !endDate.trim().isEmpty()) {
+            queryParams.put("memDateRange", new String[]{startDate + "," + endDate});
+        }
+
+        Session session = sessionFactory.openSession();
+        List<MemberVO> list = HibernateUtil_CompositeQuery_Mem.getAllC(queryParams, session);
+        model.addAttribute("memListData", list); // for listAllEmp.jsp 第85行用
+        return "back-end/member/listAllMem";
+    }
+	
+	//以下Ajax測試用
+	@GetMapping("listAllMembyAjax")
+	public String listAllMemAjax (Model model) {
+		return "back-end/member/listAllMembyAjax";
+	}
+
+	@PostMapping("ajaxSearch")
+	public String ajaxSearch(HttpServletRequest req, Model model, HttpSession session) {
 		Map<String, String[]> map = req.getParameterMap();
 		List<MemberVO> list = memSvc.getAll(map);
 		model.addAttribute("memListData", list); // for listAllEmp.jsp 第85行用
-		return "back-end/member/listAllMem";
+        return "back-end/member/listAllFragment :: resultsList";
 	}
 	
-	//以下Ajax測試用
-//	@GetMapping("listAllMembyAjax")
-//	public String listAllMemAjax (Model model) {
-//		return "back-end/member/listAllMembyAjax";
-//	}
-//
-//	@PostMapping("ajaxSearch")
-//	public String ajaxSearch(HttpServletRequest req, Model model, HttpSession session) {
-//		Map<String, String[]> map = req.getParameterMap();
-//		List<MemberVO> list = memSvc.getAll(map);
-//		model.addAttribute("memListData", list); // for listAllEmp.jsp 第85行用
-//        return "back-end/member/listAllFragment :: resultsList";
-//	}
-//	
-//	//以下Ajax會員詳情測試用
-//	@PostMapping("ajaxDetail")
-//	public String ajaxDetail(@RequestParam("memNo") String memNo, HttpServletRequest req, Model model, HttpSession session) {
-//			MemberVO memberVO = (MemberVO) memSvc.getOneMem(Integer.valueOf(memNo));
-//
-//			model.addAttribute("memberVO", memberVO);
-//		return "back-end/member/inspectMemFragment :: memberDetail";
-//	}
-//	
-//	@GetMapping("memberManagement")
-//	public String memberManagement() {
-//		return "back-end/member/select_page";
-//	}
+	//以下Ajax會員詳情測試用
+	@PostMapping("ajaxDetail")
+	public String ajaxDetail(@RequestParam("memNo") String memNo, HttpServletRequest req, Model model, HttpSession session) {
+			MemberVO memberVO = (MemberVO) memSvc.getOneMem(Integer.valueOf(memNo));
+
+			model.addAttribute("memberVO", memberVO);
+		return "back-end/member/inspectMemFragment :: memberDetail";
+	}
+	
+	@GetMapping("memberManagement")
+	public String memberManagement() {
+		return "back-end/member/select_page";
+	}
 
 	/*************************** 登出、登入功能 ******************/
 	// 1. 登入
