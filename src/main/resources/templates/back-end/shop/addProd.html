@@ -16,6 +16,44 @@
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<script>
+
+	$(document).ready(
+			function() {
+				var navbarHeight = $('.navbar').outerHeight();
+				var shopnavbarHeight = $('.shopnavbar').outerHeight();
+				$('.sidebar').css('top', navbarHeight + shopnavbarHeight);
+				$('.content').css('margin-top',
+						navbarHeight + shopnavbarHeight + 20);
+			});
+		
+	$(document).ready(
+			function() {
+				// 預覽上傳圖片
+				$('#prodPic').on(
+						'change',
+						function(event) {
+							console.log('File input changed');
+							var files = event.target.files;
+							$('#preview').empty(); // 清空預覽容器
+							for (var i = 0; i < files.length; i++) {
+								var file = files[i];
+								var reader = new FileReader();
+								reader.onload = function(e) {
+									var img = $('<img>').attr('src',
+											e.target.result).addClass(
+											'img-thumbnail mb-2').css({
+										width : '150px',
+										height : '150px'
+									});
+									$('#preview').append(img);
+								};
+								reader.readAsDataURL(file);
+							}
+						});
+			});
+</script>
+
 <style type="text/css">
 .navbar {
 	position: fixed;
@@ -41,7 +79,7 @@
 	top: 112px; /* 確保位於 shopnavbar 下方 */
 	bottom: 0;
 	background-color: #f0f8e0;
-	width: 180px;
+	width: 150px;
 	padding-top: 20px;
 	padding-bottom: 20px; /* 確保內容不被 bottom 覆蓋 */
 	color: #333;
@@ -57,20 +95,10 @@
 	margin-top: 168px; /* 確保不被 navbar 和 shopnavbar 遮擋 */
 }
 
-input[type=text], input[type=password], select, textarea {
-	width: 200px;
-	margin: 2px;
-}
-
 label, input, span, select {
 	display: table-cell;
 	margin: 5px;
 	text-align: left;
-}
-
-input[type=text], input[type=password], select {
-	width: 200px;
-	margin: 5px;
 }
 
 textarea {
@@ -99,18 +127,15 @@ a {
 
 	<div class="sidebar">
 		<ul>
-			<li><h5>
+			<li><h6>
 					<a th:href='@{/shop/shopManagement/select_page}'>查詢商品(主頁)</a>
-				</h5></li>
-			<li><h5>
+				</h6></li>
+			<li><h6>
 					<a th:href='@{/shop/shopManagement/listAllProd}'>檢視所有商品</a>
-				</h5></li>
-			<li><h5>
+				</h6></li>
+			<li><h6>
 					<a href='addProd'>新增商品</a>
-				</h5></li>
-			<li><h5>
-					<a href="#">商品圖片新增/修改</a>
-				</h5></li>
+				</h6></li>
 		</ul>
 	</div>
 
@@ -173,12 +198,14 @@ a {
 
 			<!-- 上傳圖片用 -->
 			<div class="mb-3">
-				<label for="prodPic" class="form-label">商品圖片:</label> <input
-					class="form-control" type="file" name="picSet" id="prodPic" multiple/>
-				<div id="blob_holder"></div>
+				<label for="prodPic" class="form-label">新增商品圖片</label> <input
+					type="file" name="picSet" id="prodPic" class="form-control"
+					multiple>
+				<!-- 預覽圖片容器 -->
+				<div id="preview" class="mt-2"></div>
 				<span class="alert alert-danger" role="alert"
-					th:if="${#fields.hasErrors('prodName')}" th:errors="*{prodName}"
-					id="prodName.errors"></span>
+					th:if="${#fields.hasErrors('shopProductPics')}"
+					th:errors="*{shopProductPics}" id="shopProductPics.errors"></span>
 			</div>
 
 
