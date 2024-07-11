@@ -37,9 +37,15 @@ public class ArticleService {
 	}
 
 	public ArticleVO getOneArticle(Integer artNo) {
-		Optional<ArticleVO> optional = repository.findById(artNo);
-//		return optional.get();
-		return optional.orElse(null);  // public T orElse(T other) : 如果值存在就回傳其值，否則回傳other的值
+		  Optional<ArticleVO> optional = repository.findById(artNo);
+		    ArticleVO articleVO = optional.orElse(null);
+		    // 添加日志输出
+		    if (articleVO != null) {
+		        System.out.println("Found Article: " + articleVO.getArtTitle());
+		    } else {
+		        System.out.println("No Article found with artNo: " + artNo);
+		    }
+		    return articleVO;  // public T orElse(T other) : 如果值存在就回傳其值，否則回傳other的值
 	}
 
 	public List<ArticleVO> getAll() {
@@ -54,5 +60,7 @@ public class ArticleService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
 
 }
