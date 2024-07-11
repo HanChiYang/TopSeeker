@@ -91,7 +91,7 @@ public class NewsController {
 		List<NewsVO> list = newsSvc.getAll();
 		model.addAttribute("newsListData", list);
 		model.addAttribute("success", "- (新增成功)");
-		return "redirect:/news/listAllNews"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
+		return "redirect:/news/newsIndex"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
 	}
 
 	/*
@@ -156,7 +156,7 @@ public class NewsController {
 		List<NewsVO> list = newsSvc.getAll();
 		model.addAttribute("newsListData", list);
 		model.addAttribute("success", "- (刪除成功)");
-		return "front-end/news/listAllNews"; // 刪除完成後轉交listAllEmp.html
+		return "back-end/news/newsBackEnd"; // 刪除完成後轉交listAllEmp.html
 	}
 
 
@@ -177,9 +177,9 @@ public class NewsController {
   		return "front-end/news/select_page";
   	}
       
-    @GetMapping("/listAllNews")
+    @GetMapping("/newsBackEnd")
   	public String listAllNews(Model model) {
-  		return "front-end/news/listAllNews";
+  		return "back-end/news/newsBackEnd";
   	}
     
    
