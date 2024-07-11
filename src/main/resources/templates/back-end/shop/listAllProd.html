@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>所有商品資料</title>
+<title>檢視/管理所有商品</title>
 
 <!-- Bootstrap CSS -->
 <link
@@ -99,7 +99,7 @@
 	top: 112px; /* 確保位於 shopnavbar 下方 */
 	bottom: 0;
 	background-color: #f0f8e0;
-	width: 180px;
+	width: 150px;
 	padding-top: 20px;
 	padding-bottom: 20px; /* 確保內容不被 bottom 覆蓋 */
 	color: #333;
@@ -109,7 +109,7 @@
 }
 
 .display {
-	margin-left: 190px; /* 確保內容位於 sidebar 右側 */
+	margin-left: 170px; /* 確保內容位於 sidebar 右側 */
 	margin-top: 200px; /* 確保內容位於 navbar 和 shopnavbar 下方 */
 	padding: 10px;
 	width: calc(100% - 200px); /* 確保內容佔滿剩餘寬度 */
@@ -130,23 +130,20 @@ a {
 	<nav class="shopnavbar">
 		<a th:href="@{/shop/shopManagement/select_page}"> <img id="logo"
 			th:src="@{/images/TopSeeker_logo.png}" width="80px">
-		</a>所有商品資料
+		</a>檢視/管理所有商品
 	</nav>
 
 	<div class="sidebar">
 		<ul>
-			<li><h5>
+			<li><h6>
 					<a th:href='@{/shop/shopManagement/select_page}'>查詢商品(主頁)</a>
-				</h5></li>
-			<li><h5>
+				</h6></li>
+			<li><h6>
 					<a th:href='@{/shop/shopManagement/listAllProd}'>檢視所有商品</a>
-				</h5></li>
-			<li><h5>
+				</h6></li>
+			<li><h6>
 					<a href='addProd'>新增商品</a>
-				</h5></li>
-			<li><h5>
-					<a href="#">商品圖片新增/修改</a>
-				</h5></li>
+				</h6></li>
 		</ul>
 	</div>
 
@@ -156,13 +153,14 @@ a {
 				<tr style="background-color: #d9ead3">
 					<th>商品編號</th>
 					<th>商品類別</th>
+					<th>商品圖片</th>
 					<th>商品名稱</th>
 					<th>商品介紹</th>
 					<th>商品定價</th>
 					<th>商品建立時間</th>
 					<th>商品狀態</th>
 					<th>修改</th>
-					<th>刪除</th>
+<!-- 					<th>刪除</th> -->
 				</tr>
 			</thead>
 			<tbody>
@@ -170,6 +168,9 @@ a {
 					<tr>
 						<td width="50px" th:text="${shopProductVO.prodNo}"></td>
 						<td th:text="${shopProductVO.shopProductTypeVO.prodTypeName}"></td>
+						<td><img
+							th:src="@{/shop/DBGifReader} + '?prodNo=' + ${shopProductVO.prodNo} "
+							width="80px"> 
 						<td width="150px" th:text="${shopProductVO.prodName}"></td>
 						<td width="200px"
 							th:text="${#strings.abbreviate(shopProductVO.prodInfo, 100)}"></td>
@@ -188,13 +189,13 @@ a {
 									name="prodNo" th:value="${shopProductVO.prodNo}">
 							</form>
 						</td>
-						<td>
-							<form method="post" th:action="@{/shop/delete}"
-								style="margin-bottom: 0px;">
-								<input type="submit" value="刪除"> <input type="hidden"
-									name="prodNo" th:value="${shopProductVO.prodNo}">
-							</form>
-						</td>
+<!-- 						<td> -->
+<!-- 							<form method="post" th:action="@{/shop/shopManagement/delete}" -->
+<!-- 								style="margin-bottom: 0px;"> -->
+<!-- 								<input type="submit" value="刪除"> <input type="hidden" -->
+<!-- 									name="prodNo" th:value="${shopProductVO.prodNo}"> -->
+<!-- 							</form> -->
+<!-- 						</td> -->
 					</tr>
 				</th:block>
 			</tbody>
