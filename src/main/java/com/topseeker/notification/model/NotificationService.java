@@ -29,9 +29,19 @@ public class NotificationService {
 		return repository.getMemNoti(memNo);
 	}
 
+	//取得所有未讀通知
+	public List<NotificationVO> listNewNoti(Integer memNo) {
+		return repository.listNewNoti(memNo);
+	}
+	
 	// 修改通知狀態
 	public void readAllNoti(Integer memNo) {
 		repository.readAllNoti(memNo);
+	}
+	
+	// 單一會員通知狀態
+	public NotificationVO forNotiStatus(Integer memNo) {
+		return repository.forNotiStatus(memNo);
 	}
 
 }

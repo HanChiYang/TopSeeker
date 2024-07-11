@@ -1,0 +1,18 @@
+#notificationContent {
+position: fixed;
+top: 58px;
+left: 825px;
+}
+
+#notification {
+font-size: 12px;
+}
+
+#moreNoti {
+	text-align: right;
+	font-size: 12px;
+	
+}
+.nav-link {
+    cursor: pointer;
+}
