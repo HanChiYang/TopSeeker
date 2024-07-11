@@ -77,8 +77,8 @@ public class IndexController_inSpringBoot {
 	@Autowired
 	ArtPicService artpicSvc;
 	
-	@Autowired
-	FollowService followSvc;
+//	@Autowired
+//	FollowService followSvc;
 	
 	
     @GetMapping("/")
@@ -270,22 +270,22 @@ public class IndexController_inSpringBoot {
  		return list;
  	}
     //=========== 以下第63~75行是提供給 /src/main/resources/templates/back-end/emp/select_page.html 與 listAllEmp.html 要使用的資料 ===================   
-    @GetMapping("/follow/select_page")
- 	public String select_page8(Model model) {
- 		return "back-end/follow/select_page";
- 	}
-    
-    @GetMapping("/follow/listAllFollow")
- 	public String listAllFollow(Model model) {
- 		return "back-end/follow/listAllFollow";
- 	}
-    
-    @ModelAttribute("followListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
- 	protected List<FollowVO> referenceListData8(Model model) {
- 		
-    	List<FollowVO> list = followSvc.getAll();
- 		return list;
- 	}
+//    @GetMapping("/follow/select_page")
+// 	public String select_page8(Model model) {
+// 		return "back-end/follow/select_page";
+// 	}
+//    
+//    @GetMapping("/follow/listAllFollow")
+// 	public String listAllFollow(Model model) {
+// 		return "back-end/follow/listAllFollow";
+// 	}
+//    
+//    @ModelAttribute("followListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
+// 	protected List<FollowVO> referenceListData8(Model model) {
+// 		
+//    	List<FollowVO> list = followSvc.getAll();
+// 		return list;
+// 	}
     
     
 }
