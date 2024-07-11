@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>新增訂單</title>
+<head th:insert="~{/back-end/shop/order/included-fragment}"></head>
+
+<style type="text/css">
+	
+	button {
+		padding: 5px;
+	}
+	form {
+		display: table;
+	}
+	form div {
+		display: table-row;
+	}
+	label, input, span, select {
+		display: table-cell;
+		margin: 5px;
+		text-align: left;		
+	}
+	input[type=text], input[type=password], select, textarea {
+		width: 200px;
+		margin: 5px;
+	}
+	form div div {
+		display: table-cell;
+	}
+	.center {
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+
+</head>
+<body>
+
+<nav>
+	<div align="center">
+		<h3>Topseeker</h3></br>
+		 <h4>新增訂單明細</h4>
+		<h3><a th:href="@{/shop/order/select_page}"><img th:src="@{/images/tomcat.gif}" width="100" height="100" border="0">回訂單管理頁面</a></h3>
+	</div>
+</nav>
+
+<div align="center">
+<form method="post" th:action="@{insert}" th:object="${orderDetailVO}">
+	
+	<div>
+		<label>訂單編號 :</label>
+<!-- 		<input type="text" th:field="*{compositeDetail.orderNo}" onclick="hideContent('compositeDetail.orderNo.errors')" /><br/> -->
+		<select th:field="*{compositeDetail.orderNo}">
+			<option th:each="compositeDetail : ${orderListData}" th:value="${compositeDetail.orderNo}" th:text="${compositeDetail.orderNo}"/>
+		</select>
+	</div>
+	<div>
+		<label>訂購商品編號 :</label>
+<!-- 		<input type="text" th:field="*{compositeDetail.prodNo}" onclick="hideContent('compositeDetail.prodNo.errors')" /><br/> -->
+		<select th:field="*{productVO.prodNo}">
+			<option th:each="productVO : ${prodListData}" th:value="${productVO.prodNo}" th:text="${productVO.prodNo}"/>
+		</select>
+	</div>
+	
+<!-- 	<label>訂購商品 :</label> -->
+<!-- 		<select th:field="*{productVO.prodName}"> -->
+<!-- 			<option th:each="productVO : ${prodListData}" th:value="${productVO.prodNo}" th:text="${productVO.prodNo} +' - '+ ${productVO.prodName} "/> -->
+<!-- 		</select> -->
+
+	
+	<div>
+		<label>銷售單價 :</label>
+		<input type="text" th:field="*{orderPrice}" onclick="hideContent('orderPrice.errors')" /><br/>
+		<span th:if="${#fields.hasErrors('orderPrice')}" th:errors="*{orderPrice}" class="error" id="orderPrice.errors"></span>
+	</div>
+	<div>
+		<label>訂購數量 :</label>
+		<input type="text" th:field="*{orderQty}" onclick="hideContent('orderQty.errors')" /><br/>
+		<span th:if="${#fields.hasErrors('orderQty')}" th:errors="*{orderQty}" class="error" id="orderQty.errors"></span>
+	</div>
+	
+	<div><button type="submit" id="submit"> 送出新增 </button>
+	<input type="hidden" name="orderNo" th:value="${orderDetailVO.orderVO.orderNo}">
+	<input type="hidden" name="prodNo" th:value="${orderDetailVO.productVO.prodNo}">
+	</div>
+	
+</form>
+
+</div>
+
+<script type="text/javascript">
+//清除提示信息
+function hideContent(d) {
+     document.getElementById(d).style.display = "none";
+}
+
+
+</script>
+</body>
+</html>

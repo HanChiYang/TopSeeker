@@ -24,6 +24,10 @@ public class ArtCommentService {
     private SessionFactory sessionFactory;
 
 	public void addArtComment(ArtCommentVO artcommentVO) {
+		
+		if (artcommentVO.getArticleVO() == null) {
+	        throw new IllegalArgumentException("artNo cannot be null");
+	    }
 		repository.save(artcommentVO);
 	}
 
@@ -50,5 +54,7 @@ public class ArtCommentService {
 	public List<ArtCommentVO> getAll(Map<String, String[]> map) {
 		return HibernateUtil_CompositeQuery_ArtComment.getAllC(map,sessionFactory.openSession());
 	}
+	
+	
 
 }

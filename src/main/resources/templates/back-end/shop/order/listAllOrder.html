@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>訂單總覽</title>
+<head th:insert="~{/back-end/shop/order/included-fragment}"></head>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>                                    <!-- ●●js  for jquery datatables 用 -->
+<script	src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>              <!-- ●●js  for jquery datatables 用 -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" /> <!-- ●●css for jquery datatables 用 -->
+
+<!-- ●● jquery datatables 設定 -->
+<script>
+	$(document).ready(function() {
+		$('#orderList').DataTable({
+			"lengthMenu": [3 ,5, 10, 20, 50, 100],
+			"searching": true,  //搜尋功能, 預設是開啟
+		    "paging": true,     //分頁功能, 預設是開啟
+		    "ordering": true,   //排序功能, 預設是開啟
+		    "language": {
+		        "processing": "處理中...",
+		        "loadingRecords": "載入中...",
+		        "lengthMenu": "顯示 _MENU_ 筆結果",
+		        "zeroRecords": "沒有符合的結果",
+		        "info": "顯示第 _START_ 至 _END_ 筆結果，共<font color=red> _TOTAL_ </font>筆",
+		        "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
+		        "infoFiltered": "(從 _MAX_ 筆結果中過濾)",
+		        "infoPostFix": "",
+		        "search": "搜尋:",
+		        "paginate": {
+		            "first": "第一頁",
+		            "previous": "上一頁",
+		            "next": "下一頁",
+		            "last": "最後一頁"
+		        },
+		        "aria": {
+		            "sortAscending":  ": 升冪排列",
+		            "sortDescending": ": 降冪排列"
+		        }
+		    }
+		});
+	});
+</script>
+<style type="text/css">
+body {
+	margin: 1rem 12rem 2rem 12rem;
+}
+
+#example td {
+    white-space: nowrap; /* 防止单元格内容换行 */
+    overflow: hidden;    /* 隐藏溢出内容 */
+    text-overflow: ellipsis; /* 显示省略号以指示溢出内容 */
+}
+
+#example th, #example td {
+    padding: 8px; /* 调整单元格内边距 */
+    text-align: left; /* 调整单元格对齐方式 */
+}
+
+#example th {
+    background-color: #CCCCFF; /* 设置表头背景颜色 */
+    position: relative; /* 相对定位以便排序箭头定位 */
+}
+
+#example th .sorting,
+#example th .sorting_asc,
+#example th .sorting_desc {
+    position: absolute;
+    right: 10px; /* 调整箭头的位置 */
+}
+
+img {
+    max-width: 100px; /* 设置图片最大宽度 */
+    height: auto; /* 保持图片宽高比 */
+}
+</style>
+</head>
+<body>
+
+<nav>
+	<div align="center">
+		<h3><b>TopSeeker</b></h3></br>
+		 <h4><b>訂單列表</b></h4>
+		<h3><a th:href="@{/shop/order/select_page}"><img th:src="@{/images/tomcat.gif}" width="100" height="100" border="0">回訂單管理頁面<label th:text="${success}"></label></a></h3></div>
+	
+</nav>
+
+<table id="orderList" class="display" style="width: 100%">
+  <thead>
+	<tr style="background-color:aqua">
+		<th>商品訂單編號</th>
+		<th>會員編號</th>
+		<th>會員姓名</th>
+		<th>訂單狀態</th>
+		<th>付款狀態</th>			
+		<th>訂單詳情</th>
+		<th>刪除</th>
+	</tr>
+  </thead>
+	
+  <tbody>
+		<th:block th:each="orderVO : ${orderListData}">
+			<tr>
+				<td class=orderno th:text="${orderVO.orderNo}"></td>
+				<td th:text="${orderVO.memberVO.memNo}"></td>
+				<td th:text="${orderVO.memberVO.memName}"></td>
+				<td class="orderStatus" th:text="${orderVO.orderStatus}"></td>
+				<td class="paymentStatus" th:text="${orderVO.paymentStatus}"></td>				
+				<td><form method="post" th:action="@{/shop/order/getOne_For_Display}" style="margin-bottom: 0px;">
+			     	<input type="submit" value="訂單詳情">
+			     	<input type="hidden" name="orderNo" th:value="${orderVO.orderNo}"></form>
+			    </td>
+			    <td>
+			  		<form method="post" th:action="@{/shop/order/delete}" style="margin-bottom: 0px;">
+				     <input type="submit" value="刪除">
+				     <input type="hidden" name="orderNo" th:value="${orderVO.orderNo}"></form>
+				</td>
+			  </tr>			
+		</th:block>
+  </tbody>
+</table>
+
+	<script>
+	
+	var orderStatusElements = document.querySelectorAll(".orderStatus");
+	orderStatusElements.forEach(function (e) {
+	    var orderStatus = e.textContent.trim();
+	    
+	    switch(orderStatus){
+	    	case '0':
+	    		e.textContent ='訂單成立';
+	    		break;
+	    	case '1':
+	    		e.textContent ='出貨中';
+	    		break;
+	    	case '2':
+	    		e.textContent ='已出貨';
+	    		break;
+	    	case '3':
+	    		e.textContent ='已收貨';
+	    		break;
+	    	case '4':
+	    		e.textContent ='訂單取消';
+	    		break;
+	    	case '5':
+	    		e.textContent ='一般結案';
+	    		break;
+	    	case '6':
+	    		e.textContent ='鑑賞期內退貨結案';
+	    		break;
+	    	case '7':
+	    		e.textContent ='瑕疵品退貨結案';
+	    		break;
+	    		
+	    	}
+	    
+	});
+	
+	var paymentStatusElements = document.querySelectorAll(".paymentStatus");
+	paymentStatusElements.forEach(function (e) {
+	    var paymentStatus = e.textContent.trim();
+	    
+	    switch(paymentStatus){
+	    	case '0':
+	    		e.textContent ='待繳費';
+	    		break;
+	    	case '1':
+	    		e.textContent ='已繳費';
+	    		break;
+	    		
+	    	}
+	    
+	});
+	
+	</script>
+
+</body>
+</html>

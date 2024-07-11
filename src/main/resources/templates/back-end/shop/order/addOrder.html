@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>新增訂單</title>
+<head th:insert="~{/back-end/shop/order/included-fragment}"></head>
+
+<style type="text/css">
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0px;
+}
+
+img {
+	max-width: 100%;
+}
+
+html {
+	/* font-size: 62.5%;  */
+	/*10px，為利於rem方便計算*/
+	--header-height: 60px;
+	--aside-width: 240px;
+}
+
+ header.header{
+        border: 1px solid black;
+        background-color: lightgray;
+        height: var(--header-height);
+        position: sticky;
+        top: 0;
+      }
+
+button {
+	padding: 5px;
+}
+
+form {
+	display: table;
+}
+
+form div {
+	display: inline-block;
+}
+
+label, input, span, select {
+	display: table-cell;
+	margin: 5px;
+	text-align: left;
+}
+
+input[type=text], input[type=password], select, textarea {
+	width: 300px;
+	margin: 5px;
+}
+
+div label {
+	width: 300px;
+}
+
+.center {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+
+section div {
+	display: inline-block;
+}
+</style>
+
+</head>
+<body>
+
+
+	<nav>
+		<div align="center">
+			<h3>Topseeker</h3>
+			</br>
+			<h4>新增訂單</h4>
+			<h3>
+				<a th:href="@{/shop/order/select_page}"><img
+					th:src="@{/images/tomcat.gif}" width="100" height="100" border="0">回訂單管理頁面</a>
+			</h3>
+		</div>
+	</nav>
+
+	<div align="center">
+		<form method="post" th:action="@{insert}" th:object="${orderVO}">
+
+			<div>
+				<label>會員名稱 :</label> <select th:field="*{memberVO.memNo}">
+					<option value="">請選擇訂購會員</option>
+					<option th:each="memberVO : ${memListData}"
+						th:value="${memberVO.memNo}" th:text="${memberVO.memName}" />
+				</select>
+			</div>
+			<div>
+				<label>促銷方案 :</label> <select th:field="*{saleVO.saleNo}">
+					<option th:each="saleVO : ${saleListData}"
+						th:value="${saleVO.saleNo}" th:text="${saleVO.saleName}" />
+				</select>
+			</div>
+
+			<div>
+				<label>訂單日期 :</label> <input type="text" id="f_date1"
+					th:field="*{orderDate}" placeholder="yyyy-MM-dd HH:mm:ss"
+					onclick="hideContent('orderDate.errors')" /> <span
+					th:if="${#fields.hasErrors('orderDate')}" th:errors="*{orderDate}"
+					class="error" id="orderDate.errors"></span>
+			</div>
+
+			<div>
+				<label>訂單原始金額 :</label> <input type="text" th:field="*{orderAmount}"
+					onclick="hideContent('orderAmount.errors')" /> <span
+					th:if="${#fields.hasErrors('orderAmount')}"
+					th:errors="*{orderAmount}" class="error" id="orderAmount.errors"></span>
+			</div>
+
+			<div>
+				<label>訂單運費 :</label> <input type="text" th:field="*{orderShipment}"
+					onclick="hideContent('orderShipment.errors')" /> <span
+					th:if="${#fields.hasErrors('orderShipment')}"
+					th:errors="*{orderShipment}" class="error"
+					id="orderShipment.errors"></span>
+			</div>
+			<div>
+				<label>折扣金額 :</label> <input type="text" th:field="*{orderDiscount}"
+					onclick="hideContent('orderDiscount.errors')" /> <span
+					th:if="${#fields.hasErrors('orderDiscount')}"
+					th:errors="*{orderDiscount}" class="error"
+					id="orderDiscount.errors"></span>
+			</div>
+			<div>
+				<label>訂單實付金額 :</label> <input type="text" th:field="*{orderBill}"
+					onclick="hideContent('orderBill.errors')" /> <span
+					th:if="${#fields.hasErrors('orderBill')}" th:errors="*{orderBill}"
+					class="error" id="orderBill.errors"></span>
+
+			</div>
+			<div>
+				<label>收件人姓名 :</label> <input type="text" th:field="*{orderName}"
+					onclick="hideContent('orderName.errors')" /> <span
+					th:if="${#fields.hasErrors('orderName')}" th:errors="*{orderName}"
+					class="error" id="orderName.errors"></span>
+
+			</div>
+			<div>
+				<label>收件人電話 :</label> <input type="text" th:field="*{orderPhone}"
+					onclick="hideContent('orderPhone.errors')" /> <span
+					th:if="${#fields.hasErrors('orderPhone')}"
+					th:errors="*{orderPhone}" class="error" id="orderPhone.errors"></span>
+
+			</div>
+			<div>
+				<label>收件人住址 :</label> <input type="text" th:field="*{orderAddress}"
+					onclick="hideContent('orderAddress.errors')" /> <span
+					th:if="${#fields.hasErrors('orderAddress')}"
+					th:errors="*{orderAddress}" class="error" id="orderAddress.errors"></span>
+
+			</div>
+			<div>
+				<label>訂單狀態 :</label> <select th:field="*{orderStatus}">
+					<option th:value="0" th:text="訂單成立" />
+					<option th:value="1" th:text="出貨中" />
+					<option th:value="2" th:text="已出貨" />
+					<option th:value="3" th:text="已收貨" />
+					<option th:value="4" th:text="訂單取消" />
+					<option th:value="5" th:text="一般結案" />
+					<option th:value="6" th:text="鑑賞期內退貨結案" />
+					<option th:value="7" th:text="瑕疵品退貨結案" />
+				</select>
+			</div>
+			<div>
+				<label>付款狀態 :</label> <select th:field="*{paymentStatus}">
+					<option th:value="0" th:text="待繳費" />
+					<option th:value="1" th:text="已繳費" />
+				</select>
+			</div>
+			<div>
+				<label>付款方式 :</label> <select th:field="*{paymentMethod}">
+					<option th:value="0" th:text="信用卡" />
+					<option th:value="1" th:text="轉帳" />
+					<option th:value="1" th:text="貨到付款" />
+				</select>
+			</div>
+			<div>
+				<label>運送方式 :</label> <select th:field="*{deliveryMethod}">
+					<option th:value="0" th:text="宅配" />
+					<option th:value="1" th:text="超商取貨" />
+				</select>
+			</div>
+			<div>
+				<label>訂單備註 :</label> <input type="text" th:field="*{remarks}" />
+			</div>
+
+			<div style="display:none">
+				<label>訂單編號:</label> <input type="text" th:field="*{orderNo}"
+					readonly="readonly" />
+			</div>
+			<section class="shopProduct" th:each="detail, stat : *{orderDetails}">
+				<span>
+					<label>購買產品編號:</label> 
+					<input type="text"	th:field="*{orderDetails[__${stat.index}__].compositeDetail.prodNo}" />
+					<span th:if="${#fields.hasErrors('orderDetails[__${stat.index}__].compositeDetail.prodNo')}"
+						th:errors="*{orderDetails[__${stat.index}__].compositeDetail.prodNo}"
+						class="error" id="orderDetails[__${stat.index}__].compositeDetail.prodNo"></span>
+				</span>
+				<span>
+					<label>購買單價:</label> 
+					<input type="text"	th:field="*{orderDetails[__${stat.index}__].orderPrice}" /> 
+					<span th:if="${#fields.hasErrors('orderDetails[__${stat.index}__].orderPrice')}"
+						th:errors="*{orderDetails[__${stat.index}__].orderPrice}"
+						class="error" id="orderDetails[__${stat.index}__].orderPrice.errors"></span> 
+				</span>
+				<span>
+					<label>購買數量:</label>
+					<input type="text"	th:field="*{orderDetails[__${stat.index}__].orderQty}" /> 
+					<span th:if="${#fields.hasErrors('orderDetails[__${stat.index}__].orderQty')}"
+						th:errors="*{orderDetails[__${stat.index}__].orderQty}"
+						class="error" id="orderDetails[__${stat.index}__].orderQty.errors"></span>
+				</span>
+			</section>
+			<br>
+	<button type="submit" id="submit"> 送出新增 </button>
+			<input type="hidden" name="orderNo" th:value="${orderNo}"> <input
+				type="hidden" name="prodNo" th:value="${prodNo}">
+		</form>
+
+	</div>
+
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/datetimepicker/jquery.datetimepicker.css}" />
+	<script th:src="@{/datetimepicker/jquery.js}"></script>
+	<script th:src="@{/datetimepicker/jquery.datetimepicker.full.js}"></script>
+
+	<style>
+.xdsoft_datetimepicker .xdsoft_datepicker {
+	width: 300px; /* width:  300px; */
+}
+
+.xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box {
+	height: 151px; /* height:  151px; */
+}
+</style>
+
+	<script>
+		$(document).ready(function() {
+
+			$.datetimepicker.setLocale('zh');
+
+			var orderDate = $('#f_date1').html();
+
+			$('#f_date1').datetimepicker({
+				theme : '', //theme: 'dark',
+				timepicker : true, //timepicker:true,
+				step : 1, //step: 60 (這是timepicker的預設間隔60分鐘)
+				format : 'Y-m-d H:i:00', //format:'Y-m-d H:i:s',
+				minDate : 0, //不早於今日		   
+			});
+
+		})
+	</script>
+
+	<script type="text/javascript">
+		//清除提示信息
+		function hideContent(d) {
+			document.getElementById(d).style.display = "none";
+		}
+	</script>
+</body>
+</html>

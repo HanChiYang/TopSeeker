@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary fixed-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary fixed-top" >
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">TopSeeker踏徙客</a>
+   <img th:src="@{/images/TopSeeker_logo.png}" width=75px alt="Logo">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -14,6 +14,12 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">揪團去玩</a>
+          <ul>
+	      <li><a href="http://localhost:8080/article/listAllArticle">開團系統</a></li>
+	      <li><a href="http://localhost:8080/participant/listAllParticipant">參團瀏覽</a></li>
+	      <li><a href="http://localhost:8080/participant/listAllParticipant">參團紀錄</a></li>
+	      <li><a href="#">檢舉回報</a></li>
+	     </ul>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/article/listAllArticle">登山情報</a>
