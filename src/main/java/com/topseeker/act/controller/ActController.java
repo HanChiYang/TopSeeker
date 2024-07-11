@@ -31,7 +31,7 @@ import com.topseeker.act.model.ActVO;
 import com.topseeker.actpicture.model.ActPictureVO;
 import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
-
+import com.topseeker.news.model.NewsVO;
 
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Act;
 
@@ -304,7 +304,7 @@ public class ActController {
     
     @GetMapping("/actBackEnd")
     public String actBackEnd(Model model) {
-    	return "front-end/act/actBackEnd";
+    	return "back-end/act/actBackEnd";
     }
     @ModelAttribute("actListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
 	protected List<ActVO> referenceListData(Model model) {
