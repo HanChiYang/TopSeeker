@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +19,20 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.topseeker.member.model.MemberService;
+import com.topseeker.member.model.MemberVO;
 import com.topseeker.shop.product.model.ShopProductService;
 import com.topseeker.shop.product.model.ShopProductVO;
 import com.topseeker.shop.productpic.model.ShopProductPicService;
 import com.topseeker.shop.productpic.model.ShopProductPicVO;
 import com.topseeker.shop.producttype.model.ShopProductTypeService;
 import com.topseeker.shop.producttype.model.ShopProductTypeVO;
+import com.topseeker.shop.wishlist.model.ShopWishlistService;
 import com.topseeker.shop.wishlist.model.ShopWishlistVO;
 
 @Controller
@@ -48,6 +51,13 @@ public class ShopProdController {
 	@Autowired
 	ShopProductPicService shopProductPicSvc;
 	
+	//會員資料用
+	@Autowired
+	MemberService memSvc;
+	
+	@Autowired
+	ShopWishlistService shopWishlistSvc;
+	
 	
 	//============前端商城頁面============
 	
@@ -61,19 +71,33 @@ public class ShopProdController {
 	return "front-end/shop/homepage";
     }
     
-     //商品詳細頁圖片用
-//    @GetMapping("{prodNo}")
-//    public String viewShopProductPic(@PathVariable Integer prodNo, Model model) {
-//    	ShopProductVO shopProductVO = shopProductSvc.getOneShopProduct(prodNo);
-//        List<ShopProductPicVO> shopProductPicVOList= shopProductPicSvc.getShopProductPicVOList(prodNo);
-//        
-//        model.addAttribute("shopProductVO", shopProductVO);
-//        model.addAttribute("shopProductPicVOList", shopProductPicVOList);
-//        
-//        
-//        return "front-end/shop/homepage"; 
-//    }
+	//商城商品詳細頁面 hompage.html
+    @GetMapping("/listOneProdDetail")
+	public String showShopProductDetail(@RequestParam String prodNo, ModelMap model) {
+    		
+	ShopProductVO shopProductVO = shopProductSvc.getOneShopProduct(Integer.valueOf(prodNo));
+	
+	model.addAttribute("shopProductVO", shopProductVO);
+	
+	return "front-end/shop/listOneProdDetail";
+    }
     
+    
+     //商品收藏頁面用 wishlist.html
+    @GetMapping("/wishlist")
+	public String showwhishlist(HttpSession session, ModelMap model, String memNo) {
+    
+    //抓取seesion內已登入會員的編號
+    MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+	Integer loggedInMemberNo = loggedInMember.getMemNo();
+	//搜尋該會員有收藏的商品編號
+	List<ShopWishlistVO> shopWishlistVO = shopWishlistSvc.showMemWishlist(loggedInMemberNo);
+	
+	model.addAttribute("shopWishlistVO", shopWishlistVO);
+	return "front-end/shop/wishlist";
+    }
+    
+  
 
 	//============後端管理頁面============
 	
@@ -114,20 +138,7 @@ public class ShopProdController {
 		return "back-end/shop/addProd";
 	}
 	
-	
-	//商品收藏 addProd.html
-//	@GetMapping("wishlist")
-//	public String showShopWishlist(ModelMap model) {
-//		ShopWishlistVO  shopWishlistVO = new ShopWishlistVO();
-//		
-//		model.addAttribute("shopWishlistVO", shopWishlistVO);
-//		
-//		List<ShopWishlistVO> wishListData = shopWishlistSvc.getAll();
-//		
-//		model.addAttribute("wishListData", wishListData);
-//		
-//		return "front-end/shop/whishlist";
-//	}
+
 	
 	//商品新增(含圖片)
 	@PostMapping("/shopManagement/insert")
@@ -212,9 +223,7 @@ public class ShopProdController {
 				    }
 				    shopProductVO.setShopProductPics(picSet); // 設置商品的圖片集合
 				}
-				if (result.hasErrors() || parts[0].isEmpty()) {
-					return "back-end/shop/update_prod_input";
-				}
+
 		/*************************** 2.開始修改資料 *****************************************/
 		shopProductSvc.updateShopProduct(shopProductVO);
 
