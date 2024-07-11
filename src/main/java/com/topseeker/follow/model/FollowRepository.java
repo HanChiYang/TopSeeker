@@ -7,21 +7,20 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.topseeker.follow.model.FollowVO;
+@Transactional
+public interface FollowRepository extends JpaRepository<FollowVO, Integer> {
 
- 
-
-public interface FollowRepository extends JpaRepository<FollowVO, Integer>  {
-	
-	
-	@Transactional
+	//刪除追隨會員
 	@Modifying
 	@Query(value = "delete from follow where mem_no =?1 and be_followed_mem_no = ?2 ", nativeQuery = true)
-	void deleteByMemNoA(int memNoA,int memNoB);
+	void deleteByMemNo(Integer memNo, Integer beFollowedMemNo);
 
-	//● (自訂)條件查詢
-	@Query(value = "from FollowVO where mem_no=?1  order by mem_no")
-	List<FollowVO> findByOthers(int memNoA);
+	//查詢所有登入會員的追隨者
+	@Query(value = "from FollowVO where memNo=?1")
+	List<FollowVO> findAllFollowers(Integer memNo);
 
-
+	//新增追隨會員
+	@Modifying
+	@Query(value = "INSERT INTO follow (mem_no, be_followed_mem_no) VALUES (?1, ?2)", nativeQuery = true)
+	List<FollowVO> addFollow(Integer memNoA, Integer memNoB);
 }

@@ -34,8 +34,7 @@ private static final long serialVersionUID = 1L;
 	
 	@Id
 	@Column(name = "act_no")
-	@GeneratedValue(strategy = GenerationType.IDENTITY) //@GeneratedValue的generator屬性指定要用哪個generator //【strategy的GenerationType, 有四種值: AUTO, IDENTITY, SEQUENCE, TABLE】 
-	
+	@GeneratedValue(strategy = GenerationType.IDENTITY) //@GeneratedValue的generator屬性指定要用哪個generator //【strategy的GenerationType, 有四種值: AUTO, IDENTITY, SEQUENCE, TABLE】
 	public Integer getActNo() {
 		return actNo;
 	}

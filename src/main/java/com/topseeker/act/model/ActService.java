@@ -44,6 +44,10 @@ public class ActService {
 	public Set<ParticipantVO> getParticipantsByActNo(Integer actNo) {
 		return getOneAct(actNo).getParticipants();
 	}
+	
+	public List<ActVO> findMyOpenGroup(Integer memNoA) {
+		return repository.findMyOpenGroup(memNoA);
+	}
 
 
 }
