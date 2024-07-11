@@ -138,7 +138,7 @@ body {
 
 <body>
 	<div class="top-bar">
-		<a href="#">會員中心</a> <a href="#">登入/註冊</a> <a href="#"><i
+		<a href="#">會員中心</a> <a href="#">登入/註冊</a> <a th:href="@{/shop/wishlist}">我的收藏</a> <a href="#"><i
 			class="fa-solid fa-shopping-cart cart-icon"></i>購物車</a>
 	</div>
 	<div class="navbar">
@@ -146,7 +146,7 @@ body {
 		<div>
 			TopSeeker 戶外用品商城
 			<div class="nav-links">
-				<a href="#">首頁</a> <a href="#">優惠活動</a> <a href="#">新品|熱賣中</a> <a
+				<a th:href="@{/shop/homepage}">首頁</a> <a href="#">優惠活動</a> <a href="#">新品|熱賣中</a> <a
 					href="/prod_page_bags.html">所有商品</a> <a href="#">包袋</a> <a href="#">鞋類</a>
 				<a href="#">服飾</a> <a href="#">裝備配件</a>
 				<div class="search-bar">
@@ -162,31 +162,47 @@ body {
 		<div class="product-grid">
 			<!-- 商品卡片範例 -->
 			<div th:each="shopProductVO : ${shopListData}" class="product-card">
-				
-<!-- 				測試印出產品編號 -->
-<!-- 				<input type="text" th:value="${shopProductVO.prodNo}"> -->
 
-				<!-- 圖片會出現，但應改寫成迴圈 -->
+ 			
+				<!--測試印出產品編號 -->
+ 		<!--	<input type="text" th:value="${shopProductVO.prodNo}">
+
+				圖片會出現，但應改寫成迴圈
 				<img
 					th:src="@{/shop/DBGifReader} + '?prodNo=' + ${shopProductVO.prodNo} "
 					width="100px"> 
 			    
-			    <!-- 測試第二種寫法 -->
-<!-- 				<img -->
-<!-- 				th:src="@{/shop/DBGifReader2} + '?prodNo=' + ${shopProductVO.prodNo} " -->
-<!-- 				width="80px"> -->
+			    測試第二種寫法
+ 				<img 
+ 				th:src="@{/shop/DBGifReader2} + '?prodNo=' + ${shopProductVO.prodNo} " 
+ 				width="80px"> 
 
-				<!-- 				迴圈顯示所有圖片 -->
-				<!-- 				<div th:text="pic : ${shopProductVO.productPics}"> -->
-				<!-- 				<input type="text" th:value="${pic.prodPic}"> -->
-				<!-- <!-- 					<img th:src="@{'data:image/gif;base64,' + ${pic.prodPic}}" width="100px"> -->
-				<!-- 				</div> -->
+				迴圈顯示所有圖片 
+ 				<div th:text="pic : ${shopProductVO.productPics}"> 
+ 				<input type="text" th:value="${pic.prodPic}"> 
+ 					<img th:src="@{'data:image/gif;base64,' + ${pic.prodPic}}" width="100px">
+ 				</div> 
 
 
+ 				<div class="product-info"> 
+ 					<h3 th:text="${shopProductVO.prodName}">商品名稱</h3> 
+			-->
+					
+					
+					
+<!-- 					<p th:text="'$' + ${shopProductVO.prodPrice}">商品金額</p> -->
+<!-- 				</div> -->
+
+				<a th:href="@{/shop/listOneProdDetail(prodNo=${shopProductVO.prodNo})}">
+					<img th:src="@{/shop/DBGifReader} + '?prodNo=' + ${shopProductVO.prodNo}" alt="商品圖片">
+				</a>
+				
 				<div class="product-info">
-					<h3 th:text="${shopProductVO.prodName}">商品名稱</h3>
+					<!-- 商品名稱連結 -->
+					<h3><a th:href="@{/shop/listOneProdDetail(prodNo=${shopProductVO.prodNo})}" th:text="${shopProductVO.prodName}">商品名稱</a></h3>
 					<p th:text="'$' + ${shopProductVO.prodPrice}">商品金額</p>
 				</div>
+				
 				<div class="product-actions">
 					<a href="#"><i class="fa-solid fa-heart"></i></a> <a href="#"><i
 						class="fa-solid fa-cart-plus"></i></a>

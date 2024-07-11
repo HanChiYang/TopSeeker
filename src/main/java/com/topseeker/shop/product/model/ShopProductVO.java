@@ -1,9 +1,7 @@
 package com.topseeker.shop.product.model;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,6 +20,7 @@ import javax.validation.constraints.Size;
 //import com.topseeker.shop.orderdetail.model.OrderDetailVO;
 import com.topseeker.shop.productpic.model.ShopProductPicVO;
 import com.topseeker.shop.producttype.model.ShopProductTypeVO;
+import com.topseeker.shop.wishlist.model.ShopWishlistVO;
 
 
 @Entity
@@ -67,9 +66,15 @@ public class ShopProductVO implements java.io.Serializable{
     @OneToMany(mappedBy = "shopProductVO", cascade = CascadeType.ALL)
     private List<ShopProductPicVO> shopProductPics = new ArrayList<>();
     
+  	//商品收藏清單用
+	@OneToMany(mappedBy = "shopProductVO", cascade = CascadeType.ALL)
+	private List<ShopWishlistVO> shopWishlists = new ArrayList<>();
+    
 //	//訂單明細用
 //    @OneToMany(mappedBy = "shopProductVO", cascade = CascadeType.ALL)
-//    private Set<OrderDetailVO> orderDetails = new HashSet<>();
+//    private List<OrderDetailVO> orderDetails = new ArrayList<>();
+    
+
 	
 	
 	//無參數建構子
@@ -131,11 +136,20 @@ public class ShopProductVO implements java.io.Serializable{
 		this.shopProductPics = shopProductPics;
 	}
 
-//	public Set<OrderDetailVO> getOrderDetails() {
+	public List<ShopWishlistVO> getShopWishlists() {
+		return shopWishlists;
+	}
+
+	public void setShopWishlists(List<ShopWishlistVO> shopWishlists) {
+		this.shopWishlists = shopWishlists;
+	}
+	
+
+//	public List<OrderDetailVO> getOrderDetails() {
 //		return orderDetails;
 //	}
 //
-//	public void setOrderDetails(Set<OrderDetailVO> orderDetails) {
+//	public void setOrderDetails(List<OrderDetailVO> orderDetails) {
 //		this.orderDetails = orderDetails;
 //	}
 	
