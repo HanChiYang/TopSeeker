@@ -101,13 +101,13 @@ background-color: white !important;
 				<th:block th:each="notificationVO : ${notiListData}">
 					<tr th:class="${notificationVO.notiStatus == 1 ? 'read' : 'unread'}">
 						<td	th:text="${#dates.format(notificationVO.notiTime, 'yyyy-MM-dd HH:mm')}"></td>
-						<td th:text="${#strings.substring(notificationVO.notiContent, 0, 20)} + '...'"></td>
+						<td th:text="${notificationVO.notiContent}"></td>
 					</tr>
 				</th:block>
 			</tbody>
 		</table>
 		<div id="moreNoti">
-		<a href="/protected/notification/allNoti" id="moreNotia">顯示更多</a>
+		<a href="/notification/allNoti" id="moreNotia">顯示更多</a>
 		</div>
 	</div>
 	</div>

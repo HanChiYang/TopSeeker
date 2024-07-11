@@ -41,20 +41,21 @@
         </li>
 		
 		<li th:if="${session.loggedInMember != null}">
-           <span th:if="${session.notiData.notiStatus == 0}">
-             <a class="nav-link">
-                 <img id="alertIcon" class="bellIcon"th:src="@{/images/alert.svg}" width="25px" th:data-new-src="@{/images/noalert.svg}" alt="Alert Icon">
-             </a>
-           </span>
-        </li>
-        
-		<li th:if="${session.loggedInMember != null}">
-           <span th:if="${session.notiData.notiStatus == 1}">
-             <a class="nav-link bellIcon">
-               <img th:src="@{/images/noalert.svg}" width="25px" alt="New Notification Icon">             
-             </a>
-           </span>
-        </li>
+		    <span th:if="${session.notiData != null}">
+		        <a class="nav-link" th:if="${session.notiData.notiStatus == 0}">
+		            <img id="alertIcon" class="bellIcon" th:src="@{/images/alert.svg}" width="25px" th:data-new-src="@{/images/noalert.svg}" alt="Alert Icon">
+		        </a>
+		        <a class="nav-link" th:if="${session.notiData.notiStatus == 1 or session.notiData.notiStatus == null}">
+		            <img class="bellIcon" th:src="@{/images/noalert.svg}" width="25px" alt="New Notification Icon">
+		        </a>
+		    </span>
+		    <span th:if="${session.notiData == null}">
+		        <a class="nav-link bellIcon">
+		            <img th:src="@{/images/noalert.svg}" width="25px" alt="New Notification Icon">
+		        </a>
+		    </span>
+		</li>
+
 
         
         <li th:if="${session.loggedInMember != null}" class="nav-item">
