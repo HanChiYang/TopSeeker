@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary fixed-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary fixed-top" >
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">TopSeeker踏徙客</a>
+   <img th:src="@{/images/TopSeeker_logo.png}" width=75px alt="Logo">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -14,6 +14,12 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">揪團去玩</a>
+          <ul>
+	      <li><a href="http://localhost:8080/article/listAllArticle">開團系統</a></li>
+	      <li><a href="http://localhost:8080/participant/listAllParticipant">參團瀏覽</a></li>
+	      <li><a href="http://localhost:8080/participant/listAllParticipant">參團紀錄</a></li>
+	      <li><a href="#">檢舉回報</a></li>
+	     </ul>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/article/listAllArticle">登山情報</a>
@@ -33,9 +39,25 @@
         <li class="nav-item">
           <a class="nav-link" href="/protected/member/indexMem">會員專區</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/protected/notification/allNoti">通知</a>
-        </li>
+		
+		<li th:if="${session.loggedInMember != null}">
+		    <span th:if="${session.notiData != null}">
+		        <a class="nav-link" th:if="${session.notiData.notiStatus == 0}">
+		            <img id="alertIcon" class="bellIcon" th:src="@{/images/alert.svg}" width="25px" th:data-new-src="@{/images/noalert.svg}" alt="Alert Icon">
+		        </a>
+		        <a class="nav-link" th:if="${session.notiData.notiStatus == 1 or session.notiData.notiStatus == null}">
+		            <img class="bellIcon" th:src="@{/images/noalert.svg}" width="25px" alt="New Notification Icon">
+		        </a>
+		    </span>
+		    <span th:if="${session.notiData == null}">
+		        <a class="nav-link bellIcon">
+		            <img th:src="@{/images/noalert.svg}" width="25px" alt="New Notification Icon">
+		        </a>
+		    </span>
+		</li>
+
+
+        
         <li th:if="${session.loggedInMember != null}" class="nav-item">
           <a class="nav-link" href="/member/logout">登出</a>
         </li>
