@@ -53,11 +53,12 @@ public class ActPictureService {
 	}
 	
 	// 只取第一張圖片(測試用)
-	public ActPictureVO getFirstActPictureVO(Integer actNo) {
+	public ActPictureVO getFirstActPicVO(Integer actNo) {
 		return repository.getFirstActPicVO(actNo);
 		// 有資料則回傳其值，沒有則回傳null
 	}
-	// 取單一商品全數圖片用
+	
+	// 取單一活動全數圖片用
 	public List<ActPictureVO> getAllActPic(Integer actPicNo) {
 		return repository.getAllActPic(actPicNo);
 	}
@@ -67,7 +68,7 @@ public class ActPictureService {
 		return repository.findAll();
 	}
 	
-	public List<ActPictureVO> getShopProductPicVOList(Integer actNo) {
+	public List<ActPictureVO> getActPicVOList(Integer actNo) {
 		return repository.getActPictureVOList(actNo);
 	}
 
