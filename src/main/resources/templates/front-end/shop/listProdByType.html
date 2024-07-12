@@ -57,10 +57,6 @@ body {
 	margin-right: 20px;
 }
 
-.navbar .logo {
-    margin-right: 200px; /* 將 logo 推向最左側 */
-}
-
 .nav-links {
 	margin-top: 10px;
 	font-weight: 500;
@@ -142,13 +138,11 @@ body {
 
 <body>
 	<div class="top-bar">
-		<a th:href="@{/protected/memmember/indexMem}">會員中心</a> <a href="#">登入/註冊</a> <a th:href="@{/shop/wishlist}">我的收藏</a> <a href="#"><i
+		<a href="#">會員中心</a> <a href="#">登入/註冊</a> <a th:href="@{/shop/wishlist}">我的收藏</a> <a href="#"><i
 			class="fa-solid fa-shopping-cart cart-icon"></i>購物車</a>
 	</div>
 	<div class="navbar">
-	<div class="logo">
-		<a th:href="@{/}"><img th:src="@{/images/TopSeeker_logo.png}" width=100px alt="Logo"></a>
-	</div>
+			<img th:src="@{/images/TopSeeker_logo.png}" width=100px alt="Logo">
 		<div>
 			TopSeeker 戶外用品商城
 			<div class="nav-links">
@@ -167,40 +161,11 @@ body {
 	</div>
 
 	<div class="content">
-		<h1>歡迎來到TopSeeker戶外用品商城！</h1>
+		<h1  th:text=" '歡迎選購 ' + ${productType.prodTypeName} + '商品'" ></h1>
 
 		<div class="product-grid">
 			<!-- 商品卡片範例 -->
-			<div th:each="shopProductVO : ${shopListData}" class="product-card">
-
- 			
-				<!--測試印出產品編號 -->
- 		<!--	<input type="text" th:value="${shopProductVO.prodNo}">
-
-				圖片會出現，但應改寫成迴圈
-				<img
-					th:src="@{/shop/DBGifReader} + '?prodNo=' + ${shopProductVO.prodNo} "
-					width="100px"> 
-			    
-			    測試第二種寫法
- 				<img 
- 				th:src="@{/shop/DBGifReader2} + '?prodNo=' + ${shopProductVO.prodNo} " 
- 				width="80px"> 
-
-				迴圈顯示所有圖片 
- 				<div th:text="pic : ${shopProductVO.productPics}"> 
- 				<input type="text" th:value="${pic.prodPic}"> 
- 					<img th:src="@{'data:image/gif;base64,' + ${pic.prodPic}}" width="100px">
- 				</div> 
-
-
- 				<div class="product-info"> 
- 					<h3 th:text="${shopProductVO.prodName}">商品名稱</h3> 
-			-->
-					
-
-<!-- 					<p th:text="'$' + ${shopProductVO.prodPrice}">商品金額</p> -->
-<!-- 				</div> -->
+			<div th:each="shopProductVO : ${shopProdTypeListData}" class="product-card">
 
 				<a th:href="@{/shop/listOneProdDetail(prodNo=${shopProductVO.prodNo})}">
 					<img th:src="@{/shop/DBGifReader} + '?prodNo=' + ${shopProductVO.prodNo}" alt="商品圖片">
@@ -213,43 +178,10 @@ body {
 				</div>
 				
 				<div class="product-actions">
-					<a href="javascript:void(0);" th:data-id="${shopProductVO.prodNo}" onclick="toggleWishlist(this)"><i class="fa-regular fa-heart"></i></a> <a href="#"><i
+					<a href="#"><i class="fa-solid fa-heart"></i></a> <a href="#"><i
 						class="fa-solid fa-cart-plus"></i></a>
 				</div>
 			</div>
 		</div>
-		
-		
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script>
-    function toggleWishlist(button) {
-        var prodNo = $(button).data("id");
-        var $icon = $(button).find('i');
-
-        $.ajax({
-            type: "POST",
-            url: "/shop/toggleWishlist",
-            data: JSON.stringify({ prodNo: prodNo }),
-            contentType: "application/json",
-            success: function(response) {
-                if (response.success) {
-                    if (response.action === "added") {
-                        $icon.removeClass('fa-regular fa-heart').addClass('fa-solid fa-heart');
-                        alert("已加入收藏");
-                    } else if (response.action === "removed") {
-                        $icon.removeClass('fa-solid fa-heart').addClass('fa-regular fa-heart');
-                        alert("已移除收藏");
-                    }
-                } else {
-                    alert(response.message || "操作失敗，請稍後再試。");
-                }
-            },
-            error: function() {
-                alert("發生錯誤，請稍後再試。");
-            }
-        });
-    }
-</script>
 </body>
 </html>
