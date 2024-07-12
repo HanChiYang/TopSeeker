@@ -156,7 +156,7 @@ public class NewsController {
 		List<NewsVO> list = newsSvc.getAll();
 		model.addAttribute("newsListData", list);
 		model.addAttribute("success", "- (刪除成功)");
-		return "front-end/news/listAllNews"; // 刪除完成後轉交listAllEmp.html
+		return "back-end/news/newsBackEnd"; // 刪除完成後轉交listAllEmp.html
 	}
 
 
@@ -177,9 +177,9 @@ public class NewsController {
   		return "front-end/news/select_page";
   	}
       
-    @GetMapping("/listAllNews")
+    @GetMapping("/newsBackEnd")
   	public String listAllNews(Model model) {
-  		return "front-end/news/listAllNews";
+  		return "back-end/news/newsBackEnd";
   	}
     
    
@@ -190,9 +190,9 @@ public class NewsController {
   		return list;
   	}
     
-    @GetMapping("/newsIndex")
+    @GetMapping("/listAllNews")
     public String newsIndex(Model model) {
-    	return "front-end/news/newsIndex";
+    	return "front-end/news/listAllNews";
     }
       
     
