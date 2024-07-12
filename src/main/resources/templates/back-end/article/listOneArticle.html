@@ -31,7 +31,7 @@ div.container {
  max-width: 90%;
  
  padding: 20px;
- background-color: #fafafa;
+ background-color: #CEDEBD;
  border-radius: 10px;
  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
  margin-bottom: 20px;
@@ -78,152 +78,95 @@ table.dataTable th, table.dataTable td {
 
 <div class="container">登山情報</div>
 
-	        <div class="article-details">
-	            <div class="article-section">
-	                <div
-	                    style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-	                    <strong>文章標題:</strong> <span th:text="${articleVO.artTitle}"></span>
-	                </div>
-	                <div
-	                    style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-	                    <strong>文章內容:</strong> <span th:text="${articleVO.artContent}"></span>
-	                </div>
-	                
-	                   <div class="image-section">
-	              
-	                    <div th:each="artPic : ${articleVO.artPics}"><img th:src="@{'data:image/jpeg;base64,' + ${artPic.base64ArtPic}}" alt="圖片"></div>
-	                
-	            </div>
-	                <div
-	                    style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-	                    <strong>文章狀態:</strong> <span th:if="${articleVO.artStatus == 0}">隱藏</span>
-	                    <span th:if="${articleVO.artStatus == 1}">公開</span>
-	                </div>
-	                <div
-	                    style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-	                    <strong>會員帳號:</strong> <span
-	                        th:text="${articleVO.memberVO.memAccount}"></span>
-	                </div>
-	                <div
-	                    style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-	                    <strong>發布時間:</strong> <span th:text="${articleVO.artPublishTime}"></span>
-	                </div>  
-	                
-	         
-	            </div>
-	
-	          
-	
-	
-	            <div>
-	                <form method="post" th:action="@{/article/getOne_For_Update}"
-	                    style="margin-bottom: 0px;">
-	                    <input type="submit" value="修改內容"> <input type="hidden"
-	                        name="artNo" th:value="${articleVO.artNo}">
-	                </form>
-	
-	            </div>
-	            <div>
-	            <button href="#" id="btnAddArtReport" style="margin-top: 10px;">檢舉文章</button> 
-	            </div>
-	            
-	            <div class="comment-section">
-	                <h3>留言區</h3>
-	                <div class="comments">
-	                    <div th:each="comment : ${articleVO.artcomments}">
-	                        <p th:text="${comment.commentContent}"></p>
-	                        <p th:text="${comment.commentPostTime}"></p>
-	                        <p>留言者: <span th:text="${comment.memberVO.memAccount}"></span></p>
-	                        
-	                        <hr />
-	                    </div>
-	                </div>
-	            <div>
-	                <!-- 留言表單 -->
-	   			<form class="comment-form" th:action="@{/article/artcomment/addComment}" method="post" th:object="${artcommentVO}">
-    <textarea name="commentContent" th:field="*{commentContent}" rows="4" placeholder="輸入你的留言..."></textarea>
-    <input type="hidden" name="artNo" th:value="${articleVO.artNo}" />
-    <button type="submit">送出留言</button>
-    <select th:field="*{memberVO.memNo}">
-        <option th:each="memberVO : ${memberListData}" th:value="${memberVO.memNo}" th:text="${memberVO.memName}" />
-    </select>
-    <span th:if="${#fields.hasErrors('memberVO.memNo')}" th:errors="*{memberVO.memNo}" class="error" id="memberVO.memNo.errors"></span>
-</form>
-	                <!-- 顯示留言 -->
-	            </div>
-	            </div>
-	        </div>
-	
-	  
-	
-	    <script
-	        src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	    <script
-	        src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-	    <script>
-	        $(document)
-	                .ready(
-	                        function() {
-	                            $('#example')
-	                                    .DataTable(
-	                                            {
-	                                                "lengthMenu" : [ 3, 5, 10, 20,
-	                                                        50, 100 ],
-	                                                "searching" : true,
-	                                                "paging" : true,
-	                                                "ordering" : true,
-	                                                "language" : {
-	                                                    "processing" : "處理中...",
-	                                                    "loadingRecords" : "載入中...",
-	                                                    "lengthMenu" : "顯示 MENU 筆結果",
-	                                                    "zeroRecords" : "沒有符合的結果",
-	                                                    "info" : "顯示第 START 至 END 筆結果，共 <strong>_TOTAL_</strong> 筆",
-	                                                    "infoEmpty" : "顯示第 0 至 0 筆結果，共 0 筆",
-	                                                    "infoFiltered" : "(從 MAX 筆結果中過濾)",
-	                                                    "infoPostFix" : "",
-	                                                    "search" : "搜尋:",
-	                                                    "paginate" : {
-	                                                        "first" : "第一頁",
-	                                                        "previous" : "上一頁",
-	                                                        "next" : "下一頁",
-	                                                        "last" : "最後一頁"
-	                                                    },
-	                                                    "aria" : {
-	                                                        "sortAscending" : ": 升冪排列",
-	                                                        "sortDescending" : ": 降冪排列"
-	                                                    }
-	                                                }
-	                                            });
-	                        });
-	
-	        $(function() {
-	            $("button.btn_hamburger").on("click", function() {
-	                $("aside.aside").toggleClass("-on");
-	            });
-	        });
-	
-	        $('#example').DataTable({
-	            "language" : {
-	                "lengthMenu" : "顯示 MENU 筆資料",
-	                "zeroRecords" : "沒有資料",
-	                "info" : "顯示第 PAGE 頁，共 PAGES 頁",
-	                "infoEmpty" : "沒有資料",
-	                "infoFiltered" : "(從 MAX 筆資料中篩選)",
-	                "search" : "搜尋:",
-	                "paginate" : {
-	                    "first" : "第一頁",
-	                    "last" : "最後一頁",
-	                    "next" : "下一頁",
-	                    "previous" : "上一頁"
-	                }
-	            }
-	        });
-	        
-	        $('#btnAddArtReport').on('click', function() {
-	        	   // 在這裡添加打開新增文章表單的操作或者跳轉到新增文章頁面的操作
-	        	   // 例如：
-	        	   window.location.href = 'http://localhost:8080/artreport/addArtReport'; // 跳轉到新增文章頁面
-	        	  });
-	    </script>
-	</body>
-	</html>
+<div class="article-details">
+    <div class="article-section">
+        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+            <strong>文章標題:</strong> <span th:text="${articleVO.artTitle}"></span>
+        </div>
+        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+            <strong>文章內容:</strong> <span th:text="${articleVO.artContent}"></span>
+        </div>
+        <div class="image-section">
+            <div th:each="artPic : ${articleVO.artPics}">
+                <img th:src="@{'data:image/jpeg;base64,' + ${artPic.base64ArtPic}}" alt="圖片">
+            </div>
+        </div>
+        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+            <strong>文章狀態:</strong>
+            <span th:if="${articleVO.artStatus == 0}">隱藏</span>
+            <span th:if="${articleVO.artStatus == 1}">公開</span>
+        </div>
+        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+            <strong>會員帳號:</strong> <span th:text="${articleVO.memberVO.memAccount}"></span>
+        </div>
+        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+            <strong>發布時間:</strong> <span th:text="${articleVO.artPublishTime}"></span>
+        </div>
+    </div>
+
+  
+    <div>
+        <button id="btnAddArtReport" style="margin-top: 10px; margin-bottom: 10px;" th:data-artno="${articleVO.artNo}">檢舉文章</button>
+    </div>
+
+    <div class="comment-section">
+        <h3>留言區</h3>
+        <div class="comments">
+            <div th:each="comment : ${articleVO.artcomments}">
+                <p th:text="${comment.commentContent}"></p>
+                <p th:text="${comment.commentPostTime}"></p>
+                <p>留言者: <span th:text="${comment.memberVO.memAccount}"></span></p>
+                <hr />
+            </div>
+        </div>
+        <div>
+            <!-- 留言表單 -->
+            <form class="comment-form" th:action="@{/article/artcomment/addComment}" method="get" th:object="${artcommentVO}">
+                <textarea name="commentContent" th:field="*{commentContent}" rows="4" placeholder="輸入你的留言..."></textarea>
+                <input type="hidden" name="artNo" th:value="${articleVO.artNo}" />
+                <button type="submit">送出留言</button>
+            </form>
+            <!-- 顯示留言 -->
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable({
+            "lengthMenu": [3, 5, 10, 20, 50, 100],
+            "searching": true,
+            "paging": true,
+            "ordering": true,
+            "language": {
+                "processing": "處理中...",
+                "loadingRecords": "載入中...",
+                "lengthMenu": "顯示 MENU 筆結果",
+                "zeroRecords": "沒有符合的結果",
+                "info": "顯示第 START 至 END 筆結果，共 <strong>_TOTAL_</strong> 筆",
+                "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
+                "infoFiltered": "(從 MAX 筆結果中過濾)",
+                "search": "搜尋:",
+                "paginate": {
+                    "first": "第一頁",
+                    "previous": "上一頁",
+                    "next": "下一頁",
+                    "last": "最後一頁"
+                },
+                "aria": {
+                    "sortAscending": ": 升冪排列",
+                    "sortDescending": ": 降冪排列"
+                }
+            }
+        });
+    });
+
+    $('#btnAddArtReport').on('click', function() {
+        var artNo = $(this).data('artno'); // 获取文章编号
+        window.location.href = 'http://localhost:8080/artreport/addArtReport?artNo=' + artNo;
+    });
+</script>
+</body>
+</html>

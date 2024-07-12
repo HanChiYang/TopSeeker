@@ -53,4 +53,8 @@ public class ActService {
 	}
 	
 
+	public List<ActVO> findMyOpenGroup(Integer memNoA) {
+		return repository.findMyOpenGroup(memNoA);
+	}
+
 }
