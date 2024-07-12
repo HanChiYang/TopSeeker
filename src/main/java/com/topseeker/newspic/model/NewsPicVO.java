@@ -10,7 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
-import com.topseeker.act.model.ActVO;
 import com.topseeker.news.model.NewsVO;
 
 @Entity

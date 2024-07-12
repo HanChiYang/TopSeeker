@@ -18,6 +18,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.Future;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.Min;
 //import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -53,7 +55,7 @@ public class ActVO implements java.io.Serializable {
 	
 	@Column(name = "act_title")
 	@NotEmpty(message="活動標題: 請勿空白")
-	@Pattern(regexp = "^[(\u4e00-\u9fa5)(a-zA-Z0-9_)]{2,20}$", message = "活動標題: 只能是中、英文字母、數字和_ , 且長度必需在2到10之間")
+	@Pattern(regexp = "^.{2,10}$", message = "活動標題: 長度必需在2到10之間")
 	private String actTitle;
 	
 	@Column(name = "act_content")
@@ -63,10 +65,12 @@ public class ActVO implements java.io.Serializable {
 	
 	@Column(name = "act_max_count")
 	@NotNull(message="可參與最多人數: 請勿空白")
+	@Min(value = 2, message = "可參與最少人數: 必須至少為2")
 	private Integer actMaxCount;
 	
 	@Column(name = "act_min_count")
 	@NotNull(message="可參與最少人數: 請勿空白")
+	@Min(value = 1, message = "可參與最少人數: 必須至少為1")
 	private Integer actMinCount;
 	
 	@Column(name = "act_current_count")
@@ -77,37 +81,31 @@ public class ActVO implements java.io.Serializable {
 	@NotNull(message = "不得是空值")
 	private Integer actCheckCount=0;
 	
-	@Column(name = "act_enroll_begin")
+	@Column(name = "act_enroll_begin", updatable = false)
 	@NotNull(message="報名開始日: 請勿空白")	
-//	@Future(message="日期必須是在今日(不含)之後")
-//	@Past(message="日期必須是在今日(含)之前")
-//	@DateTimeFormat(pattern="yyyy-MM-dd") 
-//	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") 
+	@FutureOrPresent(message = "日期必須是今天（含）之後") 
 	private Date actEnrollBegin;
 	
-	@Column(name = "act_enroll_end")
+	@Column(name = "act_enroll_end", updatable = false)
 	@NotNull(message="報名結束日: 請勿空白")	
-//	@Future(message="日期必須是在今日(不含)之後")
-//	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@Future(message="日期必須是在今日(不含)之後")
 	private Date actEnrollEnd;
 	
-	@Column(name = "act_start")	
+	@Column(name = "act_start", updatable = false)	
 	@NotNull(message="活動開始日: 請勿空白")
 	@Future(message="日期必須是在今日(不含)之後")
-//	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date actStart;
 	
-	@Column(name = "act_end")
+	@Column(name = "act_end", updatable = false)
 	@NotNull(message="活動結束日: 請勿空白")	
 	@Future(message="日期必須是在今日(不含)之後")
-//	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date actEnd;
 	
 	@Column(name = "act_place")
 	@NotEmpty(message="活動地點: 請勿空白")	
 	private String actPlace;
 	
-	@Column(name = "act_status")
+	@Column(name = "act_status", updatable = false)
 	@NotNull(message = "不得是空值")	
 	private Integer actStatus=0;
 	
