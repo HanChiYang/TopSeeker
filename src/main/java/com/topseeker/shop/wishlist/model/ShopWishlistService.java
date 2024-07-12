@@ -26,10 +26,16 @@ public class ShopWishlistService {
 		repository.deleteById(wishlistNo);
 	}
     
-    //透過會員號碼查詢全部收藏商品
+    //透過會員號碼查詢【全部】收藏商品
     public List <ShopWishlistVO> showMemWishlist(Integer memNo) {
     	return repository.findByMemNo(memNo);
     }
+    
+    //透過會員號碼查詢【單一】收藏商品
+    public ShopWishlistVO findByMemNoAndProdNo(Integer memNo, Integer prodNo) {
+        return repository.findByMemNoAndProdNo(memNo, prodNo);
+    }
+    
     
     //============架構變更，故不使用複合主鍵============
     
