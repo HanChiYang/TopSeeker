@@ -7,10 +7,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <style>
 div.container {
-margin-top: 75px;
+margin-top: 90px;
+}
+
+body {
+background-color:#FAF1E4;
 }
 
 </style>
+<link rel="stylesheet" th:href="@{/css/common.css}">
+
 </head>
 <body>
 
@@ -26,7 +32,7 @@ margin-top: 75px;
         <span id="errorMsg"></span>
     </div>
 
-    <button type="button" class="btn btn-primary" id="check_email_btn">發送重設密碼信件</button>
+    <button type="button" class="btn btn-success" id="check_email_btn">發送重設密碼信件</button>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
