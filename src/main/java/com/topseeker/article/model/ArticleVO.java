@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 
@@ -25,6 +26,7 @@ import com.topseeker.artpic.model.ArtPicVO;
 import com.topseeker.artcomment.model.ArtCommentVO;
 import com.topseeker.member.model.MemberVO;
 
+@DynamicUpdate
 @Entity  //要加上@Entity才能成為JPA的一個Entity類別
 @Table(name = "article") //代表這個class是對應到資料庫的實體table，目前對應的table是EMP2 
 public class ArticleVO {
