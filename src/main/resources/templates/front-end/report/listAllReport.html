@@ -74,7 +74,6 @@ table.dataTable th, table.dataTable td {
 <table id="example" class="display" style="width: 100%">
   <thead >
 	<tr style="background-color:#CCCCFF">
-		<th>計數</th>
 		<th>檢舉活動編號</th>
 		<th>活動編號</th>
 		<th>會員編號</th>
@@ -93,7 +92,6 @@ table.dataTable th, table.dataTable td {
   <tbody>
 		<th:block th:each="reportVO : ${reportListData}">
 			<tr>
-				<td th:text="${reportVOStat.count}"></td>
 				<td th:text="${reportVO.actRpNo}"></td>
 				<td th:text="${reportVO.actVO.actNo} + '-[' + ${reportVO.actVO.actTitle} + ']'"></td>				
 				<td th:text="${reportVO.memberVO.memNo} + '-[' + ${reportVO.memberVO.memName} + ']'"></td>				
