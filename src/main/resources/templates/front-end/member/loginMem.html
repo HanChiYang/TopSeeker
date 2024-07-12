@@ -99,31 +99,51 @@ body > div > main > form > div:nth-child(2) {
 margin-bottom: 10px;
 
 }
+
+body {
+    background-color: #FAF1E4;
+
+}
+
+body > div {
+margin-top: 150px;
+}
+
+#forgetPW > form > button {
+    background-color: #FAF1E4;
+}
+#forgetPW > form > button:hover {
+    background-color: #A67B5B;
+    color: white;
+}
+
     </style>
 
     <!-- Custom styles for this template -->
     <link href="/css/sign-in.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    
 </head>
-<body class="d-flex align-items-center py-4 bg-body-tertiary">
+<body>
 <nav th:insert="~{/front-end/navbar.html}"></nav>
 
 
-<div class="container">
+<div>
     <main class="form-signin w-100 m-auto">
         <form method="post" th:action="@{/member/loginMem}">
             <h1 class="h3 mb-3 fw-normal">登入會員</h1>
 
             <div class="form-floating">
-                <input name="memAccount" type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <input name="memAccount" type="text" class="form-control" id="floatingInput">
                 <label for="floatingInput">帳號</label>
             </div>
             <div class="form-floating">
-                <input name="memPassword" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                <input name="memPassword" type="password" class="form-control" id="floatingPassword">
                 <label for="floatingPassword">密碼</label>
             </div>
 
 
-            <button class="btn btn-lg btn-primary w-100" type="submit">登入</button>
+            <button class="btn btn-lg btn-success w-100" type="submit">登入</button>
                 
             <div th:if="${loginError}" class="alert alert-danger" role="alert" id="error">
               <span th:text="${loginError}"></span>
@@ -133,13 +153,12 @@ margin-bottom: 10px;
         
                 <div id="forgetPW">
                     <form th:action="@{/member/forgetPW}" method="get">
-                        <button type="submit" class="btn btn-light ">忘記密碼</button>
+                        <button type="submit" class="btn btn-light">忘記密碼</button>
                     </form>
                 </div>
         
         
     </main>
 </div>
-
 </body>
 </html>
