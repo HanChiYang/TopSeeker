@@ -47,7 +47,8 @@ public class FollowController {
 		Integer loggedInMemberNo = loggedInMember.getMemNo();
 		
 		List<FollowVO> followListData = followSvc.findAllFollowers(loggedInMemberNo);
-		
+//		List<MemberVO> followMemVOList = memberSvc.f
+				
 		model.addAttribute("followListData", followListData);
 		
 		return "front-end/follow/allFollow";
@@ -78,9 +79,4 @@ public class FollowController {
 		
 		return "front-end/follow/allFollow";
 	}
-
-
-
- 
-
 }
