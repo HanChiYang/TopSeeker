@@ -37,7 +37,7 @@ import com.topseeker.employee.model.EmployeeVO;
 
 @Controller
 @Validated
-@RequestMapping("/artreport")
+@RequestMapping("artreport")
 public class ArtReportController {
 	
 	
@@ -75,7 +75,7 @@ public class ArtReportController {
 	        model.addAttribute("artreportVO", artreportVO);
 	        model.addAttribute("articleTitle", articleVO.getArtTitle());
 	        model.addAttribute("memberAccount", loggedInMember.getMemAccount()); // 传递会员账号
-	        return "back-end/artreport/addArtReport";
+	        return "front-end/artreport/addArtReport";
 	    }
 
 	/*
@@ -119,56 +119,28 @@ public class ArtReportController {
 	/*
 	 * This method will be called on listAllEmp.html form submission, handling POST request
 	 */
-	@PostMapping("getOne_For_Update")
-	public String getOne_For_Update(@RequestParam("artReportNo") String artReportNo, ModelMap model) {
-		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		/*************************** 2.開始查詢資料 *****************************************/
-		// EmpService empSvc = new EmpService();
-		ArtReportVO artreportVO = artreportSvc.getOneArtReport(Integer.valueOf(artReportNo));
+    @PostMapping("getOne_For_Update")
+    public String getOne_For_Update(@RequestParam("artReportNo") Integer artReportNo, ModelMap model) {
+        ArtReportVO artreportVO = artreportSvc.getOneArtReport(artReportNo);
+        model.addAttribute("artreportVO", artreportVO);
+        return "back-end/artreport/update_ArtReport_input";
+    }
 
-		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
-		model.addAttribute("artreportVO", artreportVO);
-		return "back-end/artreport/update_ArtReport_input"; // 查詢完成後轉交update_emp_input.html
-	}
+    @PostMapping("update")
+    public String update(@Valid ArtReportVO artreportVO, BindingResult result, ModelMap model) throws IOException {
+        result = removeFieldError(artreportVO, result, "upFiles");
 
-	/*
-	 * This method will be called on update_emp_input.html form submission, handling POST request It also validates the user input
-	 */
-	@PostMapping("update")
-	public String update(@Valid ArtReportVO artreportVO, BindingResult result, ModelMap model,
-			 MultipartFile[] parts) throws IOException {
+        if (result.hasErrors()) {
+            model.addAttribute("artreportVO", artreportVO);
+            return "back-end/artreport/update_ArtReport_input";
+        }
 
-		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
-		result = removeFieldError(artreportVO, result, "upFiles");
-
-//		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的新圖片時
-//			// EmpService empSvc = new EmpService();
-//			byte[] upFiles = participantSvc.getOneParticipant(participantVO.getActPartNo()).getUpFiles();
-//			participantVO.setUpFiles(upFiles);
-//		} else {
-//			for (MultipartFile multipartFile : parts) {
-//				byte[] upFiles = multipartFile.getBytes();
-//				participantVO.setUpFiles(upFiles);
-//			}
-//		}
-		if (result.hasErrors()) {
-			return "back-end/report/update_ArtReport_input";
-		}
-		
-		if (artreportVO.getArtReportStatus() == 1) {
+        if (artreportVO.getArtReportStatus() == 1) {
             articleSvc.updateArticleStatus(artreportVO.getArticleVO().getArtNo(), 0);
         }
-		/*************************** 2.開始修改資料 *****************************************/
-		// EmpService empSvc = new EmpService();
-		artreportSvc.updateArtReport(artreportVO);
-
-		/*************************** 3.修改完成,準備轉交(Send the Success view) **************/
-		model.addAttribute("success", "- (修改成功)");
-		artreportVO = artreportSvc.getOneArtReport(Integer.valueOf(artreportVO.getArtReportNo()));
-		model.addAttribute("artreportVO", artreportVO);
-		return "back-end/artreport/listOneArtReport"; // 修改成功後轉交listOneEmp.html
-	}
+        artreportSvc.updateArtReport(artreportVO);
+        return "redirect:/artreport/listAllArtReport";
+    }
 
 	/*
 	 * This method will be called on listAllEmp.html form submission, handling POST request

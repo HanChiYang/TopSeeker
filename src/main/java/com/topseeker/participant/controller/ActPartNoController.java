@@ -71,15 +71,15 @@ public class ActPartNoController {
 		
 		if (participantVO == null) {
 			model.addAttribute("errorMessage", "查無資料");
-			return "back-end/participant/select_page";
+			return "front-end/participant/select_page";
 		}
 		
 		/***************************3.查詢完成,準備轉交(Send the Success view)*****************/
 		model.addAttribute("participantVO", participantVO);
 		model.addAttribute("getOne_For_Display", "true"); // 旗標getOne_For_Display見select_page.html的第156行 -->
 		
-//		return "back-end/emp/listOneEmp";  // 查詢完成後轉交listOneEmp.html
-		return "back-end/participant/select_page"; // 查詢完成後轉交select_page.html由其第158行insert listOneEmp.html內的th:fragment="listOneEmp-div
+//		return "front-end/emp/listOneEmp";  // 查詢完成後轉交listOneEmp.html
+		return "front-end/participant/select_page"; // 查詢完成後轉交select_page.html由其第158行insert listOneEmp.html內的th:fragment="listOneEmp-div
 	}
 
 	
@@ -91,7 +91,7 @@ public class ActPartNoController {
 	    for (ConstraintViolation<?> violation : violations ) {
 	          strBuilder.append(violation.getMessage() + "<br>");
 	    }
-	    //==== 以下第92~96行是當前面第77行返回 /src/main/resources/templates/back-end/emp/select_page.html用的 ====   
+	    //==== 以下第92~96行是當前面第77行返回 /src/main/resources/templates/front-end/emp/select_page.html用的 ====   
 //	    model.addAttribute("empVO", new EmpVO());
 //    	EmpService empSvc = new EmpService();
 		List<ParticipantVO> list = participantSvc.getAll();
@@ -100,7 +100,7 @@ public class ActPartNoController {
 		List<ActVO> list2 = actSvc.getAll();
     	model.addAttribute("actListData",list2);    // for select_page.html 第135行用
 		String message = strBuilder.toString();
-	    return new ModelAndView("back-end/participant/select_page", "errorMessage", "請修正以下錯誤:<br>"+message);
+	    return new ModelAndView("front-end/participant/select_page", "errorMessage", "請修正以下錯誤:<br>"+message);
 	}
 
 }
