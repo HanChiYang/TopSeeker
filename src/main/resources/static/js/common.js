@@ -10,8 +10,12 @@
                 url: '/notification/listNewNoti',
                 method: 'GET',
                 success: function(data) {
+					if (data) {
                     $('#notificationContent').html(data);
-                    $('#notificationContainer').toggle();
+                    $('#notificationContainer').toggle();						
+					}else {
+						alert("您尚無任何通知");
+					}
                 },
                 error: function() {
                     alert('加載通知失敗');

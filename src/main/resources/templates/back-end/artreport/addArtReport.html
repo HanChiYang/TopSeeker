@@ -84,22 +84,19 @@ table.dataTable th, table.dataTable td {
 		<form th:action="@{insert}" method="post" th:object="${artreportVO}" enctype="multipart/form-data">
 			
 			
-			<div>
-			<label>文章編號:</label>
-			<select th:field="*{articleVO.artNo}">
-				<option th:each="articleVO : ${articleListData}" th:value="${articleVO.artNo}" th:text="${articleVO.artTitle}" />
-			</select>
-			<span th:if="${#fields.hasErrors('articleVO.artNo')}" th:errors="*{articleVO.artNo}" class="error" id="articleVO.artNo.errors"></span>
-			</div>
+			 <div>
+                <label>文章標題:</label>
+                <input type="text" th:value="${articleTitle}" readonly /><br/>
+                <input type="hidden" th:field="*{articleVO.artNo}" />
+                <span th:if="${#fields.hasErrors('articleVO.artNo')}" th:errors="*{articleVO.artNo}" class="error" id="articleVO.artNo.errors"></span>
+            </div>
 			
 			
 			<div>
-			<label>會員編號:</label>
-			<select th:field="*{memberVO.memNo}">
-				<option th:each="memberVO : ${memberListData}" th:value="${memberVO.memNo}" th:text="${memberVO.memName}" />
-			</select>
-			<span th:if="${#fields.hasErrors('memberVO.memNo')}" th:errors="*{memberVO.memNo}" class="error" id="memberVO.memNo.errors"></span>
-			</div>
+                <label>會員帳號:</label>
+                <input type="text" th:value="${memberAccount}" readonly /><br/>
+            </div>
+            
 			
 		
 			
