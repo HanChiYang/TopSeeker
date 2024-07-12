@@ -19,6 +19,8 @@ public interface ArticleRepository extends JpaRepository<ArticleVO, Integer> {
 	//● (自訂)條件查詢
 	@Query(value = "from ArticleVO where art_no=?1 and art_title like?2 order by art_no")
 	List<ArticleVO> findByOthers(int artNo , int artTitle);
+	
+	List<ArticleVO> findByArtStatusNot(Integer artStatus);
 
 
 }

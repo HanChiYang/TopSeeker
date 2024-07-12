@@ -3,11 +3,15 @@ package com.topseeker.article.model;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.topseeker.artpic.model.ArtPicRepository;
 
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Article;
 
@@ -20,6 +24,9 @@ public class ArticleService {
 	ArticleRepository repository;
 	
 	@Autowired
+    private ArtPicRepository artPicRepository;
+	
+	@Autowired
     private SessionFactory sessionFactory;
 
 	public void addArticle(ArticleVO articleVO) {
@@ -29,8 +36,13 @@ public class ArticleService {
 	public void updateArticle(ArticleVO articleVO) {
 		repository.save(articleVO);
 	}
-
+	@Transactional
 	public void deleteArticle(Integer artNo) {
+		 
+		ArticleVO article = repository.findById(artNo).orElseThrow(() -> new IllegalArgumentException("Invalid article ID: " + artNo));
+
+	       
+		artPicRepository.deleteByArticleVO(article);
 		if (repository.existsById(artNo))
 			repository.deleteByActMsgNo(artNo);
 //		    repository.deleteById(actPartNo);
@@ -49,17 +61,27 @@ public class ArticleService {
 	}
 
 	public List<ArticleVO> getAll() {
-		return repository.findAll();
+        return repository.findByArtStatusNot(0);
 	}
 
 	public List<ArticleVO> getAll(Map<String, String[]> map) {
-		return HibernateUtil_CompositeQuery_Article.getAllC(map,sessionFactory.openSession());
-	}
+		return HibernateUtil_CompositeQuery_Article.getAllC(map, sessionFactory.openSession())
+                .stream().filter(article -> article.getArtStatus() != 0).collect(Collectors.toList());	}
 
 	public ArticleVO findById(Integer artNo) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	  public List<ArticleVO> getAllIncludingStatusZero() {
+	        return repository.findAll();
+	    }
+	  
+	  public void updateArticleStatus(Integer artNo, Integer newStatus) {
+	        ArticleVO article = repository.findById(artNo).orElseThrow(() -> new RuntimeException("Article not found"));
+	        article.setArtStatus(newStatus);
+	        repository.save(article);
+	    }
 	
 	
 

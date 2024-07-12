@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,18 +61,29 @@ public class ArtReportController {
 	 * This method will serve as addEmp.html handler.
 	 */
 	@GetMapping("addArtReport")
-	public String addArtReport(ModelMap model) {
-		ArtReportVO artreportVO = new ArtReportVO();
-		model.addAttribute("artreportVO", artreportVO);
-		return "back-end/artreport/addArtReport";
-	}
+	public String addArtReport(@RequestParam("artNo") Integer artNo, ModelMap model , HttpSession session) {
+		  MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+	        if (loggedInMember == null) {
+	            return "redirect:/member/loginMem"; 
+	        }
+
+	        ArtReportVO artreportVO = new ArtReportVO();
+	        ArticleVO articleVO = articleSvc.getOneArticle(artNo);
+	        artreportVO.setArticleVO(articleVO);
+	        artreportVO.setMemberVO(loggedInMember);
+
+	        model.addAttribute("artreportVO", artreportVO);
+	        model.addAttribute("articleTitle", articleVO.getArtTitle());
+	        model.addAttribute("memberAccount", loggedInMember.getMemAccount()); // 传递会员账号
+	        return "back-end/artreport/addArtReport";
+	    }
 
 	/*
 	 * This method will be called on addEmp.html form submission, handling POST request It also validates the user input
 	 */
 	@PostMapping("insert")
 	public String insert(@Valid ArtReportVO artreportVO, BindingResult result, ModelMap model,
-			 MultipartFile[] parts) throws IOException {
+			 MultipartFile[] parts , HttpSession session) throws IOException {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
@@ -86,6 +98,14 @@ public class ArtReportController {
 //			}
 //		}
 		
+		 MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+	        if (loggedInMember == null) {
+	            return "redirect:/member/loginMem"; 
+	        }
+
+	        artreportVO.setMemberVO(loggedInMember);
+
+		
 		/*************************** 2.開始新增資料 *****************************************/
 		// EmpService empSvc = new EmpService();
 		artreportSvc.addArtReport(artreportVO);
@@ -93,7 +113,7 @@ public class ArtReportController {
 		List<ArtReportVO> list = artreportSvc.getAll();
 		model.addAttribute("artreportListData", list);
 		model.addAttribute("success", "- (新增成功)");
-		return "redirect:/artreport/listAllArtReport"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
+		return "redirect:/article/listAllArticle"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
 	}
 
 	/*
@@ -135,6 +155,10 @@ public class ArtReportController {
 		if (result.hasErrors()) {
 			return "back-end/report/update_ArtReport_input";
 		}
+		
+		if (artreportVO.getArtReportStatus() == 1) {
+            articleSvc.updateArticleStatus(artreportVO.getArticleVO().getArtNo(), 0);
+        }
 		/*************************** 2.開始修改資料 *****************************************/
 		// EmpService empSvc = new EmpService();
 		artreportSvc.updateArtReport(artreportVO);
@@ -225,6 +249,8 @@ public class ArtReportController {
 		model.addAttribute("artreportListData", list); // for listAllEmp.html 第85行用
 		return "back-end/artreport/listAllArtReport";
 	}
+	
+
 
 
 }
