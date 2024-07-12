@@ -112,7 +112,7 @@ public class ActnoController {
 	
 	@PostMapping("details")
     public String getActDetails(@RequestParam("actNo") String actNo, Model model) {
-		System.out.println(actNo);
+//		System.out.println(actNo);
 		ActVO actVO = actSvc.getOneAct(Integer.valueOf(actNo));
         model.addAttribute("actVO", actVO);
         return "front-end/act/listOneAct";

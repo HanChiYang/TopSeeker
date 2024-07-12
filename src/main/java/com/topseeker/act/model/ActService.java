@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Act;
 
 
@@ -22,15 +23,15 @@ public class ActService {
 	
 
 	
-
+	//新增
 	public void addAct(ActVO actVO) {
 		repository.save(actVO);
 	}
-
+	//修改
 	public void updateAct(ActVO actVO) {
 		repository.save(actVO);
 	}
-
+	//刪除
 	public void deleteAct(Integer actNo) {
 		if (repository.existsById(actNo))
 			repository.deleteByActNo(actNo);
