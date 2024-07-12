@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>活動資料修改 - update_act_input.html</title>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
+		 <div align="center"> <h2>活動資料修改 - update_act_input.html</h2>
+		 <h3><a class="navbar-brand" href="javascript:history.back()"><i class="fa-solid fa-person-walking-arrow-loop-left"></i>回上一頁</a></h3></div>
+</nav>
+
+	<div align="center">
+		<h3><b>所有欄位皆為必填欄位</b></h3>
+		<form th:action="@{update}" method="post" th:object="${actVO}" enctype="multipart/form-data">
+			
+			<div>
+			<label>活動編號:</label>
+			<input type="text" th:field="*{actNo}" style="border:0px ; font-weight: bold;" readonly /><br/>
+			</div>
+			
+			<div>
+			<label>會員編號:</label>
+			<input type="text" th:field="*{memberVO.memNo}" style="border:0px ; font-weight: bold;" readonly /><br/>
+			</div>
+			
+			<div>
+			<label>活動標題:</label>
+			<input type="text" th:field="*{actTitle}" onclick="hideContent('actTitle.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('actTitle')}" th:errors="*{actTitle}" class="error" id="actTitle.errors"></span>
+			</div>
+			
+			<div>
+			<label>活動地點:</label>
+			<input type="text" th:field="*{actPlace}" onclick="hideContent('actPlace.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('actPlace')}" th:errors="*{actPlace}" class="error" id="actPlace.errors"></span>
+			</div>
+			
+			<div>
+			<label>活動內容:</label>
+			<textarea th:field="*{actContent}" onclick="hideContent('actContent.errors');" rows="6" cols="50" ></textarea><br/>
+			<span  th:if="${#fields.hasErrors('actContent')}" th:errors="*{actContent}" class="error" id="actContent.errors"></span>
+			</div>
+			
+			<div id="ActPic">                             <!-- 要加S? -->
+					<div th:each="pic, iterStat : ${actVO.actPictures}" th:id="'pic-' + ${iterStat.index}">			
+						<img th:src="@{/actpicture/DBGifReader} + '?actPicNo=' + ${pic.actPicNo}"
+							class="img-thumbnail mb-2" width="150" height="150">
+						<!--刪除按鈕 -->
+						<button type="button" class="btn btn-danger btn-sm"
+							th:data-index="${iterStat.index}"
+							th:data-act-pic-no="${pic.actPicNo}">刪除</button>
+					</div>
+					上傳新圖片 <label for="actPic" class="form-label">活動圖片:</label> <input
+						type="file" name="picSet" id="actPic" class="form-control"
+						multiple>
+				</div>
+			
+			<div>
+			<label>可參與最多人數:</label>
+			<input type="text" th:field="*{actMaxCount}" onclick="hideContent('actMaxCount.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('actMaxCount')}" th:errors="*{actMaxCount}" class="error" id="actMaxCount.errors"></span>
+			</div>
+			
+			<div>
+			<label>可參與最少人數:</label>
+			<input type="text" th:field="*{actMinCount}" onclick="hideContent('actMinCount.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('actMinCount')}" th:errors="*{actMinCount}" class="error" id="actMinCount.errors"></span>
+			</div>
+			
+			<div>
+			<label>當前參與人數:</label>
+			<input type="text" th:field="*{actCurrentCount}" style="border:0px ; font-weight: bold;" readonly /><br/>
+			</div>
+			
+			<div>
+			<label>待審核人數:</label>
+			<input type="text" th:field="*{actCheckCount}" style="border:0px ; font-weight: bold;" readonly /><br/>
+			</div>
+			
+			<div>
+			<label>報名開始時間:</label>
+			<input type="date" th:field="*{actEnrollBegin}" onclick="hideContent('actEnrollBegin.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('actEnrollBegin')}" th:errors="*{actEnrollBegin}" class="error" id="actEnrollBegin.errors"></span>
+			</div>
+			
+			<div>
+			<label>報名結束時間:</label>
+			<input type="date" th:field="*{actEnrollEnd}" onclick="hideContent('actEnrollEnd.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('actEnrollEnd')}" th:errors="*{actEnrollEnd}" class="error" id="actEnrollEnd.errors"></span>
+			</div>
+			
+			<div>
+			<label>活動開始時間:</label>
+			<input type="date" th:field="*{actStart}" onclick="hideContent('actStart.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('actStart')}" th:errors="*{actStart}" class="error" id="actStart.errors"></span>
+			</div>
+			
+			<div>
+			<label>活動結束時間:</label>
+			<input type="date" th:field="*{actEnd}" onclick="hideContent('actEnd.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('actEnd')}" th:errors="*{actEnd}" class="error" id="actEnd.errors"></span>
+			</div>
+
+			<div>
+			<label>活動狀態:</label>
+			<input type="text" th:field="*{actStatus}" style="border:0px ; font-weight: bold;" readonly /><br/>
+			</div>
+			
+			<div>
+			<label>評價總星數:</label>
+			<input type="text" th:field="*{actRateSum}" style="border:0px ; font-weight: bold;" readonly /><br/>
+			</div>
+			
+			<div>
+			<label>評價總人數:</label>
+			<input type="text" th:field="*{evalSum}" style="border:0px ; font-weight: bold;" readonly /><br/>
+			</div>
+			
+			<div>
+				<div></div>
+				<div><button type="submit" id="submit" name="picSet"> 送出修改 </button></div>
+				<div></div>
+			</div>		
+		</form>
+	
+	</div>
+	
+<!-- 	<script type="text/javascript">
+// 	//清除提示信息
+// 	function hideContent(d) {
+// 	     document.getElementById(d).style.display = "none";
+// 	}
+ -->
+	<script>
+	// 刪除圖片
+	$(document).ready(
+			function() {
+				$('.btn-danger').click(function() {
+					var index = $(this).data('index');
+					var actPicNo = $(this).data('act-pic-no');
+					var picElement = $('#pic-' + index);
+
+					$.ajax({
+						url : '/actpicture/deleteActImage',
+						type : 'POST',
+						data : {
+							actPicNo : actPicNo
+						},
+						success : function(response) {
+							if (response.success) {
+								alert("圖片刪除成功");
+								picElement.remove(); // 如果需要移除圖片元素
+							} else {
+								alert("圖片刪除失敗");
+							}
+						},
+						error : function() {
+							alert("請求失敗");
+						}
+					});
+				});
+			});
+	</script>
+
+
+
+</body>
+</html>
