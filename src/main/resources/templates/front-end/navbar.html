@@ -15,28 +15,28 @@
           <a class="nav-link" href="#">套裝行程</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="http://localhost:8080/act/listAllAct">揪團去玩</a>
+          <a class="nav-link" href="#">揪團去玩</a>
           <ul>
-	      <li><a href="http://localhost:8080/act/listAllAct">活動列表</a></li>
-	      <li><a href="http://localhost:8080/act/memMyAct">開團管理</a></li>
-	      <li><a href="http://localhost:8080/participant/listAllParticipant">參團瀏覽</a></li>
-	      <li><a href="http://localhost:8080/participant/listAllParticipant">參團紀錄</a></li>
-	      <li><a href="#">檢舉回報</a></li>
-	     </ul>
+       <li><a href="http://localhost:8080/article/listAllArticle">開團系統</a></li>
+       <li><a href="http://localhost:8080/participant/listAllParticipant">參團瀏覽</a></li>
+       <li><a href="http://localhost:8080/participant/listAllParticipant">參團紀錄</a></li>
+       <li><a href="#">檢舉回報</a></li>
+      </ul>
         </li>
+
         <li class="nav-item">
           <a class="nav-link" href="#">社群系統</a>
           <ul>
-		      <li><a href="http://localhost:8080/article/listAllArticle">新聞分享</a></li>
-		      <li><a href="http://localhost:8080/participant/listAllParticipant">登山情報</a></li>
-		      <li><a href="#">天氣情報</a></li>
-	     </ul>
+        <li><a href="http://localhost:8080/article/listAllArticle">新聞分享</a></li>
+        <li><a href="http://localhost:8080/participant/listAllParticipant">登山情報</a></li>
+        <li><a href="#">天氣情報</a></li>
+      </ul>
         </li>
         
         <li th:if="${session.loggedInMember == null}" class="nav-item">
           <a class="nav-link" href="/member/loginMem">登入會員</a>
         </li>
-	    <li th:if="${session.loggedInMember == null}" class="nav-item">
+     <li th:if="${session.loggedInMember == null}" class="nav-item">
           <a class="nav-link" href="/member/registrationMem">註冊會員</a>
         </li>
         
@@ -44,22 +44,22 @@
           <a class="nav-link" href="/protected/member/indexMem">會員專區</a>
         </li>
 
-		
-		<li th:if="${session.loggedInMember != null}">
-		    <span th:if="${session.notiData != null}">
-		        <a class="nav-link" th:if="${session.notiData.notiStatus == 0}">
-		            <img id="alertIcon" class="bellIcon" th:src="@{/images/alert.svg}" width="25px" th:data-new-src="@{/images/noalert.svg}" alt="Alert Icon">
-		        </a>
-		        <a class="nav-link" th:if="${session.notiData.notiStatus == 1 or session.notiData.notiStatus == null}">
-		            <img class="bellIcon" th:src="@{/images/noalert.svg}" width="25px" alt="New Notification Icon">
-		        </a>
-		    </span>
-		    <span th:if="${session.notiData == null}">
-		        <a class="nav-link bellIcon">
-		            <img th:src="@{/images/noalert.svg}" width="25px" alt="New Notification Icon">
-		        </a>
-		    </span>
-		</li>
+  
+  <li th:if="${session.loggedInMember != null}">
+      <span th:if="${session.notiData != null}">
+          <a class="nav-link" th:if="${session.notiData.notiStatus == 0}">
+              <img id="alertIcon" class="bellIcon" th:src="@{/images/alert.svg}" width="25px" th:data-new-src="@{/images/noalert.svg}" alt="Alert Icon">
+          </a>
+          <a class="nav-link" th:if="${session.notiData.notiStatus == 1 or session.notiData.notiStatus == null}">
+              <img class="bellIcon" th:src="@{/images/noalert.svg}" width="25px" alt="New Notification Icon">
+          </a>
+      </span>
+      <span th:if="${session.notiData == null}">
+          <a class="nav-link bellIcon">
+              <img th:src="@{/images/noalert.svg}" width="25px" alt="New Notification Icon">
+          </a>
+      </span>
+  </li>
 
 
         
