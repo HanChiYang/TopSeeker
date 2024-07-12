@@ -73,65 +73,47 @@ table.dataTable th, table.dataTable td {
 	        <div class="article-details">
 
 	<div align="center">
-		<h3><b>所有欄位皆為必填欄位</b></h3>
-		<form th:action="@{update}" method="post" th:object="${artreportVO}" enctype="multipart/form-data">
-			<div>
-			<label>檢舉編號:</label>
-			<input type="text" th:field="*{artReportNo}" style="border:0px ; font-weight: bold;" readonly /><br/>
-			</div>
-	
-			<div>
-			<label>文章編號:</label>
-			<select th:field="*{articleVO.artNo}">
-				<option th:each="articleVO : ${articleListData}" th:value="${articleVO.artNo}" th:text="${articleVO.artTitle}" />
-			</select>
-			<span th:if="${#fields.hasErrors('articleVO.artNo')}" th:errors="*{articleVO.artNo}" class="error" id="articleVO.artNo.errors"></span>
-			</div>
-			
-			
-			<div>
-			<label>會員編號:</label>
-			<select th:field="*{memberVO.memNo}">
-				<option th:each="memberVO : ${memberListData}" th:value="${memberVO.memNo}" th:text="${memberVO.memName}" />
-			</select>
-			<span th:if="${#fields.hasErrors('memberVO.memNo')}" th:errors="*{memberVO.memNo}" class="error" id="memberVO.memNo.errors"></span>
-			</div>
-			
-			<div>
-			<label>員工編號:</label>
-			<select th:field="*{employeeVO.empNo}">
-				<option th:each="employeeVO : ${employeeListData}" th:value="${employeeVO.empNo}" th:text="${employeeVO.empName}" />
-			</select>
-			<span th:if="${#fields.hasErrors('employeeVO.empNo')}" th:errors="*{employeeVO.empNo}" class="error" id="employeeVO.empNo.errors"></span>
-			</div>
-			
-			<div>
-			<label>檢舉內容:</label>
-			<input type="text" th:field="*{artReportContent}" onclick="hideContent('artReportContent.errors');" /><br/>
-			<span  th:if="${#fields.hasErrors('artReportContent')}" th:errors="*{artReportContent}" class="error" id="artReportContent.errors"></span>
-			</div>
-			
-			<div>
-			    <label>檢舉狀態:</label>
-			    <select th:field="*{artReportStatus}">
-			        <option value="0" th:selected="${artReportStatus == 0}">尚未審核完畢</option>
-			        <option value="1" th:selected="${artReportStatus == 1}">檢舉屬實</option>
-			        <option value="2" th:selected="${artReportStatus == 2}">檢舉不屬實</option>
-			    </select>
-			    <span th:if="${#fields.hasErrors('artReportStatus')}" th:errors="*{artReportStatus}" class="error" id="artReportStatus.errors"></span>
-			</div>
-			
-			
-		
-			
-		
-			
-			<div>
-				<div></div>
-				<div><button type="submit" id="submit"> 送出修改 </button></div>
-				<div></div>
-			</div>		
-		</form>
+	   <form th:action="@{/artreport/update}" method="post" th:object="${artreportVO}">
+            <input type="hidden" th:field="*{artReportNo}" />
+
+            <div>
+                <label>登山情報標題:</label>
+                <input type="text" th:value="${artreportVO.articleVO.artTitle}" readonly />
+                <input type="hidden" th:field="*{articleVO.artNo}" />
+            </div>
+
+            <div>
+                <label>會員帳號:</label>
+                <input type="text" th:value="${artreportVO.memberVO.memAccount}" readonly />
+                <input type="hidden" th:field="*{memberVO.memNo}" />
+            </div>
+
+            <div>
+                <label>員工名稱:</label>
+                <select th:field="*{employeeVO.empNo}">
+                    <option th:each="employeeVO : ${employeeListData}" th:value="${employeeVO.empNo}" th:text="${employeeVO.empName}" />
+                </select>
+                <span th:if="${#fields.hasErrors('employeeVO.empNo')}" th:errors="*{employeeVO.empNo}" class="error"></span>
+            </div>
+
+            <div>
+                <label>檢舉內容:</label>
+                <input type="text" th:field="*{artReportContent}" readonly /><br/>
+                <span th:if="${#fields.hasErrors('artReportContent')}" th:errors="*{artReportContent}" class="error" id="artReportContent.errors"></span>
+            </div>
+
+            <div>
+                <label>檢舉狀態:</label>
+                <select th:field="*{artReportStatus}">
+                    <option value="0" th:selected="${artreportVO.artReportStatus == 0}">尚未審核完畢</option>
+                    <option value="1" th:selected="${artreportVO.artReportStatus == 1}">檢舉屬實</option>
+                    <option value="2" th:selected="${artreportVO.artReportStatus == 2}">檢舉不屬實</option>
+                </select>
+                <span th:if="${#fields.hasErrors('artReportStatus')}" th:errors="*{artReportStatus}" class="error" id="artReportStatus.errors"></span>
+            </div>
+
+            <button type="submit">送出修改</button>
+        </form>
 	
 	</div>
 	

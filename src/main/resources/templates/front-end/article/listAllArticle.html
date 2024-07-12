@@ -73,7 +73,6 @@ table.dataTable th, table.dataTable td {
 <div class="article-details">
     <button id="btnAddArticle" style="margin-bottom: 10px;">新增文章</button>
     <button id="btnlistMyArticles" style="margin-bottom: 10px;">我的文章</button>
-    <button id="btnlistAllArtReport" style="margin-bottom: 10px;">檢舉文章</button>
     <table id="example" class="display">
         <thead>
             <tr>
@@ -108,7 +107,7 @@ table.dataTable th, table.dataTable td {
 <script>
 $(document).ready(function() {
     $('#example').DataTable({
-        "lengthMenu": [3, 5, 10, 20, 50, 100],
+        "lengthMenu": [10],
         "searching": true,
         "paging": true,
         "ordering": true,
@@ -136,7 +135,7 @@ $(document).ready(function() {
 });
 
 $('#btnAddArticle').on('click', function() {
-    window.location.href = 'http://localhost:8080/article/addArticle';
+    window.location.href = 'http://localhost:8080/protected/article/addArticle';
 });
 
 $('#btnlistAllArtReport').on('click', function() {
@@ -144,7 +143,7 @@ $('#btnlistAllArtReport').on('click', function() {
 });
 
 $('#btnlistMyArticles').on('click', function() {
-    window.location.href = 'http://localhost:8080/article/listMyArticles';
+    window.location.href = 'http://localhost:8080/protected/article/listMyArticles';
 });
 </script>
 </body>
