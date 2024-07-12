@@ -71,11 +71,11 @@ public class ActVO implements java.io.Serializable {
 	
 	@Column(name = "act_current_count")
 	@NotNull(message = "不得是空值")
-	private Integer actCurrentCount;
+	private Integer actCurrentCount=0;
 	
 	@Column(name = "act_check_count")
 	@NotNull(message = "不得是空值")
-	private Integer actCheckCount;
+	private Integer actCheckCount=0;
 	
 	@Column(name = "act_enroll_begin")
 	@NotNull(message="報名開始日: 請勿空白")	
@@ -109,7 +109,7 @@ public class ActVO implements java.io.Serializable {
 	
 	@Column(name = "act_status")
 	@NotNull(message = "不得是空值")	
-	private Integer actStatus;
+	private Integer actStatus=0;
 	
 	@Column(name = "act_rate_sum")
 	private Integer actRateSum;
