@@ -11,10 +11,6 @@ crossorigin="anonymous">
 
 <style>
 
-body {
-	background-color: white;
-
-}
 
 
 * {
@@ -82,6 +78,9 @@ body>div>div:nth-child(3) {
 #functionArea {
 /*     border: black solid 1px; */
     margin-top: 20px;
+    }
+body > div:nth-child(2){
+    background-color: #FAF1E4;
 }
 
 #column1, #column2, #column3, #column4 {
@@ -89,8 +88,6 @@ body>div>div:nth-child(3) {
     padding: 5px;
     width: 300px;
 }
-
-
 
 .icon-text {
     display: flex;
@@ -110,17 +107,50 @@ margin: 0;
 button.function {
     width: 100%;
     margin-bottom: 10px;
+    background-color: #9EB384;
+    font-weight: bold;
+    
 }
+button.function:hover {
+    background-color: #435334;
+    color: white;
+}
+
+
 
 body > div > div:nth-child(1) {
 height: 300px;
 }
 
 #functionArea > div {
-	margin-left:20px;
+	margin-left:35px;
 	margin-right: 0;
 }
+
+#verifyBtn {
+background-color: #F48484;
+color: black;
+border:0px;
+
+            
+
+}
+#verifyBtn:hover {
+font-weight: bold;
+background-color: #C40C0C;
+         color: white;
+          
+}
+
+p{
+font-weight: bold;
+
+}
+
+
 </style>
+<link rel="stylesheet" th:href="@{/css/common.css}">
+
 </head>
 <body>
 
@@ -162,7 +192,7 @@ height: 300px;
 
                 <div th:if="${session.loggedInMember.memStatus == 1}" class="mb-8">
                     <form th:action="@{/member/protected/verifyPage}" method="post">
-                        <button type="submit" class="btn btn-danger function">驗證信箱</button>
+                        <button type="submit" id="verifyBtn" class="btn btn-danger function">驗證信箱</button>
                     </form>
                     <p>信箱尚未驗證</p>
                 </div>

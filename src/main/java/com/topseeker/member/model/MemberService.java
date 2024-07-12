@@ -27,22 +27,18 @@ public class MemberService {
 		repository.save(memberVO);
 	}
 
-//	public void deleteMem(Integer memNo) {
-//		if (repository.existsById(memNo))
-//			repository.deleteByMemNo(memNo);
-//		    repository.deleteById(empno);
-//	}
-
 	public MemberVO getOneMem(Integer memNo) {
 		Optional<MemberVO> optional = repository.findById(memNo);
 //		return optional.get();
 		return optional.orElse(null);  // public T orElse(T other) : 如果值存在就回傳其值，否則回傳other的值
 	}
 
+	//查詢全部
 	public List<MemberVO> getAll() {
 		return repository.findAll();
 	}
 	
+	//複合查詢
 	public List<MemberVO> getAll(Map<String, String[]> map) {
 		return HibernateUtil_CompositeQuery_Mem.getAllC(map,sessionFactory.openSession());
 	}
@@ -78,6 +74,7 @@ public class MemberService {
 		return optional.orElse(null);
 	}
 	
+	//使用身分證字號查詢
 	public MemberVO findByUid(String memUid) {
 		Optional<MemberVO> optional = repository.findByAccount(memUid);
 		return optional.orElse(null);
