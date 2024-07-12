@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
@@ -62,7 +63,7 @@ public class ParticipantController {
 	public String addEmp(ModelMap model) {
 		ParticipantVO participantVO = new ParticipantVO();
 		model.addAttribute("participantVO", participantVO);
-		return "back-end/participant/addParticipant";
+		return "front-end/participant/addParticipant";
 	}
 
 	/*
@@ -107,7 +108,7 @@ public class ParticipantController {
 
 		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("participantVO", participantVO);
-		return "back-end/participant/update_participant_input"; // 查詢完成後轉交update_emp_input.html
+		return "front-end/participant/update_participant_input"; // 查詢完成後轉交update_emp_input.html
 	}
 
 	/*
@@ -132,7 +133,7 @@ public class ParticipantController {
 //			}
 //		}
 		if (result.hasErrors()) {
-			return "back-end/participant/update_participant_input";
+			return "front-end/participant/update_participant_input";
 		}
 		/*************************** 2.開始修改資料 *****************************************/
 		// EmpService empSvc = new EmpService();
@@ -142,7 +143,7 @@ public class ParticipantController {
 		model.addAttribute("success", "- (修改成功)");
 		participantVO = participantSvc.getOneParticipant(Integer.valueOf(participantVO.getActPartNo()));
 		model.addAttribute("participantVO", participantVO);
-		return "back-end/participant/listOneParticipant"; // 修改成功後轉交listOneEmp.html
+		return "front-end/participant/listOneParticipant"; // 修改成功後轉交listOneEmp.html
 	}
 
 	/*
@@ -158,7 +159,7 @@ public class ParticipantController {
 		List<ParticipantVO> list = participantSvc.getAll();
 		model.addAttribute("participantListData", list);
 		model.addAttribute("success", "- (刪除成功)");
-		return "back-end/participant/listAllParticipant"; // 刪除完成後轉交listAllEmp.html
+		return "front-end/participant/listAllParticipant"; // 刪除完成後轉交listAllEmp.html
 	}
 
 	/*
@@ -209,11 +210,38 @@ public class ParticipantController {
 	 * This method will be called on select_page.html form submission, handling POST request
 	 */
 	@PostMapping("listParticipants_ByCompositeQuery")
-	public String listAllEmp(HttpServletRequest req, Model model) {
-		Map<String, String[]> map = req.getParameterMap();
-		List<ParticipantVO> list = participantSvc.getAll(map);
-		model.addAttribute("participantListData", list); // for listAllEmp.html 第85行用
-		return "back-end/participant/listAllParticipant";
+	public String listAllParticipant(HttpServletRequest req, Model model, HttpSession session) {
+	    MemberVO loggedInMember = getCurrentMember(session);
+	    if (loggedInMember == null) {
+	        return "redirect:/member/loginMem";
+	    }
+
+	    Map<String, String[]> map = req.getParameterMap();
+	    List<ParticipantVO> list = participantSvc.getAll(map).stream()
+	            .filter(p -> p.getMemberVO().getMemNo().equals(loggedInMember.getMemNo()))
+	            .collect(Collectors.toList());
+
+	    model.addAttribute("participantListData", list);
+	    return "front-end/participant/listAllParticipant";
+	}
+	
+	private MemberVO getCurrentMember(HttpSession session) {
+        return (MemberVO) session.getAttribute("loggedInMember");
+    }
+	
+	@GetMapping("listMyAllParticipant")
+	public String listMyAllParticipant(HttpSession session, Model model) {
+	    MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+	    if (loggedInMember == null) {
+	        return "redirect:/member/loginMem";
+	    }
+
+	    List<ParticipantVO> list = participantSvc.getAll().stream()
+	            .filter(p -> p.getMemberVO().getMemNo().equals(loggedInMember.getMemNo()))
+	            .collect(Collectors.toList());
+
+	    model.addAttribute("participantListData", list);
+	    return "front-end/participant/listMyAllParticipant";
 	}
 
 }

@@ -28,10 +28,11 @@ import java.util.stream.Collectors;
 
 import com.topseeker.act.model.ActService;
 import com.topseeker.act.model.ActVO;
+import com.topseeker.actpicture.model.ActPictureService;
 import com.topseeker.actpicture.model.ActPictureVO;
 import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
-
+import com.topseeker.news.model.NewsVO;
 
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Act;
 
@@ -44,6 +45,9 @@ public class ActController {
 
 	@Autowired
 	ActService actSvc;
+	
+	@Autowired
+	ActPictureService actPictureSvc;
 
 	@Autowired
 	MemberService memberSvc;
@@ -75,6 +79,11 @@ public class ActController {
 		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
 		result = removeFieldError(actVO, result, "actPic");
 
+		// 設置預設值	    
+        actVO.setActCurrentCount(0);   
+        actVO.setActStatus(0);     
+        actVO.setActCheckCount(0);
+	    
 		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
 			
 			model.addAttribute("errorMessage", "照片: 請上傳照片");
@@ -94,12 +103,9 @@ public class ActController {
 			
 		}
 		if (result.hasErrors() || parts[0].isEmpty()) {
-			
+//			System.out.println(result);
 			return "front-end/act/addAct";
 		}
-//		if (result.hasErrors()) {			
-//			return "back-end/act/addAct";
-//		}
 		/*************************** 2.開始新增資料 *****************************************/
 		// EmpService empSvc = new EmpService();
 		actSvc.addAct(actVO);
@@ -113,7 +119,7 @@ public class ActController {
 	/*
 	 * This method will be called on listAllEmp.html form submission, handling POST request
 	 */
-	@PostMapping("getOne_For_Update")
+	@PostMapping("updateActByMem")
 	public String getOne_For_Update(@RequestParam("actNo") String actNo, ModelMap model) {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		/*************************** 2.開始查詢資料 *****************************************/
@@ -122,7 +128,7 @@ public class ActController {
 
 		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("actVO", actVO);
-		return "front-end/act/update_act_input"; // 查詢完成後轉交update_emp_input.html
+		return "front-end/act/updateActByMem"; // 查詢完成後轉交update_emp_input.html
 	}
 	
 	@PostMapping("UpdateActByEmp")
@@ -148,9 +154,7 @@ public class ActController {
 		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
 		result = removeFieldError(actVO, result, "actPic");
 
-		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
-			model.addAttribute("errorMessage", "商品圖片: 請上傳圖片");
-		} else {
+		
 		    List<ActPictureVO> picSet = new ArrayList<>();
 		    
 		    for (MultipartFile multipartFile : parts) {
@@ -163,9 +167,12 @@ public class ActController {
 		        picSet.add(actPictureVO); // 添加到集合中
 		    }
 		    actVO.setActPictures(picSet); // 設置活動的圖片集合
-		}
-		if (result.hasErrors() || parts[0].isEmpty()) {
-			return "front-end/act/update_act_input";
+		
+//		if (result.hasErrors() || parts[0].isEmpty()) {
+//			return "front-end/act/update_act_input";
+//		}
+		if (result.hasErrors()) {
+			return "front-end/act/updateActByMem";
 		}
 		/*************************** 2.開始修改資料 *****************************************/
 		// EmpService empSvc = new EmpService();
@@ -304,8 +311,14 @@ public class ActController {
     
     @GetMapping("/actBackEnd")
     public String actBackEnd(Model model) {
-    	return "front-end/act/actBackEnd";
+    	return "back-end/act/actBackEnd";
     }
+    
+    @GetMapping("/memMyActAct")
+    public String memMyActAct(Model model) {
+    	return "front-end/act/memMyAct";
+    }
+    
     @ModelAttribute("actListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
 	protected List<ActVO> referenceListData(Model model) {
 		
@@ -347,12 +360,23 @@ public class ActController {
 //		return "back-end/act/listAllActFragment :: resultsList";
 //	}
 	//活動列表頁面自動載入全部活動
-	@GetMapping("ajaxSearch")
-    public String getAllAct(Model model) {
-        List<ActVO> actList = actSvc.getAll();
-        model.addAttribute("actListData", actList);
+	@GetMapping("ajaxSearchAll")
+    public String getAllAct(HttpServletRequest req,Model model) {
+//        List<ActVO> actList = actSvc.getAll();
+		Map<String, String[]> map = req.getParameterMap();
+        Map<String, String[]> queryParams = new HashMap<>(map);
+        Session session = sessionFactory.openSession();
+        List<ActVO> list = HibernateUtil_CompositeQuery_Act.getAllC(queryParams, session);
+        model.addAttribute("actListData", list);
         return "front-end/act/listAllActFragment :: resultsList";
     }
 	
+//	//活動列表單張圖
+//    @GetMapping("/listAllActFragment")
+//	public String listAllActFragment(ModelMap model) {
+//    	return "front-end/act/listAllActFragment";
+//    }
+	
+  
 
 }

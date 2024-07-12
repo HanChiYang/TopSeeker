@@ -52,7 +52,7 @@ public class MessageController {
 	public String addMessage(ModelMap model) {
 		MessageVO messageVO = new MessageVO();
 		model.addAttribute("messageVO", messageVO);
-		return "back-end/message/addMessage";
+		return "front-end/message/addMessage";
 	}
 
 	/*
@@ -97,7 +97,7 @@ public class MessageController {
 
 		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("messageVO", messageVO);
-		return "back-end/message/update_Message_input"; // 查詢完成後轉交update_emp_input.html
+		return "front-end/message/update_Message_input"; // 查詢完成後轉交update_emp_input.html
 	}
 
 	/*
@@ -122,7 +122,7 @@ public class MessageController {
 //			}
 //		}
 		if (result.hasErrors()) {
-			return "back-end/message/update_Message_input";
+			return "front-end/message/update_Message_input";
 		}
 		/*************************** 2.開始修改資料 *****************************************/
 		// EmpService empSvc = new EmpService();
@@ -132,7 +132,7 @@ public class MessageController {
 		model.addAttribute("success", "- (修改成功)");
 		messageVO = messageSvc.getOneMessage(Integer.valueOf(messageVO.getActMsgNo()));
 		model.addAttribute("messageVO", messageVO);
-		return "back-end/message/listOneMessage"; // 修改成功後轉交listOneEmp.html
+		return "front-end/message/listOneMessage"; // 修改成功後轉交listOneEmp.html
 	}
 
 	/*
@@ -148,7 +148,7 @@ public class MessageController {
 		List<MessageVO> list = messageSvc.getAll();
 		model.addAttribute("messageListData", list);
 		model.addAttribute("success", "- (刪除成功)");
-		return "back-end/message/listAllMessage"; // 刪除完成後轉交listAllEmp.html
+		return "front-end/message/listAllMessage"; // 刪除完成後轉交listAllEmp.html
 	}
 
 	/*
@@ -210,7 +210,7 @@ public class MessageController {
 		Map<String, String[]> map = req.getParameterMap();
 		List<MessageVO> list = messageSvc.getAll(map);
 		model.addAttribute("messageListData", list); // for listAllEmp.html 第85行用
-		return "back-end/message/listAllMessage";
+		return "front-end/message/listAllMessage";
 	}
 
 
