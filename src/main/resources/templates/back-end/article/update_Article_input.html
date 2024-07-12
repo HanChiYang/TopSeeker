@@ -3,175 +3,94 @@
 <head>
 <meta charset="utf-8">
 <title>討論區文章管理</title>
-<meta name="viewport"
- content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<link rel="stylesheet"
- href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css">
 <style>
 * {
- box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 :root {
- --header-height: 60px;
- --aside-width: 240px;
+    --header-height: 60px;
+    --aside-width: 240px;
 }
 
 body {
- margin: 0;
- font-family: Arial, sans-serif;
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
 img {
- max-width: 100%;
+    max-width: 100%;
 }
 
 div.container {
- margin-top: 100px;
- max-width: 90%;
- 
- padding: 20px;
- background-color: #fafafa;
- border-radius: 10px;
- box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
- margin-bottom: 20px;
- font-size: 20px;
- font-weight: bold; 
+    margin-top: 100px;
+    max-width: 90%;
+    padding: 20px;
+    background-color: #CEDEBD;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold; 
 }
 
 div.article-details {
-margin-top: 50px;
- max-width: 90%;
- margin: 0 auto;
- padding: 20px;
- background-color: #fafafa;
- border-radius: 10px;
- box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
- margin-bottom: 20px;
+    margin-top: 50px;
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fafafa;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
 div.artContent input[type="text"] {
- width: 100%;  /* 讓 input 欄位寬度最大化 */
- padding: 15px;  /* 增加內部填充以放大空間 */
- margin-bottom: 20px;  /* 增加與其他元素的間隔 */
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
 }
 
 
-/* DataTable Styles */
-table.dataTable {
- width: 100%;
- margin-top: 20px;
- border-collapse: collapse;
- box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-table.dataTable thead {
- background-color: #f0f0f0;
-}
-
-table.dataTable th, table.dataTable td {
- border: 1px solid #ccc;
- padding: 10px;
- text-align: left;
-}
 </style>
 <link rel="stylesheet" th:href="@{/css/navbar.css}" />
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKzYjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
 <nav th:insert="~{/front-end/navbar.html}"></nav>
 
 <div class="container">登山情報</div>
-  <div class="article-details" align="center">
-   <h3>
-    <b>所有欄位皆為必填欄位</b>
-   </h3>
-   <form th:action="@{update}" method="post" th:object="${articleVO}"
-    enctype="multipart/form-data">
-
+<div class="article-details" align="center">
+   
+  <form th:action="@{/article/update}" method="post" th:object="${articleVO}" enctype="multipart/form-data">
+    <input type="hidden" th:field="*{artNo}" />
     <div style="margin-bottom: 10px;">
-     <label>文章標題:</label> <input type="text" th:field="*{artTitle}"
-      onclick="hideContent('artTitle.errors');"
-      style="border: 1px solid #ccc; border-radius: 5px; padding: 5px; width: 400px;" />
-     <span th:if="${#fields.hasErrors('artTitle')}"
-      th:errors="*{artTitle}" class="error" id="artTitle.errors"></span>
+        <label>文章標題:</label>
+        <input type="text" th:field="*{artTitle}" onclick="hideContent('artTitle.errors');" style="border: 1px solid #ccc; border-radius: 5px; padding: 5px; width: 400px;" />
+        <span th:if="${#fields.hasErrors('artTitle')}" th:errors="*{artTitle}" class="error" id="artTitle.errors"></span>
     </div>
-
     <div style="margin-bottom: 10px;">
-     <label>文章內容:</label> <input type="text" th:field="*{artContent}"
-      onclick="hideContent('artContent.errors');"
-      style="border: 1px solid #ccc; border-radius: 5px; padding: 5px; width: 400px;" />
-     <span th:if="${#fields.hasErrors('artContent')}"
-      th:errors="*{artContent}" class="error" id="artContent.errors"></span>
+        <label>文章內容:</label>
+        <input type="text" th:field="*{artContent}" onclick="hideContent('artContent.errors');" style="border: 1px solid #ccc; border-radius: 5px; padding: 5px; width: 400px;" />
+        <span th:if="${#fields.hasErrors('artContent')}" th:errors="*{artContent}" class="error" id="artContent.errors"></span>
     </div>
-
     <div style="margin-bottom: 10px;">
-     <label for="artStatus">文章狀態:</label> <select id="artStatus"
-      name="artStatus" th:field="*{artStatus}"
-      onclick="hideContent('artStatus.errors');"
-      style="border: 1px solid #ccc; border-radius: 5px; padding: 5px; width: 200px;">
-      <option value="0" th:selected="${articleVO.artStatus == 0}">隱藏</option>
-      <option value="1" th:selected="${articleVO.artStatus == 1}">公開</option>
-     </select> <span th:if="${#fields.hasErrors('artStatus')}"
-      th:errors="*{artStatus}" class="error" id="artStatus.errors"></span>
+        <label for="artStatus">文章狀態:</label>
+        <input type="hidden" th:field="*{artStatus}" />
+        <span th:text="${articleVO.artStatus == 0 ? '隱藏' : '公開'}"></span>
+        <span th:if="${#fields.hasErrors('artStatus')}" th:errors="*{artStatus}" class="error" id="artStatus.errors"></span>
     </div>
-
-
-
     <div>
-     <button type="submit" id="submit"
-      style="padding: 10px 20px; border: none; border-radius: 5px; background-color: #007bff; color: #fff; cursor: pointer;">送出修改</button>
+        <button type="submit" id="submit" style="padding: 10px 20px; border: none; border-radius: 5px; background-color: #007bff; color: #fff; cursor: pointer;">送出修改</button>
     </div>
-   </form>
-  </div>
+</form>
+</div>
 
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<script>
 
-
- <script
-  src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
- <script
-  src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
- <script>
-  $(document)
-    .ready(
-      function() {
-       $('#example')
-         .DataTable(
-           {
-            "lengthMenu" : [ 3, 5, 10, 20,
-              50, 100 ],
-            "searching" : true,
-            "paging" : true,
-            "ordering" : true,
-            "language" : {
-             "processing" : "處理中...",
-             "loadingRecords" : "載入中...",
-             "lengthMenu" : "顯示 MENU 筆結果",
-             "zeroRecords" : "沒有符合的結果",
-             "info" : "顯示第 START 至 END 筆結果，共 <strong>_TOTAL_</strong> 筆",
-             "infoEmpty" : "顯示第 0 至 0 筆結果，共 0 筆",
-             "infoFiltered" : "(從 MAX 筆結果中過濾)",
-             "infoPostFix" : "",
-             "search" : "搜尋:",
-             "paginate" : {
-              "first" : "第一頁",
-              "previous" : "上一頁",
-              "next" : "下一頁",
-              "last" : "最後一頁"
-             },
-             "aria" : {
-              "sortAscending" : ": 升冪排列",
-              "sortDescending" : ": 降冪排列"
-             }
-            }
-           });
-
-       $("button.btn_hamburger").on("click", function() {
-        $("aside.aside").toggleClass("-on");
-       });
-      });
- </script>
+</script>
 </body>
 </html>
