@@ -70,106 +70,167 @@ table.dataTable th, table.dataTable td {
 <body>
 <nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
 <div class="container">登山情報檢舉處理</div>
- <div class="article-details">
+<div class="article-details">
 
-<table id="example" class="display" style="width: 100%">
-  <thead >
-	<tr >
-		<th>計數</th>
-		<th>檢舉登山情報編號</th>
-		<th>登山情報編號</th>
-		<th>會員編號</th>
- 	    <th>員工編號</th>
-		<th>檢舉內容</th>
-		<th>檢舉狀態</th>		
-		<th>檢舉時間</th>			
-		<th>審核檢舉</th>
-		<th>刪除</th>
-	</tr>
+<!-- 尚未審核完畢部分 -->
+<h2>尚未審核完畢</h2>
+<table id="unreviewed" class="display" style="width: 100%">
+  <thead>
+    <tr>
+       
+        <th>檢舉登山情報編號</th>
+        <th>登山情報標題</th>
+        <th>會員帳號</th>
+        <th>員工名稱</th>
+        <th>檢舉內容</th>
+        <th>檢舉狀態</th>        
+        <th>檢舉時間</th>            
+        <th>審核檢舉</th>
+        <th>刪除</th>
+    </tr>
   </thead>
-	
   <tbody>
-		<th:block th:each="artreportVO : ${artreportListData}">
-			<tr>
-				<td th:text="${artreportVOStat.count}"></td>
-				<td th:text="${artreportVO.artReportNo}"></td>	
-                <td th:text="${artreportVO.articleVO.artNo} + '-[' + ${artreportVO.articleVO.artTitle} + ']'"></td>
-				<td th:text="${artreportVO.memberVO.memNo} + '-[' + ${artreportVO.memberVO.memName} + ']'"></td>
-<td th:text="${artreportVO.employeeVO != null ? artreportVO.employeeVO.empNo + '-[' + artreportVO.employeeVO.empName + ']' : '未指定'}"></td>
-			    <td th:text="${artreportVO.artReportContent}"></td>	
-<td th:text="${artreportVO.artReportStatus == 0 ? '尚未審核完畢' : (artreportVO.artReportStatus == 1 ? '檢舉屬實' : '檢舉不屬實')}"></td>
-				<td th:text="${artreportVO.artReportDate}"></td>			
-			<td>
-			  <form method="post" th:action="@{/artreport/getOne_For_Update}" style="margin-bottom: 0px;">
-			     <input type="submit" value="點選審核">
-			     <input type="hidden" name="artReportNo" th:value="${artreportVO.artReportNo}"></form>
-			
-			</td>
-			<td>
-			  <form method="post" th:action="@{/artreport/delete}" style="margin-bottom: 0px;">
-			     <input type="submit" value="刪除">
-			     <input type="hidden" name="artReportNo" th:value="${artreportVO.artReportNo}"></form>
-			
-			</td>
-			</tr>
-		</th:block>
+    <th:block th:each="artreportVO : ${artreportListData}">
+        <tr th:if="${artreportVO.artReportStatus == 0}">
+           
+            <td th:text="${artreportVO.artReportNo}"></td>    
+            <td th:text="${artreportVO.articleVO.artTitle}"></td>
+            <td th:text="${artreportVO.memberVO.memAccount}"></td>
+            <td th:text="${artreportVO.employeeVO != null ? artreportVO.employeeVO.empName : '未指定'}"></td>
+            <td th:text="${artreportVO.artReportContent}"></td>    
+            <td th:text="${artreportVO.artReportStatus == 0 ? '尚未審核完畢' : (artreportVO.artReportStatus == 1 ? '檢舉屬實' : '檢舉不屬實')}"></td>
+            <td th:text="${artreportVO.artReportDate}"></td>            
+            <td>
+                <form method="post" th:action="@{/artreport/getOne_For_Update}" style="margin-bottom: 0px;">
+                    <input type="submit" value="點選審核">
+                    <input type="hidden" name="artReportNo" th:value="${artreportVO.artReportNo}">
+                </form>
+            </td>
+            <td>
+                <form method="post" th:action="@{/artreport/delete}" style="margin-bottom: 0px;">
+                    <input type="submit" value="刪除">
+                    <input type="hidden" name="artReportNo" th:value="${artreportVO.artReportNo}">
+                </form>
+            </td>
+        </tr>
+    </th:block>
   </tbody>
 </table>
- </div>
- 
 
- <script
-  src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
- <script
-  src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
- <script>
-  $(document)
-    .ready(
-      function() {
-       $('#example')
-         .DataTable(
-           {
-            "lengthMenu" : [ 3, 5, 10, 20,
-              50, 100 ],
-            "searching" : true,
-            "paging" : true,
-            "ordering" : true,
-            "language" : {
-             "processing" : "處理中...",
-             "loadingRecords" : "載入中...",
-             "lengthMenu" : "顯示 MENU 筆結果",
-             "zeroRecords" : "沒有符合的結果",
-             "info" : "顯示第 START 至 END 筆結果，共 <strong>_TOTAL_</strong> 筆",
-             "infoEmpty" : "顯示第 0 至 0 筆結果，共 0 筆",
-             "infoFiltered" : "(從 MAX 筆結果中過濾)",
-             "infoPostFix" : "",
-             "search" : "搜尋:",
-             "paginate" : {
-              "first" : "第一頁",
-              "previous" : "上一頁",
-              "next" : "下一頁",
-              "last" : "最後一頁"
-             },
-             "aria" : {
-              "sortAscending" : ": 升冪排列",
-              "sortDescending" : ": 降冪排列"
-             }
-            }
-           });
-      });
- </script>
- <script>
+<!-- 其他部分 -->
+<h2>已審核完畢</h2>
+<table id="reviewed" class="display" style="width: 100%">
+  <thead>
+    <tr>
+        
+        <th>檢舉登山情報編號</th>
+        <th>登山情報標題</th>
+        <th>會員帳號</th>
+        <th>員工名稱</th>
+        <th>檢舉內容</th>
+        <th>檢舉狀態</th>        
+        <th>檢舉時間</th>            
+        <th>審核檢舉</th>
+        <th>刪除</th>
+    </tr>
+  </thead>
+  <tbody>
+    <th:block th:each="artreportVO : ${artreportListData}">
+        <tr th:if="${artreportVO.artReportStatus != 0}">
+            
+            <td th:text="${artreportVO.artReportNo}"></td>    
+            <td th:text="${artreportVO.articleVO.artTitle}"></td>
+            <td th:text="${artreportVO.memberVO.memAccount}"></td>
+            <td th:text="${artreportVO.employeeVO != null ? artreportVO.employeeVO.empName : '未指定'}"></td>
+            <td th:text="${artreportVO.artReportContent}"></td>    
+            <td th:text="${artreportVO.artReportStatus == 0 ? '尚未審核完畢' : (artreportVO.artReportStatus == 1 ? '檢舉屬實' : '檢舉不屬實')}"></td>
+            <td th:text="${artreportVO.artReportDate}"></td>            
+         	<td th:if="${artreportVO.artReportStatus != 0}">
+                <span>已完成審核</span>
+            </td>
+            <td>
+                <form method="post" th:action="@{/artreport/delete}" style="margin-bottom: 0px;">
+                    <input type="submit" value="刪除">
+                    <input type="hidden" name="artReportNo" th:value="${artreportVO.artReportNo}">
+                </form>
+            </td>
+        </tr>
+    </th:block>
+  </tbody>
+</table>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#unreviewed').DataTable({
+      "lengthMenu": [10],
+      "searching": true,
+      "paging": true,
+      "ordering": true,
+      "language": {
+        "processing": "處理中...",
+        "loadingRecords": "載入中...",
+        "lengthMenu": "顯示 MENU 筆結果",
+        "zeroRecords": "沒有符合的結果",
+        "info": "顯示第 START 至 END 筆結果，共 <strong>_TOTAL_</strong> 筆",
+        "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
+        "infoFiltered": "(從 MAX 筆結果中過濾)",
+        "infoPostFix": "",
+        "search": "搜尋:",
+        "paginate": {
+          "first": "第一頁",
+          "previous": "上一頁",
+          "next": "下一頁",
+          "last": "最後一頁"
+        },
+        "aria": {
+          "sortAscending": ": 升冪排列",
+          "sortDescending": ": 降冪排列"
+        }
+      }
+    });
+
+    $('#reviewed').DataTable({
+      "lengthMenu": [10],
+      "searching": true,
+      "paging": true,
+      "ordering": true,
+      "language": {
+        "processing": "處理中...",
+        "loadingRecords": "載入中...",
+        "lengthMenu": "顯示 MENU 筆結果",
+        "zeroRecords": "沒有符合的結果",
+        "info": "顯示第 START 至 END 筆結果，共 <strong>_TOTAL_</strong> 筆",
+        "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
+        "infoFiltered": "(從 MAX 筆結果中過濾)",
+        "infoPostFix": "",
+        "search": "搜尋:",
+        "paginate": {
+          "first": "第一頁",
+          "previous": "上一頁",
+          "next": "下一頁",
+          "last": "最後一頁"
+        },
+        "aria": {
+          "sortAscending": ": 升冪排列",
+          "sortDescending": ": 降冪排列"
+        }
+      }
+    });
+  });
+</script>
+<script>
   $(function() {
-   $("button.btn_hamburger").on("click", function() {
-    $("aside.aside").toggleClass("-on");
-   });
+    $("button.btn_hamburger").on("click", function() {
+      $("aside.aside").toggleClass("-on");
+    });
   });
 
   $('#btnAddArticle').on('click', function() {
-   // 在這裡添加打開新增文章表單的操作或者跳轉到新增文章頁面的操作
-   // 例如：
-   window.location.href = 'http://localhost:8080/article/addArticle'; // 跳轉到新增文章頁面
+    window.location.href = 'http://localhost:8080/article/addArticle';
   });
- </script>
+</script>
 </body>
 </html>

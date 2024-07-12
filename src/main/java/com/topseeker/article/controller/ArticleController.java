@@ -40,7 +40,7 @@ import com.topseeker.member.model.MemberVO;
 
 @Controller
 @Validated
-@RequestMapping("/article")
+@RequestMapping("protected/article")
 public class ArticleController {
 
     @Autowired
@@ -60,7 +60,7 @@ public class ArticleController {
     public String addArticle(ModelMap model) {
         ArticleVO articleVO = new ArticleVO();
         model.addAttribute("articleVO", articleVO);
-        return "back-end/article/addArticle";
+        return "front-end/article/addArticle";
     }
 
     @PostMapping("insert")
@@ -102,7 +102,7 @@ public class ArticleController {
         ArticleVO articleVO = articleSvc.getOneArticle(Integer.valueOf(artNo));
         model.addAttribute("articleVO", articleVO);
         model.addAttribute("artcommentVO", new ArtCommentVO()); // 确保 artcommentVO 被传递
-        return "back-end/article/update_Article_input";
+        return "front-end/article/update_Article_input";
     }
 
     @PostMapping("update")
@@ -111,7 +111,7 @@ public class ArticleController {
 
         if (result.hasErrors()) {
             model.addAttribute("artcommentVO", new ArtCommentVO()); // 确保 artcommentVO 被传递
-            return "back-end/article/update_Article_input";
+            return "front-end/article/update_Article_input";
         }
         
         MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
@@ -144,7 +144,7 @@ public class ArticleController {
         articleVO = articleSvc.getOneArticle(Integer.valueOf(articleVO.getArtNo()));
         model.addAttribute("articleVO", articleVO);
         model.addAttribute("artcommentVO", new ArtCommentVO()); // 确保 artcommentVO 被传递
-        return "back-end/article/listOneArticle";
+        return "front-end/article/listOneArticle";
     }
 
     @PostMapping("delete")
@@ -153,7 +153,7 @@ public class ArticleController {
         List<ArticleVO> list = articleSvc.getAll();
         model.addAttribute("articleListData", list);
         model.addAttribute("success", "- (刪除成功)");
-        return "back-end/article/listAllArticle";
+        return "front-end/article/listAllArticle";
     }
 
     @ModelAttribute("articleListData")
@@ -199,7 +199,7 @@ public class ArticleController {
         Map<String, String[]> map = req.getParameterMap();
         List<ArticleVO> list = articleSvc.getAll(map);
         model.addAttribute("articleListData", list);
-        return "back-end/article/listAllArticle";
+        return "front-end/article/listAllArticle";
     }
 
     @GetMapping("/article/{artNo}")
@@ -222,7 +222,7 @@ public class ArticleController {
                  .collect(Collectors.toList());
 
          model.addAttribute("myArticles", myArticles);
-         return "back-end/article/listMyArticles";
+         return "front-end/article/listMyArticles";
     }
     
     
@@ -231,7 +231,7 @@ public class ArticleController {
         // 更新檢舉狀態邏輯
         if (result.hasErrors()) {
             model.addAttribute("artReportVO", artReportVO);
-            return "back-end/artreport/update_ArtReport_input";
+            return "front-end/artreport/update_ArtReport_input";
         }
 
         // 檢查檢舉狀態是否為檢舉屬實，如果是，則將對應文章狀態設為隱藏（0）

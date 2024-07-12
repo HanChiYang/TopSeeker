@@ -57,7 +57,7 @@ public class ReplyMessageController {
 	public String addReplyMessage(ModelMap model) {
 		ReplyMessageVO replymessageVO = new ReplyMessageVO();
 		model.addAttribute("replymessageVO", replymessageVO);
-		return "back-end/replymessage/addReplyMessage";
+		return "front-end/replymessage/addReplyMessage";
 	}
 
 	/*
@@ -102,7 +102,7 @@ public class ReplyMessageController {
 
 		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("replymessageVO", replymessageVO);
-		return "back-end/replymessage/update_ReplyMessage_input"; // 查詢完成後轉交update_emp_input.html
+		return "front-end/replymessage/update_ReplyMessage_input"; // 查詢完成後轉交update_emp_input.html
 	}
 
 	/*
@@ -127,7 +127,7 @@ public class ReplyMessageController {
 //			}
 //		}
 		if (result.hasErrors()) {
-			return "back-end/replymessage/update_ReplyMessage_input";
+			return "front-end/replymessage/update_ReplyMessage_input";
 		}
 		/*************************** 2.開始修改資料 *****************************************/
 		// EmpService empSvc = new EmpService();
@@ -137,7 +137,7 @@ public class ReplyMessageController {
 		model.addAttribute("success", "- (修改成功)");
 		replymessageVO = replymessageSvc.getOneReplyMessage(Integer.valueOf(replymessageVO.getActMsgRpNo()));
 		model.addAttribute("replymessageVO", replymessageVO);
-		return "back-end/replymessage/listOneReplyMessage"; // 修改成功後轉交listOneEmp.html
+		return "front-end/replymessage/listOneReplyMessage"; // 修改成功後轉交listOneEmp.html
 	}
 
 	/*
@@ -153,7 +153,7 @@ public class ReplyMessageController {
 		List<ReplyMessageVO> list = replymessageSvc.getAll();
 		model.addAttribute("replymessageListData", list);
 		model.addAttribute("success", "- (刪除成功)");
-		return "back-end/replymessage/listAllReplyMessage"; // 刪除完成後轉交listAllEmp.html
+		return "front-end/replymessage/listAllReplyMessage"; // 刪除完成後轉交listAllEmp.html
 	}
 
 	/*
@@ -215,7 +215,7 @@ public class ReplyMessageController {
 		Map<String, String[]> map = req.getParameterMap();
 		List<ReplyMessageVO> list = replymessageSvc.getAll(map);
 		model.addAttribute("replymessageListData", list); // for listAllEmp.html 第85行用
-		return "back-end/replymessage/listAllReplyMessage";
+		return "front-end/replymessage/listAllReplyMessage";
 	}
 
 }

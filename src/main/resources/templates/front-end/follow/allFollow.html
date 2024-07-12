@@ -88,8 +88,9 @@ background-color: white !important;
 			<thead>
 				<tr style="background-color: #CCCCFF">
 
-					<th>我的名稱</th>
-					<th>追隨名稱</th>
+					<th>追隨帳號</th>
+				    <th>大頭貼</th>
+				    <th>目前開團中！</th>
 					<th>刪除</th>
 				</tr>
 			</thead>
@@ -101,8 +102,13 @@ background-color: white !important;
 						<td	th:text="${followVO.memNo}"></td>
 						<td	th:text="${followVO.beFollowedMemNo}"></td>
 			            <td>
+			              <span>
+			            	活動內容
+			              </span>
+			            </td>
+			            <td>
 						  <form method="post" th:action="@{/follow/delete}" style="margin-bottom: 0px;">
-						     <input type="submit" value="刪除">
+						     <input type="submit" value="取消追隨">
 						     <input type="hidden" name="beFollowedMemNo" th:value="${followVO.beFollowedMemNo}">
 						  </form>
 						</td>					
