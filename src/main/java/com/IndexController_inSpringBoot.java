@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.topseeker.act.model.ActService;
+import com.topseeker.act.model.ActVO;
 import com.topseeker.artcomment.model.ArtCommentService;
 import com.topseeker.artcomment.model.ArtCommentVO;
 import com.topseeker.article.model.ArticleService;
@@ -17,9 +19,19 @@ import com.topseeker.artpic.model.ArtPicVO;
 import com.topseeker.artreport.model.ArtReportService;
 import com.topseeker.artreport.model.ArtReportVO;
 import com.topseeker.employee.model.EmployeeService;
+import com.topseeker.follow.model.FollowService;
+import com.topseeker.follow.model.FollowVO;
 import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
+import com.topseeker.message.model.MessageService;
+import com.topseeker.message.model.MessageVO;
 import com.topseeker.notification.model.NotificationService;
+import com.topseeker.participant.model.ParticipantService;
+import com.topseeker.participant.model.ParticipantVO;
+import com.topseeker.replymessage.model.ReplyMessageService;
+import com.topseeker.replymessage.model.ReplyMessageVO;
+import com.topseeker.report.model.ReportService;
+import com.topseeker.report.model.ReportVO;
 
 
 
@@ -35,20 +47,20 @@ public class IndexController_inSpringBoot {
 	@Autowired
 	NotificationService notiSvc;
 
-//	@Autowired
-//	ParticipantService participantSvc;
+	@Autowired
+	ParticipantService participantSvc;
 	
-//	@Autowired
-//	ActService actSvc;
+	@Autowired
+	ActService actSvc;
 	
-//	@Autowired
-//	ReportService reportSvc;
+	@Autowired
+	ReportService reportSvc;
 	
-//	@Autowired
-//	MessageService messageSvc;
+	@Autowired
+	MessageService messageSvc;
 	
-//	@Autowired
-//	ReplyMessageService replymessageSvc;
+	@Autowired
+	ReplyMessageService replymessageSvc;
 	
 	@Autowired
 	EmployeeService employeeSvc;
@@ -118,19 +130,19 @@ public class IndexController_inSpringBoot {
  		return "back-end/participant/listAllParticipant";
  	}
     
-//    @ModelAttribute("participantListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
-// 	protected List<ParticipantVO> referenceListData(Model model) {
-// 		
-//    	List<ParticipantVO> list = participantSvc.getAll();
-// 		return list;
-// 	}
+    @ModelAttribute("participantListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
+ 	protected List<ParticipantVO> referenceListData(Model model) {
+ 		
+    	List<ParticipantVO> list = participantSvc.getAll();
+ 		return list;
+ 	}
     
-// 	@ModelAttribute("actListData") // for select_page.html 第135行用
-// 	protected List<ActVO> referenceListData_Dept(Model model) {
-// 		model.addAttribute("actVO", new ActVO()); // for select_page.html 第133行用
-// 		List<ActVO> list = actSvc.getAll();
-// 		return list;
-// 	}
+ 	@ModelAttribute("actListData") // for select_page.html 第135行用
+ 	protected List<ActVO> referenceListData_Dept(Model model) {
+ 		model.addAttribute("actVO", new ActVO()); // for select_page.html 第133行用
+ 		List<ActVO> list = actSvc.getAll();
+ 		return list;
+ 	}
  	
  	  //=========== 以下第63~75行是提供給 /src/main/resources/templates/back-end/emp/select_page.html 與 listAllEmp.html 要使用的資料 ===================   
     @GetMapping("/report/select_page")
@@ -143,12 +155,12 @@ public class IndexController_inSpringBoot {
  		return "back-end/report/listAllReport";
  	}
     
-//    @ModelAttribute("reportListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
-// 	protected List<ReportVO> referenceListData1(Model model) {
-// 		
-//    	List<ReportVO> list = reportSvc.getAll();
-// 		return list;
-// 	}
+    @ModelAttribute("reportListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
+ 	protected List<ReportVO> referenceListData1(Model model) {
+ 		
+    	List<ReportVO> list = reportSvc.getAll();
+ 		return list;
+ 	}
      
  	  //=========== 以下第63~75行是提供給 /src/main/resources/templates/back-end/emp/select_page.html 與 listAllEmp.html 要使用的資料 ===================   
     @GetMapping("/message/select_page")
@@ -161,12 +173,12 @@ public class IndexController_inSpringBoot {
  		return "back-end/message/listAllMessage";
  	}
     
-//    @ModelAttribute("messageListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
-// 	protected List<MessageVO> referenceListData2(Model model) {
-// 		
-//    	List<MessageVO> list = messageSvc.getAll();
-// 		return list;
-// 	}
+    @ModelAttribute("messageListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
+ 	protected List<MessageVO> referenceListData2(Model model) {
+ 		
+    	List<MessageVO> list = messageSvc.getAll();
+ 		return list;
+ 	}
      
  	 // =========== 以下第63~75行是提供給 /src/main/resources/templates/back-end/emp/select_page.html 與 listAllEmp.html 要使用的資料 ===================   
     @GetMapping("/replymessage/select_page")
@@ -179,13 +191,13 @@ public class IndexController_inSpringBoot {
  		return "back-end/replymessage/listAllReplyMessage";
  	}
     
-//    @ModelAttribute("replymessageListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
-// 	protected List<ReplyMessageVO> referenceListData3(Model model) {
-// 		
-//    	List<ReplyMessageVO> list = replymessageSvc.getAll();
-// 		return list;
-// 	}
-//     
+    @ModelAttribute("replymessageListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
+ 	protected List<ReplyMessageVO> referenceListData3(Model model) {
+ 		
+    	List<ReplyMessageVO> list = replymessageSvc.getAll();
+ 		return list;
+ 	}
+     
  	  //=========== 以下第63~75行是提供給 /src/main/resources/templates/back-end/emp/select_page.html 與 listAllEmp.html 要使用的資料 ===================   
      @GetMapping("/article/select_page")
  	public String select_page4(Model model) {
@@ -258,16 +270,16 @@ public class IndexController_inSpringBoot {
  		return list;
  	}
     //=========== 以下第63~75行是提供給 /src/main/resources/templates/back-end/emp/select_page.html 與 listAllEmp.html 要使用的資料 ===================   
-    @GetMapping("/follow/select_page")
- 	public String select_page8(Model model) {
- 		return "back-end/follow/select_page";
- 	}
-    
-    @GetMapping("/follow/listAllFollow")
- 	public String listAllFollow(Model model) {
- 		return "back-end/follow/listAllFollow";
- 	}
-    
+//    @GetMapping("/follow/select_page")
+// 	public String select_page8(Model model) {
+// 		return "back-end/follow/select_page";
+// 	}
+//    
+//    @GetMapping("/follow/listAllFollow")
+// 	public String listAllFollow(Model model) {
+// 		return "back-end/follow/listAllFollow";
+// 	}
+//    
 //    @ModelAttribute("followListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
 // 	protected List<FollowVO> referenceListData8(Model model) {
 // 		

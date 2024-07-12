@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.topseeker.shop.product.model.ShopProductService;
@@ -157,37 +158,28 @@ public class ShopProdPicController {
 //		model.addAttribute("success", "- (刪除成功)");
 //		return "back-end/shop/listAllProdPic"; // 刪除完成後轉交listAllProd.html
 //	}
-
+	// 刪除特定圖片
 	@PostMapping("/deleteProductImage")
-	public Map<String, Object> deleteProductImage(@RequestBody Map<String, String> payload) {
+	@ResponseBody
+	public Map<String, Object> deleteProductImage(@RequestParam("prodPicNo") Integer prodPicNo) {
 		Map<String, Object> response = new HashMap<>();
-		try {
-			String prodPicNo = payload.get("prodPicNo");
-			System.out.println(payload);
-			/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-			if (prodPicNo == null || prodPicNo.isEmpty()) {
-				response.put("success", false);
-				response.put("message", "商品圖片編號無效");
-				return response;
-			}
-			/*************************** 2.開始刪除資料 *****************************************/
-			boolean success = shopProductPicSvc.deleteShopProductPic(Integer.valueOf(prodPicNo));
 
-			if (success) {
-				response.put("success", true);
-				System.out.println("圖片刪除成功");
-			} else {
-				response.put("success", false);
-				response.put("message", "圖片刪除失敗");
-				System.out.println("圖片刪除失敗");
-			}
+		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 
-		} catch (Exception e) {
+		/*************************** 2.開始刪除資料 *****************************************/
+		boolean success = shopProductPicSvc.deleteShopProductPic(prodPicNo);
+		
+//		System.out.println(prodPicNo);
+		if (success) {
+			response.put("success", true);
+			System.out.println("圖片刪除成功");
+		} else {
 			response.put("success", false);
-			response.put("message", "圖片刪除過程中發生錯誤");
-			e.printStackTrace();
+			response.put("message", "圖片刪除失敗");
+			System.out.println("圖片刪除失敗");
 		}
-		System.out.println("Response: " + response); // 調試輸出
+
+//		response.put("success", success);
 		return response;
 	}
 

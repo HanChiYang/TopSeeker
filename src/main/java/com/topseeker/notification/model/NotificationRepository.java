@@ -21,4 +21,11 @@ public interface NotificationRepository extends JpaRepository<NotificationVO, In
 	@Query(value = "from NotificationVO where memNo = ?1 order by notiTime desc")
 	List<NotificationVO> getMemNoti(Integer memNo);
 
+	//取得最新通知
+	@Query(value = "from NotificationVO where memNo = ?1 and notiStatus = 0 order by notiTime desc")
+	List<NotificationVO> listNewNoti(Integer memNo);
+
+	// 單一會員通知狀態
+	@Query(value = "SELECT DISTINCT * FROM notification WHERE mem_no = ?1 order by noti_time", nativeQuery = true)
+	NotificationVO forNotiStatus(Integer memNo);
 }

@@ -54,7 +54,7 @@ public class ArtReportVO {
 	
 	public ArtReportVO() {
 		  this.artReportDate = new Timestamp(System.currentTimeMillis()); 
-		
+		  this.artReportStatus = 0;
 
 	}
 
