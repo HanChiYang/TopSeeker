@@ -48,7 +48,7 @@ public class ArtPicController {
 	public String addEmp(ModelMap model) {
 		ArtPicVO artpicVO = new ArtPicVO();
 		model.addAttribute("artpicVO", artpicVO);
-		return "back-end/artpic/addArtPic";
+		return "front-end/artpic/addArtPic";
 	}
 
 	/*
@@ -71,7 +71,7 @@ public class ArtPicController {
 			}
 		}
 		if (result.hasErrors() || parts[0].isEmpty()) {
-			return "back-end/artpic/addArtPic";
+			return "front-end/artpic/addArtPic";
 		}
 		/*************************** 2.開始新增資料 *****************************************/
 		// EmpService empSvc = new EmpService();
@@ -95,7 +95,7 @@ public class ArtPicController {
 
 		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("artpicVO", artpicVO);
-		return "back-end/artpic/update_ArtPic_input"; // 查詢完成後轉交update_emp_input.html
+		return "front-end/artpic/update_ArtPic_input"; // 查詢完成後轉交update_emp_input.html
 	}
 
 	/*
@@ -120,7 +120,7 @@ public class ArtPicController {
 			}
 		}
 		if (result.hasErrors()) {
-			return "back-end/artpic/update_ArtPic_input";
+			return "front-end/artpic/update_ArtPic_input";
 		}
 		/*************************** 2.開始修改資料 *****************************************/
 		// EmpService empSvc = new EmpService();
@@ -130,7 +130,7 @@ public class ArtPicController {
 		model.addAttribute("success", "- (修改成功)");
 		artpicVO = artpicSvc.getOneArtPic(Integer.valueOf(artpicVO.getArtPicNo()));
 		model.addAttribute("artpicVO", artpicVO);
-		return "back-end/artpic/listOneArtPic"; // 修改成功後轉交listOneEmp.html
+		return "front-end/artpic/listOneArtPic"; // 修改成功後轉交listOneEmp.html
 	}
 
 	/*
@@ -146,7 +146,7 @@ public class ArtPicController {
 		List<ArtPicVO> list = artpicSvc.getAll();
 		model.addAttribute("artpicListData", list);
 		model.addAttribute("success", "- (刪除成功)");
-		return "back-end/artpic/listAllArtPic"; // 刪除完成後轉交listAllEmp.html
+		return "front-end/artpic/listAllArtPic"; // 刪除完成後轉交listAllEmp.html
 	}
 
 	/*
@@ -193,7 +193,7 @@ public class ArtPicController {
 		Map<String, String[]> map = req.getParameterMap();
 		List<ArtPicVO> list = artpicSvc.getAll(map);
 		model.addAttribute("artpicListData", list); // for listAllEmp.html 第85行用
-		return "back-end/artpic/listAllArtPic";
+		return "front-end/artpic/listAllArtPic";
 	}
 
 
