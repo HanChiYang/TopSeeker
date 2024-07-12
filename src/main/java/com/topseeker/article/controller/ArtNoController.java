@@ -53,7 +53,7 @@ public class ArtNoController {
         
         if (articleVO == null) {
             model.addAttribute("errorMessage", "查無資料");
-            return "back-end/article/select_page";
+            return "front-end/article/select_page";
         }
         
         HttpSession session = request.getSession();
@@ -69,13 +69,13 @@ public class ArtNoController {
         List<ArtPicVO> list3 = artpicSvc.getAll();
         model.addAttribute("artpicListData", list3);
 
-        return "back-end/article/listOneArticle";
+        return "front-end/article/listOneArticle";
     }
 
     @GetMapping("/artcomment/addComment")
     public String addComment(@ModelAttribute ArtCommentVO artcommentVO, @RequestParam("artNo") Integer artNo, BindingResult result, Model model, HttpServletRequest request) {
         if (result.hasErrors()) {
-            return "back-end/article/listOneArticle";
+            return "front-end/article/listOneArticle";
         }
         
         HttpSession session = request.getSession();
@@ -108,6 +108,6 @@ public class ArtNoController {
         List<MemberVO> list2 = memberSvc.getAll();
         model.addAttribute("memberListData", list2);
         String message = strBuilder.toString();
-        return new ModelAndView("back-end/article/select_page", "errorMessage", "請修正以下錯誤:<br>" + message);
+        return new ModelAndView("front-end/article/select_page", "errorMessage", "請修正以下錯誤:<br>" + message);
     }
 }
