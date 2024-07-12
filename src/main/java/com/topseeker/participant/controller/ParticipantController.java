@@ -60,10 +60,21 @@ public class ParticipantController {
 	 * This method will serve as addEmp.html handler.
 	 */
 	@GetMapping("addParticipant")
-	public String addEmp(ModelMap model) {
-		ParticipantVO participantVO = new ParticipantVO();
-		model.addAttribute("participantVO", participantVO);
-		return "front-end/participant/addParticipant";
+	public String addParticipant(@RequestParam("actNo") Integer actNo, ModelMap model, HttpSession session) {
+		MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+	    if (loggedInMember == null) {
+	        return "redirect:/member/loginMem";
+	    }
+
+	    ParticipantVO participantVO = new ParticipantVO();
+	    ActVO actVO = actSvc.getOneAct(actNo);
+	    participantVO.setActVO(actVO);
+	    participantVO.setMemberVO(loggedInMember);
+
+	    model.addAttribute("participantVO", participantVO);
+	    model.addAttribute("actTitle", actVO.getActTitle());
+	    model.addAttribute("memName", loggedInMember.getMemName());
+	    return "front-end/participant/addParticipant";
 	}
 
 	/*
@@ -93,7 +104,7 @@ public class ParticipantController {
 		List<ParticipantVO> list = participantSvc.getAll();
 		model.addAttribute("participantListData", list);
 		model.addAttribute("success", "- (新增成功)");
-		return "redirect:/participant/listAllParticipant"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
+		return "redirect:/participant/listMyAllParticipant"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
 	}
 
 	/*
