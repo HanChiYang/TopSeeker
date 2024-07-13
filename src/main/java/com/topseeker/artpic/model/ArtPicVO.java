@@ -69,6 +69,12 @@ public class ArtPicVO implements java.io.Serializable {
 	public String getBase64ArtPic() {
         return Base64.getEncoder().encodeToString(this.artPic);
     }
+
+
+	public void setArticleVO(Integer artNo) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	

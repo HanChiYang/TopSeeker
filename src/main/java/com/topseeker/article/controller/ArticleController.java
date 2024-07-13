@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,201 +31,219 @@ import org.springframework.web.multipart.MultipartFile;
 import com.topseeker.article.model.ArticleVO;
 import com.topseeker.artpic.model.ArtPicService;
 import com.topseeker.artpic.model.ArtPicVO;
+import com.topseeker.artreport.model.ArtReportService;
+import com.topseeker.artreport.model.ArtReportVO;
+import com.topseeker.artcomment.model.ArtCommentVO;
 import com.topseeker.article.model.ArticleService;
 import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
 
-
 @Controller
 @Validated
-@RequestMapping("/article")
+@RequestMapping("protected/article")
 public class ArticleController {
-	
 
-	@Autowired
-	ArticleService articleSvc;
-	
+    @Autowired
+    ArticleService articleSvc;
 
-	@Autowired  // 要先增actsvc 跟 membersvc
-	MemberService memberSvc;
-	
-	@Autowired  // 要先增actsvc 跟 membersvc
-	ArtPicService artpicSvc;
-	
-	/*
-	 * This method will serve as addEmp.html handler.
-	 */
-	@GetMapping("addArticle")
-	public String addArticle(ModelMap model) {
-		ArticleVO articleVO = new ArticleVO();
-		model.addAttribute("articleVO", articleVO);
-		return "back-end/article/addArticle";
-	}
+    @Autowired
+    MemberService memberSvc;
 
-	/*
-	 * This method will be called on addEmp.html form submission, handling POST request It also validates the user input
-	 */
-	@PostMapping("insert")
-	public String insert(@Valid ArticleVO articleVO, BindingResult result, ModelMap model,
-			 MultipartFile[] parts) throws IOException {
+    @Autowired
+    ArtPicService artpicSvc;
+    
+    
+    @Autowired
+    ArtReportService artreportSvc;
 
-		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
-		result = removeFieldError(articleVO, result, "artPic");
+    @GetMapping("addArticle")
+    public String addArticle(ModelMap model) {
+        ArticleVO articleVO = new ArticleVO();
+        model.addAttribute("articleVO", articleVO);
+        return "front-end/article/addArticle";
+    }
 
-//		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
-//			model.addAttribute("errorMessage", "員工照片: 請上傳照片");
-//		} else {
-//			for (MultipartFile multipartFile : parts) {
-//				byte[] buf = multipartFile.getBytes();
-//				participantVO.setUpFiles(buf);
-//			}
-//		}
-		
-		/*************************** 2.開始新增資料 *****************************************/
-		// EmpService empSvc = new EmpService();
-		articleSvc.addArticle(articleVO);
-		/*************************** 3.新增完成,準備轉交(Send the Success view) **************/
-		List<ArticleVO> list = articleSvc.getAll();
-		model.addAttribute("articleListData", list);
-		model.addAttribute("success", "- (新增成功)");
-		return "redirect:/article/listAllArticle"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
-	}
+    @PostMapping("insert")
+    public String insert(@Valid ArticleVO articleVO, BindingResult result, ModelMap model, @RequestParam("artPics") MultipartFile[] artPics, HttpSession session) throws IOException {
+        result = removeFieldError(articleVO, result, "artPic");
+        
+        MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+        if (loggedInMember != null) {
+            articleVO.setMemberVO(loggedInMember);
+        } else {
+            model.addAttribute("errorMessage", "需要先登入才能新增文章");
+            return "front-end/member/loginMem";
+        }
 
-	/*
-	 * This method will be called on listAllEmp.html form submission, handling POST request
-	 */
-	@PostMapping("getOne_For_Update")
-	public String getOne_For_Update(@RequestParam("artNo") String artNo, ModelMap model) {
-		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		/*************************** 2.開始查詢資料 *****************************************/
-		// EmpService empSvc = new EmpService();
-		ArticleVO articleVO = articleSvc.getOneArticle(Integer.valueOf(artNo));
+        articleSvc.addArticle(articleVO);
+        
+        Set<ArtPicVO> artPicVOs = new HashSet<>();
+        for (MultipartFile file : artPics) {
+            if (!file.isEmpty()) {
+                ArtPicVO artPicVO = new ArtPicVO();
+                artPicVO.setArticleVO(articleVO);
+                artPicVO.setArtPic(file.getBytes());
+                artpicSvc.addArtPic(artPicVO);
+                artPicVOs.add(artPicVO);
+            }
+        }
+        articleVO.setArtPics(artPicVOs);
+        articleSvc.updateArticle(articleVO);
+        
+        
+        List<ArticleVO> list = articleSvc.getAll();
+        model.addAttribute("articleListData", list);
+        model.addAttribute("success", "- (新增成功)");
+        return "redirect:/article/listAllArticle";
+    }
 
-		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
-		model.addAttribute("articleVO", articleVO);
-		return "back-end/article/update_Article_input"; // 查詢完成後轉交update_emp_input.html
-	}
+    @GetMapping("getOne_For_Update")
+    public String getOne_For_Update(@RequestParam("artNo") String artNo, ModelMap model) {
+        ArticleVO articleVO = articleSvc.getOneArticle(Integer.valueOf(artNo));
+        model.addAttribute("articleVO", articleVO);
+        model.addAttribute("artcommentVO", new ArtCommentVO()); // 确保 artcommentVO 被传递
+        return "front-end/article/update_Article_input";
+    }
 
-	/*
-	 * This method will be called on update_emp_input.html form submission, handling POST request It also validates the user input
-	 */
-	@PostMapping("update")
-	public String update(@Valid ArticleVO articleVO, BindingResult result, ModelMap model,
-			 MultipartFile[] parts) throws IOException {
+    @PostMapping("update")
+    public String update(@Valid ArticleVO articleVO, BindingResult result, ModelMap model, MultipartFile[] artPics , HttpSession session) throws IOException {
+        result = removeFieldError(articleVO, result, "artPic");
 
-		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
-		result = removeFieldError(articleVO, result, "artPic");
+        if (result.hasErrors()) {
+            model.addAttribute("artcommentVO", new ArtCommentVO()); // 确保 artcommentVO 被传递
+            return "front-end/article/update_Article_input";
+        }
+        
+        MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+        if (loggedInMember != null) {
+            articleVO.setMemberVO(loggedInMember);
+        } else {
+            model.addAttribute("errorMessage", "需要先登入才能修改文章");
+            return "front-end/member/loginMem";
+        }
+        
+        
+        
+//        Set<ArtPicVO> artPicVOs = new HashSet<>();
+//        for (MultipartFile file : artPics) {
+//            if (!file.isEmpty()) {
+//                ArtPicVO artPicVO = new ArtPicVO();
+//                artPicVO.setArticleVO(articleVO);
+//                artPicVO.setArtPic(file.getBytes());
+//                artpicSvc.addArtPic(artPicVO);
+//                artPicVOs.add(artPicVO);
+//            }
+//        }
+//        articleVO.setArtPics(artPicVOs);
+        articleSvc.updateArticle(articleVO);
+        
+        
+        
 
-//		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的新圖片時
-//			// EmpService empSvc = new EmpService();
-//			byte[] upFiles = participantSvc.getOneParticipant(participantVO.getActPartNo()).getUpFiles();
-//			participantVO.setUpFiles(upFiles);
-//		} else {
-//			for (MultipartFile multipartFile : parts) {
-//				byte[] upFiles = multipartFile.getBytes();
-//				participantVO.setUpFiles(upFiles);
-//			}
-//		}
-		if (result.hasErrors()) {
-			return "back-end/article/update_Article_input";
-		}
-		/*************************** 2.開始修改資料 *****************************************/
-		// EmpService empSvc = new EmpService();
-		articleSvc.updateArticle(articleVO);
+        model.addAttribute("success", "- (修改成功)");
+        articleVO = articleSvc.getOneArticle(Integer.valueOf(articleVO.getArtNo()));
+        model.addAttribute("articleVO", articleVO);
+        model.addAttribute("artcommentVO", new ArtCommentVO()); // 确保 artcommentVO 被传递
+        return "front-end/article/listOneArticle";
+    }
 
-		/*************************** 3.修改完成,準備轉交(Send the Success view) **************/
-		model.addAttribute("success", "- (修改成功)");
-		articleVO = articleSvc.getOneArticle(Integer.valueOf(articleVO.getArtNo()));
-		model.addAttribute("articleVO", articleVO);
-		return "back-end/article/listOneArticle"; // 修改成功後轉交listOneEmp.html
-	}
+    @PostMapping("delete")
+    public String delete(@RequestParam("artNo") String artNo, ModelMap model) {
+        articleSvc.deleteArticle(Integer.valueOf(artNo));
+        List<ArticleVO> list = articleSvc.getAll();
+        model.addAttribute("articleListData", list);
+        model.addAttribute("success", "- (刪除成功)");
+        return "front-end/article/listAllArticle";
+    }
 
-	/*
-	 * This method will be called on listAllEmp.html form submission, handling POST request
-	 */
-	@PostMapping("delete")
-	public String delete(@RequestParam("artNo") String artNo, ModelMap model) {
-		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		/*************************** 2.開始刪除資料 *****************************************/
-		// EmpService empSvc = new EmpService();
-		articleSvc.deleteArticle(Integer.valueOf(artNo));
-		/*************************** 3.刪除完成,準備轉交(Send the Success view) **************/
-		List<ArticleVO> list = articleSvc.getAll();
-		model.addAttribute("articleListData", list);
-		model.addAttribute("success", "- (刪除成功)");
-		return "back-end/article/listAllArticle"; // 刪除完成後轉交listAllEmp.html
-	}
+    @ModelAttribute("articleListData")
+    protected List<ArticleVO> referenceListData() {
+        List<ArticleVO> list = articleSvc.getAll();
+        return list;
+    }
 
-	/*
-	 * 第一種作法 Method used to populate the List Data in view. 如 : 
-	 * <form:select path="deptno" id="deptno" items="${deptListData}" itemValue="deptno" itemLabel="dname" />
-	 */
-	@ModelAttribute("articleListData")
-	protected List<ArticleVO> referenceListData() {
-		// DeptService deptSvc = new DeptService();
-		List<ArticleVO> list = articleSvc.getAll();
-		return list;
-	}
-	
-	@ModelAttribute("memberListData")
-	protected List<MemberVO> referenceListData2() {
-		// DeptService deptSvc = new DeptService();
-		List<MemberVO> list = memberSvc.getAll();
-		return list;
-	}
-	
-	@ModelAttribute("artPicListData")
-	protected List<ArtPicVO> referenceListData3() {
-		// DeptService deptSvc = new DeptService();
-		List<ArtPicVO> list = artpicSvc.getAll();
-		return list;
-	}
-		
-	
-	/*
-	 * 【 第二種作法 】 Method used to populate the Map Data in view. 如 : 
-	 * <form:select path="deptno" id="deptno" items="${depMapData}" />
-	 */
-	@ModelAttribute("articleMapData") //
-	protected Map<Integer, String> referenceMapData() {
-		Map<Integer, String> map = new LinkedHashMap<Integer, String>();
-		map.put(1, "南三段水源通報");
-		map.put(2, "雪霸6月起開放雪山登山口到七卡山莊單日健行");
-		map.put(3, "桃園虎頭山公園健行7.5公里o型路線分享");
-		return map;
-	}
+    @ModelAttribute("memberListData")
+    protected List<MemberVO> referenceListData2() {
+        List<MemberVO> list = memberSvc.getAll();
+        return list;
+    }
 
-	// 去除BindingResult中某個欄位的FieldError紀錄
-	public BindingResult removeFieldError(ArticleVO articleVO, BindingResult result, String removedFieldname) {
-		List<FieldError> errorsListToKeep = result.getFieldErrors().stream()
-				.filter(fieldname -> !fieldname.getField().equals(removedFieldname))
-				.collect(Collectors.toList());
-		result = new BeanPropertyBindingResult(articleVO, "articleVO");
-		for (FieldError fieldError : errorsListToKeep) {
-			result.addError(fieldError);
-		}
-		return result;
-	}
-	
-	/*
-	 * This method will be called on select_page.html form submission, handling POST request
-	 */
-	@PostMapping("listMessages_ByCompositeQuery")
-	public String listAllArticle(HttpServletRequest req, Model model) {
-		Map<String, String[]> map = req.getParameterMap();
-		List<ArticleVO> list = articleSvc.getAll(map);
-		model.addAttribute("articleListData", list); // for listAllEmp.html 第85行用
-		return "back-end/article/listAllArticle";
-	}
-	
-	  @GetMapping("/article/{artNo}")
-	     public String getArticle(@PathVariable Integer artNo, Model model) {
-	         ArticleVO article = articleSvc.findById(artNo);
-	         model.addAttribute("articleVO", article);
-	         return "listOneArticle";
-	     }
+    @ModelAttribute("artPicListData")
+    protected List<ArtPicVO> referenceListData3() {
+        List<ArtPicVO> list = artpicSvc.getAll();
+        return list;
+    }
 
+    @ModelAttribute("articleMapData")
+    protected Map<Integer, String> referenceMapData() {
+        Map<Integer, String> map = new LinkedHashMap<Integer, String>();
+        map.put(1, "南三段水源通報");
+        map.put(2, "雪霸6月起開放雪山登山口到七卡山莊單日健行");
+        map.put(3, "桃園虎頭山公園健行7.5公里o型路線分享");
+        return map;
+    }
 
+    public BindingResult removeFieldError(ArticleVO articleVO, BindingResult result, String removedFieldname) {
+        List<FieldError> errorsListToKeep = result.getFieldErrors().stream()
+                .filter(fieldname -> !fieldname.getField().equals(removedFieldname))
+                .collect(Collectors.toList());
+        result = new BeanPropertyBindingResult(articleVO, "articleVO");
+        for (FieldError fieldError : errorsListToKeep) {
+            result.addError(fieldError);
+        }
+        return result;
+    }
+
+    @PostMapping("listMessages_ByCompositeQuery")
+    public String listAllArticle(HttpServletRequest req, Model model) {
+        Map<String, String[]> map = req.getParameterMap();
+        List<ArticleVO> list = articleSvc.getAll(map);
+        model.addAttribute("articleListData", list);
+        return "front-end/article/listAllArticle";
+    }
+
+    @GetMapping("/article/{artNo}")
+    public String getArticle(@PathVariable Integer artNo, Model model) {
+        ArticleVO article = articleSvc.findById(artNo);
+        model.addAttribute("articleVO", article);
+        model.addAttribute("artcommentVO", new ArtCommentVO()); // 确保 artcommentVO 被传递
+        return "listOneArticle";
+    }
+    
+    @GetMapping("listMyArticles")
+    public String listMyArticles(HttpSession session, Model model) {
+    	 MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+         if (loggedInMember == null) {
+             return "redirect:/front-end/member/loginMem"; // 如果没有登录，重定向到登录页面
+         }
+
+         List<ArticleVO> myArticles = articleSvc.getAllIncludingStatusZero().stream()
+                 .filter(article -> article.getMemberVO().getMemNo().equals(loggedInMember.getMemNo()))
+                 .collect(Collectors.toList());
+
+         model.addAttribute("myArticles", myArticles);
+         return "front-end/article/listMyArticles";
+    }
+    
+    
+    @PostMapping("/artreport/update")
+    public String updateArtReport(@Valid ArtReportVO artReportVO, BindingResult result, Model model) {
+        // 更新檢舉狀態邏輯
+        if (result.hasErrors()) {
+            model.addAttribute("artReportVO", artReportVO);
+            return "front-end/artreport/update_ArtReport_input";
+        }
+
+        // 檢查檢舉狀態是否為檢舉屬實，如果是，則將對應文章狀態設為隱藏（0）
+        if (artReportVO.getArtReportStatus() == 1) {
+            ArticleVO articleVO = artReportVO.getArticleVO();
+            articleVO.setArtStatus(0);
+            articleSvc.updateArticle(articleVO);
+        }
+
+        // 保存檢舉狀態更新
+        artreportSvc.updateArtReport(artReportVO);
+
+        return "redirect:/artreport/listAllArtReports";
+    }
 }
