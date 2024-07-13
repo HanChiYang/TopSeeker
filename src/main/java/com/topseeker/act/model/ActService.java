@@ -47,6 +47,10 @@ public class ActService {
 	public List<ActVO> getAll() {
 		return repository.findAll();
 	}
+	
+//	public List<ActVO> getActsByMem(Integer memNo) {
+//		return repository.findActByMem(memNo);
+//	}
 
 	public List<ActVO> getAll(Map<String, String[]> map) {
 		return HibernateUtil_CompositeQuery_Act.getAllC(map,sessionFactory.openSession());
