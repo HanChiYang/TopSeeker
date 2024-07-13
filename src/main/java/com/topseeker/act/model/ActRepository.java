@@ -21,6 +21,9 @@ public interface ActRepository extends JpaRepository<ActVO, Integer> {
 	@Modifying
 	@Query(value = "delete from act where act_no =?1", nativeQuery = true)
 	void deleteByActNo(int actNo);
+	
+	@Query(value = "from act where mem_no=?1", nativeQuery = true)
+	List<ActVO> findActByMem(Integer memNo);
 
 	
 }
