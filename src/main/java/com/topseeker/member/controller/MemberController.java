@@ -338,7 +338,7 @@ public class MemberController {
 		return "back-end/member/inspectMemFragment :: memberDetail";
 	}
 	
-	@GetMapping("memberManagement")
+	@GetMapping("/memberManagement")
 	public String memberManagement() {
 		return "back-end/member/select_page";
 	}
