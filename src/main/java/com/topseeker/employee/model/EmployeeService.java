@@ -15,6 +15,8 @@ import com.topseeker.authority.model.AuthorityRepository;
 import com.topseeker.authority.model.AuthorityVO;
 import com.topseeker.empauth.model.EmpAuthRepository;
 import com.topseeker.empauth.model.EmpAuthVO;
+import com.topseeker.employee.model.EmployeeVO;
+import com.topseeker.employee.model.EmployeeRepository;
 
 //import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Emps;
 
@@ -48,8 +50,8 @@ public class EmployeeService {
 //		    repository.deleteById(empno);
 	}
 
-	public EmployeeVO getOneEmp(Integer empno) {
-		Optional<EmployeeVO> optional = employeeRepository.findById(empno);
+	public EmployeeVO getOneEmp(Integer empNo) {
+		Optional<EmployeeVO> optional = employeeRepository.findById(empNo);
 //		return optional.get();
 		return optional.orElse(null);  // public T orElse(T other) : 如果值存在就回傳其值，否則回傳other的值
 	}
@@ -101,4 +103,9 @@ public class EmployeeService {
     public EmployeeVO findById(Integer empNo) {
         return employeeRepository.findById(empNo).orElseThrow(() -> new RuntimeException("Employee not found"));
     }
+
+	public Optional<EmployeeVO> empLogin(String empAccount, String empPassword) {
+		
+		return employeeRepository.empLogin(empAccount, empPassword);
+	}
 }
