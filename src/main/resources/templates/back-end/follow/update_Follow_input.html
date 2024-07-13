@@ -1,0 +1,108 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>留言內容修改 - update_Message_input.html</title>
+
+<head th:insert="~{/back-end/message/included-fragment}"></head>
+<style type="text/css">
+	
+	button {
+		padding: 5px;
+	}
+	form {
+		display: table;
+	}
+	form div {
+		display: table-row;
+	}
+	label, input, span, select {
+		display: table-cell;
+		margin: 5px;
+		text-align: left;		
+	}
+	input[type=text], input[type=password], select, textarea {
+		width: 200px;
+		margin: 5px;
+	}
+	form div div {
+		display: table-cell;
+	}
+	.center {
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
+		 <div align="center"> <h2>留言內容修改 - update_Message_input.html</h2>
+		 <h3><a class="navbar-brand" th:href="@{/message/select_page}"><img th:src="@{/images/back1.gif}">回查詢頁</a></h3></div>
+</nav>
+
+	<div align="center">
+		<h3><b>所有欄位皆為必填欄位</b></h3>
+		<form th:action="@{update}" method="post" th:object="${messageVO}" enctype="multipart/form-data">
+			<div>
+			<label>留言編號:</label>
+			<input type="text" th:field="*{actMsgNo}" style="border:0px ; font-weight: bold;" readonly /><br/>
+			</div>
+			
+			<div>
+			<label>留言內容:</label>
+			<input type="text" th:field="*{actMsg}" onclick="hideContent('actMsg.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('actMsg')}" th:errors="*{actMsg}" class="error" id="actMsg.errors"></span>
+			</div>
+			
+			<div>
+			<label>活動編號:</label>
+			<select th:field="*{actVO.actNo}">
+				<option th:each="actVO : ${actListData}" th:value="${actVO.actNo}" th:text="${actVO.actNo}" />
+			</select>
+			<span th:if="${#fields.hasErrors('actVO.actNo')}" th:errors="*{actVO.actNo}" class="error" id="actVO.actNo.errors"></span>
+			</div>
+			
+			<div>
+			<label>會員編號:</label>
+			<select th:field="*{memberVO.memNo}">
+				<option th:each="memberVO : ${memberListData}" th:value="${memberVO.memNo}" th:text="${memberVO.memNo}" />
+			</select>
+			<span th:if="${#fields.hasErrors('memberVO.memNo')}" th:errors="*{memberVO.memNo}" class="error" id="memberVO.memNo.errors"></span>
+			</div>	
+			
+			
+	
+			
+			<div>
+				<div></div>
+				<div><button type="submit" id="submit"> 送出修改 </button></div>
+				<div></div>
+			</div>		
+		</form>
+	
+	</div>
+
+
+<!-- JavaScript part -->
+<script type="text/javascript">
+//清除提示信息
+function hideContent(d) {
+     document.getElementById(d).style.display = "none";
+}
+
+
+</script>
+
+</body>
+</html>
