@@ -57,7 +57,7 @@ public class ReportController {
 	public String addReport(ModelMap model) {
 		ReportVO reportVO = new ReportVO();
 		model.addAttribute("reportVO", reportVO);
-		return "back-end/report/addReport";
+		return "front-end/report/addReport";
 	}
 
 	/*

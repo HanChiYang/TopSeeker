@@ -1,14 +1,20 @@
 package com.topseeker.artpic.model;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.HashSet;
+
+import javax.validation.Valid;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-
+import com.topseeker.article.model.ArticleVO;
 
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_ArtPic;
 
@@ -54,5 +60,24 @@ public class ArtPicService {
 	public List<ArtPicVO> getAll(Map<String, String[]> map) {
 		return HibernateUtil_CompositeQuery_ArtPic.getAllC(map,sessionFactory.openSession());
 	}
+
+	public Set<ArtPicVO> saveArtPics(MultipartFile[] artPics, @Valid ArticleVO articleVO) {
+		Set<ArtPicVO> artPicVOs = new HashSet<>();
+		for (MultipartFile file : artPics) {
+			try {
+				ArtPicVO artPicVO = new ArtPicVO();
+				artPicVO.setArticleVO(articleVO);
+				artPicVO.setArtPic(file.getBytes());
+				artPicVOs.add(artPicVO);
+				repository.save(artPicVO);
+			} catch (IOException e) {
+				e.printStackTrace();
+				// 可以根据需要添加更多错误处理逻辑
+			}
+		}
+		return artPicVOs;
+	}
+
+
 
 }

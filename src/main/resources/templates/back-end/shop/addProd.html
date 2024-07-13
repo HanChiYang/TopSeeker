@@ -198,14 +198,13 @@ a {
 
 			<!-- 上傳圖片用 -->
 			<div class="mb-3">
-				<label for="prodPic" class="form-label">新增商品圖片</label> <input
+				<label for="prodPic" class="form-label" th:field="*{shopProductPics}">新增商品圖片</label> <input
 					type="file" name="picSet" id="prodPic" class="form-control"
-					multiple>
+					multiple onclick="hideContent('upFiles.errors')">
+				<span  class="alert alert-danger" role="alert" th:utext="${errorMessage}" id="upFiles.errors">${errorMessage} </span>
+				
 				<!-- 預覽圖片容器 -->
 				<div id="preview" class="mt-2"></div>
-				<span class="alert alert-danger" role="alert"
-					th:if="${#fields.hasErrors('shopProductPics')}"
-					th:errors="*{shopProductPics}" id="shopProductPics.errors"></span>
 			</div>
 
 
