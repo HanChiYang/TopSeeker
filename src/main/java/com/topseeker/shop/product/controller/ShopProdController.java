@@ -4,7 +4,9 @@ package com.topseeker.shop.product.controller;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
@@ -19,9 +21,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.topseeker.member.model.MemberService;
@@ -55,6 +60,7 @@ public class ShopProdController {
 	@Autowired
 	MemberService memSvc;
 	
+	//商品收藏用
 	@Autowired
 	ShopWishlistService shopWishlistSvc;
 	
@@ -64,11 +70,27 @@ public class ShopProdController {
 	//商城首頁 hompage.html
     @GetMapping("/homepage")
 	public String showShopProduct(ModelMap model) {
-	List<ShopProductVO> shopListData = shopProductSvc.getAll();
+	List<ShopProductVO> shopListData = shopProductSvc.getAllReleasedProd();
 	
 	model.addAttribute("shopListData", shopListData);
 	
 	return "front-end/shop/homepage";
+    }
+    
+
+    // 商城商品分類頁面 listProdByType.html
+    @GetMapping("/category/{categoryName}")
+//    public String showShopProductByType(@PathVariable("prodTypeNo") int prodTypeNo, ModelMap model) {
+	public String showShopProductByType(@PathVariable String categoryName, @RequestParam int prodTypeNo, ModelMap model) {
+    	
+        List<ShopProductVO> shopProdTypeListData = shopProductSvc.findByProdTypeNo(prodTypeNo);
+        model.addAttribute("shopProdTypeListData", shopProdTypeListData);
+        
+        ShopProductTypeVO productType = shopProductTypeSvc.getOneShopProductType(prodTypeNo);
+        model.addAttribute("productType", productType);
+        
+        
+        return "front-end/shop/listProdByType";
     }
     
 	//商城商品詳細頁面 hompage.html
@@ -89,12 +111,101 @@ public class ShopProdController {
     
     //抓取seesion內已登入會員的編號
     MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+    if (loggedInMember == null) {
+        // 如果未登入，重定向到登入頁面
+        return "redirect:/member/loginMem";
+    }
+    
+    
 	Integer loggedInMemberNo = loggedInMember.getMemNo();
 	//搜尋該會員有收藏的商品編號
 	List<ShopWishlistVO> shopWishlistVO = shopWishlistSvc.showMemWishlist(loggedInMemberNo);
 	
+
 	model.addAttribute("shopWishlistVO", shopWishlistVO);
 	return "front-end/shop/wishlist";
+    }
+    
+    
+	//============Ajax新增刪除功能============
+    
+    //whishlist刪除收藏商品
+    @PostMapping("/removeWishlistProd")
+    @ResponseBody
+    public Map<String, Object> removeWishlistProd(@RequestBody Map<String, Object> request) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Integer wishlistNo = (Integer) request.get("wishlistNo");
+            // 呼叫服務層方法來移除收藏的商品
+            shopWishlistSvc.deletShopWishlist(wishlistNo);
+            response.put("success", true);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+        }
+        return response;
+    }
+    
+    //商品頁面，收藏清單中新增或收藏該商品
+    @PostMapping("/toggleWishlist")
+    @ResponseBody
+    public Map<String, Object> toggleWishlist(@RequestBody Map<String, Object> request, HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+        	
+            // 獲取商品編號並進行類型轉換
+            Integer prodNo = null;
+            if (request.get("prodNo") instanceof String) {
+                prodNo = Integer.valueOf((String) request.get("prodNo"));
+            } else if (request.get("prodNo") instanceof Integer) {
+                prodNo = (Integer) request.get("prodNo");
+            }
+
+            // 確認商品編號是否成功解析
+            if (prodNo == null) {
+                response.put("success", false);
+                response.put("message", "無效的商品編號");
+                return response;
+            }
+            // 確認會員是否登入
+            MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+            if (loggedInMember == null) {
+                response.put("success", false);
+                response.put("message", "請先登入");
+                return response;
+            }
+
+            Integer memNo = loggedInMember.getMemNo();
+
+            // 檢查是否已經收藏
+            ShopWishlistVO existingWishlistItem = shopWishlistSvc.findByMemNoAndProdNo(memNo, prodNo);
+
+            if (existingWishlistItem != null) {
+                // 已存在，執行刪除
+                shopWishlistSvc.deletShopWishlist(existingWishlistItem.getWishlistNo());
+                response.put("action", "removed");
+            } else {
+                // 不存在，執行新增
+                // 不存在，執行新增
+                ShopWishlistVO newWishlistItem = new ShopWishlistVO();
+
+                // 假設你有相應的服務層來獲取MemberVO和ShopProductVO對象
+                MemberVO memberVO = memSvc.getOneMem(memNo);
+                ShopProductVO shopProductVO = shopProductSvc.getOneShopProduct(prodNo);
+
+                newWishlistItem.setMemberVO(memberVO);
+                newWishlistItem.setShopProductVO(shopProductVO);
+
+                shopWishlistSvc.addShopWishlist(newWishlistItem);
+                response.put("action", "added");
+            }
+
+            response.put("success", true);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+        }
+        return response;
     }
     
   
@@ -204,6 +315,10 @@ public class ShopProdController {
 			@RequestParam("picSet") MultipartFile[] parts) throws IOException {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
+		//設定修改時間
+		Timestamp prodDate = new Timestamp(System.currentTimeMillis());
+		shopProductVO.setProdDate(prodDate);
+		
 		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
 				result = removeFieldError(shopProductVO, result, "prodPic");
 
@@ -250,8 +365,6 @@ public class ShopProdController {
 	}
 	
 
-
-    
     
 	//============圖片錯誤訊息刪除用===========
 	// 去除BindingResult中某個欄位的FieldError紀錄
