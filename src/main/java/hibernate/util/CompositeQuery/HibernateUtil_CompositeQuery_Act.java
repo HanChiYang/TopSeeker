@@ -79,7 +79,7 @@ public class HibernateUtil_CompositeQuery_Act {
             }
             System.out.println("predicateList.size()=" + predicateList.size());
             criteriaQuery.where(predicateList.toArray(new Predicate[0]));
-            criteriaQuery.orderBy(builder.asc(root.get("actNo")));
+            criteriaQuery.orderBy(builder.desc(root.get("actNo")));
             // 【●最後完成創建 javax.persistence.Query●】
             Query query = session.createQuery(criteriaQuery);
             list = query.getResultList();

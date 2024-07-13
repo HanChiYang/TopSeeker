@@ -57,6 +57,10 @@ body {
 	margin-right: 20px;
 }
 
+.navbar .logo {
+    margin-right: 200px; /* 將 logo 推向最左側 */
+}
+
 .nav-links {
 	margin-top: 10px;
 	font-weight: 500;
@@ -89,7 +93,7 @@ body {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 20px;
-	justify-content: space-between; /* 保持卡片均勻分佈 */
+	justify-content: flex-start; /* 使卡片靠左排列 */
 }
 
 .product-card {
@@ -138,17 +142,23 @@ body {
 
 <body>
 	<div class="top-bar">
-		<a href="#">會員中心</a> <a href="#">登入/註冊</a> <a th:href="@{/shop/wishlist}">我的收藏</a> <a href="#"><i
+		<a th:href="@{/protected/memmember/indexMem}">會員中心</a> <a href="#">登入/註冊</a> <a th:href="@{/shop/wishlist}">我的收藏</a> <a href="#"><i
 			class="fa-solid fa-shopping-cart cart-icon"></i>購物車</a>
 	</div>
 	<div class="navbar">
-		<img th:src="@{/images/TopSeeker_logo.png}" width=100px alt="Logo">
+	<div class="logo">
+		<a th:href="@{/}"><img th:src="@{/images/TopSeeker_logo.png}" width=100px alt="Logo"></a>
+	</div>
 		<div>
 			TopSeeker 戶外用品商城
 			<div class="nav-links">
-				<a th:href="@{/shop/homepage}">首頁</a> <a href="#">優惠活動</a> <a href="#">新品|熱賣中</a> <a
-					href="/prod_page_bags.html">所有商品</a> <a href="#">包袋</a> <a href="#">鞋類</a>
-				<a href="#">服飾</a> <a href="#">裝備配件</a>
+				<a th:href="@{/shop/homepage}">首頁</a> 
+				<a href="#">優惠活動</a> 
+				<a href="#">新品|熱賣中</a>         
+				<a th:href="@{/shop/category/bag(prodTypeNo=1)}">包袋</a>
+		        <a th:href="@{/shop/category/shoes(prodTypeNo=2)}">鞋類</a>
+		        <a th:href="@{/shop/category/clothes(prodTypeNo=4)}">服飾</a>
+		        <a th:href="@{/shop/category/accessory(prodTypeNo=3)}">裝備配件</a>
 				<div class="search-bar">
 					<input type="text" placeholder="搜尋商品...">
 				</div>
@@ -188,8 +198,7 @@ body {
  					<h3 th:text="${shopProductVO.prodName}">商品名稱</h3> 
 			-->
 					
-					
-					
+
 <!-- 					<p th:text="'$' + ${shopProductVO.prodPrice}">商品金額</p> -->
 <!-- 				</div> -->
 
@@ -204,10 +213,43 @@ body {
 				</div>
 				
 				<div class="product-actions">
-					<a href="#"><i class="fa-solid fa-heart"></i></a> <a href="#"><i
+					<a href="javascript:void(0);" th:data-id="${shopProductVO.prodNo}" onclick="toggleWishlist(this)"><i class="fa-regular fa-heart"></i></a> <a href="#"><i
 						class="fa-solid fa-cart-plus"></i></a>
 				</div>
 			</div>
 		</div>
+		
+		
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    function toggleWishlist(button) {
+        var prodNo = $(button).data("id");
+        var $icon = $(button).find('i');
+
+        $.ajax({
+            type: "POST",
+            url: "/shop/toggleWishlist",
+            data: JSON.stringify({ prodNo: prodNo }),
+            contentType: "application/json",
+            success: function(response) {
+                if (response.success) {
+                    if (response.action === "added") {
+                        $icon.removeClass('fa-regular fa-heart').addClass('fa-solid fa-heart');
+                        alert("已加入收藏");
+                    } else if (response.action === "removed") {
+                        $icon.removeClass('fa-solid fa-heart').addClass('fa-regular fa-heart');
+                        alert("已移除收藏");
+                    }
+                } else {
+                    alert(response.message || "操作失敗，請稍後再試。");
+                }
+            },
+            error: function() {
+                alert("發生錯誤，請稍後再試。");
+            }
+        });
+    }
+</script>
 </body>
 </html>

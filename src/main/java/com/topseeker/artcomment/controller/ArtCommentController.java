@@ -57,7 +57,7 @@ public class ArtCommentController {
 	public String addArtComment(ModelMap model) {
 		ArtCommentVO artcommentVO = new ArtCommentVO();
 		model.addAttribute("artcommentVO", artcommentVO);
-		return "back-end/artcomment/addArtComment";
+		return "front-end/artcomment/addArtComment";
 	}
 
 	/*
@@ -102,7 +102,7 @@ public class ArtCommentController {
 
 		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("artcommentVO", artcommentVO);
-		return "back-end/artcomment/update_ArtComment_input"; // 查詢完成後轉交update_emp_input.html
+		return "front-end/artcomment/update_ArtComment_input"; // 查詢完成後轉交update_emp_input.html
 	}
 
 	/*
@@ -127,7 +127,7 @@ public class ArtCommentController {
 //			}
 //		}
 		if (result.hasErrors()) {
-			return "back-end/artcomment/update_ArtComment_input";
+			return "front-end/artcomment/update_ArtComment_input";
 		}
 		/*************************** 2.開始修改資料 *****************************************/
 		// EmpService empSvc = new EmpService();
@@ -137,7 +137,7 @@ public class ArtCommentController {
 		model.addAttribute("success", "- (修改成功)");
 		artcommentVO = artcommentSvc.getOneArtComment(Integer.valueOf(artcommentVO.getCommentNo()));
 		model.addAttribute("artcommentVO", artcommentVO);
-		return "back-end/artcomment/listOneArtComment"; // 修改成功後轉交listOneEmp.html
+		return "front-end/artcomment/listOneArtComment"; // 修改成功後轉交listOneEmp.html
 	}
 
 	/*
@@ -153,7 +153,7 @@ public class ArtCommentController {
 		List<ArtCommentVO> list = artcommentSvc.getAll();
 		model.addAttribute("artcommentListData", list);
 		model.addAttribute("success", "- (刪除成功)");
-		return "back-end/artcomment/listAllArtComment"; // 刪除完成後轉交listAllEmp.html
+		return "front-end/artcomment/listAllArtComment"; // 刪除完成後轉交listAllEmp.html
 	}
 
 	/*
@@ -210,7 +210,7 @@ public class ArtCommentController {
 		Map<String, String[]> map = req.getParameterMap();
 		List<ArtCommentVO> list = artcommentSvc.getAll(map);
 		model.addAttribute("artcommentListData", list); // for listAllEmp.html 第85行用
-		return "back-end/artcomment/listAllArtComment";
+		return "front-end/artcomment/listAllArtComment";
 	}
 
 }

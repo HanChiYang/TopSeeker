@@ -53,10 +53,6 @@ public class NewsVO implements java.io.Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) //@GeneratedValue的generator屬性指定要用哪個generator //【strategy的GenerationType, 有四種值: AUTO, IDENTITY, SEQUENCE, TABLE】
 	private Integer newsNo;
 	
-//	@ManyToOne
-//	@JoinColumn(name = "mem_no")
-//	private MemberVO memberVO;
-	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="newsVO")
 	@OrderBy("newsImgNo asc")
 	private Set<NewsPicVO> newsPic = new HashSet<NewsPicVO>();
@@ -71,24 +67,21 @@ public class NewsVO implements java.io.Serializable {
 //	@Size(min=1,max=1000,message="活動內容: 長度必需在{min}到{max}之間")
 	private String newsContent;	
 	
-	@Column(name = "news_publish_time")
+	@Column(name = "news_publish_time", updatable=false)
 	@NotNull(message="新聞發布日期: 請勿空白")	
-//	@Future(message="日期必須是在今日(不含)之後")
 	@Past(message="日期必須是在今日(含)之前")
-//	@DateTimeFormat(pattern="yyyy-MM-dd") 
-//	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") 
 	private Date newsPublishTime;
 	
 	public NewsVO() {
 	}
 
-//	public Set<NewsPicVO> getNewsPic() {
-//	return this.newsPic;
-//	}
-//
-//	public void setNewsPic(Set<NewsPicVO> newsPic) {
-//	this.newsPic = newsPic;
-//	}
+	public Set<NewsPicVO> getNewsPic() {
+	return this.newsPic;
+	}
+
+	public void setNewsPic(Set<NewsPicVO> newsPic) {
+	this.newsPic = newsPic;
+	}
 	
 	public Integer getNewsNo() {
 		return newsNo;
