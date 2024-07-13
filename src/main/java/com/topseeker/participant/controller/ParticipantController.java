@@ -254,5 +254,24 @@ public class ParticipantController {
 	    model.addAttribute("participantListData", list);
 	    return "front-end/participant/listMyAllParticipant";
 	}
+	
+	@PostMapping("updateStatus")
+	public String updateStatus(@RequestParam("actPartNo") Integer actPartNo, @RequestParam("actCommit") Integer actCommit, ModelMap model) {
+	    ParticipantVO participantVO = participantSvc.getOneParticipant(actPartNo);
+	    participantVO.setActCommit(actCommit);
+	    participantSvc.updateParticipant(participantVO);
+
+	    List<ParticipantVO> list = participantSvc.getAll();
+	    model.addAttribute("participantListData", list);
+	    return "front-end/participant/participantCheck";
+	}
+
+	@GetMapping("participantCheck")
+	public String checkParticipants(ModelMap model) {
+	    List<ParticipantVO> list = participantSvc.getAll();
+	    model.addAttribute("participantListData", list);
+	    return "front-end/participant/participantCheck"; 
+	}
+
 
 }
