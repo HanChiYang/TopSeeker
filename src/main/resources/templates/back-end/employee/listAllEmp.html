@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>所有員工資料 - listAllEmp.html</title>
+
+<head th:insert="~{/back-end/emp/included-fragment}"></head>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" />
+
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable({
+            "lengthMenu": [3 ,5, 10, 20, 50, 100],
+            "searching": true,
+            "paging": true,
+            "ordering": true,
+            "language": {
+                "processing": "處理中...",
+                "loadingRecords": "載入中...",
+                "lengthMenu": "顯示 _MENU_ 筆結果",
+                "zeroRecords": "沒有符合的結果",
+                "info": "顯示第 _START_ 至 _END_ 筆結果，共<font color=white> _TOTAL_ </font>筆",
+                "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
+                "infoFiltered": "(從 _MAX_ 筆結果中過濾)",
+                "search": "搜尋:",
+                "paginate": {
+                    "first": "第一頁",
+                    "previous": "上一頁",
+                    "next": "下一頁",
+                    "last": "最後一頁"
+                },
+                "aria": {
+                    "sortAscending":  ": 升冪排列",
+                    "sortDescending": ": 降冪排列"
+                }
+            }
+        });
+    });
+</script>
+<style type="text/css">
+body {
+    margin: 1rem 12rem 2rem 12rem;
+    background-color: #2f2f2f;
+    color: #d3d3d3;
+    font-family: 'Arial', sans-serif;
+}
+
+h2, h3 {
+    color: #d3d3d3;
+}
+
+.navbar {
+    background-color: #808080;
+    border-bottom: 2px solid #555;
+    height: 70px; /* 调整导航栏的高度 */
+}
+
+.navbar h2, .navbar h3 {
+    font-size: 1rem; /* 调整标题字体大小 */
+}
+
+.navbar .navbar-brand img {
+    height: 35px; /* 调整图片高度 */
+}
+
+.navbar .navbar-brand {
+    padding: 0.25rem 0.5rem; /* 调整链接的填充 */
+}
+
+table.dataTable {
+    background-color: #3a3a3a;
+    border-collapse: collapse;
+}
+
+table.dataTable th,
+table.dataTable td {
+    border: 1px solid #555;
+    padding: 8px;
+    color: #d3d3d3;
+}
+
+table.dataTable thead th {
+    background-color: #4a4a4a;
+}
+
+input[type="submit"] {
+    background-color: #555;
+    color: #d3d3d3;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+input[type="submit"]:hover {
+    background-color: #666;
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark fixed-top justify-content-center">
+         <div align="center"> <h2>所有員工資料 - listAllEmp.html</h2>
+         <h3><a class="navbar-brand" th:href="@{/emp/select_page}"><img th:src="@{/images/wolf.jpg}">回查詢頁<label th:text="${success}"></label></a></h3></div>
+</nav>
+
+<table id="example" class="display" style="width: 100%">
+  <thead >
+    <tr style="background-color:#CCCCFF">
+<!--          <th>計數</th> -->
+        <th>員工編號</th>
+        <th>員工姓名</th>
+        <th>員工帳號</th>
+        <th>員工密碼</th>
+        <th>員工到職日</th>
+        <th>員工狀態</th>
+        <th>員工權限</th>
+        
+        
+<!--         <th>員工詳細編號</th> -->
+<!--         <th>權限詳細編號</th> -->
+        <th>操作</th> 
+       
+        
+    </tr>
+  </thead>
+    
+  <tbody>
+    <th:block th:each="empVO : ${empListData}">
+        <tr>
+<!--             <td th:text="${empauthVOStat.count}"></td> -->
+          <td th:text="${empVO.empNo}"></td> 
+          <td th:text="${empVO.empName}"></td>
+          <td th:text="${empVO.empAccount}"></td> 
+          <td th:text="${empVO.empPassword}"></td>
+          <td th:text="${empVO.empHiredate}"></td>
+          <td>
+              <span th:if="${empVO.empStatus == 1}" th:text="'在職'">在職</span>
+              <span th:if="${empVO.empStatus == 0}" th:text="'離職'">離職</span>
+          </td>
+          
+          <td>
+			    <span th:each="empAuth, iterStat : ${empVO.empAuths}">
+			        <span th:text="${empAuth.authVO.authName}"></span>
+			        <!-- 如果不是最後一個元素，添加分隔符 -->
+			        <span th:if="${not iterStat.last}">,</span>
+			    </span>
+		  </td>
+          
+            <td>
+                 <form method="post" th:action="@{/emp/getOne_For_Update}" style="margin-bottom: 0px;">
+                    <input type="submit" value="修改">
+                    <input type="hidden" name="empNo" th:value="${empVO.empNo}">
+<!--                     <input type="hidden" name="authNo" th:value="${authVO.authNo}"> -->
+                </form> 
+                <form method="post" th:action="@{/emp/delete}" style="margin-bottom: 0px;">
+				     <input type="submit" value="刪除">
+				     <input type="hidden" name="empNo" th:value="${empVO.empNo}">
+				     
+			     </form>
+                </td>
+			</tr>
+		</th:block>
+  </tbody>
+</table>
+
+</body>
+</html>

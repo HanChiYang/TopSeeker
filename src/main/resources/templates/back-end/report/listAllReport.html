@@ -69,55 +69,128 @@ table.dataTable th, table.dataTable td {
 </head>
 <body>
 <nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
-<div class="container">登山情報檢舉處理</div>
+<div class="container">揪團檢舉處理</div>
+
+<!-- 未處理的檢舉 -->
+<div class="container">未處理的檢舉</div>
 <div class="article-details">
-<table id="example" class="display" style="width: 100%">
+<table id="example1" class="display" style="width: 100%">
   <thead >
-	<tr style="background-color:#CCCCFF">
-		<th>計數</th>
-		<th>檢舉活動編號</th>
-		<th>活動編號</th>
-		<th>會員編號</th>
-		<th>檢舉事由</th>
-		<th>檢舉內容</th>
-		<th>檢舉時間</th>
-		<th>處理員工編號</th>
-		<th>處理時間</th>
-		<th>處理狀態</th>
-		<th>處理註記</th>
-		<th>修改</th>
-		<th>刪除</th>
-	</tr>
+    <tr>
+        <th>檢舉活動編號</th>
+        <th>活動標題</th>
+        <th>會員帳號</th>
+        <th>檢舉事由</th>
+        <th>檢舉內容</th>
+        <th>檢舉時間</th>
+        <th>負責員工</th>
+        <th>處理時間</th>
+        <th>處理狀態</th>
+        <th>處理註記</th>
+        <th>處理</th>
+        <th>刪除</th>
+    </tr>
   </thead>
-	
+    
   <tbody>
-		<th:block th:each="reportVO : ${reportListData}">
-			<tr>
-				<td th:text="${reportVOStat.count}"></td>
-				<td th:text="${reportVO.actRpNo}"></td>
-				<td th:text="${reportVO.actVO.actNo} + '-[' + ${reportVO.actVO.actTitle} + ']'"></td>				
-				<td th:text="${reportVO.memberVO.memNo} + '-[' + ${reportVO.memberVO.memName} + ']'"></td>				
-				<td th:text="${reportVO.actReport}"></td>
-				<td th:text="${reportVO.actReportText}"></td>
-				<td th:text="${reportVO.actReportTime}"></td>
-				<td th:text="${reportVO.employeeVO.empNo} + '-[' + ${reportVO.employeeVO.empName} + ']'"></td>	
-				<td th:text="${reportVO.handleTime}"></td>
-				<td th:text="${reportVO.handleCheck}"></td>
-				<td th:text="${reportVO.handleReply}"></td>
-			<td>
-			  <form method="post" th:action="@{/report/getOne_For_Update}" style="margin-bottom: 0px;">
-			     <input type="submit" value="修改">
-			     <input type="hidden" name="actRpNo" th:value="${reportVO.actRpNo}"></form>
-			
-			</td>
-			<td>
-			  <form method="post" th:action="@{/report/delete}" style="margin-bottom: 0px;">
-			     <input type="submit" value="刪除">
-			     <input type="hidden" name="actRpNo" th:value="${reportVO.actRpNo}"></form>
-			
-			</td>
-			</tr>
-		</th:block>
+        <th:block th:each="reportVO : ${reportListData}" th:if="${reportVO.handleCheck == 0}">
+            <tr>
+                <td th:text="${reportVO.actRpNo}"></td>
+                <td th:text="${reportVO.actVO.actTitle}"></td>                
+                <td th:text="${reportVO.memberVO.memAccount}"></td>  
+                <td th:text="${reportVO.actReport == 0 ? '活動內容與標題不符' : 
+                              reportVO.actReport == 1 ? '活動內容違反善良風俗' : 
+                              reportVO.actReport == 2 ? '騷擾行為' : 
+                              reportVO.actReport == 3 ? '非主辦人出席宣傳之營利廣告' : 
+                              reportVO.actReport == 4 ? '活動包含詐騙內容' : 
+                              reportVO.actReport == 5 ? '其他' : '未知'}"></td>
+                <td th:text="${reportVO.actReportText}"></td>
+                <td th:text="${reportVO.actReportTime}"></td>
+                
+                <td th:if="${reportVO.employeeVO != null}" th:text="${reportVO.employeeVO.empName}"></td>                
+                <td th:if="${reportVO.employeeVO == null}"></td>                
+                
+                <td th:text="${reportVO.handleTime}"></td>
+                <td th:text="${reportVO.handleCheck == 0 ? '未處理' : 
+                              reportVO.handleCheck == 1 ? '通過' : 
+                              reportVO.handleCheck == 2 ? '不通過' : ''}"></td>
+                <td th:text="${reportVO.handleReply}"></td>
+                <td>
+                  <form method="post" th:action="@{/report/getOne_For_Update}" style="margin-bottom: 0px;">
+                     <input type="submit" value="處理">
+                     <input type="hidden" name="actRpNo" th:value="${reportVO.actRpNo}">
+                  </form>
+                </td>
+                <td>
+                  <form method="post" th:action="@{/report/delete}" style="margin-bottom: 0px;">
+                     <input type="submit" value="刪除">
+                     <input type="hidden" name="actRpNo" th:value="${reportVO.actRpNo}">
+                  </form>
+                </td>
+            </tr>
+        </th:block>
+  </tbody>
+</table>
+</div>
+
+<!-- 其他檢舉 -->
+<div class="container">已處理檢舉</div>
+<div class="article-details">
+<table id="example2" class="display" style="width: 100%">
+  <thead >
+    <tr>
+        <th>檢舉活動編號</th>
+        <th>活動標題</th>
+        <th>會員帳號</th>
+        <th>檢舉事由</th>
+        <th>檢舉內容</th>
+        <th>檢舉時間</th>
+        <th>負責員工</th>
+        <th>處理時間</th>
+        <th>處理狀態</th>
+        <th>處理註記</th>
+        <th>處理</th>
+        <th>刪除</th>
+    </tr>
+  </thead>
+    
+  <tbody>
+        <th:block th:each="reportVO : ${reportListData}" th:unless="${reportVO.handleCheck == 0}">
+            <tr>
+                <td th:text="${reportVO.actRpNo}"></td>
+                <td th:text="${reportVO.actVO.actTitle}"></td>                
+                <td th:text="${reportVO.memberVO.memAccount}"></td>  
+                <td th:text="${reportVO.actReport == 0 ? '活動內容與標題不符' : 
+                              reportVO.actReport == 1 ? '活動內容違反善良風俗' : 
+                              reportVO.actReport == 2 ? '騷擾行為' : 
+                              reportVO.actReport == 3 ? '非主辦人出席宣傳之營利廣告' : 
+                              reportVO.actReport == 4 ? '活動包含詐騙內容' : 
+                              reportVO.actReport == 5 ? '其他' : '未知'}"></td>
+                <td th:text="${reportVO.actReportText}"></td>
+                <td th:text="${reportVO.actReportTime}"></td>
+                
+                <td th:if="${reportVO.employeeVO != null}" th:text="${reportVO.employeeVO.empName}"></td>                
+                <td th:if="${reportVO.employeeVO == null}"></td>                
+                
+                <td th:text="${reportVO.handleTime}"></td>
+                <td th:text="${reportVO.handleCheck == 0 ? '未處理' : 
+                              reportVO.handleCheck == 1 ? '通過' : 
+                              reportVO.handleCheck == 2 ? '不通過' : ''}"></td>
+                <td th:text="${reportVO.handleReply}"></td>
+                <td>
+                  <form method="post" th:action="@{/report/getOne_For_Update}" style="margin-bottom: 0px;">
+                     <input type="submit" value="處理">
+                     <input type="hidden" name="actRpNo" th:value="${reportVO.actRpNo}">
+                  </form>
+                </td>
+                <td>
+                  <form method="post" th:action="@{/report/delete}" style="margin-bottom: 0px;">
+                     <input type="submit" value="刪除">
+                     <input type="hidden" name="actRpNo" th:value="${reportVO.actRpNo}">
+                  </form>
+                </td>
+            </tr>
+        </th:block>
   </tbody>
 </table>
 </div>
@@ -126,7 +199,7 @@ table.dataTable th, table.dataTable td {
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 <script>
   $(document).ready(function() {
-    $('#unreviewed').DataTable({
+    $('#example1').DataTable({
       "lengthMenu": [10],
       "searching": true,
       "paging": true,
@@ -154,7 +227,7 @@ table.dataTable th, table.dataTable td {
       }
     });
 
-    $('#reviewed').DataTable({
+    $('#example2').DataTable({
       "lengthMenu": [10],
       "searching": true,
       "paging": true,
@@ -181,6 +254,17 @@ table.dataTable th, table.dataTable td {
         }
       }
     });
+  });
+</script>
+<script>
+  $(function() {
+    $("button.btn_hamburger").on("click", function() {
+      $("aside.aside").toggleClass("-on");
+    });
+  });
+
+  $('#btnAddArticle').on('click', function() {
+    window.location.href = 'http://localhost:8080/article/addArticle';
   });
 </script>
 </body>

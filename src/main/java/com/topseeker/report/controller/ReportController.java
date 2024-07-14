@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,10 +55,21 @@ public class ReportController {
 	 * This method will serve as addEmp.html handler.
 	 */
 	@GetMapping("addReport")
-	public String addReport(ModelMap model) {
-		ReportVO reportVO = new ReportVO();
-		model.addAttribute("reportVO", reportVO);
-		return "front-end/report/addReport";
+	public String addReport(@RequestParam("actNo") Integer actNo, ModelMap model, HttpSession session) {
+	    MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+	    if (loggedInMember == null) {
+	        return "redirect:/member/loginMem";
+	    }
+
+	    ReportVO reportVO = new ReportVO();
+	    ActVO actVO = actSvc.getOneAct(actNo);
+	    reportVO.setActVO(actVO);
+	    reportVO.setMemberVO(loggedInMember);
+
+	    model.addAttribute("reportVO", reportVO);
+	    model.addAttribute("actTitle", actVO.getActTitle());
+	    model.addAttribute("memAccount", loggedInMember.getMemAccount());
+	    return "front-end/report/addReport";
 	}
 
 	/*
@@ -68,78 +80,56 @@ public class ReportController {
 			 MultipartFile[] parts) throws IOException {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
 		result = removeFieldError(reportVO, result, "upFiles");
-
-//		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
-//			model.addAttribute("errorMessage", "員工照片: 請上傳照片");
-//		} else {
-//			for (MultipartFile multipartFile : parts) {
-//				byte[] buf = multipartFile.getBytes();
-//				participantVO.setUpFiles(buf);
-//			}
-//		}
-		
 		/*************************** 2.開始新增資料 *****************************************/
-		// EmpService empSvc = new EmpService();
 		reportSvc.addReport(reportVO);
 		/*************************** 3.新增完成,準備轉交(Send the Success view) **************/
 		List<ReportVO> list = reportSvc.getAll();
 		model.addAttribute("reportListData", list);
 		model.addAttribute("success", "- (新增成功)");
-		return "redirect:/report/listAllReport"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
+		return "redirect:/act/listAllAct"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
 	}
 
 	/*
 	 * This method will be called on listAllEmp.html form submission, handling POST request
 	 */
-	@PostMapping("getOne_For_Update")
-	public String getOne_For_Update(@RequestParam("actRpNo") String actRpNo, ModelMap model) {
-		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		/*************************** 2.開始查詢資料 *****************************************/
-		// EmpService empSvc = new EmpService();
-		ReportVO reportVO = reportSvc.getOneReport(Integer.valueOf(actRpNo));
+    @PostMapping("getOne_For_Update")
+    public String getOne_For_Update(@RequestParam("actRpNo") Integer actRpNo, ModelMap model) {
+        ReportVO reportVO = reportSvc.getOneReport(actRpNo);
+        reportVO.setMemberVO(memberSvc.getOneMem(reportVO.getMemberVO().getMemNo()));
+        reportVO.setActVO(actSvc.getOneAct(reportVO.getActVO().getActNo()));
 
-		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
-		model.addAttribute("reportVO", reportVO);
-		return "back-end/report/update_report_input"; // 查詢完成後轉交update_emp_input.html
-	}
+        model.addAttribute("reportVO", reportVO);
+        return "back-end/report/update_Report_input";
+    }
 
-	/*
-	 * This method will be called on update_emp_input.html form submission, handling POST request It also validates the user input
-	 */
-	@PostMapping("update")
-	public String update(@Valid ReportVO reportVO, BindingResult result, ModelMap model,
-			 MultipartFile[] parts) throws IOException {
+    @PostMapping("update")
+    public String update(@Valid ReportVO reportVO, BindingResult result, ModelMap model, HttpSession session) throws IOException {
+        result = removeFieldError(reportVO, result, "upFiles");
 
-		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
-		result = removeFieldError(reportVO, result, "upFiles");
+        if (result.hasErrors()) {
+            model.addAttribute("reportVO", reportVO);
+            return "back-end/report/update_Report_input";
+        }
 
-//		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的新圖片時
-//			// EmpService empSvc = new EmpService();
-//			byte[] upFiles = participantSvc.getOneParticipant(participantVO.getActPartNo()).getUpFiles();
-//			participantVO.setUpFiles(upFiles);
-//		} else {
-//			for (MultipartFile multipartFile : parts) {
-//				byte[] upFiles = multipartFile.getBytes();
-//				participantVO.setUpFiles(upFiles);
-//			}
-//		}
-		if (result.hasErrors()) {
-			return "back-end/report/update_report_input";
-		}
-		/*************************** 2.開始修改資料 *****************************************/
-		// EmpService empSvc = new EmpService();
-		reportSvc.updateReport(reportVO);
+        MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+        if (loggedInMember == null) {
+            return "redirect:/member/loginMem";
+        }
 
-		/*************************** 3.修改完成,準備轉交(Send the Success view) **************/
-		model.addAttribute("success", "- (修改成功)");
-		reportVO = reportSvc.getOneReport(Integer.valueOf(reportVO.getActRpNo()));
-		model.addAttribute("reportVO", reportVO);
-		return "back-end/report/listOneReport"; // 修改成功後轉交listOneEmp.html
-	}
+        reportVO.setMemberVO(loggedInMember);
+        
+//        if (reportVO.getHandleCheck() == 1) {
+//            actSvc.updateActStatus(reportVO.getActVO().getActNo(), 3);
+//        }
+        
+        reportSvc.updateReport(reportVO);
 
+        model.addAttribute("success", "- (修改成功)");
+        List<ReportVO> list = reportSvc.getAll();
+        model.addAttribute("reportListData", list);
+        return "back-end/report/listAllReport";
+    }
 	/*
 	 * This method will be called on listAllEmp.html form submission, handling POST request
 	 */
@@ -224,6 +214,18 @@ public class ReportController {
 		model.addAttribute("reportListData", list); // for listAllEmp.html 第85行用
 		return "back-end/report/listAllReport";
 	}
+	
+	@GetMapping("myAllReport")
+    public String myAllReport(ModelMap model, HttpSession session) {
+        MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+        if (loggedInMember == null) {
+            return "redirect:/member/loginMem";
+        }
+        
+        List<ReportVO> myReports = reportSvc.getReportsByMember(loggedInMember.getMemNo());
+        model.addAttribute("reportListData", myReports);
+        return "front-end/report/myAllReport";
+    }
 
 
 }
