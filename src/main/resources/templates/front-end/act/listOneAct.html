@@ -77,9 +77,8 @@
             </div>
             
             <div class="text-center mt-4">
-                <a th:href="@{/participant/addParticipant(actNo=${actVO.actNo})}" class="btn btn-primary">我要檢舉</a>
+                <a th:href="@{/report/addReport(actNo=${actVO.actNo})}" class="btn btn-danger">我要檢舉</a>
             </div>
-            
         </div>
         <h3><a class="navbar-brand back-button" th:href="@{/act/listAllAct}">
             <i class="fa-solid fa-person-walking-arrow-loop-left"></i> 返回活動列表</a></h3>
