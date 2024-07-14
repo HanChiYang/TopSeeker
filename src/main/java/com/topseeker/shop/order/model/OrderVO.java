@@ -14,12 +14,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.topseeker.member.model.MemberVO;
+import com.topseeker.shop.cart.model.CartVO;
 import com.topseeker.shop.orderdetail.model.OrderDetailVO;
 import com.topseeker.shop.sale.model.SaleVO;
 
@@ -44,7 +46,6 @@ public class OrderVO implements java.io.Serializable {
 	
 	
 	@Column(name = "order_date")
-	@NotNull(message="請輸入訂購日期")
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Timestamp orderDate;
 	
@@ -65,15 +66,15 @@ public class OrderVO implements java.io.Serializable {
 	private Integer orderBill;
 	
 	@Column(name = "order_name")
-	@NotEmpty(message="請輸入訂購人姓名")
+//	@NotNull(message="請輸入訂購人姓名")
 	private String orderName;
 	
 	@Column(name = "order_phone")
-	@NotEmpty(message="請輸入連絡電話")
+//	@NotNull(message="請輸入連絡電話")
 	private String orderPhone;
 	
 	@Column(name = "order_address")
-	@NotEmpty(message="請輸入收件地址")
+//	@NotNull(message="請輸入收件地址")
 	private String orderAddress;
 	
 	@Column(name = "order_status")
@@ -91,11 +92,14 @@ public class OrderVO implements java.io.Serializable {
 	@Column(name = "remarks")	
 	private String remarks;
 	
+	@Transient
+	private List<CartVO> cartDetail;
+	
 	public OrderVO() {
 	}
 	
 
-	@OneToMany(mappedBy = "orderVO", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "orderVO", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<OrderDetailVO> orderDetails = new ArrayList<>();
 	
 	
@@ -108,8 +112,8 @@ public class OrderVO implements java.io.Serializable {
 	}
 	
 	public void addOrderDetail(OrderDetailVO orderDetailVO) {
+		this.orderDetails.add(orderDetailVO);
 		 orderDetailVO.setOrderVO(this);
-	     this.orderDetails.add(orderDetailVO);
 	}
 	
 
@@ -240,6 +244,14 @@ public class OrderVO implements java.io.Serializable {
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
-	
 
+	public List<CartVO> getCartDetails() {
+		return cartDetail;
+	}
+
+	public void setCartDetails(List<CartVO> cartDetails) {
+		this.cartDetail = cartDetails;
+	}
+	
+	
 }
