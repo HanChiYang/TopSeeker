@@ -212,13 +212,30 @@ body {
 	padding: 20px;
 	margin-top: 20px;
 }
+
+
+/* ----@@購物車因為用a標籤稍微調整其CSS */
+.btn a {
+	text-decoration: none;
+	color:black;
+}
+
+.btn a:visited {
+	color:black;
+}
+/* @@------------------------- */
+
+
 </style>
 </head>
 
 <body>
 	<div class="top-bar">
-		<a href="#">會員中心</a> <a href="#">登入/註冊</a> <a href="#"><i
-			class="fa-solid fa-shopping-cart cart-icon"></i>購物車</a>
+		<a href="#">會員中心</a> <a href="#">登入/註冊</a> 
+<!-- 		@@新增購物車連結 -->
+		<a th:href="@{/protected/cart/cart}"><i class="fa-solid fa-shopping-cart cart-icon"></i>購物車</a>
+<!-- 		@@ -->
+		
 	</div>
 	<div class="navbar">
 		<img th:src="@{/images/TopSeeker_logo.png}" width=100px alt="Logo">
@@ -267,7 +284,9 @@ body {
 						<p th:text="'$' + ${shopProductVO.prodPrice}">商品金額</p>
 						<div class="product-actions">
 							<button class="btn" onclick="decrementQuantity()">-</button>
-							<input type="number" id="quantity" value="1" min="1">
+<!-- -------------------@@改 購買商品數量------------------------------------------------------------------- -->
+							<input type="number" id="quantity" name="prodQty" value="1" min="1">
+<!-- --------------------	------@@------------------------------------------------------ -->
 							<button class="btn" onclick="incrementQuantity()">+</button>
 						</div>
 					</div>
@@ -276,10 +295,13 @@ body {
 						<button class="btn">
 							<i class="fa-solid fa-heart"></i> 加入收藏
 						</button>
+						
+<!-- ------------------------@@加入購物車ajax -->
 						<button class="btn">
-							<i class="fa-solid fa-cart-plus"></i> 加入購物車
+							<a href="javascript:void(0);" th:data-id="${shopProductVO.prodNo}" onclick="addToCart(this)">
+								<i class="fa-solid fa-cart-plus"></i>加入購物車</a>
 						</button>
-
+<!-- ----------------------------@@---- -->
 					</div>
 					<div class="product-description">
 						<h2>商品資訊</h2>
@@ -290,6 +312,10 @@ body {
 			</div>
 		</div>
 	</div>
+	
+<!-- 	@@加jQuery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- 	@@ -->
 
 	<script>
 		function decrementQuantity() {
@@ -305,6 +331,34 @@ body {
 			var currentValue = parseInt(quantityInput.value);
 			quantityInput.value = currentValue + 1;
 		}
+		
+//--------------------@@新增至購物車Ajax-----------
+	      function addToCart(button) {
+	        var prodNo = $(button).data("id");
+	        var prodQty = parseInt(document.getElementById("quantity").value);
+	       console.log("!!!!!")
+	        $.ajax({
+	            type: "POST",
+	            url: "/protected/cart/saveOrUpdateCart",
+	            data: JSON.stringify({ prodNo: prodNo, prodQty: prodQty }),
+	            contentType: "application/json",
+	            success: function(response) {
+	                if (response.success) {
+	                    alert(response.message);
+	                } else {
+	                    alert("請先登入會員");
+	                }
+	            },
+	            error: function(xhr) {
+	                if (xhr.status === 401) {
+	                    window.location.href = "/member/loginMem";
+	                } else {
+	                    alert("發生錯誤，請稍後再試。");
+	                }
+	            }
+	        });
+	    }
+//----------------@@-------------------------------
 	</script>
 </body>
 </html>
