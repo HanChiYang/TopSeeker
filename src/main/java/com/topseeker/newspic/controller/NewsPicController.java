@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -148,6 +149,34 @@ public class NewsPicController {
 		model.addAttribute("newsPicListData", list);
 		model.addAttribute("success", "- (刪除成功)");
 		return "front-end/newspic/listAllNewsPic"; // 刪除完成後轉交listAllEmp.html
+	}
+	
+	@PostMapping("deleteNewsImage")
+	@ResponseBody
+	public Map<String, Object> deleteNewsImage(@RequestParam("newsImgNo") Integer newsImgNo) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			
+			/*************************** 2.開始刪除資料 *****************************************/
+			boolean success = newsPicSvc.deleteNewsPic(newsImgNo);
+
+			if (success) {
+				response.put("success", true);
+				
+				System.out.println("圖片刪除成功");
+			} else {
+				response.put("success", false);
+				response.put("message", "圖片刪除失敗");
+				System.out.println("圖片刪除失敗");
+			}
+
+		} catch (Exception e) {
+			response.put("success", false);
+			response.put("message", "圖片刪除過程中發生錯誤");
+			e.printStackTrace();
+		}
+		System.out.println("Response: " + response);
+		return response;
 	}
 
 	/*

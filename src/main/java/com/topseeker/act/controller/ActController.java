@@ -1,11 +1,16 @@
 package com.topseeker.act.controller;
 
+import javax.persistence.Column;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -25,7 +30,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
+import com.topseeker.act.controller.validation.MemGroup;
 import com.topseeker.act.model.ActService;
 import com.topseeker.act.model.ActVO;
 import com.topseeker.actpicture.model.ActPictureService;
@@ -33,6 +38,10 @@ import com.topseeker.actpicture.model.ActPictureVO;
 import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
 import com.topseeker.news.model.NewsVO;
+import com.topseeker.participant.model.ParticipantVO;
+import com.topseeker.shop.product.model.ShopProductVO;
+import com.topseeker.shop.productpic.model.ShopProductPicVO;
+import com.topseeker.shop.wishlist.model.ShopWishlistVO;
 
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Act;
 
@@ -59,11 +68,12 @@ public class ActController {
 	 * This method will serve as addEmp.html handler.
 	 */
 	@GetMapping("addAct")
-	public String addAct(ModelMap model) {
+	public String addAct(ModelMap model,HttpSession session) {
 		ActVO actVO = new ActVO();
 		actVO.setActCurrentCount(0);
 		actVO.setActCheckCount(0);
 		actVO.setActStatus(0);
+
 		model.addAttribute("actVO", actVO);
 		return "front-end/act/addAct";
 	}
@@ -72,15 +82,22 @@ public class ActController {
 	 * This method will be called on addEmp.html form submission, handling POST request It also validates the user input
 	 */
 	@PostMapping("insert")
-	public String insert(@Valid ActVO actVO, BindingResult result, ModelMap model,
-			@RequestParam("picSet") MultipartFile[] parts) throws IOException {
+	public String insert(
+			/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
+			
+			
+			@Validated(MemGroup.class)ActVO actVO, BindingResult result, ModelMap model,
+			@RequestParam("picSet") MultipartFile[] parts, HttpSession session) throws IOException {
 		
-		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
 		result = removeFieldError(actVO, result, "actPic");
-
+		
+	
 		// 設置預設值	    
-        actVO.setActCurrentCount(0);   
+		MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+
+		actVO.setMemberVO(loggedInMember);
+		actVO.setActCurrentCount(0);   
         actVO.setActStatus(0);     
         actVO.setActCheckCount(0);
 	    
@@ -113,7 +130,7 @@ public class ActController {
 		List<ActVO> list = actSvc.getAll();
 		model.addAttribute("actListData", list);
 		model.addAttribute("success", "- (新增成功)");
-		return "redirect:/act/listAllAct"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
+		return "redirect:/act/memMyAct"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
 	}
 
 	/*
@@ -131,7 +148,7 @@ public class ActController {
 		return "front-end/act/updateActByMem"; // 查詢完成後轉交update_emp_input.html
 	}
 	
-	@PostMapping("UpdateActByEmp")
+	@PostMapping("updateActByEmp")
 	public String UpdateByEmp(@RequestParam("actNo") String actNo, ModelMap model) {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		/*************************** 2.開始查詢資料 *****************************************/
@@ -140,7 +157,7 @@ public class ActController {
 
 		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("actVO", actVO);
-		return "front-end/act/updateActByEmp"; // 查詢完成後轉交updateActByEmp.html
+		return "back-end/act/updateActByEmp"; // 查詢完成後轉交updateActByEmp.html
 	}
 
 	/*
@@ -152,28 +169,24 @@ public class ActController {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
-		result = removeFieldError(actVO, result, "actPic");
+				result = removeFieldError(actVO, result, "actPic");
 
-		
-		    List<ActPictureVO> picSet = new ArrayList<>();
-		    
-		    for (MultipartFile multipartFile : parts) {
-		        byte[] buf = multipartFile.getBytes();
-		        
-		        ActPictureVO actPictureVO = new ActPictureVO();
-		        actPictureVO.setActPic(buf);
-		        actPictureVO.setActVO(actVO); // 設置關聯到活動
-		        
-		        picSet.add(actPictureVO); // 添加到集合中
-		    }
-		    actVO.setActPictures(picSet); // 設置活動的圖片集合
-		
-//		if (result.hasErrors() || parts[0].isEmpty()) {
-//			return "front-end/act/update_act_input";
-//		}
-		if (result.hasErrors()) {
-			return "front-end/act/updateActByMem";
-		}
+				if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
+					model.addAttribute("errorMessage", "商品圖片: 請上傳圖片");
+				} else {
+				    List<ActPictureVO> picSet = new ArrayList<>();
+				    
+				    for (MultipartFile multipartFile : parts) {
+				        byte[] buf = multipartFile.getBytes();
+				        
+				        ActPictureVO actPictureVO = new ActPictureVO();
+				        actPictureVO.setActPic(buf);
+				        actPictureVO.setActVO(actVO); // 設置關聯到活動
+				        
+				        picSet.add(actPictureVO); // 添加到集合中
+				    }
+				    actVO.setActPictures(picSet); // 設置活動圖片集合
+				}
 		/*************************** 2.開始修改資料 *****************************************/
 		// EmpService empSvc = new EmpService();
 		actSvc.updateAct(actVO);
@@ -182,32 +195,14 @@ public class ActController {
 		model.addAttribute("success", "- (修改成功)");
 		actVO = actSvc.getOneAct(Integer.valueOf(actVO.getActNo()));
 		model.addAttribute("actVO", actVO);
-		return "front-end/act/updateOneAct"; // 修改成功後轉交listOneEmp.html
+		return "front-end/act/updateOneAct"; // 修改成功後轉交updateOneAct.html
 	}
 	@PostMapping("updateByEmp")
-	public String updateByEmp(@Valid ActVO actVO, BindingResult result, ModelMap model,
-			@RequestParam("picSet") MultipartFile[] parts) throws IOException {
+	public String updateByEmp(@Valid ActVO actVO, BindingResult result, ModelMap model
+			) throws IOException {
 		
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
-//		result = removeFieldError(actVO, result, "actPic");
-//		
-//			List<ActPictureVO> picSet = new ArrayList<>();
-//			
-//			for (MultipartFile multipartFile : parts) {
-//				byte[] buf = multipartFile.getBytes();
-//				
-//				ActPictureVO actPictureVO = new ActPictureVO();
-//				actPictureVO.setActPic(buf);
-//				actPictureVO.setActVO(actVO); // 設置關聯到活動
-//				
-//				picSet.add(actPictureVO); // 添加到集合中
-//			}
-//			actVO.setActPictures(picSet); // 設置活動的圖片集合
-//		
-//		if (result.hasErrors() || parts[0].isEmpty()) {
-//			return "back-end/act/updateActByEmp";
-//		}
+		
 		/*************************** 2.開始修改資料 *****************************************/
 		// EmpService empSvc = new EmpService();
 		actSvc.updateAct(actVO);
@@ -216,7 +211,7 @@ public class ActController {
 		model.addAttribute("success", "- (修改成功)");
 		actVO = actSvc.getOneAct(Integer.valueOf(actVO.getActNo()));
 		model.addAttribute("actVO", actVO);
-		return "front-end/act/updateOneAct"; // 修改成功後轉交listOneEmp.html
+		return "back-end/act/updateOneActByEmp"; // 修改成功後轉交updateOneActByEmp.html
 	}
 
 	/*
@@ -232,7 +227,20 @@ public class ActController {
 		List<ActVO> list = actSvc.getAll();
 		model.addAttribute("actListData", list);
 		model.addAttribute("success", "- (刪除成功)");
-		return "front-end/act/listAllAct"; // 刪除完成後轉交listAllEmp.html
+		return "front-end/act/memMyAct"; // 刪除完成後轉交memMyAct.html
+	}
+	
+	@PostMapping("deleteByBackEnd")
+	public String deleteByBackEnd(@RequestParam("actNo") String actNo, ModelMap model) {
+		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
+		/*************************** 2.開始刪除資料 *****************************************/
+		// EmpService empSvc = new EmpService();
+		actSvc.deleteAct(Integer.valueOf(actNo));
+		/*************************** 3.刪除完成,準備轉交(Send the Success view) **************/
+		List<ActVO> list = actSvc.getAll();
+		model.addAttribute("actListData", list);
+		model.addAttribute("success", "- (刪除成功)");
+		return "back-end/act/actBackEnd"; // 刪除完成後轉交actBackEnd.html
 	}
 
 	/*
@@ -288,16 +296,7 @@ public class ActController {
         return "front-end/act/listAllAct";
     }
 
-	//copy from IndexController
-	@GetMapping("/ActSelect")
-	public String ActSelect(Model model) {
-		return "front-end/act/ActSelect";
-	}
-	
-	@GetMapping("/select_page")
-	public String select_page(Model model) {
-		return "front-end/act/select_page";
-	}
+	//copy from IndexController	
     
     @GetMapping("/listAllAct")
 	public String listAllAct(Model model) {
@@ -305,7 +304,18 @@ public class ActController {
 	}
     
     @GetMapping("/memMyAct")
-	public String memMyAct(Model model) {
+	public String memMyAct(HttpSession session, ModelMap model, String memNo) {
+    	//抓取seesion內已登入會員的編號
+        MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+        if (loggedInMember == null) {
+	        return "redirect:/member/loginMem";
+	    }
+
+	    List<ActVO> list = actSvc.getAll().stream()
+	            .filter(p -> p.getMemberVO().getMemNo().equals(loggedInMember.getMemNo()))
+	            .collect(Collectors.toList());
+
+	    model.addAttribute("memMyAct", list);
 		return "front-end/act/memMyAct";
 	}
     
@@ -343,7 +353,7 @@ public class ActController {
 	}
 	
 	
-
+	//活動列表的ajax
 	@PostMapping("ajaxSearch")
 	public String ajaxSearch(HttpServletRequest req, Model model) {
         Map<String, String[]> map = req.getParameterMap();
@@ -361,14 +371,9 @@ public class ActController {
         model.addAttribute("actListData", list);
         return "front-end/act/listAllActFragment :: resultsList";
 	}
-//	@PostMapping("ajaxSearch")
-//	public String ajaxSearch(HttpServletRequest req, Model model, HttpSession session) {
-//		Map<String, String[]> map = req.getParameterMap();
-//		List<ActVO> list = actSvc.getAll(map);
-//		model.addAttribute("actListData", list);
-//		return "back-end/act/listAllActFragment :: resultsList";
-//	}
-	//活動列表頁面自動載入全部活動
+	
+
+	//進入活動列表頁面先自動載入全部活動
 	@GetMapping("ajaxSearchAll")
     public String getAllAct(HttpServletRequest req,Model model) {
 //        List<ActVO> actList = actSvc.getAll();
@@ -380,11 +385,6 @@ public class ActController {
         return "front-end/act/listAllActFragment :: resultsList";
     }
 	
-//	//活動列表單張圖
-//    @GetMapping("/listAllActFragment")
-//	public String listAllActFragment(ModelMap model) {
-//    	return "front-end/act/listAllActFragment";
-//    }
 	
   
 

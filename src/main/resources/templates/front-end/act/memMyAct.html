@@ -99,7 +99,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <th:block th:each="actVO : ${memActListData}">
+                    <th:block th:each="actVO : ${memMyAct}">
                         <tr>
                             <td th:text="${actVOStat.count}"></td>
                             <td th:text="${actVO.memberVO.memNo} + '-[' + ${actVO.memberVO.memName} + ']'"></td>

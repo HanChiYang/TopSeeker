@@ -79,7 +79,8 @@ public class HibernateUtil_CompositeQuery_News {
             }
             System.out.println("predicateList.size()=" + predicateList.size());
             criteriaQuery.where(predicateList.toArray(new Predicate[0]));
-            criteriaQuery.orderBy(builder.asc(root.get("newsNo")));
+            //讓新聞依新聞編號降序排列
+            criteriaQuery.orderBy(builder.desc(root.get("newsNo")));
             // 【●最後完成創建 javax.persistence.Query●】
             Query query = session.createQuery(criteriaQuery);
             list = query.getResultList();
