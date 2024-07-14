@@ -59,8 +59,8 @@
 	<div>
 		<label>訂購商品編號 :</label>
 <!-- 		<input type="text" th:field="*{compositeDetail.prodNo}" onclick="hideContent('compositeDetail.prodNo.errors')" /><br/> -->
-		<select th:field="*{productVO.prodNo}">
-			<option th:each="productVO : ${prodListData}" th:value="${productVO.prodNo}" th:text="${productVO.prodNo}"/>
+		<select th:field="*{shopProductVO.prodNo}">
+			<option th:each="shopProductVO : ${shopProductListData}" th:value="${shopProductVO.prodNo}" th:text="${shopProductVO.prodNo}"/>
 		</select>
 	</div>
 	
@@ -83,7 +83,7 @@
 	
 	<div><button type="submit" id="submit"> 送出新增 </button>
 	<input type="hidden" name="orderNo" th:value="${orderDetailVO.orderVO.orderNo}">
-	<input type="hidden" name="prodNo" th:value="${orderDetailVO.productVO.prodNo}">
+	<input type="hidden" name="prodNo" th:value="${orderDetailVO.shopProductVO.prodNo}">
 	</div>
 	
 </form>

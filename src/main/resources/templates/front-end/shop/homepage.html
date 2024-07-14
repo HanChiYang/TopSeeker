@@ -142,8 +142,12 @@ body {
 
 <body>
 	<div class="top-bar">
-		<a th:href="@{/protected/memmember/indexMem}">會員中心</a> <a href="#">登入/註冊</a> <a th:href="@{/shop/wishlist}">我的收藏</a> <a href="#"><i
-			class="fa-solid fa-shopping-cart cart-icon"></i>購物車</a>
+		<a th:href="@{/protected/member/indexMem}">會員中心</a> <a href="#">登入/註冊</a> <a th:href="@{/shop/wishlist}">我的收藏</a> 
+		
+<!-- 		@@新增購物車連結 -->
+		<a th:href="@{/protected/cart/cart}"><i class="fa-solid fa-shopping-cart cart-icon"></i>購物車</a>
+<!-- 	@@ -->
+	
 	</div>
 	<div class="navbar">
 	<div class="logo">
@@ -213,8 +217,12 @@ body {
 				</div>
 				
 				<div class="product-actions">
-					<a href="javascript:void(0);" th:data-id="${shopProductVO.prodNo}" onclick="toggleWishlist(this)"><i class="fa-regular fa-heart"></i></a> <a href="#"><i
-						class="fa-solid fa-cart-plus"></i></a>
+					<a href="javascript:void(0);" th:data-id="${shopProductVO.prodNo}" onclick="toggleWishlist(this)"><i class="fa-regular fa-heart"></i></a> 
+
+<!-- 					@@新增購物車Ajax -->
+					<a href="javascript:void(0);" th:data-id="${shopProductVO.prodNo}" onclick="addToCart(this)"><i class="fa-solid fa-cart-plus"></i></a>
+<!-- 						@@ -->
+
 				</div>
 			</div>
 		</div>
@@ -250,6 +258,36 @@ body {
             }
         });
     }
+    
+//----------------@@新增至購物車Ajax
+      function addToCart(button) {
+        var prodNo = $(button).data("id");
+        var prodQty = 1; // 假設每次添加一個商品
+
+        $.ajax({
+            type: "POST",
+            url: "/protected/cart/saveOrUpdateCart",
+            data: JSON.stringify({ prodNo: prodNo, prodQty: prodQty }),
+            contentType: "application/json",
+            success: function(response) {
+                if (response.success) {
+                    alert(response.message);
+                } else {
+                    alert("請先登入會員");
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 401) {
+                    window.location.href = "/member/loginMem";
+                } else {
+                    alert("發生錯誤，請稍後再試。");
+                }
+            }
+        });
+    }
+//----------------@@-------------------------------
+   
+  
 </script>
 </body>
 </html>
