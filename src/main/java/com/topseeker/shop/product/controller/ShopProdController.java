@@ -76,6 +76,16 @@ public class ShopProdController {
 	
 	return "front-end/shop/homepage";
     }
+	
+	//【新版型測試用】商城首頁 homepageWithNav.html
+    @GetMapping("/homepageNav")
+	public String showTestShopProduct(ModelMap model) {
+	List<ShopProductVO> shopListData = shopProductSvc.getAllReleasedProd();
+	
+	model.addAttribute("shopListData", shopListData);
+	
+	return "front-end/shop/homepageWithNav";
+    }
     
 
     // 商城商品分類頁面 listProdByType.html
@@ -129,22 +139,50 @@ public class ShopProdController {
     
 	//============Ajax新增刪除功能============
     
-    //whishlist刪除收藏商品
-    @PostMapping("/removeWishlistProd")
+
+    
+    
+    //商品頁面，檢查商品是否已被收藏
+    @PostMapping("/checkWishlistStatus")
     @ResponseBody
-    public Map<String, Object> removeWishlistProd(@RequestBody Map<String, Object> request) {
+    public Map<String, Object> checkWishlistStatus(@RequestBody Map<String, Object> request, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
         try {
-            Integer wishlistNo = (Integer) request.get("wishlistNo");
-            // 呼叫服務層方法來移除收藏的商品
-            shopWishlistSvc.deletShopWishlist(wishlistNo);
-            response.put("success", true);
+            Integer prodNo = null;
+            if (request.get("prodNo") instanceof String) {
+                prodNo = Integer.valueOf((String) request.get("prodNo"));
+            } else if (request.get("prodNo") instanceof Integer) {
+                prodNo = (Integer) request.get("prodNo");
+            }
+
+            if (prodNo == null) {
+                response.put("isInWishlist", false);
+                response.put("message", "無效的商品編號");
+                return response;
+            }
+
+            MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+
+            if (loggedInMember == null) {
+                response.put("isInWishlist", false);
+                response.put("message", "請先登入");
+                return response;
+            }
+
+            Integer memNo = loggedInMember.getMemNo();
+            ShopWishlistVO wishlistItem = shopWishlistSvc.findByMemNoAndProdNo(memNo, prodNo);
+            response.put("isInWishlist", wishlistItem != null);
+
+//            System.out.println("會員編號是:" + memNo + ", 收藏狀態是: " + (wishlistItem != null));
+
         } catch (Exception e) {
-            response.put("success", false);
+            response.put("isInWishlist", false);
             response.put("message", e.getMessage());
+            e.printStackTrace();
         }
         return response;
     }
+
     
     //商品頁面，收藏清單中新增或收藏該商品
     @PostMapping("/toggleWishlist")
@@ -200,6 +238,23 @@ public class ShopProdController {
                 response.put("action", "added");
             }
 
+            response.put("success", true);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+        }
+        return response;
+    }
+    
+    //商品收藏頁面，刪除收藏商品 whishlist.html
+    @PostMapping("/removeWishlistProd")
+    @ResponseBody
+    public Map<String, Object> removeWishlistProd(@RequestBody Map<String, Object> request) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Integer wishlistNo = (Integer) request.get("wishlistNo");
+            // 呼叫服務層方法來移除收藏的商品
+            shopWishlistSvc.deletShopWishlist(wishlistNo);
             response.put("success", true);
         } catch (Exception e) {
             response.put("success", false);
