@@ -20,6 +20,10 @@ public interface NewsPicRepository extends JpaRepository<NewsPicVO, Integer> {
 	//拿第一張圖片
 	@Query(value = "SELECT * FROM news_pic WHERE news_no=?1 limit 1", nativeQuery = true)
 	NewsPicVO getFirstNewsPic(Integer newsNo);
+	
+	//拿取單一商品的全部圖片
+	@Query(value = "SELECT * FROM news_pic WHERE news_img_no=?1", nativeQuery = true)
+	List<NewsPicVO> getAllNewsPic(Integer newsImgNo);
 
 	//● (自訂)條件查詢
 //	@Query(value = "from EmpVO where empno=?1 and ename like?2 and hiredate=?3 order by empno")

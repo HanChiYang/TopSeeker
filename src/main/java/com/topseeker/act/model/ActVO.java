@@ -25,9 +25,10 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
+import javax.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.topseeker.act.controller.validation.MemGroup;
 import com.topseeker.actpicture.model.ActPictureVO;
 import com.topseeker.member.model.MemberVO;
 /*
@@ -48,6 +49,9 @@ public class ActVO implements java.io.Serializable {
 	@ManyToOne
 	@JoinColumn(name = "mem_no")
 	private MemberVO memberVO;
+
+//	@Column(name = "mem_no")
+//	private Integer memNo;
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="actVO")
 	@OrderBy("actPicNo asc")
@@ -74,40 +78,37 @@ public class ActVO implements java.io.Serializable {
 	private Integer actMinCount;
 	
 	@Column(name = "act_current_count")
-	@NotNull(message = "不得是空值")
 	private Integer actCurrentCount=0;
 	
 	@Column(name = "act_check_count")
-	@NotNull(message = "不得是空值")
 	private Integer actCheckCount=0;
 	
-	@Column(name = "act_enroll_begin", updatable = false)
+	@Column(name = "act_enroll_begin")
 	@NotNull(message="報名開始日: 請勿空白")	
-	@FutureOrPresent(message = "日期必須是今天（含）之後") 
+//	@FutureOrPresent(message = "日期必須是今天（含）之後") 
 	private Date actEnrollBegin;
 	
-	@Column(name = "act_enroll_end", updatable = false)
+	@Column(name = "act_enroll_end")
 	@NotNull(message="報名結束日: 請勿空白")	
-	@Future(message="日期必須是在今日(不含)之後")
+	@Future(message="日期必須是在今日(不含)之後", groups = {MemGroup.class})
 	private Date actEnrollEnd;
 	
-	@Column(name = "act_start", updatable = false)	
+	@Column(name = "act_start")	
 	@NotNull(message="活動開始日: 請勿空白")
-	@Future(message="日期必須是在今日(不含)之後")
+	@Future(message="日期必須是在今日(不含)之後", groups = {MemGroup.class})
 	private Date actStart;
 	
-	@Column(name = "act_end", updatable = false)
+	@Column(name = "act_end")
 	@NotNull(message="活動結束日: 請勿空白")	
-	@Future(message="日期必須是在今日(不含)之後")
+	@Future(message="日期必須是在今日(不含)之後", groups = {MemGroup.class})
 	private Date actEnd;
 	
 	@Column(name = "act_place")
 	@NotEmpty(message="活動地點: 請勿空白")	
 	private String actPlace;
 	
-	@Column(name = "act_status", updatable = false)
-	@NotNull(message = "不得是空值")	
-	private Integer actStatus=0;
+	@Column(name = "act_status")	
+	private Integer actStatus;
 	
 	@Column(name = "act_rate_sum")
 	private Integer actRateSum;
@@ -138,6 +139,14 @@ public class ActVO implements java.io.Serializable {
 	public List<ActPictureVO> getActPictures() {
 		return this.actPictures;
 	}
+
+//	public Integer getMemNo() {
+//		return memNo;
+//	}
+//
+//	public void setMemNo(Integer memNo) {
+//		this.memNo = memNo;
+//	}
 
 	public void setActPictures(List<ActPictureVO> actpictures) {
 		this.actPictures = actpictures;

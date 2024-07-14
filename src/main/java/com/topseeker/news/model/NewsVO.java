@@ -2,7 +2,9 @@ package com.topseeker.news.model;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -55,7 +57,7 @@ public class NewsVO implements java.io.Serializable {
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="newsVO")
 	@OrderBy("newsImgNo asc")
-	private Set<NewsPicVO> newsPic = new HashSet<NewsPicVO>();
+	private List<NewsPicVO> newsPic = new ArrayList<>();
 	
 	@Column(name = "news_title")
 	@NotEmpty(message="新聞標題: 請勿空白")
@@ -75,11 +77,11 @@ public class NewsVO implements java.io.Serializable {
 	public NewsVO() {
 	}
 
-	public Set<NewsPicVO> getNewsPic() {
+	public List<NewsPicVO> getNewsPic() {
 	return this.newsPic;
 	}
 
-	public void setNewsPic(Set<NewsPicVO> newsPic) {
+	public void setNewsPic(List<NewsPicVO> newsPic) {
 	this.newsPic = newsPic;
 	}
 	

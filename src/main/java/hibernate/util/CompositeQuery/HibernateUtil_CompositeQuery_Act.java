@@ -67,6 +67,10 @@ public class HibernateUtil_CompositeQuery_Act {
 
             List<Predicate> predicateList = new ArrayList<>();
 
+            // 排除狀態為已取消的活動
+            Predicate notCancelled = builder.notEqual(root.get("actStatus"), 3);
+            predicateList.add(notCancelled);
+            
             Set<String> keys = map.keySet();
             for (String key : keys) {
                 String value = map.get(key)[0];
@@ -79,6 +83,7 @@ public class HibernateUtil_CompositeQuery_Act {
             }
             System.out.println("predicateList.size()=" + predicateList.size());
             criteriaQuery.where(predicateList.toArray(new Predicate[0]));
+            //讓活動依活動編號降序排列
             criteriaQuery.orderBy(builder.desc(root.get("actNo")));
             // 【●最後完成創建 javax.persistence.Query●】
             Query query = session.createQuery(criteriaQuery);

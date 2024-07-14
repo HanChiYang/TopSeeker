@@ -7,11 +7,11 @@ import java.util.Optional;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Act;
 
-
+@Transactional
 @Service("actService")
 public class ActService {
 
@@ -43,15 +43,15 @@ public class ActService {
 //		return optional.get();
 		return optional.orElse(null);  // public T orElse(T other) : 如果值存在就回傳其值，否則回傳other的值，簡化if語法
 	}
-
+	
 	public List<ActVO> getAll() {
 		return repository.findAll();
 	}
-	
-//	public List<ActVO> getActsByMem(Integer memNo) {
-//		return repository.findActByMem(memNo);
-//	}
-
+	//取會員的開團活動(未使用)
+	public List<ActVO> getActsByMem(Integer memNo) {
+		return repository.findActByMem(memNo);
+	}
+	//活動複合查詢
 	public List<ActVO> getAll(Map<String, String[]> map) {
 		return HibernateUtil_CompositeQuery_Act.getAllC(map,sessionFactory.openSession());
 	}
@@ -59,6 +59,10 @@ public class ActService {
 
 	public List<ActVO> findMyOpenGroup(Integer memNoA) {
 		return repository.findMyOpenGroup(memNoA);
+	}
+	//檢舉後修改活動狀態
+	public void updateActStatus(Integer actNo, Integer newStatus) {
+		  repository.updateActStatus(actNo, newStatus);
 	}
 
 }
