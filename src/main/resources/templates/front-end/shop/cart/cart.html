@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>購物車</title>
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+* {
+  box-sizing: border-box;
+}
+body{
+  margin: 0;
+}
+img.jpg {
+	/*width:300px;*/
+	height: 150px;
+}
+
+.hidden {
+	display: none;
+}
+.btn-del{
+  	background-color: rgb(199, 220, 167);
+     border: none;
+
+}
+
+ .btn-del:hover, 
+ .btn-del:focus { 
+     font-size:x-large;
+     background-color: rgb(199, 220, 167);
+     border: none;
+ }
+
+a {
+	text-decoration: none;
+	color:rgb(222, 249, 196);
+}
+
+a:visited {
+	color:rgb(222, 249, 196);
+}
+
+a:hover{
+
+	color:#003C9D;
+}
+ 
+ button.next,
+ form button.next {
+  
+  background-color:rgb(70, 133, 133);
+  color:rgb(222, 249, 196);
+  border-radius:10px;
+  cursor:pointer;
+  font-size: 20px;
+  
+}
+
+ 
+button.next:hover,
+form button.next:hover {
+  color:#003C9D;
+  background-color:#fff;
+  border:2px #003C9D solid;
+}
+ 
+ th{
+ 	color: white;
+ }
+ 
+ tbody,
+ td {
+ 	background-color: rgb(199, 220, 167);
+ } 
+
+thead,
+.bg1 {
+	background-color: rgb(54, 94, 50);
+}
+
+
+/*固定結帳區*/
+.check-sticky {
+	position: sticky;
+	bottom: 10px;
+	z-index: 1000;
+	background-color: rgb(128, 175, 129);
+	width: 100%;
+	height: 100px;
+	
+}
+
+.check-sticky div.btns{
+	padding: 20px 20px;
+	display: flex;
+    justify-content: center;
+    align-items: center; /* 控制板块的垂直对齐方式 */
+   	gap: 20px;
+
+}
+
+/* 表格滾動 */
+.scrollable-table tbody {
+	display: block;
+	max-height: 800px;
+	overflow-y: auto;
+}
+
+.scrollable-table thead, .scrollable-table tbody tr {
+	display: table;
+	width: 100%;
+	table-layout: fixed;
+}
+
+.scrollable-table {
+	width: 100%;
+	margin: auto;
+}
+
+
+
+
+span.sum {
+	padding-right: 10px;
+	font-size: 25px;
+	color: rgb(214, 239, 216);
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body id="body">
+
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	
+	<h3>購物車</h3>
+
+	<div class="scrollable-table">
+	
+		<table width="100%" class="table table-hover table-striped mt-0">
+			<thead>
+				<tr class="bg1">
+					
+					<th style="width: 23vw">商品圖片</th>
+					<th style="width: 7.5vw">商品編號</th>
+					<th style="width: 13vw">名稱</th>
+					<th style="width: 7.5vw">售價</th>
+					<th style="width: 7.5vw">購買數量</th>
+					<th style="width: 7.5vw">小計</th>
+
+					<!-- 刪除商品 -->
+					<th style="width: 13vw"></th>
+				</tr>
+			</thead>
+			<tbody id="tbody">
+				<tr th:each="cartDetail : ${cartDetail}" id="lists">
+<!-- 				會員編號 -->
+				<td align="center" class="vertical hidden" style="width: 5vw" th:value="${cartDetail.memberVO.memNo}"></td>
+				
+<!-- 				購物車編號 -->
+					<td align="center" class="vertical cartNo hidden" style="width: 5vw" th:text="${cartDetail.cartNo}"></td>
+					
+<!-- 				商品圖片連結 -->
+					<td align="center" style="width: 23vw">
+						<img th:src="@{/shop/DBGifReader(prodNo=${cartDetail.shopProductVO.prodNo})}" class="jpg">					
+					</td>
+					
+<!-- 					商品編號 -->
+					<td align="center" class="prodNo" style="width: 7.5vw"
+						th:text="${cartDetail.shopProductVO.prodNo}"></td>
+						
+<!-- 					商品名稱	 -->
+					<td align="center" class="" style="width: 13vw"
+						th:text="${cartDetail.shopProductVO.prodName}">
+					</td>
+					
+<!-- 					商品售價 -->
+					<td align="center" class="prodPrice vertical" style="width: 7.5vw"
+						th:text="${cartDetail.shopProductVO.prodPrice}"></td>
+
+						
+<!-- 					商品數量	 -->
+					<td align="center" class="prodQty vertical" style="width: 7.5vw">
+					   <input type="number" min="1" max="99" step="1"
+							th:value="${cartDetail.prodQty}" class="num" name="prodQty"
+							th:id="'prodQty_' + ${cartDetail.shopProductVO != null ? cartDetail.shopProductVO.prodNo : 'N/A'}">
+					</td>
+					
+					<!-- 小計 -->
+					<td align="center" class="sub vertical" style="width: 7.5vw"></td>
+					
+
+					<!--  刪除商品 -->
+					<td align="center" class="no-wrap vertical" style="width: 13vw">
+						<form th:action="@{/protected/cart/deleteOne}" method="post"
+							th:object="${cartDetail}">
+							<button class="btn-del delete1" type="submit"
+								data-bs-toggle="modal">
+								<i class="fa-solid fa-trash-can fa-lg" style="color: #74C0FC;"></i>
+								<input type="hidden" name="prodNo" th:value="${cartDetail.shopProductVO.prodNo}">
+							</button>
+						</form>
+
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+		
+
+		<div th:if="${#lists.isEmpty(cartDetail)}" align="center">
+			<h1>目前購物車沒有商品</h1>
+		</div>
+		
+		<div style="text-align:center;" class="check-sticky">
+<!-- 		總金額 -->
+			<span class="sum">總金額:</span>
+			<span class="totalAmount sum" name="totalAmount"></span>
+			
+			<!-- 折扣金額 -->
+			<span class="sum">折扣名稱:</span>
+			<span class="saleName sum" name="saleName"></span>
+			
+			<span class="sum">折扣後金額:</span>
+			<span class="discountedAmount sum" name="discountedAmount"></span>
+			
+			<!-- 繼續購物 -->
+			<div class="btns">
+				<button class="next">
+					<a th:href="@{/shop/homepage}">繼續購物</a>
+				</button>
+			<!--  清空購物車 -->	
+				<form th:action="@{deleteMemAllCart}" method="post">
+					<button class="next" type="submit">清空購物車</button>
+				</form>
+			<!-- 結帳 -->	
+				<form th:action="@{checkOut}" method="post" th:object="${cartDetail}">
+					<button class="next checkout" type="submit">結帳</button>
+				</form>
+				
+			</div>
+	
+		
+			
+		</div>
+			
+
+	</div>
+
+	
+
+	<script type="text/javascript">
+	
+		
+	
+		
+
+		//進入頁面更新數量及金額
+		$(document).ready(function() {
+			//結帳檢查
+			 $('button.checkout').on('click', function(event) {
+	            if ($('.scrollable-table tbody tr').length === 0) {
+	                event.preventDefault();
+	                alert("購物車中沒有商品，請先添加商品再結帳。");
+	            }
+        	});
+			
+			
+		//進入時顯示	
+		$('.sub').each(function() {
+	
+// 			console.log(this);//<td align="center" class="sub vertical" style="width: 7.5vw">$$$</td>
+			
+			//售價
+			var prodPrice = $(this).closest("tr").find(".prodPrice").text();
+
+			//取出數量
+			var prodQty = parseInt($(this).closest("tr").find(".num").val());
+
+			//計算小計金額
+			$(this).text(parseInt(prodPrice	* prodQty));
+			var sub = parseInt($(this).text());
+			
+			//總金額
+			var totalAmount = calculateTotalAmount();
+			$(".totalAmount").text("$" + totalAmount.toFixed(0));
+	        $(".totalAmount").val(totalAmount.toFixed(0));
+		        
+	        //促銷相關
+	        var sales = fetchApplicableDiscounts();
+			var discountedAmount = applyDiscounts(sales);
+			var saleName = applyDiscounts(sales);
+
+		});
+		
+
+        
+		$('.num').on("change", function() {
+			console.log("觸發change事件")
+			
+			var prodQty = $(this).val();
+			if (prodQty < 1) {
+                $(this).val(1);
+                alert("商品數量不得低於一件，或將該商品自購物車移除");
+            }
+			
+			var prodPrice = $(this).closest("tr").find(".prodPrice").text();
+			
+			//計算小計
+			var sub = prodQty * prodPrice;
+			//更新小計
+			$(this).closest('tr').find('.sub').text(sub);
+			
+			$('.sub').each(function(){
+				var sub = parseInt($(this).text());			
+			});
+			
+			//總金額
+			var totalAmount = calculateTotalAmount();
+			
+			 updateAmounts();
+			 updateSubtotal($(this));
+			 
+			//折扣後金額
+		    var sales = fetchApplicableDiscounts();
+			var discountedAmount = applyDiscounts(sales);
+			var saleName = bestDiscountName;
+			
+		});
+		
+		//動態更新資料庫數量
+		$('.num').on("blur", function() {
+	        console.log("觸發blur事件");
+	        
+			var cartNo = $(this).closest('tr').find('.cartNo').text();
+			var prodNo = $(this).closest('tr').find('.prodNo').text();
+		    var updateQty = $(this).val();
+		    
+		    $.ajax({
+                url: '/protected/cart/updateQty',
+                type: 'post',
+                data: {
+                	cartNo: cartNo,
+                    prodNo: prodNo,
+                    prodQty: updateQty
+                },
+                success: function(response) {
+                    updateAmounts();
+                },
+                error: function(xhr, status, error) {
+                    console.error("資訊更新有誤: ", status, error);
+                }
+            });
+
+		
+	});
+		
+		 function updateAmounts() {
+	           var totalAmount = 0;
+	            $(".num").each(function() {
+	                var price = parseInt($(this).closest('tr').find('.prodPrice').text());
+	                var qty = parseInt($(this).val());
+	                var sub = price * qty;
+	                $(this).closest('tr').find('.sub').text(sub.toFixed(0));
+	                $(this).closest('tr').find('.sub').val(sub.toFixed(0));
+	               	totalAmount += sub;
+	                
+	            });
+	            $(".totalAmount").text("$" + totalAmount.toFixed(0));
+	            $(".totalAmount").val(totalAmount.toFixed(0));
+	           
+	        }
+
+		 function updateSubtotal(input) {
+			 var totalAmount = 0;
+		        var tr = input.closest('tr');
+		        var price = parseFloat(tr.find('.prodPrice').text());
+		        var quantity = parseInt(input.val());
+		        var sub = price * quantity;
+		        if (!isNaN(sub)) {totalAmount += sub;}
+		        
+		        tr.find('.totalAmount').text(totalAmount.toFixed(0));
+		        tr.find('.totalAmount').val(totalAmount.toFixed(0));
+		        console.log(totalAmount)
+		    } 
+		 
+		 //計算總金額
+		 function calculateTotalAmount() {
+		        var totalAmount = 0;
+		        $('.num').each(function() {
+		            var tr = $(this).closest('tr');
+		            var price = parseFloat(tr.find('.prodPrice').text());
+		            var quantity = parseInt($(this).val());
+		            var sub = price * quantity;
+		            totalAmount += sub;
+		        });
+		        return totalAmount;
+		    }
+		//包裝總金額至server
+		function fetchApplicableDiscounts() {
+			var totalAmount = calculateTotalAmount();
+    		var currentTime = getCurrentDateTime();
+    		
+			    $.ajax({
+			        url: '/shop/sale/applicableSales',
+			        type: 'GET',
+			        data: { 'totalAmount': totalAmount, 
+			        		'currentTime': currentTime},  
+			        success: function(sales) {
+			        	console.log("Sending AJAX request with totalAmount: ", totalAmount);
+			        	console.log("促銷方案: ", sales);
+			            applyDiscounts(sales);
+			        },
+			        error: function(xhr, status, error) {
+			        	console.log("Sending AJAX request with totalAmount: ", totalAmount);
+			            console.error("沒有收到促銷方案", error);
+			        }
+			 });
+		}
+		
+		
+		//使用折扣計算折扣後總金額
+		function applyDiscounts(sales) {
+		    if (!Array.isArray(sales) || sales.length === 0) {
+		        console.log('沒有合適折扣');
+		        return;
+		    }
+		    var totalAmount = calculateTotalAmount();
+			var maxDiscount = calculateBestDiscount(totalAmount, sales);
+			var saleName = bestDiscountName(totalAmount, sales);
+		   	var discountedAmount = totalAmount * maxDiscount;
+			console.log(saleName);
+			console.log(discountedAmount);
+		        $('.discountedAmount').text("$" + discountedAmount.toFixed(0));
+		        $('.discountedAmount').val(Math.floor(discountedAmount));
+		        
+		        $(".saleName").text(saleName);
+	           
+		    
+		}
+		
+		//合適最佳折扣
+		function calculateBestDiscount(totalAmount, sales) {
+		    var maxDiscount = 0;
+		    sales.forEach(function(sale) {
+		        if (totalAmount >= sale.saleAmount) {
+		            maxDiscount = Math.max(maxDiscount, sale.saleDiscount);
+		        }
+		    });
+		    return maxDiscount;
+		}
+		//取出最佳折扣名稱
+		function bestDiscountName(totalAmount, sales) {
+		    var saleName = "";
+		    sales.forEach(function(sale) {
+		        if (totalAmount >= sale.saleAmount) {
+		        	saleName = sale.saleName;
+		        }
+		    });
+		    return saleName;
+		}
+		
+		//取出現在時間
+		function getCurrentDateTime() {
+        var now = new Date();
+        
+        // Format the date and time as needed
+        var year = now.getFullYear();
+        var month = (now.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+        var day = now.getDate().toString().padStart(2, '0');
+        var hours = now.getHours().toString().padStart(2, '0');
+        var minutes = now.getMinutes().toString().padStart(2, '0');
+        var seconds = now.getSeconds().toString().padStart(2, '0');
+
+        // Create a formatted string
+        var formattedDateTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+
+        return formattedDateTime;
+    	}
+	        
+	        
+	        
+});
+	</script>
+	<script src="https://kit.fontawesome.com/933ec792e9.js"
+		crossorigin="anonymous"></script>
+</body>
+</html>

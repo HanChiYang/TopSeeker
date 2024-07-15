@@ -18,5 +18,7 @@ public interface ReportRepository extends JpaRepository<ReportVO, Integer> {
 	//● (自訂)條件查詢
 	@Query(value = "from ReportVO where act_rp_no=?1 and act_report like?2 order by act_rp_no")
 	List<ReportVO> findByOthers(int actRpNo , int actReport);
+	
+	List<ReportVO> findByMemberVO_MemNo(Integer memNo);
 
 }

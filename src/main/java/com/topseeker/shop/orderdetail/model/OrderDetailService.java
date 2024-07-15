@@ -54,5 +54,8 @@ public class OrderDetailService {
 		return repository.findAll();
 	}
 	
+	public List<OrderDetailVO> findOrderDetailsByOrderNo(Integer orderNo) {
+        return repository.findOrderDetailsByOrderNo(orderNo);
+    }
 
 }

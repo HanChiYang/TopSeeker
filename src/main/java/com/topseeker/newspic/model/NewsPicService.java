@@ -9,6 +9,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.topseeker.actpicture.model.ActPictureVO;
+
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Act;
 
 
@@ -44,6 +46,10 @@ public class NewsPicService {
 		return repository.findAll();
 	}
 
+	// 只取第一張圖片
+	public NewsPicVO getFirstNewsPic(Integer newsNo) {
+		return repository.getFirstNewsPic(newsNo);
+	}
 //	public List<ActVO> getAll(Map<String, String[]> map) {
 //		return HibernateUtil_CompositeQuery_Act.getAllC(map,sessionFactory.openSession());
 //	}
