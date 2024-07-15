@@ -326,6 +326,15 @@ public class ActController {
 		return list;
 	}
     
+    @ModelAttribute("memActListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
+    protected List<ActVO> memActListData(Model model) {
+    	model.addAttribute("actVO", new ActVO()); // for select_page.html 第133行用
+		List<ActVO> list = actSvc.getAll();
+		return list;
+    	
+    }
+ 
+    
 	@ModelAttribute("memberListData") // for select_page.html 第135行用
 	protected List<MemberVO> referenceListData_Member(Model model) {
 		model.addAttribute("memberVO", new MemberVO()); // for select_page.html 第133行用

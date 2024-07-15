@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>員工管理 - select_page.html</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; /* 淺灰色背景 */
+            color: #444; /* 深灰色文本 */
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: #ccc; /* 水泥灰色背景 */
+            border: 1px solid #999; /* 深灰色邊框 */
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        form {
+            margin-bottom: 15px;
+        }
+        label, input, select, span {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .errorblock {
+            color: red;
+            margin-bottom: 10px;
+        }
+        h2, h4, h5 {
+            color: #333; /* 深灰色標題 */
+        }
+        a {
+            color: #666; /* 中灰色連結 */
+            text-decoration: none;
+        }
+        a:hover {
+            color: #000; /* 黑色連結 */
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+	 <div class="user-info">
+        <!-- 使用Thymeleaf语法获取并显示登录用户的用户名 -->
+        <p th:text="'Welcome, ' + ${session.loginUser}" style="font-weight: bold;"></p>
+    </div>
+    
+    <nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
+		 <div align="center"> <h2>員工管理 - select_page.html</h2>
+		 <h3><a class="navbar-brand" th:href="@{/}"><img th:src="@{/images/back1.gif}">回index.html</a></h3></div>
+	</nav>
+
+    <h4>資料查詢:</h4>
+    <div class="errorblock" th:utext="${errorMessage}">${errorMessage}</div>
+
+    <div>
+        <h5><a href='listAllEmp'>List all Emps.</a></h5>
+
+        <form method="post" th:action="@{getOne_For_Display}">
+    輸入員工編號:
+    <input type="text" name="empNo" th:value="${param.empNo}">
+    <input type="submit" value="送出">
+    (輸入如1,2,3...)
+<!--     輸入權限編號: -->
+<!--     <input type="text" name="authNo" th:value="${param.authNo}"> -->
+<!--     <input type="submit" value="送出"> -->
+<!--     (輸入如1,2,3...) -->
+</form>
+
+<form method="post" th:action="@{getOne_For_Display}">
+    選擇員工編號:
+    <select name="empNo">
+        <option th:each="empVO : ${empListData}" th:value="${empVO.empNo}" th:text="${empVO.empNo}" />
+    </select>
+    <input type="submit" value="送出">
+<!--     選擇權限編號: -->
+<!--     <select name="authNo"> -->
+<!--         <option th:each="empauthVO : ${empauthListData}" th:value="${empauthVO.authVO.authNo}" th:text="${empauthVO.authVO.authNo}" /> -->
+<!--     </select> -->
+<!--     <input type="submit" value="送出"> -->
+</form>
+    </div>
+
+    <div th:if="${getOne_For_Display}">
+        <div th:insert="~{/back-end/emp/listOneEmp :: listOneEmp-div}"></div>
+    </div>
+
+    <h4>員工管理</h4>
+    <ul>
+        <li><h5><a href='addEmp'>Add a new EmpAuth.</a></h5></li>
+    </ul>
+</div>
+
+	<!-- 旗標getOne_For_Display見EmpnoController.java的第74行 -->
+    <div class="b" th:if="${getOne_For_Display}">
+        <!--使用listOneEmp.html網頁的listOneEmp-div片段--> <!-- 見listOneEmp.html的第35行的th:fragment="listOneEmp-div" --> <!-- 使用th:replace也可 -->
+        <div th:insert="~{/back-end/emp/listOneEmpAuth :: listOneEmp-div}"></div>
+    </div>
+</body>
+</html>

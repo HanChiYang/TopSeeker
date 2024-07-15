@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>訂單詳情</title>
+<style type="text/css">
+	
+    span {
+		display: inline-block;
+		width: 150px;
+		text-align: left;
+		font-weight: bold;
+	}
+	
+	h3 span {
+		text-align: center
+	}
+	
+	th{
+ 	color: white;
+ 	}
+
+	thead,
+	.bg1 {
+		background-color: rgb(54, 94, 50);
+		border-color: rgb(54, 94, 50);
+	}
+ 
+ 	tbody,
+ 	td {
+ 		background-color: rgb(199, 220, 167);
+ 		border-color: rgb(199, 220, 167);
+ 		text-align: center;
+	 } 
+
+</style>
+</head>
+<body>
+<nav>
+	<div align="center">
+		<h3>訂單詳情</h3>
+		<button onclick="goBack()" class="btn btn-success">回上一頁</button></div>
+</nav>
+	<div align="center" th:fragment="listOneOrder-div"> 
+		<h3><span>查詢結果</span></h3>
+		
+		<span>訂單編號	:</span><span th:text="${orderVO.orderNo}"></span><br/>
+<!-- 		<span>會員編號	:</span><span th:text="${orderVO.memberVO.memNo}"></span><br/> -->
+<!-- 		<span>會員姓名	:</span><span th:text="${orderVO.memberVO.memName}"></span><br/> -->
+		<span>促銷活動名稱	:</span><span th:text="${orderVO.saleVO.saleName}"></span><br/>
+		<span>訂單日期	:</span><span th:text="${orderVO.orderDate}"></span><br/>
+<!-- 		<span>訂單原始金額	:</span><span th:text="${orderVO.orderAmount}"></span><br/> -->
+<!-- 		<span>訂單運費	:</span><span th:text="${orderVO.orderShipment}"></span><br/> -->
+<!-- 		<span>折扣金額	:</span><span th:text="${orderVO.orderDiscount}"></span><br/> -->
+		<span>訂單實付金額	:</span><span th:text="${orderVO.orderBill}"></span><br/>
+		<span>收件人姓名	:</span><span th:text="${orderVO.orderName}"></span><br/>
+		<span>收件人電話	:</span><span th:text="${orderVO.orderPhone}"></span><br/>
+		<span>收件人住址	:</span><span th:text="${orderVO.orderAddress}"></span><br/>
+		<span>訂單狀態	:</span><span class="orderStatus" th:text="${orderVO.orderStatus}"></span><br/>
+		<span>付款狀態	:</span><span class="paymentStatus" th:text="${orderVO.paymentStatus}"></span><br/>
+		<span>付款方式	:</span><span class="paymentMethod" th:text="${orderVO.paymentMethod}"></span><br/>
+		<span>運送方式	:</span><span class="deliveryMethod" th:text="${orderVO.deliveryMethod}"></span><br/>
+		<span>訂單備註	:</span><span th:text="${orderVO.remarks}"></span><br/>
+		<br/> 
+		
+<!-- 顯示 OrderDetailVO 資料 -->
+        <h3>訂單明細</h3>
+        <table id="orderDetailList" class="display" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>購買項目</th>
+                    <th>商品單價</th>
+                    <th>購買數量</th>
+                </tr>
+            </thead>
+            <tbody>
+                <th:block th:each="details : ${orderDetailData}">
+                <tr>
+                    <td th:text="${details.shopProductVO.prodName}"></td>
+                    <td th:text="${details.orderPrice}"></td>
+                    <td th:text="${details.orderQty}"></td>
+                </tr>
+                </th:block>
+            </tbody>
+            </table>
+			
+		</div> 
+	<script>
+	function goBack() {
+        window.history.back();
+    }
+	
+		var orderStatusElements = document.querySelectorAll(".orderStatus");
+		orderStatusElements.forEach(function (e) {
+            var orderStatus = e.textContent.trim();
+            
+            switch(orderStatus){
+            	case '0':
+            		e.textContent ='訂單成立';
+            		break;
+            	case '1':
+            		e.textContent ='出貨中';
+            		break;
+            	case '2':
+            		e.textContent ='已出貨';
+            		break;
+            	case '3':
+            		e.textContent ='已收貨';
+            		break;
+            	case '4':
+            		e.textContent ='訂單取消';
+            		break;
+            	case '5':
+            		e.textContent ='一般結案';
+            		break;
+            	case '6':
+            		e.textContent ='鑑賞期內退貨結案';
+            		break;
+            	case '7':
+            		e.textContent ='瑕疵品退貨結案';
+            		break;
+            		
+            	}
+            
+        });
+		
+		var paymentStatusElements = document.querySelectorAll(".paymentStatus");
+		paymentStatusElements.forEach(function (e) {
+            var paymentStatus = e.textContent.trim();
+            
+            switch(paymentStatus){
+            	case '0':
+            		e.textContent ='待繳費';
+            		break;
+            	case '1':
+            		e.textContent ='已繳費';
+            		break;
+            		
+            	}
+            
+        });
+		
+		var paymentMethodElements = document.querySelectorAll(".paymentMethod");
+		paymentMethodElements.forEach(function (e) {
+            var paymentMethod = e.textContent.trim();
+            
+            switch(paymentMethod){
+            	case '0':
+            		e.textContent ='信用卡';
+            		break;
+            	case '1':
+            		e.textContent ='轉帳';
+            		break;
+            	case '2':
+            		e.textContent ='貨到付款';
+            		break;
+            	
+            	}
+            
+        });
+		
+		var deliveryMethodElements = document.querySelectorAll(".deliveryMethod");
+		deliveryMethodElements.forEach(function (e) {
+            var deliveryMethod = e.textContent.trim();
+            
+            switch(deliveryMethod){
+            	case '0':
+            		e.textContent ='宅配';
+            		break;
+            	case '1':
+            		e.textContent ='超商取貨';
+            		break;
+            	}
+            
+        });
+		
+	
+	
+	</script>
+
+</body>
+</html>

@@ -84,8 +84,10 @@
 
 </head>
 <body>
+
 	<!-- topseeker前台Navbar -->
 	<nav th:insert="~{/front-end/navbar.html}"></nav>
+
 
 	<!-- 商城用Navbar -->
 	<nav th:insert="~{/front-end/shop/shop_front_end_nav.html}"></nav>
@@ -119,12 +121,14 @@
 				</div>
 
 				<div class="product-actions">
+
 					<a href="javascript:void(0);" th:data-id="${shopProductVO.prodNo}"
 						onclick="toggleWishlist(this)" class="wishlist-btn"><i
 						class="fa-regular fa-heart"></i></a>
 					<!-- 購物車Ajax -->
 					<a href="javascript:void(0);" th:data-id="${shopProductVO.prodNo}"
 						onclick="addToCart(this)"><i class="fa-solid fa-cart-plus"></i></a>
+
 				</div>
 			</div>
 		</div>
@@ -138,6 +142,7 @@
 	<!-- 引入 DataTables -->
 	<script
 		src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+
 
 	<!-- topseeker前台Navbar共用JavaScript -->
 	<script src="/js/common.js"></script>
