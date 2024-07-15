@@ -55,7 +55,28 @@ public class ArticleController {
     
     @Autowired
     ArtReportService artreportSvc;
+    
+    
+    @ModelAttribute("articleListData")
+    protected List<ArticleVO> referenceListData() {
+        List<ArticleVO> list = articleSvc.getAll();
+        return list;
+    }
 
+    @ModelAttribute("memberListData")
+    protected List<MemberVO> referenceListData2() {
+        List<MemberVO> list = memberSvc.getAll();
+        return list;
+    }
+
+    @ModelAttribute("artPicListData")
+    protected List<ArtPicVO> referenceListData3() {
+        List<ArtPicVO> list = artpicSvc.getAll();
+        return list;
+    }
+
+    
+    //新增所需要的mapping
     @GetMapping("addArticle")
     public String addArticle(ModelMap model) {
         ArticleVO articleVO = new ArticleVO();
@@ -96,12 +117,13 @@ public class ArticleController {
         model.addAttribute("success", "- (新增成功)");
         return "redirect:/article/listAllArticle";
     }
-
+    
+    //新增留言所需要的mapping
     @GetMapping("getOne_For_Update")
     public String getOne_For_Update(@RequestParam("artNo") String artNo, ModelMap model) {
         ArticleVO articleVO = articleSvc.getOneArticle(Integer.valueOf(artNo));
         model.addAttribute("articleVO", articleVO);
-        model.addAttribute("artcommentVO", new ArtCommentVO()); // 确保 artcommentVO 被传递
+        model.addAttribute("artcommentVO", new ArtCommentVO()); 
         return "front-end/article/update_Article_input";
     }
 
@@ -110,7 +132,7 @@ public class ArticleController {
         result = removeFieldError(articleVO, result, "artPic");
 
         if (result.hasErrors()) {
-            model.addAttribute("artcommentVO", new ArtCommentVO()); // 确保 artcommentVO 被传递
+            model.addAttribute("artcommentVO", new ArtCommentVO()); 
             return "front-end/article/update_Article_input";
         }
         
@@ -122,8 +144,7 @@ public class ArticleController {
             return "front-end/member/loginMem";
         }
         
-        
-        
+            
 //        Set<ArtPicVO> artPicVOs = new HashSet<>();
 //        for (MultipartFile file : artPics) {
 //            if (!file.isEmpty()) {
@@ -156,32 +177,9 @@ public class ArticleController {
         return "front-end/article/listAllArticle";
     }
 
-    @ModelAttribute("articleListData")
-    protected List<ArticleVO> referenceListData() {
-        List<ArticleVO> list = articleSvc.getAll();
-        return list;
-    }
 
-    @ModelAttribute("memberListData")
-    protected List<MemberVO> referenceListData2() {
-        List<MemberVO> list = memberSvc.getAll();
-        return list;
-    }
 
-    @ModelAttribute("artPicListData")
-    protected List<ArtPicVO> referenceListData3() {
-        List<ArtPicVO> list = artpicSvc.getAll();
-        return list;
-    }
-
-    @ModelAttribute("articleMapData")
-    protected Map<Integer, String> referenceMapData() {
-        Map<Integer, String> map = new LinkedHashMap<Integer, String>();
-        map.put(1, "南三段水源通報");
-        map.put(2, "雪霸6月起開放雪山登山口到七卡山莊單日健行");
-        map.put(3, "桃園虎頭山公園健行7.5公里o型路線分享");
-        return map;
-    }
+   
 
     public BindingResult removeFieldError(ArticleVO articleVO, BindingResult result, String removedFieldname) {
         List<FieldError> errorsListToKeep = result.getFieldErrors().stream()
@@ -194,27 +192,23 @@ public class ArticleController {
         return result;
     }
 
-    @PostMapping("listMessages_ByCompositeQuery")
-    public String listAllArticle(HttpServletRequest req, Model model) {
-        Map<String, String[]> map = req.getParameterMap();
-        List<ArticleVO> list = articleSvc.getAll(map);
-        model.addAttribute("articleListData", list);
-        return "front-end/article/listAllArticle";
-    }
+    
 
     @GetMapping("/article/{artNo}")
     public String getArticle(@PathVariable Integer artNo, Model model) {
         ArticleVO article = articleSvc.findById(artNo);
         model.addAttribute("articleVO", article);
-        model.addAttribute("artcommentVO", new ArtCommentVO()); // 确保 artcommentVO 被传递
+        model.addAttribute("artcommentVO", new ArtCommentVO()); 
         return "listOneArticle";
     }
     
+    
+    //轉道自己所發的文章的mapping
     @GetMapping("listMyArticles")
     public String listMyArticles(HttpSession session, Model model) {
     	 MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
          if (loggedInMember == null) {
-             return "redirect:/front-end/member/loginMem"; // 如果没有登录，重定向到登录页面
+             return "redirect:/front-end/member/loginMem";
          }
 
          List<ArticleVO> myArticles = articleSvc.getAllIncludingStatusZero().stream()
@@ -226,6 +220,7 @@ public class ArticleController {
     }
     
     
+    //傳遞檢舉文章後可以更改status狀態 讓被檢舉的文章無法顯示
     @PostMapping("/artreport/update")
     public String updateArtReport(@Valid ArtReportVO artReportVO, BindingResult result, Model model) {
         // 更新檢舉狀態邏輯

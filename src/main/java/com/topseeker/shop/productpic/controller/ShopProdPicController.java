@@ -176,7 +176,7 @@ public class ShopProdPicController {
 		} else {
 			response.put("success", false);
 			response.put("message", "圖片刪除失敗");
-			System.out.println("圖片刪除失敗");
+//			System.out.println("圖片刪除失敗");
 		}
 
 //		response.put("success", success);

@@ -28,28 +28,55 @@ public class ReportVO implements java.io.Serializable {
 	
 private static final long serialVersionUID = 1L;
 	
+	@Id //@Id代表這個屬性是這個Entity的唯一識別屬性，並且對映到Table的主鍵 
+	@Column(name = "act_rp_no")  //@Column指這個屬性是對應到資料庫Table的哪一個欄位   //【非必要，但當欄位名稱與屬性名稱不同時則一定要用】	
+	@GeneratedValue(strategy = GenerationType.IDENTITY) //@GeneratedValue的generator屬性指定要用哪個generator //【strategy的GenerationType, 有四種值: AUTO, IDENTITY, SEQUENCE, TABLE】 
 	private Integer actRpNo;
+	
+	
+	@ManyToOne
+	@JoinColumn(name = "mem_no")   // 指定用來join table的column
 	private MemberVO memberVO;
+	
+	@ManyToOne
+	@JoinColumn(name = "act_no")   // 指定用來join table的column
 	private ActVO actVO;	
+	
+	@Column(name = "act_report")
 	private Integer actReport;
+	
+	@Column(name = "act_report_text")
 	private String actReportText;
+	
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") 
+	@Column(name = "act_report_time" , updatable = false)
 	private	Timestamp actReportTime;
+	
+	
+	@ManyToOne
+	@JoinColumn(name = "emp_no" )   // 指定用來join table的column	
 	private EmployeeVO employeeVO;
+	
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") 
+	@Column(name = "handle_time" , insertable = false)
 	private Timestamp handleTime;
+	
+	@Column(name = "handle_check")
 	private Integer handleCheck;
+	
+	@Column(name = "handle_reply")
 	private String handleReply;	
 
 	public ReportVO() { //必需有一個不傳參數建構子(JavaBean基本知識)
 		
 		this.actReportTime = new Timestamp(System.currentTimeMillis()); 
 		this.handleTime = new Timestamp(System.currentTimeMillis()); 
+		  this.handleCheck = 0;
+
 	}
 
 
 	
-	@Id //@Id代表這個屬性是這個Entity的唯一識別屬性，並且對映到Table的主鍵 
-	@Column(name = "act_rp_no")  //@Column指這個屬性是對應到資料庫Table的哪一個欄位   //【非必要，但當欄位名稱與屬性名稱不同時則一定要用】	
-	@GeneratedValue(strategy = GenerationType.IDENTITY) //@GeneratedValue的generator屬性指定要用哪個generator //【strategy的GenerationType, 有四種值: AUTO, IDENTITY, SEQUENCE, TABLE】 
 	public Integer getActRpNo() {
 		return actRpNo;
 	}
@@ -63,8 +90,6 @@ private static final long serialVersionUID = 1L;
 
 
 
-	@ManyToOne
-	@JoinColumn(name = "mem_no")   // 指定用來join table的column
 	public MemberVO getMemberVO() {
 		return memberVO;
 	}
@@ -78,8 +103,6 @@ private static final long serialVersionUID = 1L;
 
 
 
-	@ManyToOne
-	@JoinColumn(name = "act_no")   // 指定用來join table的column
 	public ActVO getActVO() {
 		return actVO;
 	}
@@ -93,7 +116,6 @@ private static final long serialVersionUID = 1L;
 
 
 
-	@Column(name = "act_report")
 	public Integer getActReport() {
 		return actReport;
 	}
@@ -107,7 +129,6 @@ private static final long serialVersionUID = 1L;
 
 
 
-	@Column(name = "act_report_text")
 	public String getActReportText() {
 		return actReportText;
 	}
@@ -121,8 +142,6 @@ private static final long serialVersionUID = 1L;
 
 
 
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") 
-	@Column(name = "act_report_time")
 	public Timestamp getActReportTime() {
 		return actReportTime;
 	}
@@ -136,8 +155,6 @@ private static final long serialVersionUID = 1L;
 
 
 
-	@ManyToOne
-	@JoinColumn(name = "emp_no")   // 指定用來join table的column	
 	public EmployeeVO getEmployeeVO() {
 		return employeeVO;
 	}
@@ -151,8 +168,6 @@ private static final long serialVersionUID = 1L;
 
 
 
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") 
-	@Column(name = "handle_time")
 	public Timestamp getHandleTime() {
 		return handleTime;
 	}
@@ -166,7 +181,6 @@ private static final long serialVersionUID = 1L;
 
 
 
-	@Column(name = "handle_check")
 	public Integer getHandleCheck() {
 		return handleCheck;
 	}
@@ -180,7 +194,6 @@ private static final long serialVersionUID = 1L;
 
 
 
-	@Column(name = "handle_reply")
 	public String getHandleReply() {
 		return handleReply;
 	}

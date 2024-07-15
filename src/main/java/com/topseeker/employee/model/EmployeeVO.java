@@ -1,38 +1,59 @@
 package com.topseeker.employee.model;
 
-import java.util.*;
+import java.sql.Date;
+import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
-//import com.topseeker.report.model.ReportVO;
+import com.topseeker.empauth.model.EmpAuthVO;
 
-@Entity  //要加上@Entity才能成為JPA的一個Entity類別
-@Table(name = "employee") //代表這個class是對應到資料庫的實體table，目前對應的table是EMP2 
+@Entity
+@Table(name = "employee")
 public class EmployeeVO implements java.io.Serializable {
-	
 	private static final long serialVersionUID = 1L;
 	
-	private Integer empNo;
-	private String empName;
-//	private Set<ReportVO> reports = new HashSet<ReportVO>();
+	@OneToMany(mappedBy = "employeeVO", cascade = CascadeType.ALL)
+	private Set<EmpAuthVO> empAuthVO;
 	
-	public EmployeeVO() {
-		
+	public Set<EmpAuthVO> getEmpAuthVO() {
+		return empAuthVO;
 	}
 
+	public void setEmpAuthVO(Set<EmpAuthVO> empAuthVO) {
+		this.empAuthVO = empAuthVO;
+	}
+
+	@Id 
+	@Column(name = "emp_no")  
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer empNo;
 	
-	@Id //@Id代表這個屬性是這個Entity的唯一識別屬性，並且對映到Table的主鍵 
-	@Column(name = "emp_no")  //@Column指這個屬性是對應到資料庫Table的哪一個欄位   //【非必要，但當欄位名稱與屬性名稱不同時則一定要用】	
-	@GeneratedValue(strategy = GenerationType.IDENTITY) //@GeneratedValue的generator屬性指定要用哪個generator //【strategy的GenerationType, 有四種值: AUTO, IDENTITY, SEQUENCE, TABLE】 	
+	@Column(name = "emp_name")
+	private String empName;
+
+	@Column(name = "emp_account")
+	private String empAccount;
+
+	@Column(name = "emp_password")
+	private String empPassword;
+
+	@Column(name = "emp_hiredate")
+	private Date empHiredate;
+
+	@Column(name = "emp_status")
+	private Byte empStatus;
+
+	public EmployeeVO() { //必需有一個不傳參數建構子(JavaBean基本知識)
+	}
+
 	public Integer getEmpNo() {
 		return empNo;
 	}
@@ -41,29 +62,72 @@ public class EmployeeVO implements java.io.Serializable {
 		this.empNo = empNo;
 	}
 
-//	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="memberVO")
-//	@OrderBy("act_rp_no asc")
-//	public Set<ReportVO> getReports() {
-//		return this.reports;
-//	}
-//
-//
-//	public void setReports(Set<ReportVO> reports) {
-//		this.reports = reports;
-//	}
-
-	
-	@Column(name = "emp_name")
 	public String getEmpName() {
 		return empName;
 	}
-
 
 	public void setEmpName(String empName) {
 		this.empName = empName;
 	}
 
+	public String getEmpAccount() {
+		return empAccount;
+	}
+
+	public void setEmpAccount(String empAccount) {
+		this.empAccount = empAccount;
+	}
+
+	public String getEmpPassword() {
+		return empPassword;
+	}
+
+	public void setEmpPassword(String empPassword) {
+		this.empPassword = empPassword;
+	}
+
+	public Date getEmpHiredate() {
+		return empHiredate;
+	}
+
+	public void setEmpHiredate(Date empHiredate) {
+		this.empHiredate = empHiredate;
+	}
+
+	public Byte getEmpStatus() {
+		return empStatus;
+	}
+
+	public void setEmpStatus(Byte empStatus) {
+		this.empStatus = empStatus;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(empAccount, empAuthVO, empHiredate, empName, empNo, empPassword, empStatus);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EmployeeVO other = (EmployeeVO) obj;
+		return Objects.equals(empAccount, other.empAccount) && Objects.equals(empAuthVO, other.empAuthVO)
+				&& Objects.equals(empHiredate, other.empHiredate) && Objects.equals(empName, other.empName)
+				&& Objects.equals(empNo, other.empNo) && Objects.equals(empPassword, other.empPassword)
+				&& Objects.equals(empStatus, other.empStatus);
+	}
+
+
 
 	
-
+	
 }

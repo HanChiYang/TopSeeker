@@ -37,17 +37,28 @@ public class ShopProductService {
 			repository.deleteByProdNo(prodNo);
 	}
 	
-	//取單一產品(商品圖片用)
+	//取單一商品(商品圖片用)
 	public ShopProductVO getOneShopProduct(Integer prodNo) {
 		Optional<ShopProductVO> optional = repository.findById(prodNo);
 		return optional.orElse(null);
 		//有資料則回傳其值，沒有則回傳null
 	}
 	
-	//取全數產品
+	//取全數商品
 	public List<ShopProductVO> getAll() {
 		return repository.findAll();
 	}
+	
+	//取全數【已上架】商品
+	public List<ShopProductVO> getAllReleasedProd() {
+		return repository.getAllReleasedProd();
+	}
+	
+	//依【商品類別】取全數商品
+	public List<ShopProductVO> findByProdTypeNo(int prodTypeNo) {
+		return repository.findByProdTypeNo(prodTypeNo);
+	}
+	
 	
 	public List<ShopProductVO> getAll(Map<String, String[]> map) {
 		return HibernateUtil_CompositeQuery_ShopProduct.getAllC(map, sessionFactory.openSession());

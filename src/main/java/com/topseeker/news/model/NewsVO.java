@@ -77,6 +77,7 @@ public class NewsVO implements java.io.Serializable {
 	public NewsVO() {
 	}
 
+
 	public List<NewsPicVO> getNewsPic() {
 	return this.newsPic;
 	}

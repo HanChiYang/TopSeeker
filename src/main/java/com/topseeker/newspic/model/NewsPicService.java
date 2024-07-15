@@ -60,6 +60,7 @@ public class NewsPicService {
 	public List<NewsPicVO> getAllNewsPic(Integer newsImgNo) {
 		return repository.getAllNewsPic(newsImgNo);
 	}
+
 //	public List<ActVO> getAll(Map<String, String[]> map) {
 //		return HibernateUtil_CompositeQuery_Act.getAllC(map,sessionFactory.openSession());
 //	}

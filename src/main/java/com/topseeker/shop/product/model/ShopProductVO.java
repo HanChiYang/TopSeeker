@@ -17,6 +17,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 //import com.topseeker.shop.orderdetail.model.OrderDetailVO;
 import com.topseeker.shop.productpic.model.ShopProductPicVO;
 import com.topseeker.shop.producttype.model.ShopProductTypeVO;
@@ -58,10 +60,10 @@ public class ShopProductVO implements java.io.Serializable{
 	@Column(name ="prod_status")
 	private Integer prodStatus;
 	
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") 
 	@Column(name ="prod_date")
 	private Timestamp prodDate;
 	
-
 	//商品圖片用
     @OneToMany(mappedBy = "shopProductVO", cascade = CascadeType.ALL)
     private List<ShopProductPicVO> shopProductPics = new ArrayList<>();

@@ -47,11 +47,12 @@ public class ActService {
 	public List<ActVO> getAll() {
 		return repository.findAll();
 	}
+
 	//取會員的開團活動(未使用)
 	public List<ActVO> getActsByMem(Integer memNo) {
 		return repository.findActByMem(memNo);
 	}
-	//活動複合查詢
+
 	public List<ActVO> getAll(Map<String, String[]> map) {
 		return HibernateUtil_CompositeQuery_Act.getAllC(map,sessionFactory.openSession());
 	}
