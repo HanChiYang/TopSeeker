@@ -26,10 +26,14 @@ import java.util.stream.Collectors;
 
 import com.topseeker.act.model.ActService;
 import com.topseeker.act.model.ActVO;
+import com.topseeker.actpicture.model.ActPictureVO;
 import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
 import com.topseeker.news.model.NewsService;
 import com.topseeker.news.model.NewsVO;
+import com.topseeker.newspic.model.NewsPicService;
+import com.topseeker.newspic.model.NewsPicVO;
+import com.topseeker.shop.productpic.model.ShopProductPicVO;
 
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Act;
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_News;
@@ -43,6 +47,9 @@ public class NewsController {
 
 	@Autowired
 	NewsService newsSvc;
+	
+	@Autowired
+	NewsPicService newsPicSvc;
 
 	@Autowired
     private SessionFactory sessionFactory;
@@ -53,36 +60,42 @@ public class NewsController {
 	@GetMapping("addNews")
 	public String addNews(ModelMap model) {
 		NewsVO newsVO = new NewsVO();
-//		actVO.setActCurrentCount(0);
-//		actVO.setActCheckCount(0);
-//		actVO.setActStatus(0);
 		model.addAttribute("newsVO", newsVO);
-		return "front-end/news/addNews";
+		return "back-end/news/addNews";
 	}
 
 	/*
 	 * This method will be called on addEmp.html form submission, handling POST request It also validates the user input
 	 */
 	@PostMapping("insert")
-	public String insert(@Valid NewsVO newsVO, BindingResult result, ModelMap model) throws IOException {
-
+	public String insert(@Valid NewsVO newsVO, BindingResult result, ModelMap model,
+			@RequestParam("picSet") MultipartFile[] parts) throws IOException {
+		
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
-//		result = removeFieldError(actVO, result, "upFiles");
-//
-//		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
-//			model.addAttribute("errorMessage", "員工照片: 請上傳照片");
-//		} else {
-//			for (MultipartFile multipartFile : parts) {
-//				byte[] buf = multipartFile.getBytes();
-//				actVO.setUpFiles(buf);
-//			}
-//		}
-//		if (result.hasErrors() || parts[0].isEmpty()) {
-//			return "back-end/act/addAct";
-//		}
+		result = removeFieldError(newsVO, result, "newsPic");
+	    
+		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
+			
+			model.addAttribute("errorMessage", "照片: 請上傳照片");
+			
+		} else {
+			List<NewsPicVO> picSet = new ArrayList<>();
+			
+			for (MultipartFile multipartFile : parts) {
+				byte[] buf = multipartFile.getBytes();			
+				NewsPicVO newsPicVO = new NewsPicVO();
+				newsPicVO.setNewsImg(buf);
+				newsPicVO.setNewsVO(newsVO);				
+				picSet.add(newsPicVO);								
+			}
+			
+			newsVO.setNewsPic(picSet);
+			
+		}
 		if (result.hasErrors()) {
-			return "front-end/news/addNews";
+//			System.out.println(result);
+			return "back-end/news/addNews";
 		}
 		/*************************** 2.開始新增資料 *****************************************/
 		// EmpService empSvc = new EmpService();
@@ -91,7 +104,7 @@ public class NewsController {
 		List<NewsVO> list = newsSvc.getAll();
 		model.addAttribute("newsListData", list);
 		model.addAttribute("success", "- (新增成功)");
-		return "redirect:/news/listAllNews"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
+		return "redirect:/news/newsBackEnd"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
 	}
 
 	/*
@@ -113,25 +126,29 @@ public class NewsController {
 	 * This method will be called on update_emp_input.html form submission, handling POST request It also validates the user input
 	 */
 	@PostMapping("update")
-	public String update(@Valid NewsVO newsVO, BindingResult result, ModelMap model) throws IOException {
+	public String update(@Valid NewsVO newsVO, BindingResult result, ModelMap model,
+			@RequestParam("picSet") MultipartFile[] parts) throws IOException {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
-//		result = removeFieldError(empVO, result, "upFiles");
-//
-//		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的新圖片時
-//			// EmpService empSvc = new EmpService();
-//			byte[] upFiles = empSvc.getOneEmp(empVO.getEmpno()).getUpFiles();
-//			empVO.setUpFiles(upFiles);
-//		} else {
-//			for (MultipartFile multipartFile : parts) {
-//				byte[] upFiles = multipartFile.getBytes();
-//				empVO.setUpFiles(upFiles);
-//			}
-//		}
-//		if (result.hasErrors()) {
-//			return "back-end/emp/update_emp_input";
-//		}
+		result = removeFieldError(newsVO, result, "newsImg");
+
+		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
+			model.addAttribute("errorMessage", "商品圖片: 請上傳圖片");
+		} else {
+		    List<NewsPicVO> picSet = new ArrayList<>();
+		    
+		    for (MultipartFile multipartFile : parts) {
+		        byte[] buf = multipartFile.getBytes();
+		        
+		        NewsPicVO newsPicVO = new NewsPicVO();
+		        newsPicVO.setNewsImg(buf);
+		        newsPicVO.setNewsVO(newsVO); // 設置關聯到商品
+		        
+		        picSet.add(newsPicVO); // 添加到集合中
+		    }
+		    newsVO.setNewsPic(picSet); // 設置商品的圖片集合
+		}
 		/*************************** 2.開始修改資料 *****************************************/
 		// EmpService empSvc = new EmpService();
 		newsSvc.updateNews(newsVO);
@@ -140,7 +157,7 @@ public class NewsController {
 		model.addAttribute("success", "- (修改成功)");
 		newsVO = newsSvc.getOneNews(Integer.valueOf(newsVO.getNewsNo()));
 		model.addAttribute("newsVO", newsVO);
-		return "front-end/news/listOneNews"; // 修改成功後轉交listOneEmp.html
+		return "back-end/news/newsBackEnd"; // 修改成功後轉交listOneEmp.html
 	}
 
 	/*
@@ -193,8 +210,7 @@ public class NewsController {
     @GetMapping("/listAllNews")
     public String newsIndex(Model model) {
     	return "front-end/news/listAllNews";
-    }
-      
+    } 
     
     @PostMapping("newsSearch")
 	public String ajaxSearch(HttpServletRequest req, Model model) {
@@ -213,11 +229,15 @@ public class NewsController {
         model.addAttribute("newsListData", list);       
         return "front-end/news/newsFragment :: resultsList";
 	}
-    
+    //進入新聞頁面先自動載入全部新聞
     @GetMapping("newsSearch")
-    public String getAllNews(Model model) {
-        List<NewsVO> newsList = newsSvc.getAll();
-        model.addAttribute("newsListData", newsList);
+    public String getAllNews(HttpServletRequest req,Model model) {
+//        List<NewsVO> newsList = newsSvc.getAll();
+    	Map<String, String[]> map = req.getParameterMap();
+        Map<String, String[]> queryParams = new HashMap<>(map);
+        Session session = sessionFactory.openSession();
+        List<NewsVO> newslist = HibernateUtil_CompositeQuery_News.getAllC(queryParams, session);        
+        model.addAttribute("newsListData", newslist);
         return "front-end/news/newsFragment :: resultsList";
     }
 
