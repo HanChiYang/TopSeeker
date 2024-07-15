@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(urlPatterns = { "/protected/*" })
+@WebFilter(urlPatterns = "/*/protected/*")
 public class MemLoginFilter implements Filter {
 
     @Override

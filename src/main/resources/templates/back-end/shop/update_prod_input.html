@@ -174,8 +174,9 @@ a {
 					<div th:each="pic, iterStat : ${shopProductVO.shopProductPics}"
 						th:id="'pic-' + ${iterStat.index}">
 						<!--測試印出產品圖片編號 -->
-						<input type="text" th:value="${pic.prodPicNo}"
-							class="form-control mb-2" readonly> <img
+<!-- 						<input type="text" th:value="${pic.prodPicNo}" -->
+<!-- 							class="form-control mb-2" readonly>  -->
+							<img
 							th:src="@{/shop/DBGifReader3} + '?prodPicNo=' + ${pic.prodPicNo}"
 							class="img-thumbnail mb-2" width="150" height="150">
 						<!--刪除按鈕 -->
