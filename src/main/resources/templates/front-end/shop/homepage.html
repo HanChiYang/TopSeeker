@@ -15,11 +15,12 @@
 <!-- icon用 -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  
 <!-- 從 Google Fonts 引入 "Playfair Display" 字體 -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap"
 	rel="stylesheet">
+
 
 <!-- Topseeker前台導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/common.css}">
@@ -88,10 +89,8 @@
 	<!-- topseeker前台Navbar -->
 	<nav th:insert="~{/front-end/navbar.html}"></nav>
 
-
 	<!-- 商城用Navbar -->
 	<nav th:insert="~{/front-end/shop/shop_front_end_nav.html}"></nav>
-
 
 	<main class="product">
 		<div class="product-grid">
@@ -101,6 +100,7 @@
 
 
 				<!--測試印出產品編號 -->
+
 				<!-- 				<input type="text" th:value="${shopProductVO.prodNo}"> -->
 
 				<a
@@ -108,6 +108,8 @@
 					<img
 					th:src="@{/shop/DBGifReader} + '?prodNo=' + ${shopProductVO.prodNo}"
 					alt="商品圖片">
+
+
 				</a>
 
 				<div class="product-info">
@@ -128,7 +130,6 @@
 					<!-- 購物車Ajax -->
 					<a href="javascript:void(0);" th:data-id="${shopProductVO.prodNo}"
 						onclick="addToCart(this)"><i class="fa-solid fa-cart-plus"></i></a>
-
 				</div>
 			</div>
 		</div>

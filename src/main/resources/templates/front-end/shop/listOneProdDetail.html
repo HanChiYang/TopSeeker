@@ -166,7 +166,6 @@
 	margin-top: 20px;
 }
 
-
 /* ----@@購物車因為用a標籤稍微調整其CSS */
 .btn a {
 	text-decoration: none;
@@ -176,8 +175,6 @@
 .btn a:visited {
 	color: black;
 }
-/* @@------------------------- */
-
 
 </style>
 </head>
@@ -232,7 +229,9 @@
 								<!-- --------------------	------@@------------------------------------------------------ -->
 								<button class="btn" onclick="incrementQuantity()">+</button>
 							</div>
+
 						</div>
+
 
 						<div class="product-actions wishandcart">
 							<button class="btn wishlist-btn"
@@ -253,8 +252,6 @@
 							<p th:text="${shopProductVO.prodInfo}">這裡顯示商品的詳細資訊。</p>
 						</div>
 					</div>
-
-
 				</div>
 			</div>
 		</div>
@@ -274,7 +271,6 @@
 
 	<!-- topseeker商城用JavaScript -->
 	<script src="/js/shop_front_end.js"></script>
-
 
 	<script>
 		//加入購物車+-數字按鈕
