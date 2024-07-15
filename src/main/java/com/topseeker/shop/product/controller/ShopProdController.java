@@ -103,21 +103,6 @@ public class ShopProdController {
         return "front-end/shop/listProdByType";
     }
     
-
-    // 商城商品分類頁面 listProdByType.html
-    @GetMapping("/category/{categoryName}")
-//    public String showShopProductByType(@PathVariable("prodTypeNo") int prodTypeNo, ModelMap model) {
-	public String showShopProductByType(@PathVariable String categoryName, @RequestParam int prodTypeNo, ModelMap model) {
-    	
-        List<ShopProductVO> shopProdTypeListData = shopProductSvc.findByProdTypeNo(prodTypeNo);
-        model.addAttribute("shopProdTypeListData", shopProdTypeListData);
-        
-        ShopProductTypeVO productType = shopProductTypeSvc.getOneShopProductType(prodTypeNo);
-        model.addAttribute("productType", productType);
-        
-        
-        return "front-end/shop/listProdByType";
-    }
     
 	//商城商品詳細頁面 hompage.html
     @GetMapping("/listOneProdDetail")
