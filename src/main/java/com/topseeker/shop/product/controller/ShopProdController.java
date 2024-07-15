@@ -103,6 +103,7 @@ public class ShopProdController {
         return "front-end/shop/listProdByType";
     }
     
+    
 	//商城商品詳細頁面 hompage.html
     @GetMapping("/listOneProdDetail")
 	public String showShopProductDetail(@RequestParam String prodNo, ModelMap model) {
@@ -138,7 +139,6 @@ public class ShopProdController {
     
     
 	//============Ajax新增刪除功能============
-    
 
     
     
@@ -262,8 +262,6 @@ public class ShopProdController {
         }
         return response;
     }
-    
-  
 
 	//============後端管理頁面============
 	
