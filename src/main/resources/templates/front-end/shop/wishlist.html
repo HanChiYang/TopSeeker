@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>收藏商品</title>
-<!-- <link rel="stylesheet" href="/css/styles.css"> -->
 
 <!-- Bootstrap CSS -->
 <link
@@ -12,126 +11,33 @@
 	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
 	crossorigin="anonymous">
 
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- icon用 -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<script>
-	$(document).ready(function() {
-		var navbarHeight = $('.navbar').outerHeight();
-		var shopnavbarHeight = $('.shopnavbar').outerHeight();
-		$('.sidebar').css('top', navbarHeight + shopnavbarHeight);
-		$('.content').css('margin-top', navbarHeight + shopnavbarHeight + 20);
-		
-	});
-	
-	function removeMyWishlist(button) {
-		var wishlistNo = $(button).data("id"); // 獲取商品ID
-	
-		$.ajax({
-			type: "POST",
-			url: "/shop/removeWishlistProd", // 設定後端控制器路徑
-			data: JSON.stringify({ wishlistNo: wishlistNo }),
-			contentType: "application/json",
-			success: function(response) {
-				if (response.success) {
-					$(button).closest("tr").remove(); // 移除對應的表格行
-				} else {
-					alert("無法移除收藏，請稍後再試。");
-				}
-			},
-			error: function() {
-				alert("發生錯誤，請稍後再試。");
-			}
-		});
-	}
-	
+<!-- 從 Google Fonts 引入 "Playfair Display" 字體 -->
+<link
+	href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap"
+	rel="stylesheet">
 
-	
-	
-	
-	
-</script>
+
+<!-- Topseeker前台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/common.css}">
+<!-- 商城導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/shop_front_end.css}">
 
 
 <style>
-body {
-	margin: 0;
-	background-color: #ffffff;
-}
-
-.top-bar {
-	background-color: #000000;
-	padding: 10px;
-	text-align: right;
-	color: #ffffff;
-	border-bottom: 1px solid #d3d3d3;
-}
-
-.top-bar a {
-	color: #ffffff;
-	text-decoration: none;
-	margin: 0 10px;
-}
-
-.top-bar .cart-icon {
-	vertical-align: middle;
-	margin-right: 5px;
-}
-
-.navbar {
-	background-color: #90c320;
-	padding: 20px;
-	text-align: center;
-	color: rgb(42, 42, 55, 0.89);
-	font-size: 36px;
-	width: 100%;
-	font-weight: bold;
-	font-family: 'Playfair Display';
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.navbar img {
-	width: 100px;
-	height: 100px;
-	object-fit: cover;
-	margin-right: 20px;
-}
-
-.nav-links {
-	margin-top: 10px;
-	font-weight: 500;
-	font-family: 'Playfair Display';
-}
-
-.nav-links a {
-	margin: 0 10px;
-	color: white;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 24px;
-}
-
-.search-bar {
-	display: inline-block;
-	margin-left: 10px;
-}
-
-.search-bar input[type="text"] {
-	padding: 5px;
-	font-size: 18px;
-}
-
-.content {
-	padding: 20px;
+.product {
+	margin-top: 30px; /* 根據需要調整，以確保不被導航欄遮擋 */
+	margin-left: 20px;
 }
 
 .product-grid {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 20px;
-	justify-content: space-between; /* 保持卡片均勻分佈 */
+	justify-content: flex-start; /* 使卡片靠左排列 */
 }
 
 .product-card {
@@ -144,7 +50,7 @@ body {
 }
 
 .product-card img {
-	width: 100%;
+	width: 70%;
 	height: 150px;
 	object-fit: cover;
 }
@@ -176,22 +82,25 @@ body {
 	font-size: 20px;
 }
 
-.table-container {
-	display: flex;
-	justify-content: center; /* 水平置中 */
-	align-items: center; /* 垂直置中，若需垂直置中則添加 */
-	height: 100%; /* 若需垂直置中則添加 */
+header {
+	margin-top: 50px;
 }
 
 table {
 	width: 80%;
 	border-collapse: collapse;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 th, td {
 	border: 1px solid #ddd;
 	padding: 8px;
 	text-align: center;
+}
+
+.left-align {
+    text-align: left;
 }
 
 th {
@@ -208,38 +117,18 @@ th {
 
 
 <body>
-	<div class="top-bar">
-		<a href="#">會員中心</a> <a href="#">登入/註冊</a> <a
-			th:href="@{/shop/wishlist}">我的收藏</a> <a href="#"><i
-			class="fa-solid fa-shopping-cart cart-icon"></i>購物車</a>
-	</div>
-	<div class="navbar">
-		<div class="logo">
-		<a th:href="@{/}"><img th:src="@{/images/TopSeeker_logo.png}" width=100px alt="Logo"></a>
-		</div>
-		<div>
-			TopSeeker 戶外用品商城
-			<div class="nav-links">
-				<a th:href="@{/shop/homepage}">首頁</a> 
-				<a href="#">優惠活動</a> 
-				<a href="#">新品|熱賣中</a>         
-				<a th:href="@{/shop/category/bag(prodTypeNo=1)}">包袋</a>
-		        <a th:href="@{/shop/category/shoes(prodTypeNo=2)}">鞋類</a>
-		        <a th:href="@{/shop/category/clothes(prodTypeNo=4)}">服飾</a>
-		        <a th:href="@{/shop/category/accessory(prodTypeNo=3)}">裝備配件</a>
-				<div class="search-bar">
-					<input type="text" placeholder="搜尋商品...">
-				</div>
-			</div>
-		</div>
-	</div>
+	<!-- topseeker前台Navbar -->
+	<nav th:insert="~{/front-end/navbar.html}"></nav>
 
-	<br>
-	<br>
+	<!-- 商城用Navbar -->
+	<nav th:insert="~{/front-end/shop/shop_front_end_nav.html}"></nav>
+
+
 	<header>
 		<h1 style="text-align: center;">我的收藏</h1>
 		<br>
 	</header>
+
 	<main>
 
 		<div class="table-container">
@@ -261,22 +150,18 @@ th {
 								onclick="removeMyWishlist(this)">
 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
 									fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-						        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"></path>
+						        <path
+										d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"></path>
 						    	</svg>
 								移除收藏
-							</button>
+							</button> <!-- 							<button type="button" class="btn btn-outline-danger" -->
+							<!-- 								th:onclick="'removeFromFavorites(' + ${wishlist.wishlistNo} + ')'"> -->
 
+							<!-- 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" -->
+							<!-- 									fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16"> -->
+							<!-- 							 <path --> <!-- 										d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"></path> -->
+							<!-- 							</svg> --> <!-- 								移除收藏 --> <!-- 							</button> -->
 
-<!-- 							<button type="button" class="btn btn-outline-danger" -->
-<!-- 								th:onclick="'removeFromFavorites(' + ${wishlist.wishlistNo} + ')'"> -->
-
-<!-- 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" -->
-<!-- 									fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16"> -->
-<!-- 							 <path -->
-<!-- 										d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"></path> -->
-<!-- 							</svg> -->
-<!-- 								移除收藏 -->
-<!-- 							</button> -->
 						</td>
 						<td>
 							<!--                         <img th:src="@{${wishlist.imageUrl}}" alt="Product Image" width="100"> -->
@@ -284,7 +169,9 @@ th {
 							th:src="@{/shop/DBGifReader2} + '?prodNo=' + ${wishlist.shopProductVO.prodNo} "
 							width="80px">
 						</td>
-						<td th:text="${wishlist.shopProductVO.prodName}">商品名稱</td>
+
+						<td th:text="${wishlist.shopProductVO.prodName}" class="left-align">商品名稱</td>
+
 						<td th:text=" '$' + ${wishlist.shopProductVO.prodPrice}">價格</td>
 						<td>
 
@@ -307,13 +194,40 @@ th {
 	</main>
 
 
-
-
 	<script>
-		function removeFromFavorites(productId) {
-			// 使用AJAX或表單提交的方式將商品從收藏中移除
-			// 可以通過後端控制器來實現具體的邏輯
+		$(document).ready(
+				function() {
+					var navbarHeight = $('.navbar').outerHeight();
+					var shopnavbarHeight = $('.shopnavbar').outerHeight();
+					$('.sidebar').css('top', navbarHeight + shopnavbarHeight);
+					$('.content').css('margin-top',
+							navbarHeight + shopnavbarHeight + 20);
+
+				});
+
+		function removeMyWishlist(button) {
+			var wishlistNo = $(button).data("id"); // 獲取商品ID
+
+			$.ajax({
+				type : "POST",
+				url : "/shop/removeWishlistProd", // 設定後端控制器路徑
+				data : JSON.stringify({
+					wishlistNo : wishlistNo
+				}),
+				contentType : "application/json",
+				success : function(response) {
+					if (response.success) {
+						$(button).closest("tr").remove(); // 移除對應的表格行
+					} else {
+						alert("無法移除收藏，請稍後再試。");
+					}
+				},
+				error : function() {
+					alert("發生錯誤，請稍後再試。");
+				}
+			});
 		}
 	</script>
+
 </body>
 </html>
