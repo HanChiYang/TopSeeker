@@ -37,26 +37,26 @@
 	width: 100%;
 }
 
-.sidebar {
-	position: fixed;
-	top: 112px; /* 確保位於 shopnavbar 下方 */
-	bottom: 0;
-	background-color: #f0f8e0;
-	width: 180px;
-	padding-top: 20px;
-	padding-bottom: 20px; /* 確保內容不被 bottom 覆蓋 */
-	color: #333;
-	font-size: 16px;
-	border-right: solid 1px #E0E0E0;
-	overflow-y: auto; /* 確保內容過多時可以滾動 */
-}
+/* .sidebar { */
+/* 	position: fixed; */
+/* 	top: 112px; /* 確保位於 shopnavbar 下方 */ */
+/* 	bottom: 0; */
+/* 	background-color: #f0f8e0; */
+/* 	width: 180px; */
+/* 	padding-top: 20px; */
+/* 	padding-bottom: 20px; /* 確保內容不被 bottom 覆蓋 */ */
+/* 	color: #333; */
+/* 	font-size: 16px; */
+/* 	border-right: solid 1px #E0E0E0; */
+/* 	overflow-y: auto; /* 確保內容過多時可以滾動 */ */
+/* } */
 
-.content {
-	flex-grow: 1;
-	padding: 20px;
-	margin-left: 200px; /* 確保不被 sidebar 遮擋 */
-	margin-top: 168px; /* 確保不被 navbar 和 shopnavbar 遮擋 */
-}
+/* .content { */
+/* 	flex-grow: 1; */
+/* 	padding: 20px; */
+/* 	margin-left: 200px; /* 確保不被 sidebar 遮擋 */ */
+/* 	margin-top: 168px; /* 確保不被 navbar 和 shopnavbar 遮擋 */ */
+/* } */
 
 button {
 	padding: 5px;
@@ -140,9 +140,9 @@ H3.orderQ{
 		<br>
 		<div class="sidebar a">
 			<ul>
-				<li><a href='listAllOrder'>訂單總覽</a></li>
+				<li><a th:href="@{/shop/order/listAllOrder}">訂單總覽</a></li>
 				<br>
-				<li><a href='/shop/orderDetail/listAllOrderDetail'>訂單明細總覽</a></li>
+				<li><a th:href="@{/shop/orderDetail/listAllOrderDetail}">訂單明細總覽</a></li>
 				<br>
 				
 				<li>
@@ -159,24 +159,9 @@ H3.orderQ{
 					</form>
 				</li>
 				
-<!-- 				<li> -->
-<!-- 					<form method="post" action="listOrders_ByCompositeQuery"> -->
-<!-- 						<H3 class="orderQ">訂單查詢 :</H3><br> -->
-<!-- 						<span>訂單編號: <input type="text" name="orderNo" th:value="1"><br>		 -->
-            
-<!-- 			           <input type="submit" value="送出"> -->
-						
-	
-<!-- 					</form>				 -->
-				
-<!-- 				</li> -->
+
 			</ul>
-			<ul>
-				<li>
-				<a th:href="@{/shop/orderDetail/addOrderDetail}">新增訂單明細</a></li>
-				<li>
-				<a href='addOrder'>新增訂單</a></li>
-			</ul>
+			
 			<div align="center">
 				<h3>
 					<a th:href="@{/shop/shopManagement}">
