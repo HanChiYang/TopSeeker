@@ -20,7 +20,8 @@
 }
 
 body {
-	margin: 1rem 12rem 2rem 12rem;
+background-color:#FAF1E4;
+	margin: 2rem 12rem 2rem 12rem;
 }
 
 #example td {
@@ -35,8 +36,9 @@ body {
 }
 
 #example th {
-	background-color: #C1FFC1;
+	background-color: #435334;
 	position: relative; 
+	color: white;
 }
 
 #example th .sorting, #example th .sorting_asc, #example th .sorting_desc
@@ -46,7 +48,7 @@ body {
 }
 
 #content {
-	margin-top: 80px;
+	margin-top: 100px;
 }
 
 #example_wrapper {
@@ -75,8 +77,33 @@ tr.unread > td {
 background-color: white !important;
 }
 
-</style>
+#actlink {
+    width: 100%;
+    text-align: left;
+    margin:3px;
+}
 
+#example > thead > tr > th:nth-child(1) {
+	width:100px !important;
+}
+#example > thead > tr > th:nth-child(2) {
+	width:110px !important;
+}
+
+#example > thead > tr > th:nth-child(3) {
+	width:800px !important;
+}
+
+#tdArea > tr > td:nth-child(4) {
+	width:50px !important;
+}
+
+
+
+
+
+</style>
+<link rel="stylesheet" th:href="@{/css/common.css}">
 </head>
 <body>
 
@@ -88,80 +115,107 @@ background-color: white !important;
 			<thead>
 				<tr style="background-color: #CCCCFF">
 
-					<th>追隨帳號</th>
+					<th width="100px">追隨編號</th>
 				    <th>大頭貼</th>
 				    <th>目前開團中！</th>
-					<th>刪除</th>
+					<th></th>
 				</tr>
 			</thead>
 
 			<tbody id="tdArea">
 
-				<th:block th:each="followVO : ${followListData}">
-					<tr>
-						<td	th:text="${followVO.memNo}"></td>
-						<td	th:text="${followVO.beFollowedMemNo}"></td>
-			            <td>
-			              <span>
-			            	活動內容
-			              </span>
-			            </td>
-			            <td>
-						  <form method="post" th:action="@{/follow/delete}" style="margin-bottom: 0px;">
-						     <input type="submit" value="取消追隨">
-						     <input type="hidden" name="beFollowedMemNo" th:value="${followVO.beFollowedMemNo}">
-						  </form>
-						</td>					
-					</tr>
-				</th:block>
+        <th:block th:each="followVO : ${followListData}">
+            <tr>
+                <td th:text="${followVO.beFollowedMemberVO.memAccount}"></td>
+                <td><img th:src="@{/member/DBGifReader} + '?memNo=' + ${followVO.memberVO.memNo}" width="100px"></td>
+                <td>
+                   	<div th:each="actVOList : ${beFollowedMemActMap[followVO.beFollowedMemberVO.memNo]}">
+                       	<div th:each="actVO : ${actVOList}">
+							<form method="post" th:action="@{/act/details}">
+							    <input type="hidden" name="actNo" th:value="${actVO.actNo}" />
+							    <input type="submit" th:value="${actVO.actTitle}" id="actlink" class="btn btn-light"/>
+							</form>
+                       	</div>
+                   	</div>
+                </td>
+                <td>
+                    <form method="post" th:action="@{/follow/delete}" style="margin-bottom: 0px;">
+                        <input type="submit" value="取消追隨" class="btn btn-danger" id="cancelFollow">
+                        <input type="hidden" name="followedMemNo" th:value="${followVO.beFollowedMemberVO.memNo}">
+                    </form>
+                </td>                    
+            </tr>
+        </th:block>
 			</tbody>
 		</table>
-		 <button onclick="goBack()" class="btn btn-primary">回上一頁</button>
+		
+		
+		
+       <form id="followForm" style="margin-bottom: 0px;">
+            <input type="button" value="追隨此會員" class="btn btn-primary" id="test">
+            <input type="hidden" name="beFollowedMemNo" value="1002">
+        </form>
+		
+		
+		
+		 <a href="/protected/member/indexMem" class="btn btn-success">回到會員專區</a>
 	</div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<!-- ●●js  for jquery datatables 用 -->
 <script
 	src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 
-<!-- ●● jquery datatables 設定 -->
 <script>
-	$(document)
-			.ready(
-					function() {
-						$('#example')
-								.DataTable(
-										{
-											"lengthMenu" : [ 10, 20, 50 ],
-											"searching" : false, //搜尋功能, 預設是開啟
-											"paging" : true, //分頁功能, 預設是開啟
-											"ordering" : false, //排序功能, 預設是開啟
-											"language" : {
-												"processing" : "處理中...",
-												"loadingRecords" : "載入中...",
-												"lengthMenu" : "顯示 _MENU_ 筆結果",
-												"zeroRecords" : "沒有符合的結果",
-												"info" : "顯示第 _START_ 至 _END_ 筆結果，共<font color=red> _TOTAL_ </font>筆",
-												"infoEmpty" : "顯示第 0 至 0 筆結果，共 0 筆",
-												"infoFiltered" : "(從 _MAX_ 筆結果中過濾)",
-												"infoPostFix" : "",
-												"search" : "搜尋:",
-												"paginate" : {
-													"first" : "第一頁",
-													"previous" : "上一頁",
-													"next" : "下一頁",
-													"last" : "最後一頁"
-												},
-												"aria" : {
-													"sortAscending" : ": 升冪排列",
-													"sortDescending" : ": 降冪排列"
-												}
-											}
-										});
-					});
-    function goBack() {
-        window.history.back();
-    }
+	$(document).ready(function() {
+		$('#example')
+			.DataTable(
+			{
+				"lengthMenu" : [ 10, 20, 50 ],
+				"searching" : false, //搜尋功能, 預設是開啟
+				"paging" : true, //分頁功能, 預設是開啟
+				"ordering" : false, //排序功能, 預設是開啟
+				"language" : {
+					"processing" : "處理中...",
+					"loadingRecords" : "載入中...",
+					"lengthMenu" : "顯示 _MENU_ 筆結果",
+					"zeroRecords" : "沒有符合的結果",
+					"info" : "顯示第 _START_ 至 _END_ 筆結果，共<font color=red> _TOTAL_ </font>筆",
+					"infoEmpty" : "顯示第 0 至 0 筆結果，共 0 筆",
+					"infoFiltered" : "(從 _MAX_ 筆結果中過濾)",
+					"infoPostFix" : "",
+					"search" : "搜尋:",
+					"paginate" : {
+						"first" : "第一頁",
+						"previous" : "上一頁",
+						"next" : "下一頁",
+						"last" : "最後一頁"
+					},
+					"aria" : {
+						"sortAscending" : ": 升冪排列",
+						"sortDescending" : ": 降冪排列"
+					}
+				}
+			});
+		});
+    
+    $(document).ready(function() {
+        $("#test").on("click", function(event) {
+            event.preventDefault();
+            var beFollowedMemNo = $("input[name='beFollowedMemNo']").val();
+            $.ajax({
+                url: "/follow/insert",
+                method: "POST",
+                data: { beFollowedMemNo: beFollowedMemNo },
+                success: function(response) {
+                	var jsonResponse = JSON.parse(response);
+                    alert(jsonResponse.message);
+                },
+                error: function() {
+                    alert("發生錯誤，請稍後再試。");
+                }
+            });
+        });
+    });
 </script>
 </body>
 </html>

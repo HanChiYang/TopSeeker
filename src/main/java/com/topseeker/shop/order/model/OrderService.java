@@ -7,8 +7,10 @@ import java.util.Optional;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.topseeker.shop.orderdetail.model.OrderDetailRepository;
+import com.topseeker.shop.orderdetail.model.OrderDetailVO;
 
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Order;
 
@@ -26,9 +28,16 @@ public class OrderService {
 	private SessionFactory sessionFactory;
 	
 	
-	public void addOrder(OrderVO orderVO) {		
+	@Transactional
+	public void addOrderWithOrderDetail(OrderVO orderVO) {		
 		
 		repository.save(orderVO);
+		
+        for (OrderDetailVO detail : orderVO.getOrderDetails()) {
+            detail.setOrderVO(orderVO);
+            odrepository.save(detail);
+        }
+		
 	}
 
 	
@@ -51,9 +60,14 @@ public class OrderService {
 		return repository.findAll();
 	}
 	
+	public List<OrderVO> getMemAllOrder(Integer memNo){
+		return repository.findByMem(memNo);
+		
+	} 
+	
 
 	public List<OrderVO> getAll(Map<String, String[]> map) {
 		return HibernateUtil_CompositeQuery_Order.getAllC(map,sessionFactory.openSession());
 	}
-
+	
 }

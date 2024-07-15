@@ -26,6 +26,8 @@ import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
 import com.topseeker.shop.order.model.OrderService;
 import com.topseeker.shop.order.model.OrderVO;
+import com.topseeker.shop.orderdetail.model.OrderDetailService;
+import com.topseeker.shop.orderdetail.model.OrderDetailVO;
 import com.topseeker.shop.sale.model.SaleService;
 import com.topseeker.shop.sale.model.SaleVO;
 
@@ -40,6 +42,39 @@ public class OrdernoController {
 	SaleService saleSvc;
 	@Autowired 
 	MemberService memSvc;
+	@Autowired
+	OrderDetailService orderDetailSvc;
+	
+	//會員中心顯示用
+	@PostMapping("memOneOrder")
+	public String getmemOneOrder(
+			 @Valid
+			/***************************1.接收請求參數 - 輸入格式的錯誤處理*************************/
+			@RequestParam("orderNo") String orderNo,
+			ModelMap model) {
+			
+		/***************************2.開始查詢資料*********************************************/
+			OrderVO orderVO = orderSvc.getOneOrder(Integer.valueOf(orderNo));
+			List<OrderVO> list = orderSvc.getAll();
+			model.addAttribute("orderListData", list); 
+			model.addAttribute("saleVO", new SaleVO());
+			List<SaleVO> list2 = saleSvc.getAll();
+			model.addAttribute("saleListData", list2);
+			List<MemberVO> list3 = memSvc.getAll();
+			model.addAttribute("memListData", list3);
+			
+			List<OrderDetailVO> orderDetailData = orderDetailSvc.findOrderDetailsByOrderNo(Integer.valueOf(orderNo));
+			model.addAttribute("orderDetailData", orderDetailData);
+			
+			if (orderVO == null) {
+				model.addAttribute("errorMessage", "查無資料");
+				return "back-end/shop/order/select_page";
+			}
+		/***************************3.查詢完成,準備轉交(Send the Success view)*****************/
+			model.addAttribute("orderVO", orderVO);
+			model.addAttribute("memOneOrder", "true"); 
+			return "front-end/shop/order/memOneOrder"; 
+	}
 	
 	@PostMapping("getOne_For_Display")
 	public String getOne_For_Display(

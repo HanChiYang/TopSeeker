@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.topseeker.member.model.MemberVO;
@@ -21,11 +23,29 @@ public class FollowVO implements java.io.Serializable {
 	@Column (name = "follow_no", updatable = false, insertable = false)
 	private Integer followNo;
 	
-	@Column(name = "mem_no")
-	private Integer memNo;
+	@ManyToOne
+	@JoinColumn(name = "mem_no")
+	private MemberVO memberVO;
 	
-	@Column(name = "be_followed_mem_no")
-	private Integer beFollowedMemNo;
+	@ManyToOne
+	@JoinColumn(name = "be_followed_mem_no")
+	private MemberVO beFollowedMemberVO;
+	
+	public MemberVO getMemberVO() {
+		return memberVO;
+	}
+	
+	public void setMemberVO(MemberVO memberVO) {
+		this.memberVO = memberVO;
+	}
+
+	public MemberVO getBeFollowedMemberVO() {
+		return beFollowedMemberVO;
+	}
+
+	public void setBeFollowedMemberVO(MemberVO beFollowedMemberVO) {
+		this.beFollowedMemberVO = beFollowedMemberVO;
+	}
 
 	public Integer getFollowNo() {
 		return followNo;
@@ -35,21 +55,21 @@ public class FollowVO implements java.io.Serializable {
 		this.followNo = followNo;
 	}
 
-	public Integer getMemNo() {
-		return memNo;
-	}
+//	public Integer getMemNo() {
+//		return memNo;
+//	}
+//
+//	public void setMemNo(Integer memNo) {
+//		this.memNo = memNo;
+//	}
 
-	public void setMemNo(Integer memNo) {
-		this.memNo = memNo;
-	}
-
-	public Integer getBeFollowedMemNo() {
-		return beFollowedMemNo;
-	}
-
-	public void setBeFollowedMemNo(Integer beFollowedMemNo) {
-		this.beFollowedMemNo = beFollowedMemNo;
-	}
+//	public Integer getBeFollowedMemNo() {
+//		return beFollowedMemNo;
+//	}
+//
+//	public void setBeFollowedMemNo(Integer beFollowedMemNo) {
+//		this.beFollowedMemNo = beFollowedMemNo;
+//	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;

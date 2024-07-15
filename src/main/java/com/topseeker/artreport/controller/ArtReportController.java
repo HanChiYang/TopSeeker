@@ -89,14 +89,6 @@ public class ArtReportController {
 		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
 		result = removeFieldError(artreportVO, result, "upFiles");
 
-//		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
-//			model.addAttribute("errorMessage", "員工照片: 請上傳照片");
-//		} else {
-//			for (MultipartFile multipartFile : parts) {
-//				byte[] buf = multipartFile.getBytes();
-//				participantVO.setUpFiles(buf);
-//			}
-//		}
 		
 		 MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
 	        if (loggedInMember == null) {
