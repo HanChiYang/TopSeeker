@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>訂單完成</title>
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+  <style>
+  
+  div.top{
+  	text-align: center;
+  	font-size: 20px;
+   }
+   
+   table{
+   	font-size: 20px;	
+ 
+   }
+   
+   th{
+   	background-color: rgb(158, 179, 132);
+   
+   }
+   
+   td{
+   	 background-color: rgb(206, 222, 189);
+   
+   }
+   
+   a{
+   	 text-decoration: none;
+   	 font-size: 20px;
+   	 display: flex;
+   	 justify-content: center;   
+   	 padding-top: 20px;
+   }
+   
+  	
+  </style>
+</head>
+<body>
+	<div class="result">
+	  <div class="top">
+	    <h2>訂單完成</h2>
+	    <p class="countdown">10 秒後重導回首頁...</p>
+	    <p>訂單編號: <span th:text="${orderVO.orderNo}"></span></p>
+	    <p>訂單日期: <span th:text="${#dates.format(orderVO.orderDate, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+	    <p>訂單金額: <span th:text="${orderVO.orderAmount}"></span></p>
+	    <p>運費: <span th:text="${orderVO.orderShipment}"></span></p>
+	    <p>折扣金額: <span th:text="${orderVO.orderDiscount}"></span></p>
+	    <p>實付金額: <span th:text="${orderVO.orderBill}"></span></p>
+	  </div>
+	
+	  <table id="orderDetailsTable" class="display">
+	    <thead>
+	        <tr>
+	            <th>商品名稱</th>
+	            <th>單價</th>
+	            <th>數量</th>
+	            <th>小計</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	        <tr th:each="detail : ${orderDetails}">
+	            <td th:text="${detail.shopProductVO.prodName}">商品名稱</td>
+	            <td th:text="${detail.orderPrice}">單價</td>
+	            <td th:text="${detail.orderQty}">數量</td>
+	            <td th:text="${detail.orderPrice * detail.orderQty}">小計</td>
+	        </tr>
+	    </tbody>
+	</table>
+	
+	<a th:href="@{/shop/homepage}">返回商城首頁</a>
+
+<script>
+  // 初始化表格
+  $(document).ready(function () {
+    $('#orderDetailsTable').DataTable({
+      "searching": false,
+      "ordering": false,
+      "paging": false,
+      "info": false
+      
+      
+    });
+        
+  });
+</script>
+<!-- 重導 -->
+<script>
+		let countdownElement = document.querySelector('.countdown');
+		let seconds = 10;
+
+		const countdownInterval = setInterval(() => {
+			seconds--;
+			countdownElement.textContent = `${seconds} 秒後重導回首頁...`;
+
+			if (seconds <= 0) {
+				clearInterval(countdownInterval);
+				window.location.href = "/shop/homepage";
+			}
+		}, 1000);
+	</script>
+</body>
+</html>

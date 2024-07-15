@@ -83,22 +83,23 @@ public class ActVO implements java.io.Serializable {
 	@Column(name = "act_check_count")
 	private Integer actCheckCount=0;
 	
-	@Column(name = "act_enroll_begin")
+	@Column(name = "act_enroll_begin", updatable = false)
 	@NotNull(message="報名開始日: 請勿空白")	
+
 //	@FutureOrPresent(message = "日期必須是今天（含）之後") 
 	private Date actEnrollBegin;
 	
-	@Column(name = "act_enroll_end")
+	@Column(name = "act_enroll_end", updatable = false)
 	@NotNull(message="報名結束日: 請勿空白")	
 	@Future(message="日期必須是在今日(不含)之後", groups = {MemGroup.class})
 	private Date actEnrollEnd;
 	
-	@Column(name = "act_start")	
+	@Column(name = "act_start", updatable = false)	
 	@NotNull(message="活動開始日: 請勿空白")
 	@Future(message="日期必須是在今日(不含)之後", groups = {MemGroup.class})
 	private Date actStart;
 	
-	@Column(name = "act_end")
+	@Column(name = "act_end", updatable = false)
 	@NotNull(message="活動結束日: 請勿空白")	
 	@Future(message="日期必須是在今日(不含)之後", groups = {MemGroup.class})
 	private Date actEnd;
@@ -109,6 +110,7 @@ public class ActVO implements java.io.Serializable {
 	
 	@Column(name = "act_status")	
 	private Integer actStatus;
+
 	
 	@Column(name = "act_rate_sum")
 	private Integer actRateSum;

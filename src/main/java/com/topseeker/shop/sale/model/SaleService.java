@@ -1,5 +1,6 @@
 package com.topseeker.shop.sale.model;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,6 +41,13 @@ public class SaleService {
 	public List<SaleVO> getAll(){
 		return repository.findAll();
 	}
+	
+	public List<SaleVO> getApplicableSales(Integer totalAmount, Timestamp currentTime){
+		
+		return repository.findByMinimumAmountLessThanEqual(totalAmount,currentTime);
+	}
+	
+	
 	
 //	public List<SaleVO> getAll(Map<String, String[]> map) {
 //		return HibernateUtil_CompositeQuery_sale.getAllC(map,sessionFactory.openSession());

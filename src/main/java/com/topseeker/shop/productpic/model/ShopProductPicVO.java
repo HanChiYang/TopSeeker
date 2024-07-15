@@ -26,8 +26,8 @@ public class ShopProductPicVO implements java.io.Serializable{
 	@JoinColumn(name = "prod_no", referencedColumnName = "prod_no")
 	private ShopProductVO shopProductVO;
 	
-	@Column(name ="prod_pic")
-	@NotEmpty(message="商品照片: 請上傳照片") //--> 由EmpController.java 第60行處理錯誤信息
+	@Column(name ="prod_pic", columnDefinition = "longblob")
+	@NotEmpty(message="商品照片: 請上傳照片")
 	private byte[] prodPic;
 	
 	public Integer getProdPicNo() {

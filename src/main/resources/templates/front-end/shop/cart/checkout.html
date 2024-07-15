@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>結帳頁面</title>
+<!-- Font Awesome -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" th:href="@{/css/error.css}"/>
+
+
+<style>
+.last {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.btn-del {
+	background-color: #ef7a70;
+	color: white;
+}
+
+.btn-del:hover, .btn-del:focus {
+	background-color: #f14131;
+}
+
+.hidden {
+	display: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:visited {
+	color: black;
+}
+
+table {
+	border-collapse: collapse;
+	border-style: double;
+}
+
+table th {
+	border-style: hidden;
+	background-color: rgb(158, 179, 132);
+	color: #ffffff;
+	width: 25vw;
+	height: 75px;
+	font-size: 20px;
+}
+
+table td {
+	border-style: hidden;
+	background-color: rgb(206, 222, 189);
+	color: rgb(67, 83, 52);
+	width: 25vw;
+	height: 50px;
+	text-align: center;
+	font-size: 15px;
+}
+
+  .delivery-form {
+        display: none;
+    }
+    .visible {
+        display: block;
+    }
+</style>
+<style></style>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body class="bg-light">
+	<div class="container mt-4">
+		<form method="post" id="checkout-form" th:action="@{/shop/order/insert}" th:object="${orderVO}">
+			<h1 class="text-center display-3 mb-4">結帳</h1>
+			<div class="mb-4 border rounded shadow-sm p-3">
+				<h4 class="border-bottom pb-2">訂購人資訊</h4>
+				<div class="row">
+					
+					<div class="col-sm">
+						<span>訂購人姓名:</span> <span class="form-control" id="memName"
+							th:text="${memberVO.memName}"></span> 
+					</div>
+					<div class="col-sm">
+						<span>訂購人聯絡電話: </span> <span class="form-control" id="memPhone"
+							th:text="${memberVO.memPhone}"></span>
+					</div>
+					<div class="col-sm">
+						<span>訂購人電子郵件: </span> <span class="form-control" id="memPhone"
+							th:text="${memberVO.memEmail}"></span>
+					</div>
+
+					<!-- 取貨方式 -->
+					<h4 class="border-bottom pb-2">收件方式</h4>
+         <div> 
+            <div>
+                <input type="radio" name="deliveryMethod" value="0" checked> 宅配
+                <input type="radio" name="deliveryMethod" value="1"> 超商取貨
+            </div>
+
+            <div id="tohome" class="delivery-form visible">
+                <div class="col">
+                    <span>收件人姓名:</span> 
+                    <input type="text" name="orderNameth" placeholder="請輸入收件人姓名">
+                    <span class="error" id="error-orderNameth"></span>
+                </div>
+                <div class="col">
+                    <span>收件人電話:</span> 
+                    <input type="text" name="orderPhoneth" placeholder="請輸入收件人連絡電話">
+                    <span class="error" id="error-orderPhoneth"></span>
+                </div>
+                <div class="col">
+                    <span>收件人地址:</span> 
+                    <input type="text" name="orderAddressth" placeholder="請輸入收件人地址">
+                    <span class="error" id="error-orderAddressth"></span>
+                </div>
+            </div>
+
+            <div id="cvspick" class="delivery-form">
+                <div class="col">
+                    <span>收件人姓名: </span> 
+                    <input type="text" name="orderNamecvs" placeholder="請輸入收件人姓名" disabled>
+                	<span class="error" id="error-orderNamecvs"></span>
+                </div>
+                <div class="col">
+                    <span>收件人電話: </span> 
+                    <input type="text" name="orderPhonecvs" placeholder="請輸入收件人連絡電話" disabled>
+                	<span class="error" id="error-orderPhonecvs"></span>
+                </div>
+                <div class="col">
+                    <span>7-11收件門市名稱: </span> 
+                    <input type="text" name="orderAddresscvs" placeholder="請輸入收件門市名稱+店號" disabled>
+                	<span class="error" id="error-orderAddresscvs"></span>
+                </div>
+            </div>
+          </div>
+					
+<!-- 					
+					<!-- 付款方式 -->
+					<div class="mb-4 border rounded shadow-sm p-3">
+						<h4 class="border-bottom pb-2">付款方式</h4>
+						<div th:value="${paymentMethod}">
+							<input type="radio" name="paymentMethod" data-method="信用卡"
+								checked th:value="0"><span name="pm" class="fs-5">信用卡</span>
+							<input type="radio" name="paymentMethod" data-method="轉帳"
+								th:value="1"><span name="pm" class="fs-5">轉帳</span> <input
+								type="radio" name="paymentMethod" data-method="貨到付款"
+								th:value="2"><span name="pm" class="fs-5">貨到付款</span>
+						</div>
+						<br>
+						<!-- 信用卡 -->
+						<div class="row text-start" id="creditCard">信用卡(綠界)</div>
+
+						<!-- 轉帳 -->
+						<div id="transfer" style="display: none;">轉帳</div>
+
+						<!-- 貨到付款 -->
+						<div id="cashOnDelivery" style="display: none;">貨到付款</div>
+
+					</div>
+					
+					<div class="col">
+                    	<h4>備註: </h4>
+                    	<textarea name="remarks" rows="4" cols="50"></textarea>
+                   	</div>
+
+					<div class="mb-4 border rounded shadow-sm p-3">
+						<h4 class="border-bottom pb-2">訂單摘要</h4>
+						<table class="table">
+							<thead>
+								<tr>
+									<th class="text-nowrap">商品名稱</th>
+									<th class="text-nowrap">單價</th>
+									<th class="text-nowrap">數量</th>
+									<th class="text-nowrap">小計</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="cartDetails : ${cartDetails}">
+									<td name="prodName"
+										th:text="${cartDetails.shopProductVO.prodName}"></td>
+									<td class="price num" name="price"
+										th:text="${cartDetails.shopProductVO.prodPrice}"></td>
+									<td class="prodQty" style="text-align: center" name="prodQty"
+										th:text="${cartDetails.prodQty}"></td>
+									<td class="sub"></td>
+							
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					</section>
+				</div>
+			</div>
+			<table id=2>
+				<thead>
+					<tr>
+						<th>總金額</th>
+						<th>促銷方案</th>
+						<th>折扣金額</th>
+						<th>運費</th>
+						<th>實付金額</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+
+						<td>
+							<div class="totalAmount" id="orderAmount"></div> <input
+							type="hidden" id="hiddenOrderAmount" name="orderAmount">
+						</td>
+						<td>
+							<div class="saleName" id="saleName"></div> <input type="hidden"
+							id="hiddensaleName" name="saleName"> <input type="hidden"
+							id="hiddensaleNo" name="saleNo">
+						</td>
+						<td>
+							<div class="orderDiscount" id="orderDiscount"></div> <input
+							type="hidden" id="hiddenOrderDiscount" name="orderDiscount">
+						</td>
+						<td>
+							<div class="orderShipment" id="orderShipment">30</div> <input
+							type="hidden" id="hiddenOrderShipment" name="orderShipment"
+							value="30">
+						</td>
+						<td>
+							<div class="orderBill" id="orderBill"></div> <input type="hidden"
+							id="hiddenOrderBill" name="orderBill">
+						</td>
+
+					</tr>
+				</tbody>
+			</table>
+			
+			<div style="display:none">
+				<label>訂單編號:</label> <input type="text" th:value="${orderNo}"
+					readonly="readonly" />
+			</div>
+	
+		
+			<div>
+				<input type="submit" value="確認付款" id="confirmPayment"
+					class="btn btn-primary">
+					<input type="hidden" name="memNo" th:value="${memberVO.memNo}"> 
+				    <input type="hidden" name="orderStatus" th:value="0"> 
+				    <input type="hidden" name="paymentStatus" th:value="0"> 
+				    <input type="hidden" name="orderNo" th:value="${orderNo}">
+				    <input type="hidden" name="prodNo" th:value="${prodNo}">
+			</div>
+
+		</form>
+	</div>
+
+	<!-- 繼續購物 -->
+	<div>
+		<button>
+			<a th:href="@{/shop/homepage}">繼續購物</a>
+		</button>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+	<script th:inline="javascript">
+		//付款、取貨方式切換--------------------------------------------------
+		$(document)
+				.ready(
+						function() {
+							paymentMethodChange();
+							//付款方式切換
+							$('[name="paymentMethod"]').on('change',
+									function() {
+										paymentMethodChange();
+									});
+							//收件方式切換
+							$("input[name='deliveryMethod']").on("change", function() {
+					                if ($(this).val() == 0) {
+					                	console.log("方法為" + $(this).val());
+					                    $("#tohome").addClass("visible").find("input").prop("disabled", false);
+					                    $("#cvspick").removeClass("visible").find("input").prop("disabled", true);
+					                } else {
+					                	console.log("方法為" + $(this).val());
+					                    $("#tohome").removeClass("visible").find("input").prop("disabled", true);
+					                    $("#cvspick").addClass("visible").find("input").prop("disabled", false);
+					                }
+					            });
+					//結帳時錯誤提示
+							$('#checkout-form').on('submit', function(event) {
+				                let valid = true;
+
+				                if ($('input[name="deliveryMethod"]:checked').val() == 0) {
+				                    // Validate tohome fields
+				                    if ($('input[name="orderNameth"]').val().trim() === '') {
+				                        $('#error-orderNameth').text('請輸入收件人姓名');
+				                        valid = false;
+				                    } else {
+				                        $('#error-orderNameth').text('');
+				                    }
+
+				                    if ($('input[name="orderPhoneth"]').val().trim() === '') {
+				                        $('#error-orderPhoneth').text('請輸入收件人連絡電話');
+				                        valid = false;
+				                    } else {
+				                        $('#error-orderPhoneth').text('');
+				                    }
+
+				                    if ($('input[name="orderAddressth"]').val().trim() === '') {
+				                        $('#error-orderAddressth').text('請輸入收件人地址');
+				                        valid = false;
+				                    } else {
+				                        $('#error-orderAddressth').text('');
+				                    }
+				                } else {
+				                    // Validate cvspick fields
+				                    if ($('input[name="orderNamecvs"]').val().trim() === '') {
+				                        $('#error-orderNamecvs').text('請輸入收件人姓名');
+				                        valid = false;
+				                    } else {
+				                        $('#error-orderNamecvs').text('');
+				                    }
+
+				                    if ($('input[name="orderPhonecvs"]').val().trim() === '') {
+				                        $('#error-orderPhonecvs').text('請輸入收件人連絡電話');
+				                        valid = false;
+				                    } else {
+				                        $('#error-orderPhonecvs').text('');
+				                    }
+
+				                    if ($('input[name="orderAddresscvs"]').val().trim() === '') {
+				                        $('#error-orderAddresscvs').text('請輸入收件門市名稱+店號');
+				                        valid = false;
+				                    } else {
+				                        $('#error-orderAddresscvs').text('');
+				                    }
+				                }
+
+				                if (!valid) {
+				                    event.preventDefault();
+				                }
+				            });
+
+							//購買資訊 
+
+							$('.sub').each(
+									function() {
+										var totalAmount = 0;
+										var price = $(this).closest("tr").find(
+												".price").text();
+										var qty = $(this).closest("tr").find(
+												".prodQty").text();
+										//小計
+										var sub = parseInt(price * qty);
+										$(this).closest("tr").find(".sub")
+												.text(sub);
+										$('.sub').each(function() {
+											var sub = parseInt($(this).text());
+											if (!isNaN(sub)) {
+												totalAmount += sub;
+											}
+										})
+										//總金額 
+										$("div.totalAmount").text(
+												totalAmount.toFixed(0));
+										$("div.totalAmount").val(
+												totalAmount.toFixed(0));
+
+										//折購金額
+										var sales = fetchApplicableDiscounts();
+										applyDiscounts(sales);
+
+										//實付金額
+										calculateOrderBill(totalAmount, sales);
+
+									});
+
+							function paymentMethodChange() {
+								var selectedMethod = $(
+										'[name="paymentMethod"]:checked').data(
+										'method');
+
+								$('#creditCard, #transfer, #cashOnDelivery')
+										.hide();
+
+								if (selectedMethod === '信用卡') {
+									$('#creditCard').show();
+								} else if (selectedMethod === '轉帳') {
+									$('#transfer').show();
+								} else if (selectedMethod === '貨到付款') {
+									$('#cashOnDelivery').show();
+								}
+							}
+
+
+
+							//計算總金額
+							function calculateTotalAmount() {
+								var totalAmount = 0;
+								var price = $(this).closest("tr")
+										.find(".price").text();
+								var qty = $(this).closest("tr")
+										.find(".prodQty").text();
+
+								var sub = parseInt(price * qty);
+								$(this).closest("tr").find(".sub").text(sub);
+								$('.sub').each(function() {
+									var sub = parseInt($(this).text());
+									if (!isNaN(sub)) {
+										totalAmount += sub;
+									}
+								})
+
+								return totalAmount;
+								console.log(totalAmount);
+
+							}
+
+							//包裝總金額至server
+							function fetchApplicableDiscounts() {
+								var totalAmount = calculateTotalAmount();
+								var currentTime = getCurrentDateTime();
+
+								$.ajax({
+											url : '/shop/sale/applicableSales',
+											type : 'GET',
+											data : {
+												'totalAmount' : totalAmount,
+												'currentTime' : currentTime
+											},
+											success : function(sales) {
+												console
+														.log(
+																"Sending AJAX request with totalAmount: ",
+																totalAmount);
+												console.log("促銷方案: ", sales);
+												applyDiscounts(sales);
+											},
+											error : function(xhr, status, error) {
+												console
+														.log(
+																"Sending AJAX request with totalAmount: ",
+																totalAmount);
+												console
+														.error("沒有收到促銷方案",
+																error);
+											}
+										});
+							}
+
+							//使用折扣計算折扣後總金額
+							function applyDiscounts(sales) {
+								if (!Array.isArray(sales) || sales.length === 0) {
+									console.log('沒有合適折扣');
+									return;
+								}
+								var totalAmount = calculateTotalAmount();
+								var bestSale = calculateBestDiscount(
+										totalAmount, sales);
+
+								var saleNo = bestSale.saleNo;
+								console.log(saleNo);
+								var saleName = bestSale.saleName;
+								console.log(saleName);
+
+								var orderDiscount = totalAmount
+										* (1 - bestSale.saleDiscount);
+
+								$("div.orderDiscount").text(
+										orderDiscount.toFixed(0));
+								$("div.orderDiscount").val(
+										orderDiscount.toFixed(0));
+
+								calculateOrderBill();
+
+								$('input#hiddensaleNo').val(saleNo);
+								$('input#hiddensaleName').val(saleName);
+								$('div#saleName').text(saleName);
+
+							}
+
+							//合適最佳折扣
+							function calculateBestDiscount(totalAmount, sales) {
+								var maxDiscount = 0;
+								var bestSale = null;
+								sales.forEach(function(sale) {
+									if (totalAmount >= sale.saleAmount) {
+										maxDiscount = Math.max(maxDiscount,
+												sale.saleDiscount);
+										bestSale = sale;
+									}
+								});
+								return bestSale;
+							}
+
+							//計算實付金額
+							function calculateOrderBill() {
+
+								var totalAmount = parseInt($("div.totalAmount")
+										.text());
+								console.log("Total Amount: " + totalAmount);
+								var orderDiscount = parseInt($(
+										"div.orderDiscount").text());
+								console.log("Order Discount: " + orderDiscount);
+								var orderShipment = parseInt($(
+										"div.orderShipment").text());
+								console.log("Order Shipment: " + orderShipment);
+								var orderBill = totalAmount - orderDiscount
+										+ orderShipment;
+								console.log("Order Bill: " + orderBill);
+								$("div.orderBill").text(orderBill.toFixed(0));
+								$("div.orderBill").val(orderBill.toFixed(0));
+
+								setHiddenInputs();
+
+							}
+
+							function setHiddenInputs() {
+								$('input#hiddenOrderAmount').val(
+										$('#orderAmount').text());
+								$('input#hiddensaleNo')
+										.val($('#saleNo').text());
+								$('input#hiddensaleName').val(
+										$('#saleName').text());
+								$('input#hiddenOrderDiscount').val(
+										$('#orderDiscount').text());
+								$('input#hiddenOrderShipment').val(
+										$('#orderShipment').text());
+								$('input#hiddenOrderBill').val(
+										$('#orderBill').text());
+							}
+
+							//取出現在時間
+							function getCurrentDateTime() {
+								var now = new Date();
+
+								var year = now.getFullYear();
+								var month = (now.getMonth() + 1).toString()
+										.padStart(2, '0'); // Months are zero-based
+								var day = now.getDate().toString().padStart(2,
+										'0');
+								var hours = now.getHours().toString().padStart(
+										2, '0');
+								var minutes = now.getMinutes().toString()
+										.padStart(2, '0');
+
+								// Create a formatted string
+								var formattedDateTime = year + '-' + month
+										+ '-' + day + ' ' + hours + ':'
+										+ minutes + ':' + 00;
+
+								return formattedDateTime;
+							}
+
+							setHiddenInputs();
+
+						});
+	</script>
+</body>
+</html>

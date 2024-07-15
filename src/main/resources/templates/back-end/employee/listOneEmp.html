@@ -1,0 +1,87 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>員工資料 - listOneEmp.html</title>
+
+<head th:insert="~{/back-end/emp/included-fragment}"></head>
+<style type="text/css">
+    body {
+        background-color: #2f2f2f;
+        color: #d3d3d3;
+        font-family: 'Arial', sans-serif;
+        margin: 1rem;
+    }
+
+    .navbar {
+        background-color: #4a4a4a;
+        border-bottom: 2px solid #555;
+        height: 80px;
+    }
+
+    .navbar h2, .navbar h3 {
+        font-size: 1.5rem;
+        color: #d3d3d3;
+    }
+
+    .navbar .navbar-brand img {
+        height: 30px;
+    }
+
+    .content {
+        background-color: #3a3a3a;
+        padding: 1rem;
+        margin-top: 100px;
+        border: 1px solid #555;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    span {
+        display: inline-block;
+        width: 150px;
+        text-align: left;
+        font-weight: bold;
+    }
+
+    span.result {
+        color: #ffc107; /* 調整查詢結果顏色 */
+    }
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
+		 <div align="center"> <h2>員工權限資料 - listOneEmp.html</h2>
+		 <h3><a class="navbar-brand" th:href="@{/emp/select_page}"><img th:src="@{/images/tomcat.gif}">回查詢頁<label th:text="${success}"></label></a></h3></div>
+</nav>
+
+	<div align="center" th:fragment="listOneEmp-div"> <!-- 此div被select_page.html第158行insert用 -->
+		<h3><span>查詢結果 :</span></h3>
+		<span>員工編號:</span><span th:text="${empVO.empNo}"></span><br/>
+<!-- 		<span>權限編號:</span><span th:text="${empauthVO.authVO.authNo}"></span><br/> -->
+<!-- 		<span>權限名稱:</span><span th:text="${empauthVO.authVO.authName}"></span><br/> -->
+		<span>員工姓名:</span><span th:text="${empVO.empName}"></span><br/>
+		<span>員工帳號:</span><span th:text="${empVO.empAccount}"></span><br/>
+		<span>員工密碼:</span><span th:text="${empVO.empPassword}"></span><br/>
+		<span>員工到職日:</span><span th:text="${empVO.empHiredate}"></span><br/>
+		<span>員工狀態:</span><span th:text="${empVO.empStatus}"></span><br/>
+		
+	</div>
+
+
+</body>
+</html>
