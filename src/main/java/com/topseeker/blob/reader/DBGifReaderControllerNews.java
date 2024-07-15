@@ -57,6 +57,7 @@ public class DBGifReaderControllerNews {
 //			e.printStackTrace();
 		}
 	}
+
 //	@GetMapping("DBGifReader")
 //	public void dBGifReader(@RequestParam("newsImgNo") String newsImgNo, HttpServletRequest req, HttpServletResponse res)
 //			                                                                                          throws IOException {
@@ -70,6 +71,7 @@ public class DBGifReaderControllerNews {
 //			out.write(buf);
 //		}
 //	}
+
 	
 	// 取得活動單張圖片
 	@GetMapping("DBGifReader2")

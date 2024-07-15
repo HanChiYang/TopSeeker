@@ -58,28 +58,28 @@
 			 <input type="submit" value="修改">
 			 <input type="hidden" name="orderNo" th:value="${orderVO.orderNo}"></form>
 		 
-<!-- 顯示 OrderDetailVO 資料 -->
-<!--         <h3>訂單明細</h3> -->
-<!--         <table id="orderDetailList" class="display" style="width: 100%"> -->
-<!--             <thead> -->
-<!--                 <tr style="background-color:aqua"> -->
-<!--                     <th>所購商品名稱</th> -->
-<!--                     <th>價格</th> -->
-<!--                     <th>購買數量</th> -->
-<!--                 </tr> -->
-<!--             </thead> -->
-<!--             <tbody> -->
-<!--                 <th:block th:each="orderDetail : ${orderDetails}"> -->
-<!--                 <tr> -->
-<!--                     <td th:text="${orderDetail.productVO.prodName}"></td> -->
-<!--                     <td th:text="${orderDetail.orderPrice}"></td> -->
-<!--                     <td th:text="${orderDetail.orderQty}"></td> -->
-<!--                 </tr> -->
-<!--                 </th:block> -->
-<!--             </tbody> -->
-<!--             </table> -->
+顯示 OrderDetailVO 資料
+        <h3>訂單明細</h3>
+        <table id="orderDetailList" class="display" style="width: 100%">
+            <thead>
+                <tr style="background-color:aqua">
+                    <th>所購商品名稱</th>
+                    <th>價格</th>
+                    <th>購買數量</th>
+                </tr>
+            </thead>
+            <tbody>
+                <th:block th:each="orderDetail : ${orderDetails}">
+                <tr>
+                    <td th:text="${orderDetail.productVO.prodName}"></td>
+                    <td th:text="${orderDetail.orderPrice}"></td>
+                    <td th:text="${orderDetail.orderQty}"></td>
+                </tr>
+                </th:block>
+            </tbody>
+            </table>
 			
-<!-- 		</div>  -->
+		</div> 
 	<script>
 		var orderStatusElements = document.querySelectorAll(".orderStatus");
 		orderStatusElements.forEach(function (e) {

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Employee</title>
+</head>
+<body>
+    <h1>Edit Employee</h1>
+    <form th:action="@{/emp/editEmp}" th:object="${employeeVO}" method="post">
+        <input type="hidden" th:field="*{empNo}"/>
+        
+        <br>
+        
+        <label for="empName">Name:</label>
+        <input type="text" id="empName" th:field="*{empName}" required/>
+
+        <br>
+
+        <label for="empAccount">Account:</label>
+        <input type="text" id="empAccount" th:field="*{empAccount}" required/>
+
+        <br>
+
+        <label for="empPassword">Password:</label>
+        <input type="password" id="empPassword" th:field="*{empPassword}" required/>
+
+        <br>
+
+        <label for="empHiredate">Hire Date:</label>
+        <input type="date" id="empHiredate" th:field="*{empHiredate}" required/>
+
+        <br>
+
+        <label for="empStatus">Status:</label>
+        <select id="empStatus" th:field="*{empStatus}">
+            <option value="1">Active</option>
+            <option value="0">Inactive</option>
+        </select>
+                <br>
+        
+
+<div th:each="authority : ${authorities}">
+   <input type="checkbox" th:id="${'auth_' + authority.authNo}" th:value="${authority.authNo}" 
+       name="authNoList" th:checked="${employeeVO.empAuthVO.contains(authority)}"/>
+
+    <label th:for="${'auth_' + authority.authNo}" th:text="${authority.authName}"></label>
+</div>
+
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>
