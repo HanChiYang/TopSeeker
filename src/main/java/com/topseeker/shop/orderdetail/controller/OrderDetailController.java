@@ -41,6 +41,10 @@ public class OrderDetailController {
 	@Autowired
 	OrderService orderSvc;
 	
+
+	
+	
+//////////////////////////////////////////
 //新增
 	@GetMapping("addOrderDetail")
 	public String addOrderDetail(ModelMap model) {
@@ -55,16 +59,8 @@ public class OrderDetailController {
 				)throws IOException {
 			/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 			Integer orderNo = orderDetailVO.getCompositeDetail().getOrderNo();
-            Integer prodNo = orderDetailVO.getProductVO().getProdNo();
+            Integer prodNo = orderDetailVO.getShopProductVO().getProdNo();
                      
-            
-//			if(orderDetail != null) {
-//					model.addAttribute("errorMessage", "已存在相同明細，請直接修改該筆訂單明細");
-//					model.addAttribute("orderDetailVO" , orderDetailVO);
-//					return "back-end/shop/order/select_page";
-//				
-//			}
-			
 			
 			if (result.hasErrors()) {
 				return "back-end/shop/order/addOrder";
@@ -78,23 +74,23 @@ public class OrderDetailController {
             
             // 驗證
             if (orderNo == null) {
-                throw new IllegalArgumentException("OrderNo cannot be null");
+                throw new IllegalArgumentException("訂單編號不得為空值");
             }else if (prodNo == null){
-                throw new IllegalArgumentException("ProdNo cannot be null");
+                throw new IllegalArgumentException("商品編號不得為空值");
             }
 
             OrderVO orderVO = orderSvc.getOneOrder(orderNo);
-            ShopProductVO productVO = prodSvc.getOneShopProduct(prodNo);
+            ShopProductVO shopProductVO = prodSvc.getOneShopProduct(prodNo);
             
             if (orderVO == null) {
-                throw new IllegalArgumentException("Order not found for id: " + orderNo);
+                throw new IllegalArgumentException("無法找到訂單編號: " + orderNo);
             }
-            if (productVO == null) {
-                throw new IllegalArgumentException("Product not found for id: " + prodNo);
+            if (shopProductVO == null) {
+                throw new IllegalArgumentException("無法找到商品編號: " + prodNo);
             }
 
             orderDetailVO.setOrderVO(orderVO);
-            orderDetailVO.setProductVO(productVO);
+            orderDetailVO.setShopProductVO(shopProductVO);
 			
 			orderDetailSvc.addOrderDetail(orderDetailVO);
 			/*************************** 3.新增完成,準備轉交(Send the Success view) **************/
@@ -143,21 +139,21 @@ public class OrderDetailController {
 			model.addAttribute("orderDetailListData", list);
 			return "back-end/shop/order/listAllOrderDetail";// 刪除完成後轉交listAllOrder.html
 		}
-	
-
-	@ModelAttribute("prodListData")
-	protected List<ShopProductVO> referenceListData(){
-	
-		List<ShopProductVO> list = prodSvc.getAll();
-		return list;
+		
+	//全部顯示
+	@GetMapping("listAllOrderDetail")
+	public String listAllOrderDetail(Model model) {
+			return "back-end/shop/order/listAllOrderDetail";
 	}
 	
-	@ModelAttribute("orderListData")
-	protected List<OrderVO> referenceListData1(){
-	
-		List<OrderVO> list = orderSvc.getAll();
-		return list;
-	}
+	//顯示該筆訂單明細
+//	@GetMapping("orderDetailByOrderNo")
+//	public List<OrderDetailVO> listOrderDetailByOrderNo(@RequestParam("orderNo") Integer orderNo, Model model) {
+//		
+//		List<OrderDetailVO> details = orderDetailSvc.findOrderDetailsByOrderNo(orderNo);
+//		
+//		return "front-end/shop/order/memOrderDeteil";
+//	}
 
 	
 	
@@ -175,6 +171,29 @@ public class OrderDetailController {
 		model.addAttribute("orderDetailListData", list); 
 		String message = strBuilder.toString();
 	    return new ModelAndView("back-end/shop/order/select_page", "errorMessage", "請修正以下錯誤:<br>"+message);
+	}
+	
+	
+	@ModelAttribute("shopProductListData")
+	protected List<ShopProductVO> referenceListData(){
+	
+		List<ShopProductVO> list = prodSvc.getAll();
+		return list;
+	}
+	
+	@ModelAttribute("orderListData")
+	protected List<OrderVO> referenceListData1(){
+	
+		List<OrderVO> list = orderSvc.getAll();
+		return list;
+	}
+
+		
+	@ModelAttribute("orderDetailListData")
+	protected List<OrderDetailVO> orderDetailListData(Model model) {
+		
+		List<OrderDetailVO> list = orderDetailSvc.getAll();
+		return list;
 	}
 	
 
