@@ -100,6 +100,8 @@ public class ActController {
 		actVO.setActCurrentCount(0);   
         actVO.setActStatus(0);     
         actVO.setActCheckCount(0);
+        actVO.setActRateSum(0);
+        actVO.setEvalSum(0);
 	    
 		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
 			

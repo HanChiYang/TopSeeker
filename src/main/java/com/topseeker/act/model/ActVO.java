@@ -2,6 +2,7 @@ package com.topseeker.act.model;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -30,6 +31,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.topseeker.act.controller.validation.MemGroup;
 import com.topseeker.actpicture.model.ActPictureVO;
+import com.topseeker.message.model.MessageVO;
 import com.topseeker.member.model.MemberVO;
 /*
  * 註1: classpath必須有javax.persistence-api-x.x.jar 
@@ -111,12 +113,24 @@ public class ActVO implements java.io.Serializable {
 	private Integer actStatus;
 	
 	@Column(name = "act_rate_sum")
-	private Integer actRateSum;
+	private Integer actRateSum=0;
 	
 	@Column(name = "eval_sum")
-	private Integer evalSum;
+	private Integer evalSum=0;
+	
+	//==============活動留言===================
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "actVO")
+    @OrderBy("actMsgNo asc") 
+    private Set<MessageVO> messages = new HashSet<MessageVO>();
 
-
+	public Set<MessageVO> getMessages() {
+		return messages;
+	}
+	
+	public void setArtcomments(Set<MessageVO> messages) {
+		this.messages = messages;
+	}
+	//========================================
 	public ActVO() {
 	}
 
