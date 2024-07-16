@@ -29,17 +29,10 @@
 </head>
 <body>
 
- <div class="container">
-        <a class="navbar-brand" href="javascript:history.back()">
-            <i class="fa-solid fa-person-walking-arrow-loop-left"></i> 回上一頁
-        </a>
-  </div>
-
-
 <div class="container">
     <div class="card">
         <div class="card-header text-center">
-            <h2>活動資料修改 - update_act_input.html</h2>
+            <h2>活動狀態修改</h2>
         </div>
         <div class="card-body">
             <form th:action="@{updateByEmp}" method="post" th:object="${actVO}" enctype="multipart/form-data">
@@ -55,42 +48,37 @@
                 
                 <div class="mb-3">
                     <label class="form-label">活動標題:</label>
-                    <input type="text" class="form-control" th:field="*{actTitle}" onclick="hideContent('actTitle.errors');"readonly/>
-                    <span th:if="${#fields.hasErrors('actTitle')}" th:errors="*{actTitle}" class="error" id="actTitle.errors"></span>
+                    <input type="text" class="form-control" th:field="*{actTitle}" style="border:0px ; font-weight: bold;" readonly />
+                    
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">活動地點:</label>
-                    <input type="text" class="form-control" th:field="*{actPlace}" onclick="hideContent('actPlace.errors');"readonly/>
-                    <span th:if="${#fields.hasErrors('actPlace')}" th:errors="*{actPlace}" class="error" id="actPlace.errors"></span>
+                    <input type="text" class="form-control" th:field="*{actPlace}" style="border:0px ; font-weight: bold;" readonly/>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">活動內容:</label>
-                    <textarea class="form-control" th:field="*{actContent}" onclick="hideContent('actContent.errors');" rows="6"readonly></textarea>
-                    <span th:if="${#fields.hasErrors('actContent')}" th:errors="*{actContent}" class="error" id="actContent.errors"></span>
+                    <textarea class="form-control" th:field="*{actContent}" style="border:0px ; font-weight: bold;" rows="6"readonly></textarea>
                 </div>
                 
                 <div id="ActPic" class="mb-3">
+                <label class="form-label">活動圖片:</label>
                     <div th:each="pic, iterStat : ${actVO.actPictures}" th:id="'pic-' + ${iterStat.index}">			
                         <img th:src="@{/actpicture/DBGifReader} + '?actPicNo=' + ${pic.actPicNo}"
                             class="img-thumbnail mb-2" width="150" height="150">
-                        
                     </div>
-                    
-                    <input type="file" name="picSet" id="actPic" class="form-control" multiple>
+<!--                     <input type="file" name="picSet" id="actPic" class="form-control" multiple /> -->
                 </div>
                 
                 <div class="mb-3">
-                    <label class="form-label">可參與最多人數:</label>
-                    <input type="text" class="form-control" th:field="*{actMaxCount}" onclick="hideContent('actMaxCount.errors');"readonly/>
-                    <span th:if="${#fields.hasErrors('actMaxCount')}" th:errors="*{actMaxCount}" class="error" id="actMaxCount.errors"></span>
+                    <label class="form-label">人數上限:</label>
+                    <input type="text" class="form-control" th:field="*{actMaxCount}" style="border:0px ; font-weight: bold;" readonly/>
                 </div>
                 
                 <div class="mb-3">
-                    <label class="form-label">可參與最少人數:</label>
-                    <input type="text" class="form-control" th:field="*{actMinCount}" onclick="hideContent('actMinCount.errors');"readonly/>
-                    <span th:if="${#fields.hasErrors('actMinCount')}" th:errors="*{actMinCount}" class="error" id="actMinCount.errors"></span>
+                    <label class="form-label">最少人數:</label>
+                    <input type="text" class="form-control" th:field="*{actMinCount}" style="border:0px ; font-weight: bold;" readonly/>
                 </div>
                 
                 <div class="mb-3">
@@ -105,26 +93,22 @@
                 
                 <div class="mb-3">
                     <label class="form-label">報名開始時間:</label>
-                    <input type="date" class="form-control" th:field="*{actEnrollBegin}" onclick="hideContent('actEnrollBegin.errors');"/>
-                    <span th:if="${#fields.hasErrors('actEnrollBegin')}" th:errors="*{actEnrollBegin}" class="error" id="actEnrollBegin.errors"></span>
+                    <input type="date" class="form-control" th:field="*{actEnrollBegin}" style="border:0px ; font-weight: bold;" readonly/>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">報名結束時間:</label>
-                    <input type="date" class="form-control" th:field="*{actEnrollEnd}" onclick="hideContent('actEnrollEnd.errors');"/>
-                    <span th:if="${#fields.hasErrors('actEnrollEnd')}" th:errors="*{actEnrollEnd}" class="error" id="actEnrollEnd.errors"></span>
+                    <input type="date" class="form-control" th:field="*{actEnrollEnd}" style="border:0px ; font-weight: bold;" readonly/>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">活動開始時間:</label>
-                    <input type="date" class="form-control" th:field="*{actStart}" onclick="hideContent('actStart.errors');"/>
-                    <span th:if="${#fields.hasErrors('actStart')}" th:errors="*{actStart}" class="error" id="actStart.errors"></span>
+                    <input type="date" class="form-control" th:field="*{actStart}" style="border:0px ; font-weight: bold;" readonly/>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">活動結束時間:</label>
-                    <input type="date" class="form-control" th:field="*{actEnd}" onclick="hideContent('actEnd.errors');"/>
-                    <span th:if="${#fields.hasErrors('actEnd')}" th:errors="*{actEnd}" class="error" id="actEnd.errors"></span>
+                    <input type="date" class="form-control" th:field="*{actEnd}" style="border:0px ; font-weight: bold;" readonly/>
                 </div>
                 
                 <div class="mb-3">
@@ -135,78 +119,30 @@
                         <option value="2">活動已完成</option>
                         <option value="3">活動已取消</option>
                     </select>
-                    <span th:if="${#fields.hasErrors('actStatus')}" th:errors="*{actStatus}" class="error" id="actStatus.errors"></span>
                 </div>
                 
-                <div class="mb-3">
-                    <label class="form-label">評價總星數:</label>
-                    <input type="text" class="form-control" th:field="*{actRateSum}" style="border:0px ; font-weight: bold;" readonly />
-                </div>
+<!--                 <div class="mb-3"> -->
+<!--                     <label class="form-label">評價總星數:</label> -->
+<!--                     <input type="text" class="form-control" th:field="*{actRateSum}" style="border:0px ; font-weight: bold;" readonly /> -->
+<!--                 </div> -->
                 
-                <div class="mb-3">
-                    <label class="form-label">評價總人數:</label>
-                    <input type="text" class="form-control" th:field="*{evalSum}" style="border:0px ; font-weight: bold;" readonly />
-                </div>
+<!--                 <div class="mb-3"> -->
+<!--                     <label class="form-label">評價總人數:</label> -->
+<!--                     <input type="text" class="form-control" th:field="*{evalSum}" style="border:0px ; font-weight: bold;" readonly /> -->
+<!--                 </div> -->
                 
                 <div class="text-center">
-                    <button type="submit" id="submit" name="picSet" class="btn btn-primary">送出修改</button>
+                    <button type="submit" id="submit" class="btn btn-primary">送出修改</button>
                 </div>		
             </form>
         </div>
     </div>
 </div>
+<div class="container">
+        <a class="navbar-brand" href="javascript:history.back()">
+            <i class="fa-solid fa-person-walking-arrow-loop-left"></i> 回上一頁
+        </a>
+</div>
 
-<!--  
-<script type="text/javascript">
-//清除提示信息
-function hideContent(d) {
-     document.getElementById(d).style.display = "none";
-}
-
-//照片上傳-預覽用
-var filereader_support = typeof FileReader != 'undefined';
-if (!filereader_support) {
-	alert("No FileReader support");
-}
-acceptedTypes = {
-		'image/png' : true,
-		'image/jpeg' : true,
-		'image/gif' : true
-};
-function previewImage() {
-	var upfile1 = document.getElementById("upFiles");
-	upfile1.addEventListener("change", function(event) {
-		var files = event.target.files || event.dataTransfer.files;
-		for (var i = 0; i < files.length; i++) {
-			previewfile(files[i])
-		}
-	}, false);
-}
-function previewfile(file) {
-	if (filereader_support === true && acceptedTypes[file.type] === true) {
-		var reader = new FileReader();
-		reader.onload = function(event) {
-			var image = new Image();
-			image.src = event.target.result;
-			image.width = 100;
-			image.height = 75;
-			image.border = 2;
-			if (blob_holder.hasChildNodes()) {
-				blob_holder.removeChild(blob_holder.childNodes[0]);
-			}
-			blob_holder.appendChild(image);
-		};
-		reader.readAsDataURL(file);
-		document.getElementById('submit').disabled = false;
-	} else {
-		blob_holder.innerHTML = "<div  style='text-align: left;'>" + "● filename: " + file.name
-				+ "<br>" + "● ContentTyp: " + file.type
-				+ "<br>" + "● size: " + file.size + "bytes"
-				+ "<br>" + "● 上傳ContentType限制: <b> <font color=red>image/png、image/jpeg、image/gif </font></b></div>";
-		document.getElementById('submit').disabled = true;
-	}
-}
-</script>
--->
 </body>
 </html>

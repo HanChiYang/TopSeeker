@@ -34,7 +34,7 @@ public class OrderDetailVO implements java.io.Serializable {
 	@ManyToOne
 	@MapsId("prodNo")
 	@JoinColumn(name = "prod_no", insertable = false, updatable = false)
-	private ShopProductVO productVO;
+	private ShopProductVO shopProductVO;
 	
 	@Column(name = "order_price")
 	@NotNull(message = "請輸入購買金額")
@@ -69,14 +69,15 @@ public class OrderDetailVO implements java.io.Serializable {
 
 	public void setOrderVO(OrderVO orderVO) {
 		this.orderVO = orderVO;
+		this.compositeDetail.setOrderNo(orderVO.getOrderNo());
 	}
 
-	public ShopProductVO getProductVO() {
-		return productVO;
+	public ShopProductVO getShopProductVO() {
+		return shopProductVO;
 	}
 
-	public void setProductVO(ShopProductVO productVO) {
-		this.productVO = productVO;
+	public void setShopProductVO(ShopProductVO shopProductVO) {
+		this.shopProductVO = shopProductVO;
 	}
 
 	public void setOrderPrice(Integer orderPrice) {
