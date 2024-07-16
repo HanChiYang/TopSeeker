@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -77,16 +78,6 @@ public class ShopProdController {
 	return "front-end/shop/homepage";
     }
 	
-	//【新版型測試用】商城首頁 homepageWithNav.html
-    @GetMapping("/homepageNav")
-	public String showTestShopProduct(ModelMap model) {
-	List<ShopProductVO> shopListData = shopProductSvc.getAllReleasedProd();
-	
-	model.addAttribute("shopListData", shopListData);
-	
-	return "front-end/shop/homepageWithNav";
-    }
-    
 
     // 商城商品分類頁面 listProdByType.html
     @GetMapping("/category/{categoryName}")
@@ -140,7 +131,14 @@ public class ShopProdController {
     
 	//============Ajax新增刪除功能============
 
-    
+    //依照商品編號更改上下架狀態
+    @PostMapping("/shopManagement/updateStatus")
+    public ResponseEntity<?> updateStatus(@RequestParam Integer prodNo, @RequestParam Integer prodStatus) {
+        shopProductSvc.updateProdStatus(prodNo, prodStatus);
+        System.out.println("功能有執行");
+        return ResponseEntity.ok().build();
+    }
+
     
     //商品頁面，檢查商品是否已被收藏
     @PostMapping("/checkWishlistStatus")
@@ -282,6 +280,13 @@ public class ShopProdController {
 	public String listAllProd(Model model) {
 		return "back-end/shop/listAllProd";
 	}
+    
+	//============Ajax新增刪除功能============
+    
+    
+    
+
+    
     
     //============後端商品CRUD============
     
