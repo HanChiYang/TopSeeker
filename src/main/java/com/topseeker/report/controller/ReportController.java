@@ -119,9 +119,9 @@ public class ReportController {
 
         reportVO.setMemberVO(loggedInMember);
         
-//        if (reportVO.getHandleCheck() == 1) {
-//            actSvc.updateActStatus(reportVO.getActVO().getActNo(), 3);
-//        }
+        if (reportVO.getHandleCheck() == 1) {
+            actSvc.updateActStatus(reportVO.getActVO().getActNo(), 3);
+        }
         
         reportSvc.updateReport(reportVO);
 
