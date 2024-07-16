@@ -1,0 +1,31 @@
+	<div>
+		<img id="longlogo" src="/images/SheiPa_long_logo.jpg">
+		<!-- 商城管理系統的導航列 -->
+		<nav id="shopNavbar" class="navbar navbar-expand-lg">
+			<div class="container-fluid">
+				<div>
+					<a class="navbar-brand" th:href="@{/shop/shopManagement}">商城管理系統</a>
+					<button class="navbar-toggler" type="button"
+						data-bs-toggle="collapse" data-bs-target="#newNavbarNav"
+						aria-controls="newNavbarNav" aria-expanded="false"
+						aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+				</div>
+				
+				
+				<div class="collapse navbar-collapse" id="shopViceNavbar">
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+						<li class="nav-item nav-item-spacing"><a
+							class="nav-link shoplink" th:href="@{/shop/shopManagement/select_page}">商品管理</a></li>
+						<li class="nav-item nav-item-spacing"><a
+							class="nav-link shoplink" href="#">最新消息管理</a></li>
+						<li class="nav-item nav-item-spacing"><a
+							class="nav-link shoplink" th:href="@{/shop/category/bag(prodTypeNo=1)}">促銷優惠管理</a></li>
+						<li class="nav-item nav-item-spacing"><a
+							class="nav-link shoplink" th:href="@{/shop/category/shoes(prodTypeNo=2)}">訂單管理</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>

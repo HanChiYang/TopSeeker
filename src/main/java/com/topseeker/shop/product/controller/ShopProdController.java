@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -76,7 +77,7 @@ public class ShopProdController {
 	
 	return "front-end/shop/homepage";
     }
-    
+	
 
     // 商城商品分類頁面 listProdByType.html
     @GetMapping("/category/{categoryName}")
@@ -92,6 +93,7 @@ public class ShopProdController {
         
         return "front-end/shop/listProdByType";
     }
+    
     
 	//商城商品詳細頁面 hompage.html
     @GetMapping("/listOneProdDetail")
@@ -128,23 +130,57 @@ public class ShopProdController {
     
     
 	//============Ajax新增刪除功能============
+
+    //依照商品編號更改上下架狀態
+    @PostMapping("/shopManagement/updateStatus")
+    public ResponseEntity<?> updateStatus(@RequestParam Integer prodNo, @RequestParam Integer prodStatus) {
+        shopProductSvc.updateProdStatus(prodNo, prodStatus);
+        System.out.println("功能有執行");
+        return ResponseEntity.ok().build();
+    }
+
     
-    //whishlist刪除收藏商品
-    @PostMapping("/removeWishlistProd")
+    //商品頁面，檢查商品是否已被收藏
+    @PostMapping("/checkWishlistStatus")
     @ResponseBody
-    public Map<String, Object> removeWishlistProd(@RequestBody Map<String, Object> request) {
+    public Map<String, Object> checkWishlistStatus(@RequestBody Map<String, Object> request, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
         try {
-            Integer wishlistNo = (Integer) request.get("wishlistNo");
-            // 呼叫服務層方法來移除收藏的商品
-            shopWishlistSvc.deletShopWishlist(wishlistNo);
-            response.put("success", true);
+            Integer prodNo = null;
+            if (request.get("prodNo") instanceof String) {
+                prodNo = Integer.valueOf((String) request.get("prodNo"));
+            } else if (request.get("prodNo") instanceof Integer) {
+                prodNo = (Integer) request.get("prodNo");
+            }
+
+            if (prodNo == null) {
+                response.put("isInWishlist", false);
+                response.put("message", "無效的商品編號");
+                return response;
+            }
+
+            MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+
+            if (loggedInMember == null) {
+                response.put("isInWishlist", false);
+                response.put("message", "請先登入");
+                return response;
+            }
+
+            Integer memNo = loggedInMember.getMemNo();
+            ShopWishlistVO wishlistItem = shopWishlistSvc.findByMemNoAndProdNo(memNo, prodNo);
+            response.put("isInWishlist", wishlistItem != null);
+
+//            System.out.println("會員編號是:" + memNo + ", 收藏狀態是: " + (wishlistItem != null));
+
         } catch (Exception e) {
-            response.put("success", false);
+            response.put("isInWishlist", false);
             response.put("message", e.getMessage());
+            e.printStackTrace();
         }
         return response;
     }
+
     
     //商品頁面，收藏清單中新增或收藏該商品
     @PostMapping("/toggleWishlist")
@@ -208,7 +244,22 @@ public class ShopProdController {
         return response;
     }
     
-  
+    //商品收藏頁面，刪除收藏商品 whishlist.html
+    @PostMapping("/removeWishlistProd")
+    @ResponseBody
+    public Map<String, Object> removeWishlistProd(@RequestBody Map<String, Object> request) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Integer wishlistNo = (Integer) request.get("wishlistNo");
+            // 呼叫服務層方法來移除收藏的商品
+            shopWishlistSvc.deletShopWishlist(wishlistNo);
+            response.put("success", true);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+        }
+        return response;
+    }
 
 	//============後端管理頁面============
 	
@@ -229,6 +280,13 @@ public class ShopProdController {
 	public String listAllProd(Model model) {
 		return "back-end/shop/listAllProd";
 	}
+    
+	//============Ajax新增刪除功能============
+    
+    
+    
+
+    
     
     //============後端商品CRUD============
     

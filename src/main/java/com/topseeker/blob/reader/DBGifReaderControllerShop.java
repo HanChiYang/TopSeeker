@@ -45,7 +45,7 @@ public class DBGifReaderControllerShop {
 			rtn = ShopProductPicSvc.getOneShopProductPic(Integer.valueOf(prodNo));
 
 			for (ShopProductPicVO VO : rtn) {
-				System.out.println(prodNo+" : "+VO.getProdPic());
+//				System.out.println(prodNo+" : "+VO.getProdPic());
 				out.write(VO.getProdPic());
 
 			}

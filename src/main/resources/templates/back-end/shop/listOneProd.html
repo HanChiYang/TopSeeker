@@ -68,6 +68,12 @@ a img {
 a {
 	text-decoration: none; /* 移除超連結的底線 */
 }
+
+.backbutton{
+margin-left: auto;
+margin-right: auto;
+
+}
 </style>
 </head>
 <body>
@@ -97,7 +103,7 @@ a {
 	</div>
 
 
-	<div class="content" th:fragment="listOneProd-div">
+	<div class="content">
 		<!-- 此div被select_page.html第158行insert用 -->
 		<div class="card">
 			<div class="card-header text-center">
@@ -140,30 +146,37 @@ a {
 
 				<div class="mb-3">
 					<label for="ProdPic" class="form-label">商品圖片:</label>
-					<div id="ProdPic">
-						<div th:each="pic, iterStat : ${shopProductVO.shopProductPics}">
+					<div id="ProdPic" class="d-flex flex-row flex-wrap">
+						<div th:each="pic, iterStat : ${shopProductVO.shopProductPics}"
+							class="p-2">
 							<!--測試印出產品圖片編號 -->
-							<input type="text" th:value="${pic.prodPicNo}"
-								class="form-control mb-2" readonly> <img
+							<!-- 							<input type="text" th:value="${pic.prodPicNo}" -->
+							<!-- 								class="form-control mb-2" readonly>  -->
+							<img
 								th:src="@{/shop/DBGifReader3} + '?prodPicNo=' + ${pic.prodPicNo}"
 								class="img-thumbnail mb-2" width="150" height="150">
 						</div>
 					</div>
 				</div>
+				<div class="text-center">
+					<a th:href="@{/shop/shopManagement/listAllProd}"
+						class="btn btn-success backbutton" role="button">繼續修改商品</a>
+				</div>
+
 			</div>
+		</div>
+	</div>
 
 
-			<script>
-				$(document).ready(
-						function() {
-							var navbarHeight = $('.navbar').outerHeight();
-							var shopnavbarHeight = $('.shopnavbar')
-									.outerHeight();
-							$('.sidebar').css('top',
-									navbarHeight + shopnavbarHeight);
-							$('.content').css('margin-top',
-									navbarHeight + shopnavbarHeight + 20);
-						});
-			</script>
+	<script>
+		$(document).ready(
+				function() {
+					var navbarHeight = $('.navbar').outerHeight();
+					var shopnavbarHeight = $('.shopnavbar').outerHeight();
+					$('.sidebar').css('top', navbarHeight + shopnavbarHeight);
+					$('.content').css('margin-top',
+							navbarHeight + shopnavbarHeight + 20);
+				});
+	</script>
 </body>
 </html>

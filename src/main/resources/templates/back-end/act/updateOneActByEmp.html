@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>TopSeeker-後台活動資料</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<script src="https://kit.fontawesome.com/de9b92a469.js" crossorigin="anonymous"></script>
+<style type="text/css">
+    .card-header {
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+    .card-body span {
+        display: inline-block;
+        width: 150px;
+        text-align: right;
+        font-weight: bold;
+    }
+    .card-body span.value {
+        font-weight: normal;
+        text-align: left;
+        margin-left: 10px;
+    }
+    .back-button {
+        margin-bottom: 1rem;
+    }
+</style>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2>後台活動資料修改成功</h2>   
+    </div>
+    <div class="card mx-auto" style="max-width: 800px;">
+        <div class="card-header text-center">
+            活動詳細資訊
+        </div>
+        <div class="card-body text-center">
+            <div class="mb-3">
+            <!-- 不能顯示圖片 -->
+<!--                 <div th:each="pic, iterStat : ${actVO.actPictures}" th:id="'pic-' + ${iterStat.index}"> -->
+<!--                     <img th:src="@{/actpicture/DBGifReader} + '?actPicNo=' + ${pic.actPicNo}" -->
+<!--                          class="img-thumbnail mb-2" width="150" height="150"> -->
+<!--                 </div> -->
+			
+				
+                
+            </div>
+            <div class="mb-2"><span>會員:</span><span class="value" th:text="${actVO.memberVO.memNo} + '-[' + ${actVO.memberVO.memName} + ']'"></span></div>
+            <div class="mb-2"><span>活動編號:</span><span class="value" th:text="${actVO.actNo}"></span></div>
+            <div class="mb-2"><span>活動標題:</span><span class="value" th:text="${actVO.actTitle}"></span></div>
+            <div class="mb-2"><span>活動地點:</span><span class="value" th:text="${actVO.actPlace}"></span></div>
+            <div class="mb-2"><span>活動內容:</span><span class="value" th:text="${actVO.actContent}"></span></div>
+            <div class="mb-2"><span>人數上限:</span><span class="value" th:text="${actVO.actMaxCount}"></span></div>
+            <div class="mb-2"><span>最少人數:</span><span class="value" th:text="${actVO.actMinCount}"></span></div>
+            <div class="mb-2"><span>報名開始日:</span><span class="value" th:text="${actVO.actEnrollBegin}"></span></div>
+            <div class="mb-2"><span>報名結束日:</span><span class="value" th:text="${actVO.actEnrollEnd}"></span></div>
+            <div class="mb-2"><span>活動開始日:</span><span class="value" th:text="${actVO.actStart}"></span></div>
+            <div class="mb-2"><span>活動結束日:</span><span class="value" th:text="${actVO.actEnd}"></span></div>
+            <div class="mb-2"><span>活動狀態:</span>
+                <span class="value" th:switch="${actVO.actStatus}">
+                    <span th:case="0">揪團中</span>
+                    <span th:case="1">已成團</span>
+                    <span th:case="2">活動已完成</span>
+                    <span th:case="3">活動已取消</span>
+                </span>
+            </div>
+            <div class="text-center mt-4">
+                <a th:href="@{/act/actBackEnd}" class="btn btn-primary">回到後台活動列表</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

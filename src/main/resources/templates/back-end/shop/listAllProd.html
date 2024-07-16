@@ -13,6 +13,9 @@
 	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
 	crossorigin="anonymous">
 
+<!-- icon用 -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <!-- ●●js  for jquery datatables 用 -->
@@ -24,49 +27,7 @@
 <!-- ●●css for jquery datatables 用 -->
 
 
-<!-- ●● jquery datatables 設定 -->
-<script>
-	$(document)
-			.ready(
-					function() {
-						$('#example')
-								.DataTable(
-										{
-											"lengthMenu" : [ 5, 10, 20, 50, 100 ],
-											"searching" : true, //搜尋功能, 預設是開啟
-											"paging" : true, //分頁功能, 預設是開啟
-											"ordering" : true, //排序功能, 預設是開啟
-											"language" : {
-												"processing" : "處理中...",
-												"loadingRecords" : "載入中...",
-												"lengthMenu" : "顯示 _MENU_ 筆結果",
-												"zeroRecords" : "沒有符合的結果",
-												"info" : "顯示第 _START_ 至 _END_ 筆結果，共<font color=red> _TOTAL_ </font>筆",
-												"infoEmpty" : "顯示第 0 至 0 筆結果，共 0 筆",
-												"infoFiltered" : "(從 _MAX_ 筆結果中過濾)",
-												"infoPostFix" : "",
-												"search" : "搜尋:",
-												"paginate" : {
-													"first" : "第一頁",
-													"previous" : "上一頁",
-													"next" : "下一頁",
-													"last" : "最後一頁"
-												},
-												"aria" : {
-													"sortAscending" : ": 升冪排列",
-													"sortDescending" : ": 降冪排列"
-												}
-											}
-										});
-					});
 
-	$(document).ready(function() {
-		var navbarHeight = $('.navbar').outerHeight();
-		var shopnavbarHeight = $('.shopnavbar').outerHeight();
-		$('.sidebar').css('top', navbarHeight + shopnavbarHeight);
-		$('.display').css('margin-top', navbarHeight + shopnavbarHeight + 20);
-	});
-</script>
 
 <style type="text/css">
 * {
@@ -142,7 +103,7 @@ a {
 					<a th:href='@{/shop/shopManagement/listAllProd}'>檢視所有商品</a>
 				</h6></li>
 			<li><h6>
-					<a href='addProd'>新增商品</a>
+					<a th:href='@{/shop/shopManagement/addProd}'>新增商品</a>
 				</h6></li>
 		</ul>
 	</div>
@@ -160,7 +121,7 @@ a {
 					<th>商品建立時間</th>
 					<th>商品狀態</th>
 					<th>修改</th>
-<!-- 					<th>刪除</th> -->
+					<!-- 					<th>刪除</th> -->
 				</tr>
 			</thead>
 			<tbody>
@@ -177,29 +138,121 @@ a {
 						<td width="80px" th:text="'$' + ${shopProductVO.prodPrice}"></td>
 						<td width="100px" th:text="${shopProductVO.prodDate}"></td>
 						<td>
-							<div th:switch="${shopProductVO.prodStatus}">
-								<span th:case="'0'">下架</span> <span th:case="'1'">上架</span>
+							<div class="btn-group" role="group"
+								aria-label="Basic radio toggle button group">
+								<!-- 上架中按鈕 -->
+								<input type="radio" class="btn-check"
+									th:name="'prodStatus-' + ${shopProductVO.prodNo}"
+									th:id="'success-outlined-' + ${shopProductVO.prodNo}"
+									autocomplete="off"
+									th:checked="${shopProductVO.prodStatus == 1}"> <label
+									class="btn btn-outline-success"
+									th:for="'success-outlined-' + ${shopProductVO.prodNo}"
+									th:onclick="'updateStatus(' + ${shopProductVO.prodNo} + ', 1)'">上架中</label>
+
+								<!-- 下架按鈕 -->
+								<input type="radio" class="btn-check"
+									th:name="'prodStatus-' + ${shopProductVO.prodNo}"
+									th:id="'secondary-outlined-' + ${shopProductVO.prodNo}"
+									autocomplete="off"
+									th:checked="${shopProductVO.prodStatus == 0}"> <label
+									class="btn btn-outline-secondary"
+									th:for="'secondary-outlined-' + ${shopProductVO.prodNo}"
+									th:onclick="'updateStatus(' + ${shopProductVO.prodNo} + ', 0)'">下架</label>
 							</div>
+
+
 						</td>
 						<td>
 							<form method="post"
 								th:action="@{/shop/shopManagement/getOne_For_Update}"
-								style="margin-bottom: 0px;">
-								<input type="submit" value="修改"> <input type="hidden"
-									name="prodNo" th:value="${shopProductVO.prodNo}">
+								style="margin-bottom: 0;">
+								<button type="submit" class="btn btn-warning text-white">
+									<i class="fas fa-edit"></i> 修改
+								</button>
+								<input type="hidden" name="prodNo"
+									th:value="${shopProductVO.prodNo}">
 							</form>
 						</td>
-<!-- 						<td> -->
-<!-- 							<form method="post" th:action="@{/shop/shopManagement/delete}" -->
-<!-- 								style="margin-bottom: 0px;"> -->
-<!-- 								<input type="submit" value="刪除"> <input type="hidden" -->
-<!-- 									name="prodNo" th:value="${shopProductVO.prodNo}"> -->
-<!-- 							</form> -->
-<!-- 						</td> -->
+						<!-- 						<td> -->
+						<!-- 							<form method="post" th:action="@{/shop/shopManagement/delete}" -->
+						<!-- 								style="margin-bottom: 0px;"> -->
+						<!-- 								<input type="submit" value="刪除"> <input type="hidden" -->
+						<!-- 									name="prodNo" th:value="${shopProductVO.prodNo}"> -->
+						<!-- 							</form> -->
+						<!-- 						</td> -->
 					</tr>
 				</th:block>
 			</tbody>
 		</table>
 	</div>
+
+
+	<!-- ●● jquery datatables 設定 -->
+	<script>
+		$(document)
+				.ready(
+						function() {
+							$('#example')
+									.DataTable(
+											{
+												"lengthMenu" : [ 5, 10, 20, 50,
+														100 ],
+												"searching" : true, //搜尋功能, 預設是開啟
+												"paging" : true, //分頁功能, 預設是開啟
+												"ordering" : true, //排序功能, 預設是開啟
+												"language" : {
+													"processing" : "處理中...",
+													"loadingRecords" : "載入中...",
+													"lengthMenu" : "顯示 _MENU_ 筆結果",
+													"zeroRecords" : "沒有符合的結果",
+													"info" : "顯示第 _START_ 至 _END_ 筆結果，共<font color=red> _TOTAL_ </font>筆",
+													"infoEmpty" : "顯示第 0 至 0 筆結果，共 0 筆",
+													"infoFiltered" : "(從 _MAX_ 筆結果中過濾)",
+													"infoPostFix" : "",
+													"search" : "搜尋:",
+													"paginate" : {
+														"first" : "第一頁",
+														"previous" : "上一頁",
+														"next" : "下一頁",
+														"last" : "最後一頁"
+													},
+													"aria" : {
+														"sortAscending" : ": 升冪排列",
+														"sortDescending" : ": 降冪排列"
+													}
+												}
+											});
+						});
+
+				$(document).ready(
+						function() {
+							var navbarHeight = $('.navbar').outerHeight();
+							var shopnavbarHeight = $('.shopnavbar').outerHeight();
+							$('.sidebar').css('top', navbarHeight + shopnavbarHeight);
+							$('.display').css('margin-top',
+									navbarHeight + shopnavbarHeight + 20);
+						});
+				
+				//Ajax修改商品上下架狀態
+				function updateStatus(prodNo, status) {
+					console.log("有執行更新");
+					$.ajax({
+						type : "POST",
+						url : "/shop/shopManagement/updateStatus",
+						data : {
+							prodNo : prodNo,
+							prodStatus : status
+						},
+						success : function(response) {
+							console.log("狀態更新成功");
+						},
+						error : function(xhr, status, error) {
+							console.log("狀態更新失敗: " + error);
+						}
+					});
+				}
+	</script>
+
 </body>
 </html>
