@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Weather Forecast</title>
+</head>
+<body>
+    <h1>七天天氣預報</h1>
+    <div th:each="location : ${weatherData.dataset.location}">
+        <h2 th:text="${location.locationName}"></h2>
+        <div th:each="element : ${location.weatherElement}">
+            <h3 th:text="${element.elementName}"></h3>
+            <div th:each="time : ${element.time}">
+                <p>
+                    <span th:text="'Start: ' + ${time.startTime}"></span><br>
+                    <span th:text="'End: ' + ${time.endTime}"></span><br>
+                    <span th:text="'Weather: ' + ${time.parameter.parameterName}"></span><br>
+                    <span th:text="'Value: ' + ${time.parameter.parameterValue}"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
