@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+<!-- 前台的navbar -->
+>>>>>>> refs/heads/master
 <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary fixed-top">
   <div class="container-fluid">
     <a href="/">
@@ -8,7 +12,11 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
+<<<<<<< HEAD
         <li class="nav-item">
+=======
+        <li class="nav-item ">
+>>>>>>> refs/heads/master
           <a class="nav-link" href="/shop/homepage">
             <i class="fas fa-shopping-cart"></i> 商城專區
           </a>
@@ -76,7 +84,16 @@
           <a class="nav-link" href="/member/registrationMem">
             <i class="fas fa-user-plus"></i> 註冊會員
           </a>
+<<<<<<< HEAD
+=======
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/protected/member/indexMem">
+            <i class="fas fa-user"></i> 會員專區
+          </a>
+>>>>>>> refs/heads/master
+        </li>
+<<<<<<< HEAD
         <li class="nav-item">
           <a class="nav-link" href="/protected/member/indexMem">
             <i class="fas fa-user"></i> 會員專區
@@ -85,7 +102,16 @@
         <li th:if="${session.loggedInMember != null}">
           <span th:if="${session.notiData != null}">
             <a class="nav-link" th:if="${session.notiData.notiStatus == 0}">
+=======
+        
+        
+        
+  <li th:if="${session.loggedInMember != null}" class="navbar-nav nav-item nav-link">
+      <span th:if="${session.hasNewNotifications == true}">
+          <a>
+>>>>>>> refs/heads/master
               <img id="alertIcon" class="bellIcon" th:src="@{/images/alert.svg}" width="25px" th:data-new-src="@{/images/noalert.svg}" alt="Alert Icon">
+<<<<<<< HEAD
             </a>
             <a class="nav-link" th:if="${session.notiData.notiStatus == 1 or session.notiData.notiStatus == null}">
               <img class="bellIcon" th:src="@{/images/noalert.svg}" width="25px" alt="New Notification Icon">
@@ -93,10 +119,25 @@
           </span>
           <span th:if="${session.notiData == null}">
             <a class="nav-link bellIcon">
+=======
+          </a>
+      </span>
+      <span th:if="${session.hasNewNotifications == false}">
+          <a class="nav-link bellIcon">
+>>>>>>> refs/heads/master
               <img th:src="@{/images/noalert.svg}" width="25px" alt="New Notification Icon">
+<<<<<<< HEAD
             </a>
           </span>
         </li>
+=======
+          </a>
+      </span>
+  </li>
+        
+        
+        
+>>>>>>> refs/heads/master
         <li th:if="${session.loggedInMember != null}" class="nav-item">
           <a class="nav-link" href="/member/logout">
             <i class="fas fa-sign-out-alt"></i> 登出

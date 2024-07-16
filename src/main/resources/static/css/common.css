@@ -1,7 +1,7 @@
 #notificationContent {
 position: fixed;
-top: 80px;
-left: 825px;
+top: 75px;
+left: 500px;
 }
 
 #notification {
@@ -237,6 +237,7 @@ a.nav-link:hover {
 .bellIcon {
   transition: transform 0.3s ease;
 }
+<<<<<<< HEAD
 
 .bellIcon:hover {
   transform: scale(1.1);
@@ -249,3 +250,23 @@ a.nav-link:hover {
     background-position: center; /* 背景圖像置中 */
     margin-top: 100px;/* navbar區隔 */
   }
+=======
+#navbarNav > ul.navbar-nav.me-auto > li:nth-child(6) > span > a{
+	padding: 0px;
+}
+.bellIcon:hover {
+  transform: scale(1.1);
+}
+ body {
+    background-image: url('/images/smallbear.jpg'); /* 圖片路徑 */
+    background-size: cover; /* 覆蓋整個頁面 */
+    background-repeat: no-repeat; /* 防止重複 */
+    background-attachment: fixed; /* 滾動的時候固定 */
+    background-position: center; /* 背景圖像置中 */
+    margin-top: 100px;/* navbar區隔 */
+  }
+  
+.nav-link {
+   align-items: center;
+  }
+>>>>>>> refs/heads/master
