@@ -10,7 +10,6 @@
 <style>
 * {
     box-sizing: border-box;
-    
 }
 
 :root {
@@ -21,7 +20,6 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    
 }
 
 img {
@@ -37,7 +35,7 @@ div.container {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
     font-size: 20px;
-    font-weight: bold; 
+    font-weight: bold;
 }
 
 div.article-details {
@@ -56,8 +54,7 @@ table.dataTable {
     margin-top: 20px;
     border-collapse: collapse;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        background-color: #fafafa;
-    
+    background-color: #fafafa;
 }
 
 table.dataTable thead {
@@ -76,11 +73,11 @@ table.dataTable th, table.dataTable td {
     padding: 10px;
     width: 600px;
     height: 200px;
-    resize: vertical; /* Allows users to resize the textarea vertically */
+    resize: vertical;
     overflow: auto;
     box-sizing: border-box;
+    vertical-align: top;
 }
-
 </style>
 <link rel="stylesheet" th:href="@{/css/navbar.css}" />
 <link rel="stylesheet" th:href="@{/css/common.css}">
@@ -91,8 +88,7 @@ table.dataTable th, table.dataTable td {
 <nav th:insert="~{/front-end/navbar.html}"></nav>
 <div class="container">登山情報</div>
 <div class="article-details">
-   
-  <form th:action="@{/article/update}" method="post" th:object="${articleVO}" enctype="multipart/form-data">
+  <form th:action="@{update}" method="post" th:object="${articleVO}" enctype="multipart/form-data">
     <input type="hidden" th:field="*{artNo}" />
     <div style="margin-bottom: 10px;">
         <label>文章標題:</label>
@@ -101,24 +97,72 @@ table.dataTable th, table.dataTable td {
     </div>
     <div style="margin-bottom: 10px;">
         <label>文章內容:</label><br>
-        <input type="text" th:field="*{artContent}" onclick="hideContent('artContent.errors');" class="input-large"  />
+        <textarea th:field="*{artContent}" onclick="hideContent('artContent.errors');" class="input-large"></textarea>
         <span th:if="${#fields.hasErrors('artContent')}" th:errors="*{artContent}" class="error" id="artContent.errors"></span>
     </div>
+    
+    <div>
+        <label for="artPics">原有圖片:</label>
+        <div th:each="artPic : ${articleVO.artPics}">
+            <div style="margin-bottom: 10px;">
+                <img th:src="'data:image/jpeg;base64,' + ${artPic.base64ArtPic}" alt="文章圖片" style="width: 200px; height: auto; margin: 10px 0;">
+                <input type="checkbox" name="deletePics" th:value="${artPic.artPicNo}" /> 刪除此圖片
+            </div>
+        </div>
+    </div>
+    
+    <div>
+        <label for="artPics">文章圖片:</label>
+        <input type="file" id="artPics" name="artPics" multiple onchange="previewImages(event)" />
+        <span th:if="${#fields.hasErrors('artPics')}" th:errors="*{artPics}" class="error"></span>
+        <div id="imagePreview"></div>
+    </div>
+    
     <div style="margin-bottom: 10px;">
         <label for="artStatus">文章狀態:</label>
-        <input type="hidden" th:field="*{artStatus}" />
+        <input type="hidden" th:field="*{artStatus}"  />
         <span th:text="${articleVO.artStatus == 0 ? '隱藏' : '公開'}"></span>
         <span th:if="${#fields.hasErrors('artStatus')}" th:errors="*{artStatus}" class="error" id="artStatus.errors"></span>
     </div>
     <div>
         <button type="submit" id="submit" style="padding: 10px 20px; border: none; border-radius: 5px; background-color: #007bff; color: #fff; cursor: pointer;">送出修改</button>
     </div>
-</form>
+  </form>
 </div>
 
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 <script>
+$(document).ready(function() {
+    $('#example').DataTable();
+});
 
+function hideContent(d) {
+    document.getElementById(d).style.display = "none";
+}
+
+function cancelAdd() {
+    history.back();
+}
+
+function previewImages(event) {
+    const files = event.target.files;
+    const preview = document.getElementById('imagePreview');
+    preview.innerHTML = ''; // 清除之前的预览
+
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.width = '100px'; // 设置预览图片的宽度
+            img.style.height = 'auto';
+            img.style.marginRight = '10px';
+            preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    }
+}
 </script>
 </body>
 </html>

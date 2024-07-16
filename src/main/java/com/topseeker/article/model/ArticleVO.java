@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -63,7 +64,7 @@ public class ArticleVO {
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="articleVO")
 	@OrderBy("artPic asc")
-	private Set<ArtPicVO> artPics = new HashSet<ArtPicVO>();
+	private List<ArtPicVO> artPics = new ArrayList<ArtPicVO>();
 	
 	 //---------------------------------------------新增的地方
 	 
@@ -82,11 +83,11 @@ public class ArticleVO {
 	 }
 	// -------------------------------------留言
 
-	public Set<ArtPicVO> getArtPics() {
+	public List<ArtPicVO> getArtPics() {
 		return artPics;
 	}
 
-	public void setArtPics(Set<ArtPicVO> artPics) {
+	public void setArtPics(List<ArtPicVO> artPics) {
 		this.artPics = artPics;
 	}
 
