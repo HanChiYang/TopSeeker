@@ -84,21 +84,9 @@ public class ParticipantController {
 	public String insert(@Valid ParticipantVO participantVO, BindingResult result, ModelMap model,
 			 MultipartFile[] parts) throws IOException {
 
-		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
+	
 		result = removeFieldError(participantVO, result, "upFiles");
 
-//		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
-//			model.addAttribute("errorMessage", "員工照片: 請上傳照片");
-//		} else {
-//			for (MultipartFile multipartFile : parts) {
-//				byte[] buf = multipartFile.getBytes();
-//				participantVO.setUpFiles(buf);
-//			}
-//		}
-		
-		/*************************** 2.開始新增資料 *****************************************/
-		// EmpService empSvc = new EmpService();
 		participantSvc.addParticipant(participantVO);
 		/*************************** 3.新增完成,準備轉交(Send the Success view) **************/
 		List<ParticipantVO> list = participantSvc.getAll();

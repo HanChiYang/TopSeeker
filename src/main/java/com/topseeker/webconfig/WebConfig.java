@@ -9,7 +9,7 @@ import com.topseeker.filter.MemLoginFilter;
 import com.topseeker.filter.NotificationFilter;
 
 @Configuration
-public class WebConfig {
+public class WebConfig implements WebMvcConfigurer {
 
   @Bean
   public FilterRegistrationBean<MemLoginFilter> loginFilter() {
