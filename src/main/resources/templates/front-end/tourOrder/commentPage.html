@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>提交評論 - commentPage.html</title>
+</head>
+<body>
+
+<h2>提交評論</h2>
+
+<form th:action="@{/tourOrder/submitComment}" method="post">
+    <input type="hidden" name="orderNo" th:value="${tourOrderVO.orderNo}" />
+    <textarea name="orderComment" rows="5" cols="30" placeholder="請輸入評論"></textarea>
+    <br/>
+    <button type="submit">提交</button>
+</form>
+
+</body>
+</html>
