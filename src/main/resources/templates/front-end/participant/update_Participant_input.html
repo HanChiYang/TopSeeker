@@ -208,19 +208,19 @@ table.dataTable th {
    <div>
     <label>活動評價星星:</label>
     <div class="star-rating">
-     <input type="radio" id="star5" name="actStar" value="5" onclick="hideContent('actStar.errors');" />
+     <input type="radio" id="star5" name="actStar" value="5" th:checked="${participantVO.actStar == 5}" />
      <label for="star5"><i class="bi bi-star-fill"></i></label>
             
-     <input type="radio" id="star4" name="actStar" value="4" onclick="hideContent('actStar.errors');" />
+     <input type="radio" id="star4" name="actStar" value="4" th:checked="${participantVO.actStar == 4}" />
      <label for="star4"><i class="bi bi-star-fill"></i></label>
 
-     <input type="radio" id="star3" name="actStar" value="3" onclick="hideContent('actStar.errors');" />
+     <input type="radio" id="star3" name="actStar" value="3" th:checked="${participantVO.actStar == 3}" />
      <label for="star3"><i class="bi bi-star-fill"></i></label>
             
-     <input type="radio" id="star2" name="actStar" value="2" onclick="hideContent('actStar.errors');" />
+     <input type="radio" id="star2" name="actStar" value="2" th:checked="${participantVO.actStar == 2}" />
      <label for="star2"><i class="bi bi-star-fill"></i></label>
             
-     <input type="radio" id="star1" name="actStar" value="1" onclick="hideContent('actStar.errors');" />
+     <input type="radio" id="star1" name="actStar" value="1" th:checked="${participantVO.actStar == 1}" />
      <label for="star1"><i class="bi bi-star-fill"></i></label>
     </div>
     <span th:if="${#fields.hasErrors('actStar')}" th:errors="*{actStar}" class="error" id="actStar.errors"></span>

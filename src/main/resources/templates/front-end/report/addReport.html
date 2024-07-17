@@ -146,7 +146,7 @@ table.dataTable th {
 <nav th:insert="~{/front-end/navbar.html}"></nav>
 <div class="container">檢舉揪團</div>
 <div class="article-details">
-    <div align="center">
+    <div >
         <form th:action="@{/report/insert}" method="post" th:object="${reportVO}" enctype="multipart/form-data">
             <div>
                 <label>活動名稱:</label>
