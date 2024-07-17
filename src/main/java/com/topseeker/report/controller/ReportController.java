@@ -51,6 +51,37 @@ public class ReportController {
 	
 	@Autowired  // 要先增actsvc 跟 membersvc
 	EmployeeService employeeSvc;
+	
+	
+	
+	@ModelAttribute("reportListData")
+	protected List<ActVO> referenceListData() {
+		// DeptService deptSvc = new DeptService();
+		List<ActVO> list = actSvc.getAll();
+		return list;
+	}
+	
+	@ModelAttribute("memberListData")
+	protected List<MemberVO> referenceListData2() {
+		// DeptService deptSvc = new DeptService();
+		List<MemberVO> list = memberSvc.getAll();
+		return list;
+	}
+	
+	@ModelAttribute("employeeListData")
+	protected List<EmployeeVO> referenceListData3() {
+		// DeptService deptSvc = new DeptService();
+		List<EmployeeVO> list = employeeSvc.getAll();
+		return list;
+	}
+	
+	
+	@ModelAttribute("actListData")
+	protected List<ActVO> referenceListData4() {
+		// DeptService deptSvc = new DeptService();
+		List<ActVO> list = actSvc.getAll();
+		return list;
+	}
 	/*
 	 * This method will serve as addEmp.html handler.
 	 */
@@ -93,43 +124,52 @@ public class ReportController {
 	/*
 	 * This method will be called on listAllEmp.html form submission, handling POST request
 	 */
-    @PostMapping("getOne_For_Update")
-    public String getOne_For_Update(@RequestParam("actRpNo") Integer actRpNo, ModelMap model) {
-        ReportVO reportVO = reportSvc.getOneReport(actRpNo);
-        reportVO.setMemberVO(memberSvc.getOneMem(reportVO.getMemberVO().getMemNo()));
-        reportVO.setActVO(actSvc.getOneAct(reportVO.getActVO().getActNo()));
+	 @PostMapping("getOne_For_Update")
+	    public String getOne_For_Update(@RequestParam("actRpNo") Integer actRpNo, ModelMap model, HttpSession session) {
+	        ReportVO reportVO = reportSvc.getOneReport(actRpNo);
+	        reportVO.setMemberVO(memberSvc.getOneMem(reportVO.getMemberVO().getMemNo()));
+	        reportVO.setActVO(actSvc.getOneAct(reportVO.getActVO().getActNo()));
 
-        model.addAttribute("reportVO", reportVO);
-        return "back-end/report/update_Report_input";
-    }
+	        EmployeeVO loggedInEmployee = (EmployeeVO) session.getAttribute("loggedInEmployee");
+	        if (loggedInEmployee != null) {
+	            reportVO.setEmployeeVO(loggedInEmployee); 
+	        }
 
-    @PostMapping("update")
-    public String update(@Valid ReportVO reportVO, BindingResult result, ModelMap model, HttpSession session) throws IOException {
-        result = removeFieldError(reportVO, result, "upFiles");
+	        model.addAttribute("reportVO", reportVO);
+	        return "back-end/report/update_Report_input";
+	    }
 
-        if (result.hasErrors()) {
-            model.addAttribute("reportVO", reportVO);
-            return "back-end/report/update_Report_input";
-        }
+	 @PostMapping("update")
+	 public String update(@Valid ReportVO reportVO, BindingResult result, ModelMap model, HttpSession session) throws IOException {
+	     result = removeFieldError(reportVO, result, "upFiles");
 
-        MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
-        if (loggedInMember == null) {
-            return "redirect:/member/loginMem";
-        }
+	     if (result.hasErrors()) {
+	         model.addAttribute("reportVO", reportVO);
+	         return "back-end/report/update_Report_input";
+	     }
 
-        reportVO.setMemberVO(loggedInMember);
-        
-        if (reportVO.getHandleCheck() == 1) {
-            actSvc.updateActStatus(reportVO.getActVO().getActNo(), 3);
-        }
-        
-        reportSvc.updateReport(reportVO);
+	     // 確保會員信息已存在
+	     if (reportVO.getMemberVO() == null || reportVO.getMemberVO().getMemNo() == null) {
+	         model.addAttribute("error", "會員信息缺失，無法更新檢舉信息");
+	         return "back-end/report/update_Report_input";
+	     } else {
+	         reportVO.setMemberVO(memberSvc.getOneMem(reportVO.getMemberVO().getMemNo()));
+	     }
 
-        model.addAttribute("success", "- (修改成功)");
-        List<ReportVO> list = reportSvc.getAll();
-        model.addAttribute("reportListData", list);
-        return "back-end/report/listAllReport";
-    }
+	     if (reportVO.getEmployeeVO() != null && reportVO.getEmployeeVO().getEmpNo() != null) {
+	         reportVO.setEmployeeVO(employeeSvc.getOneEmp(reportVO.getEmployeeVO().getEmpNo()));
+	     }
+
+	     if (reportVO.getHandleCheck() == 1) {
+	         actSvc.updateActStatus(reportVO.getActVO().getActNo(), 3);
+	     }
+
+	     reportSvc.updateReport(reportVO);
+	     model.addAttribute("success", "- (修改成功)");
+	     List<ReportVO> list = reportSvc.getAll();
+	     model.addAttribute("reportListData", list);
+	     return "back-end/report/listAllReport";
+	 }
 	/*
 	 * This method will be called on listAllEmp.html form submission, handling POST request
 	 */
@@ -146,51 +186,6 @@ public class ReportController {
 		return "back-end/report/listAllReport"; // 刪除完成後轉交listAllEmp.html
 	}
 
-	/*
-	 * 第一種作法 Method used to populate the List Data in view. 如 : 
-	 * <form:select path="deptno" id="deptno" items="${deptListData}" itemValue="deptno" itemLabel="dname" />
-	 */
-	@ModelAttribute("reportListData")
-	protected List<ActVO> referenceListData() {
-		// DeptService deptSvc = new DeptService();
-		List<ActVO> list = actSvc.getAll();
-		return list;
-	}
-	
-	@ModelAttribute("memberListData")
-	protected List<MemberVO> referenceListData2() {
-		// DeptService deptSvc = new DeptService();
-		List<MemberVO> list = memberSvc.getAll();
-		return list;
-	}
-	
-	@ModelAttribute("employeeListData")
-	protected List<EmployeeVO> referenceListData3() {
-		// DeptService deptSvc = new DeptService();
-		List<EmployeeVO> list = employeeSvc.getAll();
-		return list;
-	}
-	
-	
-	@ModelAttribute("actListData")
-	protected List<ActVO> referenceListData4() {
-		// DeptService deptSvc = new DeptService();
-		List<ActVO> list = actSvc.getAll();
-		return list;
-	}
-
-	/*
-	 * 【 第二種作法 】 Method used to populate the Map Data in view. 如 : 
-	 * <form:select path="deptno" id="deptno" items="${depMapData}" />
-	 */
-	@ModelAttribute("actMapData") //
-	protected Map<Integer, String> referenceMapData() {
-		Map<Integer, String> map = new LinkedHashMap<Integer, String>();
-		map.put(1, "阿里山趴趴走");
-		map.put(2, "來去草嶺古道看芒草");
-		map.put(3, "阿朗壹古道探險之旅部");
-		return map;
-	}
 
 	// 去除BindingResult中某個欄位的FieldError紀錄
 	public BindingResult removeFieldError(ReportVO reportVO, BindingResult result, String removedFieldname) {

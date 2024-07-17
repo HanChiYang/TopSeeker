@@ -112,19 +112,28 @@ public class ArtReportController {
 	 * This method will be called on listAllEmp.html form submission, handling POST request
 	 */
     @PostMapping("getOne_For_Update")
-    public String getOne_For_Update(@RequestParam("artReportNo") Integer artReportNo, ModelMap model) {
+    public String getOne_For_Update(@RequestParam("artReportNo") Integer artReportNo, ModelMap model, HttpSession session) {
         ArtReportVO artreportVO = artreportSvc.getOneArtReport(artReportNo);
+        EmployeeVO loggedInEmployee = (EmployeeVO) session.getAttribute("loggedInEmployee");
+        if (loggedInEmployee != null) {
+            artreportVO.setEmployeeVO(loggedInEmployee); // 设置已登录员工
+        }
         model.addAttribute("artreportVO", artreportVO);
         return "back-end/artreport/update_ArtReport_input";
     }
 
     @PostMapping("update")
-    public String update(@Valid ArtReportVO artreportVO, BindingResult result, ModelMap model) throws IOException {
+    public String update(@Valid ArtReportVO artreportVO, BindingResult result, ModelMap model, HttpSession session) throws IOException {
         result = removeFieldError(artreportVO, result, "upFiles");
 
         if (result.hasErrors()) {
             model.addAttribute("artreportVO", artreportVO);
             return "back-end/artreport/update_ArtReport_input";
+        }
+
+        EmployeeVO loggedInEmployee = (EmployeeVO) session.getAttribute("loggedInEmployee");
+        if (loggedInEmployee != null) {
+            artreportVO.setEmployeeVO(loggedInEmployee);
         }
 
         if (artreportVO.getArtReportStatus() == 1) {
