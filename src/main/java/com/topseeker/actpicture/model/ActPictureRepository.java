@@ -27,4 +27,9 @@ public interface ActPictureRepository extends JpaRepository<ActPictureVO, Intege
 	//拿取單一活動的全部圖片
 	@Query(value = "SELECT * FROM act_picture WHERE act_pic_no=?1", nativeQuery = true)
 	List<ActPictureVO> getAllActPic(Integer actPicNo);
+	
+	//修改 getAllActPic 方法，使其根據 act_no 來查找圖片
+	@Query(value = "SELECT * FROM act_picture WHERE act_no = ?1", nativeQuery = true)
+	List<ActPictureVO> getDetailsActPic(Integer actNo);
+	
 }

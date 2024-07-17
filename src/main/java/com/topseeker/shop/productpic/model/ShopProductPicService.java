@@ -48,7 +48,7 @@ public class ShopProductPicService {
 		// 有資料則回傳其值，沒有則回傳null
 	}
 
-	// 只取第一張圖片(測試用)
+	// 只取第一張圖片
 	public ShopProductPicVO getFirstShopProductPicVO(Integer prodNo) {
 		return repository.getFirstShopProductPicVO(prodNo);
 		// 有資料則回傳其值，沒有則回傳null

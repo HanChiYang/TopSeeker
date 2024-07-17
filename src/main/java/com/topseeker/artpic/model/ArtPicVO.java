@@ -29,7 +29,7 @@ public class ArtPicVO implements java.io.Serializable {
 	private byte[] artPic;
 	
 	@ManyToOne
-	@JoinColumn(name = "art_no")   // 指定用來join table的column
+	@JoinColumn(name = "art_no", nullable = false)   // 指定用來join table的column
 	private ArticleVO articleVO;
 	
 	

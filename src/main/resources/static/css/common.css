@@ -237,6 +237,7 @@ a.nav-link:hover {
 .bellIcon {
   transition: transform 0.3s ease;
 }
+
 #navbarNav > ul.navbar-nav.me-auto > li:nth-child(6) > span > a{
 	padding: 0px;
 }
@@ -251,6 +252,7 @@ a.nav-link:hover {
     background-position: center; /* 背景圖像置中 */
     margin-top: 100px;/* navbar區隔 */
   }
+
   
 .nav-link {
    align-items: center;

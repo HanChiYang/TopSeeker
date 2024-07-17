@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.topseeker.shop.productpic.model.ShopProductPicVO;
+
 
 public interface ShopInfoRepository  extends JpaRepository<ShopInfoVO, Integer>{
 	
@@ -17,5 +19,7 @@ public interface ShopInfoRepository  extends JpaRepository<ShopInfoVO, Integer>{
 	void deleteByInfoNo(Integer infoNo);
 	
 	//自訂的條件查詢
-	
+	//取單一圖片
+	@Query(value = "SELECT * FROM shop_info WHERE info_no=?1", nativeQuery = true)
+	ShopInfoVO getShopInfoPic(Integer infoNo);
 }

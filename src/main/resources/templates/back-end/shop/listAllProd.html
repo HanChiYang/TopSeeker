@@ -17,11 +17,23 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<!-- 從 Google Fonts 引入 "Playfair Display" 字體 -->
+<link
+	href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap"
+	rel="stylesheet">
+
+
+<!-- Topseeker前台導航列CSS -->
+<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+
+<!-- 商城導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
+
+
 <!-- ●●js  for jquery datatables 用 -->
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script
 	src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-<!-- ●●js  for jquery datatables 用 -->
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" />
 <!-- ●●css for jquery datatables 用 -->
@@ -30,85 +42,20 @@
 
 
 <style type="text/css">
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
 
-.navbar {
-	position: fixed;
-	top: 0;
-	width: 100%;
-	border-bottom: solid 1px #E0E0E0;
-	z-index: 1000;
-}
 
-.shopnavbar {
-	background-color: #90c320;
-	font-size: 36px;
-	font-weight: bold;
-	border-bottom: solid 1px #E0E0E0;
-	z-index: 999;
-	position: fixed;
-	top: 56px; /* 確保位於 navbar 下方 */
-	width: 100%;
-}
-
-.sidebar {
-	position: fixed;
-	top: 112px; /* 確保位於 shopnavbar 下方 */
-	bottom: 0;
-	background-color: #f0f8e0;
-	width: 150px;
-	padding-top: 20px;
-	padding-bottom: 20px; /* 確保內容不被 bottom 覆蓋 */
-	color: #333;
-	font-size: 16px;
-	border-right: solid 1px #E0E0E0;
-	overflow-y: auto; /* 確保內容過多時可以滾動 */
-}
-
-.display {
-	margin-left: 170px; /* 確保內容位於 sidebar 右側 */
-	margin-top: 200px; /* 確保內容位於 navbar 和 shopnavbar 下方 */
-	padding: 10px;
-	width: calc(100% - 200px); /* 確保內容佔滿剩餘寬度 */
-	overflow-x: auto; /* 確保內容過寬時可以滾動 */
-}
-
-a img {
-	border: none; /* 移除圖片邊框 */
-}
-
-a {
-	text-decoration: none; /* 移除超連結的底線 */
-}
 </style>
 </head>
 <body>
-	<nav th:insert="~{/back-end/shop/back_end_navbar.html}"></nav>
-	<nav class="shopnavbar">
-		<a th:href="@{/shop/shopManagement/select_page}"> <img id="logo"
-			th:src="@{/images/TopSeeker_logo.png}" width="80px">
-		</a>檢視/管理所有商品
-	</nav>
 
-	<div class="sidebar">
-		<ul>
-			<li><h6>
-					<a th:href='@{/shop/shopManagement/select_page}'>查詢商品(主頁)</a>
-				</h6></li>
-			<li><h6>
-					<a th:href='@{/shop/shopManagement/listAllProd}'>檢視所有商品</a>
-				</h6></li>
-			<li><h6>
-					<a th:href='@{/shop/shopManagement/addProd}'>新增商品</a>
-				</h6></li>
-		</ul>
-	</div>
+	<!-- topseeker後台Navbar -->
+	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
 
-	<div class="display">
+	<!-- 商城後台用Navbar + 左側邊欄 -->
+	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
+
+	<main class="shopManagementContent">
+	<div class="listAllProdDisplay">
 		<table id="example" class="display">
 			<thead>
 				<tr style="background-color: #d9ead3">
@@ -138,6 +85,9 @@ a {
 						<td width="80px" th:text="'$' + ${shopProductVO.prodPrice}"></td>
 						<td width="100px" th:text="${shopProductVO.prodDate}"></td>
 						<td>
+						<!-- 賦一個隱藏的值給DataTable排序用 -->
+						<span style="display:none" th:text="${shopProductVO.prodStatus}"></span>
+						
 							<div class="btn-group" role="group"
 								aria-label="Basic radio toggle button group">
 								<!-- 上架中按鈕 -->
@@ -148,7 +98,7 @@ a {
 									th:checked="${shopProductVO.prodStatus == 1}"> <label
 									class="btn btn-outline-success"
 									th:for="'success-outlined-' + ${shopProductVO.prodNo}"
-									th:onclick="'updateStatus(' + ${shopProductVO.prodNo} + ', 1)'">上架中</label>
+									th:onclick="'updateStatus(' + ${shopProductVO.prodNo} + ', 1)'" th:value="${shopProductVO.prodStatus}">上架中</label>
 
 								<!-- 下架按鈕 -->
 								<input type="radio" class="btn-check"
@@ -158,7 +108,7 @@ a {
 									th:checked="${shopProductVO.prodStatus == 0}"> <label
 									class="btn btn-outline-secondary"
 									th:for="'secondary-outlined-' + ${shopProductVO.prodNo}"
-									th:onclick="'updateStatus(' + ${shopProductVO.prodNo} + ', 0)'">下架</label>
+									th:onclick="'updateStatus(' + ${shopProductVO.prodNo} + ', 0)'" th:value="${shopProductVO.prodStatus}">下架</label>
 							</div>
 
 
@@ -186,6 +136,7 @@ a {
 			</tbody>
 		</table>
 	</div>
+	</main>
 
 
 	<!-- ●● jquery datatables 設定 -->
@@ -224,19 +175,9 @@ a {
 												}
 											});
 						});
-
-				$(document).ready(
-						function() {
-							var navbarHeight = $('.navbar').outerHeight();
-							var shopnavbarHeight = $('.shopnavbar').outerHeight();
-							$('.sidebar').css('top', navbarHeight + shopnavbarHeight);
-							$('.display').css('margin-top',
-									navbarHeight + shopnavbarHeight + 20);
-						});
-				
+		
 				//Ajax修改商品上下架狀態
 				function updateStatus(prodNo, status) {
-					console.log("有執行更新");
 					$.ajax({
 						type : "POST",
 						url : "/shop/shopManagement/updateStatus",
@@ -245,10 +186,10 @@ a {
 							prodStatus : status
 						},
 						success : function(response) {
-							console.log("狀態更新成功");
+ 							//console.log("狀態更新成功");
 						},
 						error : function(xhr, status, error) {
-							console.log("狀態更新失敗: " + error);
+							//console.log("狀態更新失敗: " + error);
 						}
 					});
 				}
