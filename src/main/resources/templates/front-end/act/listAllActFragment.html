@@ -17,7 +17,6 @@
                             	<div class="card-body">
                                 <h5 class="card-title" th:text="${actVO.actTitle}">活動標題</h5>
                                 <p class="card-text">活動地點: <span th:text="${actVO.actPlace}"></span></p>
-                                <p class="card-text">活動評價: <span th:text="${actVO.evalSum != 0 ? actVO.actRateSum / actVO.evalSum : '尚無評價'}"></span></p>
                                 <p class="card-text">人數上限: <span th:text="${actVO.actMaxCount}"></span></p>
                                 <p class="card-text">當前人數: <span th:text="${actVO.actCurrentCount}"></span></p>
                                 <p class="card-text">活動開始日: <span th:text="${actVO.actStart}"></span></p>
