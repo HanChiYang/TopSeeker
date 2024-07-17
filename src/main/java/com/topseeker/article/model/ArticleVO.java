@@ -62,13 +62,13 @@ public class ArticleVO {
 	@Column(name = "art_update_time" , insertable = false)
 	private Timestamp artUpdateTime;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="articleVO")
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="articleVO")
 	@OrderBy("artPic asc")
 	private List<ArtPicVO> artPics = new ArrayList<ArtPicVO>();
 	
 	 //---------------------------------------------新增的地方
 	 
-	 @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "articleVO")
+	 @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "articleVO")
 	 @OrderBy("commentNo asc") 
 	 private Set<ArtCommentVO> artcomments = new HashSet<ArtCommentVO>();
 	 
