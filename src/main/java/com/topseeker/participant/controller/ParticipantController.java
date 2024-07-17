@@ -59,41 +59,37 @@ public class ParticipantController {
 	/*
 	 * This method will serve as addEmp.html handler.
 	 */
-	@GetMapping("addParticipant")
-	public String addParticipant(@RequestParam("actNo") Integer actNo, ModelMap model, HttpSession session) {
-		MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
-	    if (loggedInMember == null) {
-	        return "redirect:/member/loginMem";
+	 @GetMapping("addParticipant")
+	    public String addParticipant(@RequestParam("actNo") Integer actNo, ModelMap model, HttpSession session) {
+	        MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+	        if (loggedInMember == null) {
+	            return "redirect:/member/loginMem";
+	        }
+
+	        ParticipantVO participantVO = new ParticipantVO();
+	        ActVO actVO = actSvc.getOneAct(actNo);
+	        participantVO.setActVO(actVO);
+	        participantVO.setMemberVO(loggedInMember);
+
+	        model.addAttribute("participantVO", participantVO);
+	        model.addAttribute("actTitle", actVO.getActTitle());
+	        model.addAttribute("memName", loggedInMember.getMemName());
+	        return "front-end/participant/addParticipant";
 	    }
 
-	    ParticipantVO participantVO = new ParticipantVO();
-	    ActVO actVO = actSvc.getOneAct(actNo);
-	    participantVO.setActVO(actVO);
-	    participantVO.setMemberVO(loggedInMember);
+	    @PostMapping("insert")
+	    public String insert(@Valid ParticipantVO participantVO, BindingResult result, ModelMap model,
+	                         MultipartFile[] parts, HttpSession session) throws IOException {
+	        if (result.hasErrors()) {
+	            return "front-end/participant/addParticipant";
+	        }
 
-	    model.addAttribute("participantVO", participantVO);
-	    model.addAttribute("actTitle", actVO.getActTitle());
-	    model.addAttribute("memName", loggedInMember.getMemName());
-	    return "front-end/participant/addParticipant";
-	}
+	        participantSvc.addParticipant(participantVO);
 
-	/*
-	 * This method will be called on addEmp.html form submission, handling POST request It also validates the user input
-	 */
-	@PostMapping("insert")
-	public String insert(@Valid ParticipantVO participantVO, BindingResult result, ModelMap model,
-			 MultipartFile[] parts) throws IOException {
-
-	
-		result = removeFieldError(participantVO, result, "upFiles");
-
-		participantSvc.addParticipant(participantVO);
-		/*************************** 3.新增完成,準備轉交(Send the Success view) **************/
-		List<ParticipantVO> list = participantSvc.getAll();
-		model.addAttribute("participantListData", list);
-		model.addAttribute("success", "- (新增成功)");
-		return "redirect:/participant/listMyAllParticipant"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
-	}
+	        model.addAttribute("participantListData", participantSvc.getAll());
+	        model.addAttribute("success", "- (新增成功)");
+	        return "redirect:/participant/listMyAllParticipant";
+	    }
 
 	/*
 	 * This method will be called on listAllEmp.html form submission, handling POST request
