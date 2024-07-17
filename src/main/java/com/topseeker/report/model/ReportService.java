@@ -49,6 +49,10 @@ public class ReportService {
 	public List<ReportVO> getAll(Map<String, String[]> map) {
 		return HibernateUtil_CompositeQuery_Report.getAllC(map,sessionFactory.openSession());
 	}
+
+	public List<ReportVO> getReportsByMember(Integer memNo) {
+	        return repository.findByMemberVO_MemNo(memNo);
+	    }
 	
 
 }

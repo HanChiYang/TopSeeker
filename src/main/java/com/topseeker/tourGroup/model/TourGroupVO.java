@@ -1,23 +1,25 @@
 package com.topseeker.tourGroup.model;
 
 import java.sql.Date;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Future;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+//import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
-import com.topseeker.tourOrder.model.TourOrderVO;
+import com.topseeker.tour.model.TourVO;
+import com.topseeker.tourArea.model.TourAreaVO;
 
 /*
  * 註1: classpath必須有javax.persistence-api-x.x.jar 
@@ -32,6 +34,7 @@ public class TourGroupVO implements java.io.Serializable {
 	
 	
 	private Integer groupNo;
+	private TourVO tourVO;
 	private Integer groupPrice;
 	private Date groupBegin;
 	private Date groupEnd;
@@ -41,22 +44,6 @@ public class TourGroupVO implements java.io.Serializable {
 	private Integer groupMax;
 	private Integer groupStatus;
 	
-
-    private Set<TourOrderVO> orders = new HashSet<>();
-	
-	@OneToMany(mappedBy = "tourGroupVO", cascade = CascadeType.ALL)
-    @OrderBy("orderNo asc")
-	public Set<TourOrderVO> getOrders() {
-		return orders;
-	}
-
-
-
-	public void setOrders(Set<TourOrderVO> orders) {
-		this.orders = orders;
-	}
-
-
 
 	public TourGroupVO() { //必需有一個不傳參數建構子(JavaBean基本知識)
 	}
@@ -79,7 +66,20 @@ public class TourGroupVO implements java.io.Serializable {
 
 
 
-	
+	@ManyToOne
+	@JoinColumn(name = "tour_no")
+	public TourVO getTourVO() {
+		return tourVO;
+	}
+
+
+
+
+	public void setTourVO(TourVO tourVO) {
+		this.tourVO = tourVO;
+	}
+
+
 
 
 	@Column(name = "group_price")

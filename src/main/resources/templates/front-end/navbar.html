@@ -1,79 +1,125 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary fixed-top" >
+
+<!-- 前台的navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary fixed-top">
   <div class="container-fluid">
-  <a href="/">
-   <img th:src="@{/images/TopSeeker_logo.png}" width=75px alt="Logo" id="logo">
-  </a>
+    <a href="/">
+      <img th:src="@{/images/TopSeeker_logo.png}" width="75px" alt="Logo" id="logo">
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="/shop/homepage">商城專區</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/tourOrder/select_root">套裝行程</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/act/listAllAct">揪團去玩</a>
-          <ul>
-       <li><a href="/act/listAllAct">活動列表</a></li>
-       <li><a href="/act/memMyAct">開團管理</a></li>
-       <li><a href="/participant/listMyAllParticipant">參團紀錄</a></li>
-       <li><a href="#">檢舉回報</a></li>
-      </ul>
-        </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="#">社群系統</a>
-          <ul>
-        <li><a href="/news/listAllNews">新聞分享</a></li>
-        <li><a href="/article/listAllArticle">登山情報</a></li>
-        <li><a href="#">天氣情報</a></li>
-      </ul>
+        <li class="nav-item ">
+          <a class="nav-link" href="/shop/homepage">
+            <i class="fas fa-shopping-cart"></i> 商城專區
+          </a>
         </li>
-        
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="fas fa-suitcase-rolling"></i> 套裝行程
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-users"></i> 揪團去玩
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li>
+              <a class="dropdown-item" href="/act/listAllAct">
+                <i class="fas fa-list"></i> 活動列表
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/act/memMyAct">
+                <i class="fas fa-edit"></i> 開團管理
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/participant/listMyAllParticipant">
+                <i class="fas fa-history"></i> 參團紀錄
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/report/myAllReport">
+                <i class="fas fa-flag"></i> 檢舉回報
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-comments"></i> 社群系統
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
+            <li>
+              <a class="dropdown-item" href="/news/listAllNews">
+                <i class="fas fa-newspaper"></i> 新聞分享
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/article/listAllArticle">
+                <i class="fas fa-mountain"></i> 登山情報
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="fas fa-cloud-sun"></i> 天氣情報
+              </a>
+            </li>
+          </ul>
+        </li>
         <li th:if="${session.loggedInMember == null}" class="nav-item">
-          <a class="nav-link" href="/member/loginMem">登入會員</a>
+          <a class="nav-link" href="/member/loginMem">
+            <i class="fas fa-sign-in-alt"></i> 登入會員
+          </a>
         </li>
-     <li th:if="${session.loggedInMember == null}" class="nav-item">
-          <a class="nav-link" href="/member/registrationMem">註冊會員</a>
+        <li th:if="${session.loggedInMember == null}" class="nav-item">
+          <a class="nav-link" href="/member/registrationMem">
+            <i class="fas fa-user-plus"></i> 註冊會員
+          </a>
         </li>
-        
         <li class="nav-item">
-          <a class="nav-link" href="/protected/member/indexMem">會員專區</a>
+          <a class="nav-link" href="/protected/member/indexMem">
+            <i class="fas fa-user"></i> 會員專區
+          </a>
         </li>
 
-  
-  <li th:if="${session.loggedInMember != null}">
-      <span th:if="${session.notiData != null}">
-          <a class="nav-link" th:if="${session.notiData.notiStatus == 0}">
+        
+        
+        
+  <li th:if="${session.loggedInMember != null}" class="navbar-nav nav-item nav-link">
+      <span th:if="${session.hasNewNotifications == true}">
+          <a>
               <img id="alertIcon" class="bellIcon" th:src="@{/images/alert.svg}" width="25px" th:data-new-src="@{/images/noalert.svg}" alt="Alert Icon">
           </a>
-          <a class="nav-link" th:if="${session.notiData.notiStatus == 1 or session.notiData.notiStatus == null}">
-              <img class="bellIcon" th:src="@{/images/noalert.svg}" width="25px" alt="New Notification Icon">
-          </a>
       </span>
-      <span th:if="${session.notiData == null}">
+      <span th:if="${session.hasNewNotifications == false}">
           <a class="nav-link bellIcon">
               <img th:src="@{/images/noalert.svg}" width="25px" alt="New Notification Icon">
           </a>
       </span>
   </li>
-
-
+        
+        
         
         <li th:if="${session.loggedInMember != null}" class="nav-item">
-          <a class="nav-link" href="/member/logout">登出</a>
+          <a class="nav-link" href="/member/logout">
+            <i class="fas fa-sign-out-alt"></i> 登出
+          </a>
         </li>
-
       </ul>
-         <ul class="navbar-nav ms-auto">
+      <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link" href="#">員工專區</a>
+          <a class="nav-link" href="/employee/login">
+            <i class="fas fa-user-tie"></i> 員工專區
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/backend_protected/backEndIndex">後台首頁</a>
+          <a class="nav-link" href="/backend_protected/backEndIndex">
+            <i class="fas fa-cogs"></i> 後台首頁
+          </a>
         </li>
       </ul>
     </div>

@@ -60,7 +60,7 @@
 }
 
 input[type=text], input[type=password], select, textarea {
-	width: 200px;
+	width: 300px;
 	margin: 2px;
 }
 
@@ -87,6 +87,7 @@ h4 {
 	font-weight: bold;
 }
 
+
 a {
 	text-decoration: none; /* 移除超連結的底線 */
 }
@@ -108,36 +109,22 @@ a {
 				<li><b>顯示所有</b><a href='listAllSale'>促銷方案</a><br> <br></li>
 
 
-				<li>
-					<form method="post" th:action="@{getOne_For_Display}">
-						<b>請輸入促銷活動編號:</b> <input type="text" name="saleNo"
-							th:value="${param.saleNo}"> <input type="submit"
-							value="送出">
-					</form> </br>
-				</li>
+<!-- 				<li> -->
+<!-- 					<form method="post" th:action="@{getOne_For_Display}"> -->
+<!-- 						<b>請輸入促銷活動編號:</b> <input type="text" name="saleNo" -->
+<!-- 							th:value="${param.saleNo}"> <input type="submit" -->
+<!-- 							value="送出"> -->
+<!-- 					</form> </br> -->
+<!-- 				</li> -->
 
 				<li>
 					<form method="post" th:action="@{getOne_For_Display}">
-						<b>選擇促銷編號:</b> <select name="saleNo">
+						<b>選擇欲查詢的促銷方案:</b> <select name="saleNo">
 							<option th:each="saleVO : ${saleListData}"
-								th:value="${saleVO.saleNo}" th:text="${saleVO.saleNo}">
+								th:value="${saleVO.saleNo}" th:text="${saleVO.saleName}">
 						</select> <input type="submit" value="送出">
 					</form>
 				</li>
-
-				<!-- 			<!--  萬用複合查詢 -->
-
-				<!-- 			<li> -->
-				<!-- 				<form method="post" th:action="@{listSales_ByCompositeQuery}"> -->
-				<!-- 					<font color=blue>萬用複合查詢:</font> -->
-				<!-- 					<br>  -->
-				<!-- 					輸入促銷方案編號: <input type="text"name="saleNo"><br> -->
-				<!-- 					輸入促銷方案名稱: <input type="text" name="saleName"><br> -->
-				<!-- 					<br> -->
-				<!-- 					<input type="submit" value="送出"> -->
-
-				<!-- 				</form> -->
-				<!-- 			</li> -->
 
 			</ul>
 			
@@ -148,12 +135,7 @@ a {
 				<div
 					th:insert="~{/back-end/shop/sale/listOneSale :: listOneSale-div}"></div>
 			</div>
-			<div align="center">
-				<h3>
-					<a th:href="@{/shop/shopManagement}">
-						返回商城管理首頁<label th:text="${success}"></label></a>
-				</h3>
-			</div>
+		
 			</div>
 </body>
 </html>
