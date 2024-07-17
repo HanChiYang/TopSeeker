@@ -42,6 +42,7 @@
                     <img th:src="@{/actpicture/DBGifReader} + '?actPicNo=' + ${pic.actPicNo}"
                          class="img-thumbnail mb-2" width="150" height="150">
                 </div>
+                
             </div>
             <div class="mb-2"><span>會員:</span><span class="value" th:text="${actVO.memberVO.memNo} + '-[' + ${actVO.memberVO.memName} + ']'"></span></div>
             <div class="mb-2"><span>活動編號:</span><span class="value" th:text="${actVO.actNo}"></span></div>
@@ -50,8 +51,6 @@
             <div class="mb-2"><span>活動內容:</span><span class="value" th:text="${actVO.actContent}"></span></div>
             <div class="mb-2"><span>人數上限:</span><span class="value" th:text="${actVO.actMaxCount}"></span></div>
             <div class="mb-2"><span>最少人數:</span><span class="value" th:text="${actVO.actMinCount}"></span></div>
-            <div class="mb-2"><span>當前參與人數:</span><span class="value" th:text="${actVO.actCurrentCount}"></span></div>
-            <div class="mb-2"><span>待審核人數:</span><span class="value" th:text="${actVO.actCheckCount}"></span></div>
             <div class="mb-2"><span>報名開始日:</span><span class="value" th:text="${actVO.actEnrollBegin}"></span></div>
             <div class="mb-2"><span>報名結束日:</span><span class="value" th:text="${actVO.actEnrollEnd}"></span></div>
             <div class="mb-2"><span>活動開始日:</span><span class="value" th:text="${actVO.actStart}"></span></div>
@@ -65,7 +64,7 @@
                 </span>
             </div>
             <div class="text-center mt-4">
-                <a th:href="@{/act/memMyActAct}" class="btn btn-primary">回到活動列表</a>
+                <a th:href="@{/act/memMyAct}" class="btn btn-primary">回到開團活動列表</a>
             </div>
         </div>
     </div>

@@ -31,9 +31,14 @@ public class NewsPicService {
 		repository.save(newsPicVO);
 	}
 
-	public void deleteNewsPic(Integer newsImgNo) {
-		if (repository.existsById(newsImgNo))
-			repository.deleteByNewsImgNo(newsImgNo);
+	public boolean deleteNewsPic(Integer newsImgNo) {
+		if (repository.existsById(newsImgNo)) {
+			repository.deleteByNewsImgNo(newsImgNo);			
+		
+		    return true;
+		} else {			
+			return false;
+		}
 	}
 
 	public NewsPicVO getOneNewsPic(Integer newsImgNo) {
@@ -50,6 +55,12 @@ public class NewsPicService {
 	public NewsPicVO getFirstNewsPic(Integer newsNo) {
 		return repository.getFirstNewsPic(newsNo);
 	}
+	
+	// 取單一活動全數圖片用
+	public List<NewsPicVO> getAllNewsPic(Integer newsImgNo) {
+		return repository.getAllNewsPic(newsImgNo);
+	}
+
 //	public List<ActVO> getAll(Map<String, String[]> map) {
 //		return HibernateUtil_CompositeQuery_Act.getAllC(map,sessionFactory.openSession());
 //	}

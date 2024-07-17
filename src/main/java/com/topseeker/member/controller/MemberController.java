@@ -118,7 +118,7 @@ public class MemberController {
 	}
 
 	// 會員驗證頁面mapping
-	@PostMapping("protected/verifyPage")
+	@PostMapping("verifyPage")
 	public String verifyMem(Model model) {
 		return "front-end/member/verifyMem";
 	}
@@ -186,7 +186,7 @@ public class MemberController {
 	/*************************** 修改密碼 ******************/
 
 	// 修改密碼頁面mapping
-	@PostMapping("protected/updatePasswordPage")
+	@PostMapping("updatePasswordPage")
 	public String updatePassword(Model model) {
 		return "front-end/member/updatePasswordPage";
 	}
@@ -283,7 +283,7 @@ public class MemberController {
 	
 	/*************************** 檢視會員資料 ******************/
 
-	@PostMapping("protected/inspect")
+	@PostMapping("inspect")
 	public String getOne_For_Inspect(HttpSession session, Model model) {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ******************/
 		/*************************** 2.開始查詢資料 ***************************************/
@@ -346,8 +346,9 @@ public class MemberController {
 	/*************************** 登出、登入功能 ******************/
 	// 1. 登入
 	@PostMapping("loginMem")
-	public String loginMem(Model model, HttpServletRequest req, HttpServletResponse res, HttpSession session,
-			@RequestParam("memAccount") String memAccount, @RequestParam("memPassword") String memPassword) {
+	public String loginMem(Model model, HttpSession session,
+			@RequestParam("memAccount") String memAccount,
+			@RequestParam("memPassword") String memPassword) {
 
 		String oriURL = session.getAttribute("oriURL") != null ? session.getAttribute("oriURL").toString() : "/";
 
@@ -388,7 +389,8 @@ public class MemberController {
 	@PostMapping("checkEmail")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> checkEmail(@RequestParam("memEmail") String memEmail, HttpSession session, HttpServletRequest req) {
-	    Optional<MemberVO> memberOpt = memSvc.findByEmail(memEmail);
+	    
+		Optional<MemberVO> memberOpt = memSvc.findByEmail(memEmail);
 	    Map<String, Object> response = new HashMap<>();
 
 	    // 若找到
@@ -418,8 +420,6 @@ public class MemberController {
 	// 顯示重設密碼頁面
 	@GetMapping("resetPassword")
 	public String showResetPWPage(@RequestParam("token") String token, HttpSession session, Model model) {
-
-//		TokenService tokSvc = new TokenService();
 
 		// 取得存在redis的會員編號及email
 		MemberVO resetMember = tokSvc.checkToken(token);

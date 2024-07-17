@@ -1,35 +1,38 @@
 package com.topseeker.weathercrawler.model;
 
-import java.util.List;
-
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-//import hibernate.util.HibernateUtil_CompositeQuery_sale;
+import java.sql.Date;
+import java.util.Optional;
 
 @Service
 public class WeatherService {
-	
-	@Autowired
-	WeatherRepository repository;
-	
-	@Autowired
-	private SessionFactory sessionFactory;
-	
-	public void addWeather(List<WeatherVO> weatherList) {
-		repository.saveAll(weatherList);
-	}
 
-	public void deleteWeather() {
-		repository.deleteWeather();
-	}
+    @Autowired
+    private WeatherRepository weatherRepository;
 
-	public List<WeatherVO> getAll(){
-		return repository.findAll();
-	}
-	
-    public void saveWeatherDataFromApi(List<WeatherVO> weatherDataList) {
-        repository.saveAll(weatherDataList);
+    void saveWeatherData(String locName, Date wxDate, String hTemp, String mTemp, String weatherCondition) {
+        Optional<WeatherVO> optionalWeatherVO = weatherRepository.findByLocNameAndWxDate(locName, wxDate);
+        WeatherVO weatherVO;
+        if (optionalWeatherVO.isPresent()) {
+            weatherVO = optionalWeatherVO.get();
+            if (hTemp != null) {
+                weatherVO.sethTemp(hTemp);
+            }
+            if (mTemp != null) {
+                weatherVO.setmTemp(mTemp);
+            }
+            if (weatherCondition != null) {
+            	weatherVO.setWeatherCondition(weatherCondition);
+            }
+        } else {
+            weatherVO = new WeatherVO();
+            weatherVO.setLocName(locName);
+            weatherVO.setWxDate(wxDate);
+            weatherVO.sethTemp(hTemp);
+            weatherVO.setmTemp(mTemp);
+            weatherVO.setWeatherCondition(weatherCondition);
+        }
+        weatherRepository.save(weatherVO);
     }
 }

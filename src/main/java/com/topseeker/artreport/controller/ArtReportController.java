@@ -89,14 +89,6 @@ public class ArtReportController {
 		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
 		result = removeFieldError(artreportVO, result, "upFiles");
 
-//		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
-//			model.addAttribute("errorMessage", "員工照片: 請上傳照片");
-//		} else {
-//			for (MultipartFile multipartFile : parts) {
-//				byte[] buf = multipartFile.getBytes();
-//				participantVO.setUpFiles(buf);
-//			}
-//		}
 		
 		 MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
 	        if (loggedInMember == null) {
@@ -120,19 +112,28 @@ public class ArtReportController {
 	 * This method will be called on listAllEmp.html form submission, handling POST request
 	 */
     @PostMapping("getOne_For_Update")
-    public String getOne_For_Update(@RequestParam("artReportNo") Integer artReportNo, ModelMap model) {
+    public String getOne_For_Update(@RequestParam("artReportNo") Integer artReportNo, ModelMap model, HttpSession session) {
         ArtReportVO artreportVO = artreportSvc.getOneArtReport(artReportNo);
+        EmployeeVO loggedInEmployee = (EmployeeVO) session.getAttribute("loggedInEmployee");
+        if (loggedInEmployee != null) {
+            artreportVO.setEmployeeVO(loggedInEmployee); // 设置已登录员工
+        }
         model.addAttribute("artreportVO", artreportVO);
         return "back-end/artreport/update_ArtReport_input";
     }
 
     @PostMapping("update")
-    public String update(@Valid ArtReportVO artreportVO, BindingResult result, ModelMap model) throws IOException {
+    public String update(@Valid ArtReportVO artreportVO, BindingResult result, ModelMap model, HttpSession session) throws IOException {
         result = removeFieldError(artreportVO, result, "upFiles");
 
         if (result.hasErrors()) {
             model.addAttribute("artreportVO", artreportVO);
             return "back-end/artreport/update_ArtReport_input";
+        }
+
+        EmployeeVO loggedInEmployee = (EmployeeVO) session.getAttribute("loggedInEmployee");
+        if (loggedInEmployee != null) {
+            artreportVO.setEmployeeVO(loggedInEmployee);
         }
 
         if (artreportVO.getArtReportStatus() == 1) {

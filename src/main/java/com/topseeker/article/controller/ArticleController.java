@@ -1,7 +1,9 @@
 package com.topseeker.article.controller;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -55,107 +57,8 @@ public class ArticleController {
     
     @Autowired
     ArtReportService artreportSvc;
-
-    @GetMapping("addArticle")
-    public String addArticle(ModelMap model) {
-        ArticleVO articleVO = new ArticleVO();
-        model.addAttribute("articleVO", articleVO);
-        return "front-end/article/addArticle";
-    }
-
-    @PostMapping("insert")
-    public String insert(@Valid ArticleVO articleVO, BindingResult result, ModelMap model, @RequestParam("artPics") MultipartFile[] artPics, HttpSession session) throws IOException {
-        result = removeFieldError(articleVO, result, "artPic");
-        
-        MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
-        if (loggedInMember != null) {
-            articleVO.setMemberVO(loggedInMember);
-        } else {
-            model.addAttribute("errorMessage", "需要先登入才能新增文章");
-            return "front-end/member/loginMem";
-        }
-
-        articleSvc.addArticle(articleVO);
-        
-        Set<ArtPicVO> artPicVOs = new HashSet<>();
-        for (MultipartFile file : artPics) {
-            if (!file.isEmpty()) {
-                ArtPicVO artPicVO = new ArtPicVO();
-                artPicVO.setArticleVO(articleVO);
-                artPicVO.setArtPic(file.getBytes());
-                artpicSvc.addArtPic(artPicVO);
-                artPicVOs.add(artPicVO);
-            }
-        }
-        articleVO.setArtPics(artPicVOs);
-        articleSvc.updateArticle(articleVO);
-        
-        
-        List<ArticleVO> list = articleSvc.getAll();
-        model.addAttribute("articleListData", list);
-        model.addAttribute("success", "- (新增成功)");
-        return "redirect:/article/listAllArticle";
-    }
-
-    @GetMapping("getOne_For_Update")
-    public String getOne_For_Update(@RequestParam("artNo") String artNo, ModelMap model) {
-        ArticleVO articleVO = articleSvc.getOneArticle(Integer.valueOf(artNo));
-        model.addAttribute("articleVO", articleVO);
-        model.addAttribute("artcommentVO", new ArtCommentVO()); // 确保 artcommentVO 被传递
-        return "front-end/article/update_Article_input";
-    }
-
-    @PostMapping("update")
-    public String update(@Valid ArticleVO articleVO, BindingResult result, ModelMap model, MultipartFile[] artPics , HttpSession session) throws IOException {
-        result = removeFieldError(articleVO, result, "artPic");
-
-        if (result.hasErrors()) {
-            model.addAttribute("artcommentVO", new ArtCommentVO()); // 确保 artcommentVO 被传递
-            return "front-end/article/update_Article_input";
-        }
-        
-        MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
-        if (loggedInMember != null) {
-            articleVO.setMemberVO(loggedInMember);
-        } else {
-            model.addAttribute("errorMessage", "需要先登入才能修改文章");
-            return "front-end/member/loginMem";
-        }
-        
-        
-        
-//        Set<ArtPicVO> artPicVOs = new HashSet<>();
-//        for (MultipartFile file : artPics) {
-//            if (!file.isEmpty()) {
-//                ArtPicVO artPicVO = new ArtPicVO();
-//                artPicVO.setArticleVO(articleVO);
-//                artPicVO.setArtPic(file.getBytes());
-//                artpicSvc.addArtPic(artPicVO);
-//                artPicVOs.add(artPicVO);
-//            }
-//        }
-//        articleVO.setArtPics(artPicVOs);
-        articleSvc.updateArticle(articleVO);
-        
-        
-        
-
-        model.addAttribute("success", "- (修改成功)");
-        articleVO = articleSvc.getOneArticle(Integer.valueOf(articleVO.getArtNo()));
-        model.addAttribute("articleVO", articleVO);
-        model.addAttribute("artcommentVO", new ArtCommentVO()); // 确保 artcommentVO 被传递
-        return "front-end/article/listOneArticle";
-    }
-
-    @PostMapping("delete")
-    public String delete(@RequestParam("artNo") String artNo, ModelMap model) {
-        articleSvc.deleteArticle(Integer.valueOf(artNo));
-        List<ArticleVO> list = articleSvc.getAll();
-        model.addAttribute("articleListData", list);
-        model.addAttribute("success", "- (刪除成功)");
-        return "front-end/article/listAllArticle";
-    }
-
+    
+    
     @ModelAttribute("articleListData")
     protected List<ArticleVO> referenceListData() {
         List<ArticleVO> list = articleSvc.getAll();
@@ -174,14 +77,131 @@ public class ArticleController {
         return list;
     }
 
-    @ModelAttribute("articleMapData")
-    protected Map<Integer, String> referenceMapData() {
-        Map<Integer, String> map = new LinkedHashMap<Integer, String>();
-        map.put(1, "南三段水源通報");
-        map.put(2, "雪霸6月起開放雪山登山口到七卡山莊單日健行");
-        map.put(3, "桃園虎頭山公園健行7.5公里o型路線分享");
-        return map;
+    
+    //新增所需要的mapping
+    // 新增所需要的 mapping
+    @GetMapping("addArticle")
+    public String addArticle(ModelMap model) {
+        ArticleVO articleVO = new ArticleVO();
+        model.addAttribute("articleVO", articleVO);
+        return "front-end/article/addArticle";
     }
+
+    @PostMapping("insert")
+    public String insert(@Valid ArticleVO articleVO, BindingResult result, ModelMap model,
+                         @RequestParam("artPics") MultipartFile[] artPics, HttpSession session) throws IOException {
+        result = removeFieldError(articleVO, result, "artPics");
+
+        MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+        if (loggedInMember != null) {
+            articleVO.setMemberVO(loggedInMember);
+        } else {
+            model.addAttribute("errorMessage", "需要先登入才能新增文章");
+            return "front-end/member/loginMem";
+        }
+
+        // 先保存文章
+        articleSvc.addArticle(articleVO);  
+
+        List<ArtPicVO> artPicVOs = new ArrayList<>();
+        for (MultipartFile file : artPics) {
+            if (!file.isEmpty()) {
+                ArtPicVO artPicVO = new ArtPicVO();
+                artPicVO.setArticleVO(articleVO);
+                artPicVO.setArtPic(file.getBytes());
+                artPicVOs.add(artPicVO);
+            }
+        }
+        // 批量保存图片
+        artpicSvc.addArtPics(artPicVOs);
+        articleVO.setArtPics(new ArrayList<>(artPicVOs));
+        articleSvc.updateArticle(articleVO);
+        
+        List<ArticleVO> list = articleSvc.getAll();
+        model.addAttribute("articleListData", list);
+        model.addAttribute("success", "- (新增成功)");
+        return "redirect:/article/listAllArticle";
+    }
+
+    // 更新所需要的 mapping
+    @GetMapping("getOne_For_Update")
+    public String getOne_For_Update(@RequestParam("artNo") String artNo, ModelMap model) {
+        ArticleVO articleVO = articleSvc.getOneArticle(Integer.valueOf(artNo));
+        model.addAttribute("articleVO", articleVO);
+        model.addAttribute("artcommentVO", new ArtCommentVO());
+        return "front-end/article/update_Article_input";
+    }
+
+    @PostMapping("update")
+    public String update(@Valid ArticleVO articleVO, BindingResult result, ModelMap model,
+                         @RequestParam("artPics") MultipartFile[] artPics,
+                         @RequestParam(value = "deletePics", required = false) Integer[] deletePics,
+                         HttpSession session) throws IOException {
+        result = removeFieldError(articleVO, result, "artPics");
+
+        if (result.hasErrors()) {
+            model.addAttribute("artcommentVO", new ArtCommentVO());
+            return "front-end/article/update_Article_input";
+        }
+
+        MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+        if (loggedInMember != null) {
+            articleVO.setMemberVO(loggedInMember);
+        } else {
+            model.addAttribute("errorMessage", "需要先登入才能修改文章");
+            return "front-end/member/loginMem";
+        }
+
+        List<ArtPicVO> existingArtPics = articleVO.getArtPics() != null ? new ArrayList<>(articleVO.getArtPics()) : new ArrayList<>();
+
+
+
+        if (deletePics != null) {
+            for (Integer picId : deletePics) {
+                ArtPicVO artPicVO = artpicSvc.getOneArtPic(picId);
+                if (artPicVO != null) {
+                    existingArtPics.remove(artPicVO);
+                    artpicSvc.deleteArtPic(picId);
+                }
+            }
+        }
+
+
+
+        for (MultipartFile file : artPics) {
+            if (!file.isEmpty()) {
+                ArtPicVO artPicVO = new ArtPicVO();
+                artPicVO.setArticleVO(articleVO);
+                artPicVO.setArtPic(file.getBytes());
+                existingArtPics.add(artPicVO);
+            }
+        }
+
+       
+
+        articleVO.setArtPics(existingArtPics);
+        articleSvc.updateArticle(articleVO);
+
+        model.addAttribute("success", "修改成功");
+        return "redirect:/article/listAllArticle";
+    }
+
+
+
+    
+
+    @PostMapping("delete")
+    public String delete(@RequestParam("artNo") String artNo, ModelMap model) {
+        articleSvc.deleteArticle(Integer.valueOf(artNo));
+        List<ArticleVO> list = articleSvc.getAll();
+        model.addAttribute("articleListData", list);
+        model.addAttribute("success", "- (刪除成功)");
+        return "front-end/article/listAllArticle";
+    }
+
+
+
+   
 
     public BindingResult removeFieldError(ArticleVO articleVO, BindingResult result, String removedFieldname) {
         List<FieldError> errorsListToKeep = result.getFieldErrors().stream()
@@ -194,27 +214,23 @@ public class ArticleController {
         return result;
     }
 
-    @PostMapping("listMessages_ByCompositeQuery")
-    public String listAllArticle(HttpServletRequest req, Model model) {
-        Map<String, String[]> map = req.getParameterMap();
-        List<ArticleVO> list = articleSvc.getAll(map);
-        model.addAttribute("articleListData", list);
-        return "front-end/article/listAllArticle";
-    }
+    
 
     @GetMapping("/article/{artNo}")
     public String getArticle(@PathVariable Integer artNo, Model model) {
         ArticleVO article = articleSvc.findById(artNo);
         model.addAttribute("articleVO", article);
-        model.addAttribute("artcommentVO", new ArtCommentVO()); // 确保 artcommentVO 被传递
+        model.addAttribute("artcommentVO", new ArtCommentVO()); 
         return "listOneArticle";
     }
     
+    
+    //轉道自己所發的文章的mapping
     @GetMapping("listMyArticles")
     public String listMyArticles(HttpSession session, Model model) {
     	 MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
          if (loggedInMember == null) {
-             return "redirect:/front-end/member/loginMem"; // 如果没有登录，重定向到登录页面
+             return "redirect:/front-end/member/loginMem";
          }
 
          List<ArticleVO> myArticles = articleSvc.getAllIncludingStatusZero().stream()
@@ -226,6 +242,7 @@ public class ArticleController {
     }
     
     
+    //傳遞檢舉文章後可以更改status狀態 讓被檢舉的文章無法顯示
     @PostMapping("/artreport/update")
     public String updateArtReport(@Valid ArtReportVO artReportVO, BindingResult result, Model model) {
         // 更新檢舉狀態邏輯

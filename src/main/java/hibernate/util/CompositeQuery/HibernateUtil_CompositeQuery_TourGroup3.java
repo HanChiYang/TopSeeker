@@ -20,7 +20,7 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
+import com.topseeker.tour.model.TourVO;
 import com.topseeker.tourGroup.model.TourGroupVO;
 
 public class HibernateUtil_CompositeQuery_TourGroup3 {
@@ -39,11 +39,11 @@ public class HibernateUtil_CompositeQuery_TourGroup3 {
 //			predicate = builder.like(root.get(columnName),  value );
 		else if ("groupBegin".equals(columnName) || "groupEnd".equals(columnName) || "groupDeadline".equals(columnName)) // 用於date
 			predicate = builder.equal(root.get(columnName), java.sql.Date.valueOf(value));
-//		else if ("tourNo".equals(columnName)) {
-//			TourVO tourVO = new TourVO();
-//			tourVO.setTourNo(Integer.valueOf(value));
-//			predicate = builder.equal(root.get("tourVO"), tourVO);
-//		}
+		else if ("tourNo".equals(columnName)) {
+			TourVO tourVO = new TourVO();
+			tourVO.setTourNo(Integer.valueOf(value));
+			predicate = builder.equal(root.get("tourVO"), tourVO);
+		}
 
 		return predicate;
 	}

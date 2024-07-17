@@ -27,7 +27,7 @@ public class ShopProductPicVO implements java.io.Serializable{
 	private ShopProductVO shopProductVO;
 	
 	@Column(name ="prod_pic", columnDefinition = "longblob")
-	@NotEmpty(message="商品照片: 請上傳照片")
+//	@NotEmpty(message="商品照片: 請上傳照片")
 	private byte[] prodPic;
 	
 	public Integer getProdPicNo() {

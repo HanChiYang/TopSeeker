@@ -16,6 +16,9 @@ public interface OrderRepository extends JpaRepository<OrderVO, Integer> {
 	@Query(value = "DELETE FROM shop_order WHERE order_no =?1", nativeQuery = true)
 	void deleteByOrderNo(int orderNo);
 
+	@Query("SELECT o FROM OrderVO o WHERE o.memberVO.memNo = ?1 ORDER BY o.orderNo")
+	List<OrderVO> findByMem(Integer memNo);
+	
 	@Query(value = "from OrderVO where orderNo=?1 and memNo=?2 and orderStatus=?3 and paymentStatus=?4 and paymentMethod=?5 and deliveryMethod=?6 order by orderNo")
 	List<SaleVO> findByOthers(int orderNo, int memNo, int orderStatus, int paymentStatus, int paymentMethod,
 			int deliveryMethod);

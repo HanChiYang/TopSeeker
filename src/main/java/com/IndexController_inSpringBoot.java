@@ -79,8 +79,8 @@ public class IndexController_inSpringBoot {
 	@Autowired
 	ArtReportService artreportSvc;
 	
-	@Autowired
-	ArtPicService artpicSvc;
+//	@Autowired
+//	ArtPicService artpicSvc;
 	
 //	@Autowired
 //	FollowService followSvc;
@@ -99,7 +99,7 @@ public class IndexController_inSpringBoot {
     
     @GetMapping("/member/registrationMem")
 	public String registrationMem(Model model) {
-    	
+    	System.out.println("123");
 		return "front-end/member/registrationMem";
 	}
     @GetMapping("/member/loginMem")
@@ -137,6 +137,11 @@ public class IndexController_inSpringBoot {
  	public String listAllParticipant(Model model) {
  		return "front-end/participant/listAllParticipant";
  	}
+    
+//	@GetMapping("backend-protected/member/memberManagement")
+//	public String memberManagement() {
+//		return "back-end/member/select_page";
+//	}
     
     @ModelAttribute("participantListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
  	protected List<ParticipantVO> referenceListData(Model model) {
@@ -271,27 +276,10 @@ public class IndexController_inSpringBoot {
  		return "front-end/artpic/listAllArtPic";
  	}
     
-    @ModelAttribute("artpicListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
- 	protected List<ArtPicVO> referenceListData7(Model model) {
- 		
-    	List<ArtPicVO> list = artpicSvc.getAll();
- 		return list;
- 	}
-    //=========== 以下第63~75行是提供給 /src/main/resources/templates/back-end/emp/select_page.html 與 listAllEmp.html 要使用的資料 ===================   
-//    @GetMapping("/follow/select_page")
-// 	public String select_page8(Model model) {
-// 		return "front-end/follow/select_page";
-// 	}
-//    
-//    @GetMapping("/follow/listAllFollow")
-// 	public String listAllFollow(Model model) {
-// 		return "front-end/follow/listAllFollow";
-// 	}
-//    
-//    @ModelAttribute("followListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
-// 	protected List<FollowVO> referenceListData8(Model model) {
+//    @ModelAttribute("artpicListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
+// 	protected List<ArtPicVO> referenceListData7(Model model) {
 // 		
-//    	List<FollowVO> list = followSvc.getAll();
+//    	List<ArtPicVO> list = artpicSvc.getAll();
 // 		return list;
 // 	}
   //=========== 以下第63~75行是提供給 /src/main/resources/templates/back-end/emp/select_page.html 與 listAllEmp.html 要使用的資料 ===================   
