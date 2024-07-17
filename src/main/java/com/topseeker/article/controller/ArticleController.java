@@ -152,13 +152,10 @@ public class ArticleController {
             return "front-end/member/loginMem";
         }
 
-        // 获取现有的图片列表
         List<ArtPicVO> existingArtPics = articleVO.getArtPics() != null ? new ArrayList<>(articleVO.getArtPics()) : new ArrayList<>();
 
-        // 日志输出：显示删除前的图片数量
-        System.out.println("现有图片数量：" + existingArtPics.size());
 
-        // 删除选中的图片
+
         if (deletePics != null) {
             for (Integer picId : deletePics) {
                 ArtPicVO artPicVO = artpicSvc.getOneArtPic(picId);
@@ -169,10 +166,8 @@ public class ArticleController {
             }
         }
 
-        // 日志输出：显示删除后的图片数量
-        System.out.println("删除后图片数量：" + existingArtPics.size());
 
-        // 添加新的图片
+
         for (MultipartFile file : artPics) {
             if (!file.isEmpty()) {
                 ArtPicVO artPicVO = new ArtPicVO();
@@ -182,8 +177,7 @@ public class ArticleController {
             }
         }
 
-        // 日志输出：显示添加后的图片数量
-        System.out.println("添加后图片数量：" + existingArtPics.size());
+       
 
         articleVO.setArtPics(existingArtPics);
         articleSvc.updateArticle(articleVO);
