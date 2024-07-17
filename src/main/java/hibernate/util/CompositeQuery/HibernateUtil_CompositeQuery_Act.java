@@ -71,10 +71,10 @@ public class HibernateUtil_CompositeQuery_Act {
             Predicate notCancelled = builder.notEqual(root.get("actStatus"), 3);
             predicateList.add(notCancelled);
 
-            // 排除狀態為已取消的活動
-            Predicate notCancelled = builder.notEqual(root.get("actStatus"), 3);
-            predicateList.add(notCancelled);
-            
+//            // 排除狀態為已取消的活動
+//            Predicate notCancelled = builder.notEqual(root.get("actStatus"), 3);
+//            predicateList.add(notCancelled);
+//            
             Set<String> keys = map.keySet();
             for (String key : keys) {
                 String value = map.get(key)[0];
