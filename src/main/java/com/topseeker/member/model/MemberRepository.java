@@ -12,9 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface MemberRepository extends JpaRepository<MemberVO, Integer> {
 
-//	@Modifying
-//	@Query(value = "delete from member where mem_no =?1", nativeQuery = true)
-//	void deleteByMemNo(int memNo);
 
 	//會員登入
 	@Query(value = "from MemberVO where memAccount=?1 and memPassword =?2")
