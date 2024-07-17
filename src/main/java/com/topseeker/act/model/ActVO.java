@@ -1,7 +1,9 @@
 package com.topseeker.act.model;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -30,6 +32,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.topseeker.act.controller.validation.MemGroup;
 import com.topseeker.actpicture.model.ActPictureVO;
+import com.topseeker.message.model.MessageVO;
+import com.topseeker.participant.model.ParticipantVO;
 import com.topseeker.member.model.MemberVO;
 /*
  * 註1: classpath必須有javax.persistence-api-x.x.jar 
@@ -54,12 +58,13 @@ public class ActVO implements java.io.Serializable {
 //	private Integer memNo;
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="actVO")
+//	@NotEmpty(message="活動圖片: 請勿空白")
 	@OrderBy("actPicNo asc")
 	private List<ActPictureVO> actPictures = new ArrayList<>();
 	
 	@Column(name = "act_title")
 	@NotEmpty(message="活動標題: 請勿空白")
-	@Pattern(regexp = "^.{2,10}$", message = "活動標題: 長度必需在2到10之間")
+	@Pattern(regexp = "^.{2,20}$", message = "活動標題: 長度必需在2到20之間")
 	private String actTitle;
 	
 	@Column(name = "act_content")
@@ -77,32 +82,37 @@ public class ActVO implements java.io.Serializable {
 	@Min(value = 1, message = "可參與最少人數: 必須至少為1")
 	private Integer actMinCount;
 	
+	//當前參與人數
 	@Column(name = "act_current_count")
 	private Integer actCurrentCount=0;
 	
+	//待審核人數
 	@Column(name = "act_check_count")
 	private Integer actCheckCount=0;
 	
-	@Column(name = "act_enroll_begin", updatable = false)
+	@Column(name = "act_enroll_begin")
 	@NotNull(message="報名開始日: 請勿空白")	
-
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 //	@FutureOrPresent(message = "日期必須是今天（含）之後") 
-	private Date actEnrollBegin;
+	private LocalDate actEnrollBegin;
 	
-	@Column(name = "act_enroll_end", updatable = false)
-	@NotNull(message="報名結束日: 請勿空白")	
-	@Future(message="日期必須是在今日(不含)之後", groups = {MemGroup.class})
-	private Date actEnrollEnd;
+	@Column(name = "act_enroll_end")
+	@NotNull(message="報名結束日: 請勿空白")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+//	@Future(message="日期必須是在今日(不含)之後", groups = {MemGroup.class})
+	private LocalDate actEnrollEnd;
 	
-	@Column(name = "act_start", updatable = false)	
+	@Column(name = "act_start")	
 	@NotNull(message="活動開始日: 請勿空白")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Future(message="日期必須是在今日(不含)之後", groups = {MemGroup.class})
-	private Date actStart;
+	private LocalDate actStart;
 	
-	@Column(name = "act_end", updatable = false)
-	@NotNull(message="活動結束日: 請勿空白")	
+	@Column(name = "act_end")
+	@NotNull(message="活動結束日: 請勿空白")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Future(message="日期必須是在今日(不含)之後", groups = {MemGroup.class})
-	private Date actEnd;
+	private LocalDate actEnd;
 	
 	@Column(name = "act_place")
 	@NotEmpty(message="活動地點: 請勿空白")	
@@ -113,12 +123,27 @@ public class ActVO implements java.io.Serializable {
 
 	
 	@Column(name = "act_rate_sum")
-	private Integer actRateSum;
+	private Integer actRateSum=0;
 	
 	@Column(name = "eval_sum")
-	private Integer evalSum;
+	private Integer evalSum=0;
+	
+	//==============活動留言===================
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "actVO")
+    @OrderBy("actMsgNo asc") 
+    private Set<MessageVO> messages = new HashSet<MessageVO>();
 
-
+	public Set<MessageVO> getMessages() {
+		return messages;
+	}
+	
+	public void setMessages(Set<MessageVO> messages) {
+		this.messages = messages;
+	}
+	
+	//========================================
+	
+	
 	public ActVO() {
 	}
 
@@ -202,35 +227,35 @@ public class ActVO implements java.io.Serializable {
 		this.actCheckCount = actCheckCount;
 	}
 
-	public Date getActEnrollBegin() {
+	public LocalDate getActEnrollBegin() {
 		return this.actEnrollBegin;
 	}
 
-	public void setActEnrollBegin(Date actEnrollBegin) {
+	public void setActEnrollBegin(LocalDate actEnrollBegin) {
 		this.actEnrollBegin = actEnrollBegin;
 	}
 
-	public Date getActEnrollEnd() {
+	public LocalDate getActEnrollEnd() {
 		return actEnrollEnd;
 	}
 
-	public void setActEnrollEnd(Date actEnrollEnd) {
+	public void setActEnrollEnd(LocalDate actEnrollEnd) {
 		this.actEnrollEnd = actEnrollEnd;
 	}
 
-	public Date getActStart() {
+	public LocalDate getActStart() {
 		return this.actStart;
 	}
 
-	public void setActStart(Date actStart) {
+	public void setActStart(LocalDate actStart) {
 		this.actStart = actStart;
 	}
 
-	public Date getActEnd() {
+	public LocalDate getActEnd() {
 		return actEnd;
 	}
 
-	public void setActEnd(Date actEnd) {
+	public void setActEnd(LocalDate actEnd) {
 		this.actEnd = actEnd;
 	}
 

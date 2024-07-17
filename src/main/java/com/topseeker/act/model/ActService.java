@@ -9,6 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.topseeker.participant.model.ParticipantRepository;
+import com.topseeker.participant.model.ParticipantService;
+import com.topseeker.participant.model.ParticipantVO;
+
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Act;
 
 @Transactional
@@ -17,6 +21,12 @@ public class ActService {
 
 	@Autowired
 	ActRepository repository;
+	
+	@Autowired
+	ParticipantRepository participantrepository;
+	
+	@Autowired
+    private ParticipantService participantService;
 	
 	@Autowired
     private SessionFactory sessionFactory;
@@ -65,5 +75,9 @@ public class ActService {
 	public void updateActStatus(Integer actNo, Integer newStatus) {
 		  repository.updateActStatus(actNo, newStatus);
 	}
+	
+	//送出參團人數後修改待審核人數
+	
 
+   
 }

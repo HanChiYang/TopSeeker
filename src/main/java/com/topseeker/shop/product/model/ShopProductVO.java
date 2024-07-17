@@ -15,9 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 //import com.topseeker.shop.orderdetail.model.OrderDetailVO;
 import com.topseeker.shop.productpic.model.ShopProductPicVO;
@@ -54,17 +53,20 @@ public class ShopProductVO implements java.io.Serializable{
 	
 	
 	@Column(name ="prod_price")
+	@NotNull(message="商品價格: 請勿空白")
 	@Min(value = 0, message = "商品定價: 不能小於{value}元")
 	private Integer prodPrice;
 	
 	@Column(name ="prod_status")
 	private Integer prodStatus;
 	
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") 
+//	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@Column(name ="prod_date")
 	private Timestamp prodDate;
 	
+
 	//商品圖片用
+//	@NotEmpty(message="商品照片: 請上傳照片")
     @OneToMany(mappedBy = "shopProductVO", cascade = CascadeType.ALL)
     private List<ShopProductPicVO> shopProductPics = new ArrayList<>();
     
