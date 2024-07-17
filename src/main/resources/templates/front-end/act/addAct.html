@@ -7,6 +7,16 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <script src="https://kit.fontawesome.com/de9b92a469.js" crossorigin="anonymous"></script>
 <style>
+    .card {
+        margin: 2rem;
+    }
+    
+    .card-body {
+        flex: 1 1 auto;
+        padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
+        color: var(--bs-card-color);
+    }
+
     .container {
         max-width: 800px;
         margin-top: 20px;
@@ -32,142 +42,116 @@
 <body>
 
 <div class="container">
-    <a class="navbar-brand" th:href="@{/act/memMyAct}">
-        <i class="fa-solid fa-person-walking-arrow-loop-left"></i> 回上一頁
-    </a>
-</div>
-
-<div class="container">
-    <div class="card">
+    <div class="card shadow">
         <div class="card-header text-center">
             <h2>活動資料新增</h2>
         </div>
         <div class="card-body">
-            <h3 class="text-center"><b>所有欄位皆為必填欄位</b></h3>
-            <form th:action="@{insert}" method="post" th:object="${actVO}" enctype="multipart/form-data">
-                
-<!--                 <div class="mb-3"> -->
-<!--                     <label class="form-label">會員編號:</label> -->
-<!--                      <input type="text" class="form-control" th:field="*{memberVO.memNo}" readonly style="border:0px ; font-weight: bold;"/> -->
-<!--                 </div> -->
-                
-                
+            <form th:action="@{insert}" method="post" th:object="${actVO}" enctype="multipart/form-data" class="needs-validation" novalidate>
                 <div class="mb-3">
                     <label class="form-label">活動標題:</label>
-                    <input type="text" class="form-control" th:field="*{actTitle}" onclick="hideContent('actTitle.errors');"/>
-                    <span th:if="${#fields.hasErrors('actTitle')}" th:errors="*{actTitle}" class="error" id="actTitle.errors"></span>
+                    <input type="text" class="form-control" th:field="*{actTitle}" required>
+                    <div class="invalid-feedback">請填寫活動標題</div>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">活動地點:</label>
-                    <input type="text" class="form-control" th:field="*{actPlace}" onclick="hideContent('actPlace.errors');"/>
-                    <span th:if="${#fields.hasErrors('actPlace')}" th:errors="*{actPlace}" class="error" id="actPlace.errors"></span>
+                    <input type="text" class="form-control" th:field="*{actPlace}" required>
+                    <div class="invalid-feedback">請填寫活動地點</div>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">活動內容:</label>
-                    <textarea class="form-control" th:field="*{actContent}" onclick="hideContent('actContent.errors');" rows="6"></textarea>
-                    <span th:if="${#fields.hasErrors('actContent')}" th:errors="*{actContent}" class="error" id="actContent.errors"></span>
+                    <textarea class="form-control" th:field="*{actContent}" rows="6" required></textarea>
+                    <div class="invalid-feedback">請填寫活動內容</div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="actPic" class="form-label">活動圖片:</label> 
+                    <input class="form-control" type="file" name="picSet" id="actPic" multiple required>
+                    <div class="invalid-feedback">請上傳活動圖片</div>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">活動人數上限:</label>
-                    <input type="text" class="form-control" th:field="*{actMaxCount}" onclick="hideContent('actMaxCount.errors');"/>
-                    <span th:if="${#fields.hasErrors('actMaxCount')}" th:errors="*{actMaxCount}" class="error" id="actMaxCount.errors"></span>
+                    <input type="number" class="form-control" th:field="*{actMaxCount}" required>
+                    <div class="invalid-feedback">請填寫活動人數上限</div>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">活動最少人數:</label>
-                    <input type="text" class="form-control" th:field="*{actMinCount}" onclick="hideContent('actMinCount.errors');"/>
-                    <span th:if="${#fields.hasErrors('actMinCount')}" th:errors="*{actMinCount}" class="error" id="actMinCount.errors"></span>
+                    <input type="number" class="form-control" th:field="*{actMinCount}" required>
+                    <div class="invalid-feedback">請填寫活動最少人數</div>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">報名開始日:</label>
-                    <input type="date" class="form-control small-date-input" th:field="*{actEnrollBegin}" onclick="hideContent('actEnrollBegin.errors');"/>
-                    <span th:if="${#fields.hasErrors('actEnrollBegin')}" th:errors="*{actEnrollBegin}" class="error" id="actEnrollBegin.errors"></span>
+                    <input type="date" class="form-control small-date-input" th:field="*{actEnrollBegin}" required>
+                    <div class="invalid-feedback">請選擇報名開始日</div>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">報名結束日:</label>
-                    <input type="date" class="form-control small-date-input" th:field="*{actEnrollEnd}" onclick="hideContent('actEnrollEnd.errors');"/>
-                    <span th:if="${#fields.hasErrors('actEnrollEnd')}" th:errors="*{actEnrollEnd}" class="error" id="actEnrollEnd.errors"></span>
+                    <input type="date" class="form-control small-date-input" th:field="*{actEnrollEnd}" required>
+                    <div class="invalid-feedback">請選擇報名結束日</div>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">活動開始日:</label>
-                    <input type="date" class="form-control small-date-input" th:field="*{actStart}" onclick="hideContent('actStart.errors');"/>
-                    <span th:if="${#fields.hasErrors('actStart')}" th:errors="*{actStart}" class="error" id="actStart.errors"></span>
+                    <input type="date" class="form-control small-date-input" th:field="*{actStart}" required>
+                    <div class="invalid-feedback">請選擇活動開始日</div>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">活動結束日:</label>
-                    <input type="date" class="form-control small-date-input" th:field="*{actEnd}" onclick="hideContent('actEnd.errors');"/>
-                    <span th:if="${#fields.hasErrors('actEnd')}" th:errors="*{actEnd}" class="error" id="actEnd.errors"></span>
+                    <input type="date" class="form-control small-date-input" th:field="*{actEnd}" required>
+                    <div class="invalid-feedback">請選擇活動結束日</div>
                 </div>
-                              
-                <div class="mb-3">
-                    <label for="actPic" class="form-label">活動圖片:</label> 
-                    <input class="form-control" type="file" name="picSet" id="actPic" multiple/>
-                </div>
+                                                                     
                 
                 <div class="text-center">
                     <button type="submit" id="submit" class="btn btn-primary">送出新增</button>
-                </div>		
+                    <a th:href="@{/act/memMyAct}" class="btn btn-secondary">取消新增</a>
+                </div>      
             </form>
         </div>
     </div>
 </div>
 <!-- JavaScript part -->  
 <script type="text/javascript">
-	//清除提示信息
-	function hideContent(d) {
-	     document.getElementById(d).style.display = "none";
-	}
-	
-	//照片上傳-預覽用
-	var filereader_support = typeof FileReader != 'undefined';
-	if (!filereader_support) {
-		alert("No FileReader support");
-	}
-	acceptedTypes = {
-			'image/png' : true,
-			'image/jpeg' : true,
-			'image/gif' : true
-	};
-	function previewImage() {
-		var upfile1 = document.getElementById("upFiles");
-		upfile1.addEventListener("change", function(event) {
-			var files = event.target.files || event.dataTransfer.files;
-			for (var i = 0; i < files.length; i++) {
-				previewfile(files[i])
-			}
-		}, false);
-	}
-	function previewfile(file) {
-		if (filereader_support === true && acceptedTypes[file.type] === true) {
-			var reader = new FileReader();
-			reader.onload = function(event) {
-				var image = new Image();
-				image.src = event.target.result;
-				image.width = 100;
-				image.height = 75;
-				image.border = 2;
-				if (blob_holder.hasChildNodes()) {
-					blob_holder.removeChild(blob_holder.childNodes[0]);
-				}
-				blob_holder.appendChild(image);
-			};
-			reader.readAsDataURL(file);
-			document.getElementById('submit').disabled = false;
-		} else {
-			blob_holder.innerHTML = "<div  style='text-align: left;'>" + "● filename: " + file.name
-					+ "<br>" + "● ContentTyp: " + file.type
-					+ "<br>" + "● size: " + file.size + "bytes"
-					+ "<br>" + "● 上傳ContentType限制: <b> <font color=red>image/png、image/jpeg、image/gif </font></b></div>";
-			document.getElementById('submit').disabled = true;
-		}
-	}
+    (function () {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity() || !validateFileInput()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                        alert("請填寫所有必填欄位並上傳圖片")
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+
+    function validateFileInput() {
+        var fileInput = document.getElementById('actPic');
+        if (fileInput.files.length === 0) {
+            fileInput.setCustomValidity('請上傳圖片');
+            fileInput.classList.add('is-invalid');
+            return false;
+        } else {
+            fileInput.setCustomValidity('');
+            fileInput.classList.remove('is-invalid');
+            return true;
+        }
+    }
 </script>
 
 </body>
