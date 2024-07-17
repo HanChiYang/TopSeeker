@@ -32,20 +32,29 @@
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
 
 
+<style>
+
+/*     main.shopManagementContent{ */
+/*     margin-top: 20px; */
+/*     margin-left: 250px; */
+/*     padding: 20px; */
+/*     } */
+
+</style>
+
 </head>
 <body>
 
 	<!-- topseeker後台Navbar -->
 	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
 
-	<!-- 商城後台用Navbar -->
-	<nav th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
+	<!-- 商城後台用Navbar + 左側邊欄 -->
+	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
 
-
-
+<main class="shopManagementContent">
 	<h1>歡迎進入商城管理系統</h1>
 	<h2>請選擇功能</h2>
-
+</main>
 
 
 	<!-- jQuery -->
