@@ -63,6 +63,11 @@ public class ActPictureService {
 		return repository.getAllActPic(actPicNo);
 	}
 	
+	// 取活動詳情全數圖片用
+	public List<ActPictureVO> getDetailsActPic(Integer actNo) {
+		return repository.getDetailsActPic(actNo);
+	}
+	
 	// 取全數圖片
 	public List<ActPictureVO> getAll() {
 		return repository.findAll();

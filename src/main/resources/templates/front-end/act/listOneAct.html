@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>活動資料 - listOneAct.html</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>TopSeeker-活動資料</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">    
     <script src="https://kit.fontawesome.com/de9b92a469.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" th:href="@{/css/common.css}" />
 
-    <style type="text/css">
+    <style>
         body {
             margin-top: 6rem;
         }
@@ -21,14 +22,19 @@
             width: 150px;
             text-align: right;
             font-weight: bold;
+            white-space: nowrap;
         }
-        .card-body span.value {
-            font-weight: normal;
+        .card-body span.value {          
             text-align: left;
             margin-left: 10px;
+            white-space: nowrap;
         }
         .back-button {
-            margin-bottom: 1rem;
+            position: fixed;
+            bottom: 20px;
+            right: 70px;
+            z-index: 1000;
+            transition: transform 1s ease-out;
         }
         .action-buttons {
             display: flex;
@@ -36,6 +42,18 @@
             gap: 50px; /* 增加按鈕之間的距離 */
             margin-top: 20px;
         }
+        .messages-section {
+            margin-top: 30px;
+        }
+        .messages {
+            margin-bottom: 20px;
+        }
+        .message-card {
+            margin-bottom: 10px;
+        }
+        .ms-2 {
+		    margin-left: 1.5rem !important;
+		}
     </style>
 </head>
 <body>
@@ -51,11 +69,18 @@
             </div>
             <div class="card-body text-center">
                 <div class="mb-3">
-                    <div th:each="pic, iterStat : ${actVO.actPictures}" th:id="'pic-' + ${iterStat.index}">
-                        <img th:src="@{/actpicture/DBGifReader} + '?actPicNo=' + ${pic.actPicNo}" class="img-thumbnail mb-2" width="600" >
+                    <div th:each="pic : ${actVO.actPictures}">
+                        <img th:src="@{/actpicture/DBGifReader} + '?actPicNo=' + ${pic.actPicNo}" class="img-thumbnail mb-2" width="600">
                     </div>
                 </div>
-                <div class="mb-2"><span>會員:</span><span class="value" th:text="'[' + ${actVO.memberVO.memAccount} + ']'"></span></div>
+                <div class="mb-2 d-flex align-items-center justify-content-center">
+                    <span>會員:</span>
+                    <span class="value" th:text="${actVO.memberVO.memAccount} + '('+${actVO.memberVO.memName}+ ')'"></span>
+                    <form id="followForm" class="ms-3" style="margin-bottom: 0;">
+                        <input type="button" value="追隨此會員" class="btn btn-primary ms-2" id="test">
+                        <input type="hidden" name="beFollowedMemNo" value="${actVO.memberVO.memNo}">
+                    </form>
+                </div>
                 <div class="mb-2"><span>活動編號:</span><span class="value" th:text="${actVO.actNo}"></span></div>
                 <div class="mb-2"><span>活動標題:</span><span class="value" th:text="${actVO.actTitle}"></span></div>
                 <div class="mb-2"><span>活動地點:</span><span class="value" th:text="${actVO.actPlace}"></span></div>
@@ -69,7 +94,7 @@
                 <div class="mb-2"><span>活動開始日:</span><span class="value" th:text="${actVO.actStart}"></span></div>
                 <div class="mb-2"><span>活動結束日:</span><span class="value" th:text="${actVO.actEnd}"></span></div>
                 <div class="mb-2"><span>活動狀態:</span>
-                    <span class="value" th:switch="${actVO.actStatus}">
+                    <span class="value" id="actStatus" th:switch="${actVO.actStatus}">
                         <span th:case="0">揪團中</span>
                         <span th:case="1">已成團</span>
                         <span th:case="2">活動已完成</span>
@@ -77,43 +102,85 @@
                     </span>
                 </div>
                 <div class="action-buttons">
-                    <a th:href="@{/participant/addParticipant(actNo=${actVO.actNo})}" class="btn btn-primary">我要報名</a>
+                    <a th:if="${actVO.actStatus == 0}" th:href="@{/participant/addParticipant(actNo=${actVO.actNo})}" class="btn btn-primary">我要報名</a>
+                    <a th:if="${actVO.actStatus != 0}" class="btn btn-secondary disabled">我要報名</a>
                     <a th:href="@{/report/addReport(actNo=${actVO.actNo})}" class="btn btn-danger">我要檢舉</a>
                 </div>
             </div>
-            <h4><a class="navbar-brand back-button" th:href="@{/act/listAllAct}">
-                <i class="fa-solid fa-person-walking-arrow-loop-left"></i> 返回活動列表</a></h4>
-        </div>
-    </div>
 
-    <div class="messages-section">
-        <h3>留言區</h3>
-        <div class="messages">
-            <div th:each="msg : ${actVO.messages}">
-                <p th:text="${msg.actMsg}"></p>
-                <p th:text="${msg.actMsgTime}"></p>
-                <p>留言者: <span th:text="${msg.memberVO.memAccount}+'('+${msg.memberVO.memName}+')'"></span></p>
-                <hr />
+            <!-- 留言區開始 -->
+            <div class="card-body">
+                <h3 class="mb-3">留言區</h3>
+                <div class="messages">
+                    <div class="card message-card" th:each="msg : ${actVO.messages}">
+                        <div class="card-body">
+                            <p class="card-text" th:text="${msg.actMsg}"></p>
+                            <p class="card-subtitle mb-2 text-muted" th:text="${msg.actMsgTime}"></p>
+                            <p class="card-text">留言者: <span th:text="${msg.memberVO.memAccount}+'('+${msg.memberVO.memName}+')'"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <!-- 留言表單 -->
+                        <form class="msg-form" th:action="@{/act/addMsg}" method="post" th:object="${messageVO}">
+                            <div class="form-group mb-3">
+                                <textarea name="actMsg" th:field="*{actMsg}" class="form-control" rows="4" placeholder="輸入你的留言..."></textarea>
+                            </div>
+                            <input type="hidden" name="actNo" th:value="${actVO.actNo}" />
+                            <button type="submit" class="btn btn-primary">送出留言</button>
+                        </form>
+                    </div>
+                </div>
             </div>
-
-        </div>
-        <div>
-            <!-- 留言表單 -->
-            <form class="msg-form" th:action="@{/act/addMsg}" method="post" th:object="${messageVO}">
-                <textarea name="actMsg" th:field="*{actMsg}" rows="4" placeholder="輸入你的留言..."></textarea>
-                <input type="hidden" name="actNo" th:value="${actVO.actNo}" />
-                <button type="submit" class="btn btn-primary">送出留言</button>
-            </form>
+            <!-- 留言區結束 -->
         </div>
     </div>
+
+    <a class="btn btn-secondary back-button" th:href="@{/act/listAllAct}">
+        <i class="fa-solid fa-person-walking-arrow-loop-left"></i> 返回活動列表
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const backButton = document.querySelector('.back-button');
+            let lastScrollY = window.scrollY;
+            let requestId = null;
+
+            function updateButtonPosition() {
+                const currentScrollY = window.scrollY;
+                const diff = currentScrollY - lastScrollY;
+                backButton.style.transform = `translateY(${diff * -3}px)`;
+                lastScrollY = currentScrollY;
+                requestId = null;
+            }
+
+            window.addEventListener('scroll', function () {
+                if (!requestId) {
+                    requestId = requestAnimationFrame(updateButtonPosition);
+                }
+            });
+        });
+
+        $(document).ready(function() {
+            $("#test").on("click", function(event) {
+                event.preventDefault();
+                var beFollowedMemNo = $("input[name='beFollowedMemNo']").val();
+                $.ajax({
+                    url: "/follow/insert",
+                    method: "POST",
+                    data: { beFollowedMemNo: beFollowedMemNo },
+                    success: function(response) {
+                        var jsonResponse = JSON.parse(response);
+                        alert(jsonResponse.message);
+                    },
+                    error: function() {
+                        alert("發生錯誤，請稍後再試。");
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
-
-<!-- <script> -->
- 
-<!-- // //傳活動編號給檢舉頁 -->
-<!-- //     $('#btnAddArtReport').on('click', function() { -->
-<!-- //         var artNo = $(this).data('actno'); //取得活動編號 -->
-<!-- //         window.location.href = 'http://localhost:8080/artreport/addArtReport?artNo=' + actNo; -->
-<!-- //     }); -->
-<!-- </script> -->
