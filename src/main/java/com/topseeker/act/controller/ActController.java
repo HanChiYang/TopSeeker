@@ -85,7 +85,7 @@ public class ActController {
 	public String insert(
 			/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 			
-			
+//			@Validated(MemGroup.class)
 			@Validated(MemGroup.class)ActVO actVO, BindingResult result, ModelMap model,
 			@RequestParam("picSet") MultipartFile[] parts, HttpSession session) throws IOException {
 		
@@ -122,17 +122,17 @@ public class ActController {
 			
 		}
 		if (result.hasErrors() || parts[0].isEmpty()) {
-//			System.out.println(result);
+			System.out.println(result);
 			return "front-end/act/addAct";
 		}
 		/*************************** 2.開始新增資料 *****************************************/
-		// EmpService empSvc = new EmpService();
+
 		actSvc.addAct(actVO);
 		/*************************** 3.新增完成,準備轉交(Send the Success view) **************/
 		List<ActVO> list = actSvc.getAll();
 		model.addAttribute("actListData", list);
 		model.addAttribute("success", "- (新增成功)");
-		return "redirect:/act/memMyAct"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
+		return "redirect:/act/memMyAct"; // 新增成功後重導至@GetMapping("/emp/listAllEmp")
 	}
 
 	/*
@@ -229,8 +229,9 @@ public class ActController {
 		List<ActVO> list = actSvc.getAll();
 		model.addAttribute("actListData", list);
 		model.addAttribute("success", "- (刪除成功)");
-		return "front-end/act/memMyAct"; // 刪除完成後轉交memMyAct.html
+		return "redirect:/act/memMyAct"; // 刪除完成後轉交memMyAct.html
 	}
+	
 	
 	@PostMapping("deleteByBackEnd")
 	public String deleteByBackEnd(@RequestParam("actNo") String actNo, ModelMap model) {
@@ -271,14 +272,6 @@ public class ActController {
 	/*
 	 * This method will be called on select_page.html form submission, handling POST request
 	 */
-//	@PostMapping("listActs_ByCompositeQuery")
-//	public String listAllAct(HttpServletRequest req, Model model) {
-//		Map<String, String[]> map = req.getParameterMap();
-//		List<ActVO> list = actSvc.getAll(map);
-//		model.addAttribute("actListData", list); // for listAllEmp.html 第85行用	
-//		
-//		return "back-end/act/listAllAct";
-//	}
 	@PostMapping("listActs_ByCompositeQuery")
 	public String listAllAct(HttpServletRequest req, Model model) {
         Map<String, String[]> map = req.getParameterMap();
@@ -321,14 +314,14 @@ public class ActController {
 		return "front-end/act/memMyAct";
 	}
     
+    @GetMapping("/check")
+    public String check(Model model) {
+    	return "front-end/participant/participantCheck";
+    }
+    
     @GetMapping("/actBackEnd")
     public String actBackEnd(Model model) {
     	return "back-end/act/actBackEnd";
-    }
-    
-    @GetMapping("/memMyActAct")
-    public String memMyActAct(Model model) {
-    	return "front-end/act/memMyAct";
     }
     
     @ModelAttribute("actListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
@@ -352,8 +345,7 @@ public class ActController {
 		model.addAttribute("memberVO", new MemberVO()); // for select_page.html 第133行用
 		List<MemberVO> list = memberSvc.getAll();
 		return list;
-	}
-	
+	}	
 	
 	//活動列表的ajax
 	@PostMapping("ajaxSearch")

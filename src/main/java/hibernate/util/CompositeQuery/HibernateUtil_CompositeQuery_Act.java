@@ -67,10 +67,6 @@ public class HibernateUtil_CompositeQuery_Act {
 
             List<Predicate> predicateList = new ArrayList<>();
             
-         // 排除狀態為已取消的活動
-            Predicate notCancelled = builder.notEqual(root.get("actStatus"), 3);
-            predicateList.add(notCancelled);
-
             // 排除狀態為已取消的活動
             Predicate notCancelled = builder.notEqual(root.get("actStatus"), 3);
             predicateList.add(notCancelled);
