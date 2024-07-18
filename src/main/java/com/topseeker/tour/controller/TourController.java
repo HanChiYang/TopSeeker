@@ -38,9 +38,6 @@ public class TourController {
 	@Autowired
 	TourAreaService tourAreaSvc;
 
-	/*
-	 * This method will serve as addTour.html handler.
-	 */
 	@GetMapping("addTour")
 	public String addTour(ModelMap model) {
 		TourVO tourVO = new TourVO();
@@ -48,9 +45,6 @@ public class TourController {
 		return "back-end/tour/addTour";
 	}
 
-	/*
-	 * This method will be called on addTour.html form submission, handling POST request It also validates the user input
-	 */
 	@PostMapping("insert")
 	public String insert(@Valid TourVO tourVO, BindingResult result, ModelMap model,
 			@RequestParam("tourPic") MultipartFile[] parts) throws IOException {
@@ -80,9 +74,6 @@ public class TourController {
 		return "redirect:/tour/listAllTour"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/tour/listAllTour")
 	}
 
-	/*
-	 * This method will be called on listAllTour.html form submission, handling POST request
-	 */
 	@PostMapping("getOne_For_Update")
 	public String getOne_For_Update(@RequestParam("tourNo") String tourNo, ModelMap model) {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
