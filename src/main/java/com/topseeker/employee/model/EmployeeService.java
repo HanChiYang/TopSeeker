@@ -109,4 +109,15 @@ public class EmployeeService {
 		return employeeRepository.empLogin(empAccount, empPassword);
 	}
 
+	public Set<Integer> getAuthNosByEmpNo(Integer empNo) {
+	    EmployeeVO employee = getOneEmp(empNo);
+	    if (employee != null && employee.getEmpAuthVO() != null && !employee.getEmpAuthVO().isEmpty()) {
+	        return employee.getEmpAuthVO().stream()
+	                       .map(empAuthVO -> empAuthVO.getAuthorityVO().getAuthNo())
+	                       .collect(Collectors.toSet());
+	    }
+	    return new HashSet<>(); // 返回空集合而不是 null
+	}
+
+
 }

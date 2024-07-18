@@ -72,13 +72,15 @@
 	<div align="center" th:fragment="listOneEmp-div"> <!-- 此div被select_page.html第158行insert用 -->
 		<h3><span>查詢結果 :</span></h3>
 		<span>員工編號:</span><span th:text="${empVO.empNo}"></span><br/>
-		<span>權限編號:</span><span th:text="${empVO.empAuthVO.authorityVO.authNo}"></span><br/>
+		<!-- <span>權限編號:</span><span th:text="${empVO.empAuthVO.authorityVO.authNo}"></span><br/> -->
 <!-- 		<span>權限名稱:</span><span th:text="${empauthVO.authVO.authName}"></span><br/> -->
 		<span>員工姓名:</span><span th:text="${empVO.empName}"></span><br/>
 		<span>員工帳號:</span><span th:text="${empVO.empAccount}"></span><br/>
 		<span>員工密碼:</span><span th:text="${empVO.empPassword}"></span><br/>
 		<span>員工到職日:</span><span th:text="${empVO.empHiredate}"></span><br/>
-		<span>員工狀態:</span><span th:text="${empVO.empStatus}"></span><br/>
+		<span>員工狀態:</span>
+		<span th:if="${empVO.empStatus == 1}">在職</span>
+		<span th:if="${empVO.empStatus == 0}">離職</span>
 		
 	</div>
 

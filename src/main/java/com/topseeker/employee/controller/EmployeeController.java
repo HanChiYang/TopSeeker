@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -248,32 +249,35 @@ public class EmployeeController {
         return "back-end/employee/login";  // 返回 login.html 模板
     }
 	
-	  @PostMapping("/login")
-	    public String login(
-	    		@RequestParam("empAccount") String empAccount,
-	    		@RequestParam("empPassword") String empPassword,
-	    		Model model, HttpSession session) {
-		 	
-		 
+	@PostMapping("/login")
+	public String login(
+	        @RequestParam("empAccount") String empAccount,
+	        @RequestParam("empPassword") String empPassword,
+	        Model model, HttpSession session) {
 
-			/*************************** 2.開始查詢資料 ***************************************/
-			Optional<EmployeeVO> employeeOpt = employeeSvc.empLogin(empAccount, empPassword);
+	    /*************************** 2.開始查詢資料 ***************************************/
+	    Optional<EmployeeVO> employeeOpt = employeeSvc.empLogin(empAccount, empPassword);
 
-			/*************************** 3.查詢成功，登入 **************************/
-			if (employeeOpt.isPresent()) {
-				EmployeeVO employee = employeeOpt.get();
-				if (employee.getEmpStatus() == 0) {
-					model.addAttribute("loginError", "您已被停權");
-					return "back-end/employee/login";// 若被停權，無法登入
-				}
-				session.setAttribute("loggedInEmployee", employee); // 將會員信息保存到 session
-				return "back-end/back_end_index"; // 重導至欲前往的頁面
+	    /*************************** 3.查詢成功，登入 **************************/
+	    if (employeeOpt.isPresent()) {
+	        EmployeeVO employee = employeeOpt.get();
+	        if (employee.getEmpStatus() == 0) {
+	            model.addAttribute("loginError", "您已被停權");
+	            return "back-end/employee/login"; // 若被停權，無法登入
+	        }
+	        session.setAttribute("loggedInEmployee", employee); // 將會員信息保存到 session
 
-			} else {
-				model.addAttribute("loginError", "無效的帳號或密碼");
-				return "back-end/employee/login"; // 登入失敗，返回登入頁面並顯示錯誤信息
-			}
-	  }
+	        // 設置多個權限號碼到 session
+	        Set<Integer> authNos = employeeSvc.getAuthNosByEmpNo(employee.getEmpNo());
+	        session.setAttribute("authNos", authNos);
+
+	        return "back-end/back_end_index"; // 重導至欲前往的頁面
+	    } else {
+	        model.addAttribute("loginError", "無效的帳號或密碼");
+	        return "back-end/employee/login"; // 登入失敗，返回登入頁面並顯示錯誤信息
+	    }
+	}
+
 
 //	/*
 //	 * 第一種作法 Method used to populate the List Data in view. 如 : 

@@ -64,9 +64,7 @@ public class TourOrderProtectController {
 	    MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
 
 	    // 检查 loggedInMember 是否为空
-	    
-
-	    // 获取会员编号
+	     // 获取会员编号
 	    Integer loggedInMemberNo = loggedInMember.getMemNo();
 	    
 	    // 获取历史订单列表
