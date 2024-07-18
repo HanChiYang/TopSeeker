@@ -51,8 +51,6 @@ public class WeatherDataParser {
             InputStream is = conn.getInputStream();
             FileOutputStream fos = new FileOutputStream(file);
 
-            System.out.println(filename + " 下載中");
-
             int length = 0;
             byte[] b = new byte[4096];
             while ((length = is.read(b)) != -1) {
@@ -62,9 +60,7 @@ public class WeatherDataParser {
 
             fos.close();
             is.close();
-            System.out.println(filename + " Done!");
 
-            // 将JSON文件解析
             parseAndSaveWeatherData(file);
 
         } catch (MalformedURLException e) {
