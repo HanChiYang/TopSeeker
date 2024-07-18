@@ -55,7 +55,7 @@ margin-top: 75px;
 		<button type="button" id="send_btn" class="btn btn-success">送出驗證碼</button>
 
 
-		<form id="verifyForm" th:action="@{/member/verifyMem}" method="post" >
+		<form id="verifyForm" th:action="@{/protected/member/verifyMem}" method="post" >
 			<input type="text" name="verifyCode" class="form-control">
 			<button type="submit" id="verify_btn" class="btn btn-success">驗證</button>
 		</form>
@@ -75,7 +75,7 @@ margin-top: 75px;
     $(document).ready(function() {
         $("#send_btn").on("click", function() {
             $.ajax({
-                url : "/member/sendVerifyMail",
+                url : "/protected/member/sendVerifyMail",
                 method : "GET",
                 success : function(response) {
                     console.log(response); // 可以在控制台看到 "OK"
@@ -96,7 +96,7 @@ margin-top: 75px;
             
             // 進行AJAX提交
             $.ajax({
-                url : "/member/verifyMem",
+                url : "/protected/member/verifyMem",
                 method : "POST",
                 data : $(this).serialize(), // 序列化表單數據以提交
                 success : function(response) {
