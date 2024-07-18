@@ -77,19 +77,66 @@ public class ParticipantController {
 	        return "front-end/participant/addParticipant";
 	    }
 
-	    @PostMapping("insert")
-	    public String insert(@Valid ParticipantVO participantVO, BindingResult result, ModelMap model,
+	@PostMapping("insert")
+	public String insert(@Valid ParticipantVO participantVO, BindingResult result, ModelMap model,
 	                         MultipartFile[] parts, HttpSession session) throws IOException {
-	        if (result.hasErrors()) {
-	            return "front-end/participant/addParticipant";
+	    if (result.hasErrors()) {
+	        return "front-end/participant/addParticipant";
+	    }
+	
+	    participantSvc.addParticipant(participantVO);
+	/*
+	 * This method will be called on addEmp.html form submission, handling POST request It also validates the user input
+	 */
+		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
+		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
+		result = removeFieldError(participantVO, result, "upFiles");
+
+//		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
+//			model.addAttribute("errorMessage", "員工照片: 請上傳照片");
+//		} else {
+//			for (MultipartFile multipartFile : parts) {
+//				byte[] buf = multipartFile.getBytes();
+//				participantVO.setUpFiles(buf);
+//			}
+//		}
+		
+		/*************************** 2.開始新增資料 *****************************************/
+		//=========================更新區塊==========================
+		// 獲取對應的活動
+	    ActVO actVO = actSvc.getOneAct(participantVO.getActVO().getActNo());
+	    if (actVO != null) {
+	        int currentCount = actVO.getActCurrentCount();
+	        int checkCount = actVO.getActCheckCount();
+	        int totalParticipants = currentCount + checkCount;
+
+	     // 檢查參與人數是否超過限制
+	        if (participantVO.getActJoinCount() > (actVO.getActMaxCount() - totalParticipants)) {
+	            model.addAttribute("errorMessage", "參與人數超過活動可接受人數限制");
+	            model.addAttribute("actTitle", actVO.getActTitle());
+
+	            MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+	            if (loggedInMember != null) {
+	                model.addAttribute("memName", loggedInMember.getMemName());
+	            }
+
+	            model.addAttribute("participantVO", participantVO); // 保持參團資訊
+	            return "front-end/participant/addParticipant";  // 返回表單頁面，並顯示錯誤信息
 	        }
 
+	        // 新增參與者並更新活動待審核人數
 	        participantSvc.addParticipant(participantVO);
-
-	        model.addAttribute("participantListData", participantSvc.getAll());
-	        model.addAttribute("success", "- (新增成功)");
-	        return "redirect:/participant/listMyAllParticipant";
+	        actSvc.updateActCheckCount(actVO.getActNo(), participantVO.getActJoinCount());
 	    }
+		//==========================================================
+	    
+	    /*************************** 3.新增完成,準備轉交(Send the Success view) **************/
+		List<ParticipantVO> list = participantSvc.getAll();
+		model.addAttribute("participantListData", list);
+		model.addAttribute("success", "- (新增成功)");
+		return "redirect:/participant/listMyAllParticipant"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
+	}
+
 
 	/*
 	 * This method will be called on listAllEmp.html form submission, handling POST request
@@ -159,7 +206,7 @@ public class ParticipantController {
 		List<ParticipantVO> list = participantSvc.getAll();
 		model.addAttribute("participantListData", list);
 		model.addAttribute("success", "- (刪除成功)");
-		return "front-end/participant/listAllParticipant"; // 刪除完成後轉交listAllEmp.html
+		return "redirect:/participant/listMyAllParticipant"; // 刪除完成後轉交listAllEmp.html
 	}
 
 	/*

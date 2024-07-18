@@ -1,6 +1,7 @@
 package com.topseeker.weathercrawler.model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,87 +9,84 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "weather")
-public class WeatherVO {
+public class WeatherVO implements java.io.Serializable {
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@Column(name = "wx_no")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer wxNo;
+	
+	@Column(name = "loc_name")
+	private String locName;
+	
+	@Column(name = "wx_date")
+	private Date wxDate;
+	
+	@Column(name = "wxh_temp")
+	private Integer wxhTemp;
+	
+	@Column(name = "wxm_temp")
+	private Integer wxmTemp;
+	
+	public WeatherVO() {
+		
+	}
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="wx_no")
-    private Integer wxNo;
-    
-    @Column(name = "loc_name")
-    private String locName;
-    @Column(name = "wx_date")
-    private Date wxDate;
-    @Column(name = "h_temp")
-    private String hTemp;
-    @Column(name = "m_temp")
-    private String mTemp;
-    @Column(name = "rain_rate")
-    private String rainRate;
-    @Column(name = "wx")
-    private String wX;
-    @Column(name = "uvi_rate")
-    private String uviRate;
-    @Column(name = "uvi_desc")
-    private String uviDesc;
-    
-    
 	public Integer getWxNo() {
 		return wxNo;
 	}
+
 	public void setWxNo(Integer wxNo) {
 		this.wxNo = wxNo;
 	}
+
 	public String getLocName() {
 		return locName;
 	}
+
 	public void setLocName(String locName) {
 		this.locName = locName;
 	}
+
 	public Date getWxDate() {
 		return wxDate;
 	}
+
 	public void setWxDate(Date wxDate) {
 		this.wxDate = wxDate;
 	}
-	public String gethTemp() {
-		return hTemp;
+
+	public Integer getWxhTemp() {
+		return wxhTemp;
 	}
-	public void sethTemp(String hTemp) {
-		this.hTemp = hTemp;
+
+	public void setWxhTemp(Integer wxhTemp) {
+		this.wxhTemp = wxhTemp;
 	}
-	public String getmTemp() {
-		return mTemp;
+
+	public Integer getWxmTemp() {
+		return wxmTemp;
 	}
-	public void setmTemp(String mTemp) {
-		this.mTemp = mTemp;
+
+	public void setWxmTemp(Integer wxmTemp) {
+		this.wxmTemp = wxmTemp;
 	}
-	public String getRainRate() {
-		return rainRate;
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
-	public void setRainRate(String rainRate) {
-		this.rainRate = rainRate;
-	}
-	public String getwX() {
-		return wX;
-	}
-	public void setwX(String wX) {
-		this.wX = wX;
-	}
-	public String getUviRate() {
-		return uviRate;
-	}
-	public void setUviRate(String uviRate) {
-		this.uviRate = uviRate;
-	}
-	public String getUviDesc() {
-		return uviDesc;
-	}
-	public void setUviDesc(String uviDesc) {
-		this.uviDesc = uviDesc;
-	}
-    
+
+
+
+	
 }

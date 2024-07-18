@@ -2,11 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<title>檢舉揪團</title>
+<title>討論區文章管理</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
 <style>
 * {
     box-sizing: border-box;
@@ -30,15 +28,12 @@ div.container {
     margin-top: 100px;
     max-width: 90%;
     padding: 20px;
-    background-image: url('/images/broderuse2.jpg'); /* 设置背景图片 */
-    background-size: cover; /* 背景图片大小 */
-    background-position: center; /* 背景图片位置 */
-    background-repeat: no-repeat; /* 防止背景图片重复 */
+    background-color: #CEDEBD;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
     font-size: 20px;
-    font-weight: bold;
+    font-weight: bold; 
 }
 
 div.article-details {
@@ -46,102 +41,37 @@ div.article-details {
     max-width: 90%;
     margin: 0 auto;
     padding: 20px;
-    background-image: url('/images/broderuse2.jpg'); /* 设置背景图片 */
-    background-size: cover; /* 背景图片大小 */
-    background-position: bottom; /* 背景图片位置 */
-    background-repeat: no-repeat; /* 防止背景图片重复 */
+    background-color: #fafafa;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
+
+div.artContent input[type="text"] {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
 table.dataTable {
     width: 100%;
     margin-top: 20px;
     border-collapse: collapse;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    background-color: #F1F8E8;
 }
 
 table.dataTable thead {
-    background-color: #D8EFD3;
-    color: 435334;
+    background-color: #f0f0f0;
 }
 
 table.dataTable th, table.dataTable td {
-    border: 1px solid #435334;
+    border: 1px solid #ccc;
     padding: 10px;
     text-align: left;
 }
-
-table.dataTable th {
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.dataTables_wrapper .dataTables_length select,
-.dataTables_wrapper .dataTables_filter input {
-    border: 1px solid #435334;
-    border-radius: 4px;
-    padding: 5px;
-    margin-bottom: 10px;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-    padding: 0.2em 0.6em;
-    margin-left: 2px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    transition: all 0.3s;
-    cursor: pointer;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.current,
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    background: #007bff;
-    color: white !important;
-    border: 1px solid #435334;
-    border-radius: 4px;
-}
-
-.dataTables_wrapper .dataTables_info {
-    padding-top: 0.85em;
-    white-space: nowrap;
-    overflow: auto;
-    color: #435334;
-}
-
-.dataTables_wrapper .dataTables_paginate {
-    float: right;
-    text-align: right;
-    padding-top: 0.25em;
-}
-
-.dataTables_wrapper .dataTables_filter {
-    float: right;
-    text-align: right;
-}
-
-.dataTables_wrapper .dataTables_length {
-    float: left;
-}
-
-.dataTables_wrapper .dataTables_processing {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    margin-left: -50%;
-    text-align: center;
-    font-size: 1.2em;
-    color: grey;
-}
-
-.table-hover tbody tr:hover {
-    background-color: #f5f5f5;
-}
-
 </style>
 <link rel="stylesheet" th:href="@{/css/common.css}">
+
 <link rel="stylesheet" th:href="@{/css/navbar.css}" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
@@ -150,42 +80,44 @@ table.dataTable th {
 
 <div class="container">登山情報</div>
 <div class="article-details">    
-    <form class="add-article" th:action="@{insert}" method="post" th:object="${articleVO}" enctype="multipart/form-data">
-        <h2>登山情報新增</h2>
-        <div>
-            <label for="artTitle">文章標題:</label>
-            <input type="text" id="artTitle" name="artTitle" th:field="*{artTitle}" onclick="hideContent('artTitle.errors');" />
-            <span th:if="${#fields.hasErrors('artTitle')}" th:errors="*{artTitle}" class="error"></span>
-        </div>
-        <div class="artContent">
-            <label for="artContent">文章內容:</label>
-            <input type="text" id="artContent" name="artContent" th:field="*{artContent}" onclick="hideContent('artContent.errors');" />
-            <span th:if="${#fields.hasErrors('artContent')}" th:errors="*{artContent}" class="error"></span>
-        </div>
-        <div>
-            <label for="artStatus">文章狀態:</label>
-            <select id="artStatus" name="artStatus" th:field="*{artStatus}">
-                <option value="0" th:text="'隱藏'">隱藏</option>
-                <option value="1" th:text="'公開'">公開</option>
-            </select>
-            <span th:if="${#fields.hasErrors('artStatus')}" th:errors="*{artStatus}" class="error"></span>
-        </div>
-        <div>
-            <label for="artPublishTime">發布時間:</label>
-            <input type="datetime" id="artPublishTime" name="artPublishTime" th:field="*{artPublishTime}" onclick="hideContent('artPublishTime.errors');" />
-            <span th:if="${#fields.hasErrors('artPublishTime')}" th:errors="*{artPublishTime}" class="error"></span>
-        </div>
-        <div>
-            <label for="artPics">文章圖片:</label>
-            <input type="file" id="artPics" name="artPics" multiple onchange="previewImages(event)" />
-            <span th:if="${#fields.hasErrors('artPics')}" th:errors="*{artPics}" class="error"></span>
-            <div id="imagePreview"></div>
-        </div>
-        <div>
-            <button type="submit">送出新增</button>
-            <button type="button" onclick="cancelAdd()">取消新增</button>
-        </div>
-    </form>
+  <form class="add-article" th:action="@{insert}" method="post" th:object="${articleVO}" enctype="multipart/form-data">
+    <h2>登山情報新增</h2>
+    <div>
+      <label for="artTitle">文章標題:</label>
+      <input type="text" id="artTitle" name="artTitle" th:field="*{artTitle}" onclick="hideContent('artTitle.errors');" />
+      <span th:if="${#fields.hasErrors('artTitle')}" th:errors="*{artTitle}" class="error"></span>
+    </div>
+    <div class="artContent">
+      <label for="artContent">文章內容:</label>
+      <input type="text" id="artContent" name="artContent" th:field="*{artContent}" onclick="hideContent('artContent.errors');" />
+      <span th:if="${#fields.hasErrors('artContent')}" th:errors="*{artContent}" class="error"></span>
+    </div>
+    <div>
+      <label for="artStatus">文章狀態:</label>
+      <select id="artStatus" name="artStatus" th:field="*{artStatus}">
+        <option value="0" th:text="'隱藏'">隱藏</option>
+        <option value="1" th:text="'公開'">公開</option>
+      </select>
+      <span th:if="${#fields.hasErrors('artStatus')}" th:errors="*{artStatus}" class="error"></span>
+    </div>
+    <div>
+      <label for="artPublishTime">發布時間:</label>
+      <input type="datetime" id="artPublishTime" name="artPublishTime" th:field="*{artPublishTime}" onclick="hideContent('artPublishTime.errors');" />
+      <span th:if="${#fields.hasErrors('artPublishTime')}" th:errors="*{artPublishTime}" class="error"></span>
+    </div>
+    
+     <div>
+      <label for="artPics">文章圖片:</label>
+      <input type="file" id="artPics" name="artPics" multiple />
+      <span th:if="${#fields.hasErrors('artPics')}" th:errors="*{artPics}" class="error"></span>
+    </div>
+    
+    
+    <div>
+      <button type="submit">送出新增</button>
+       <button type="button" onclick="cancelAdd()">取消新增</button>
+    </div>
+  </form>
 </div>
 
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
@@ -193,33 +125,14 @@ table.dataTable th {
 $(document).ready(function() {
     $('#example').DataTable();
 });
+</script>
 
+<script type="text/javascript">
 function hideContent(d) {
     document.getElementById(d).style.display = "none";
 }
-
 function cancelAdd() {
     history.back();
-}
-
-function previewImages(event) {
-    const files = event.target.files;
-    const preview = document.getElementById('imagePreview');
-    preview.innerHTML = ''; // 清除之前的预览
-
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.style.width = '100px'; // 设置预览图片的宽度
-            img.style.height = 'auto';
-            img.style.marginRight = '10px';
-            preview.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-    }
 }
 </script>
 

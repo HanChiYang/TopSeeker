@@ -29,7 +29,8 @@ public class MemberService {
 
 	public MemberVO getOneMem(Integer memNo) {
 		Optional<MemberVO> optional = repository.findById(memNo);
-		return optional.orElse(null);
+//		return optional.get();
+		return optional.orElse(null);  // public T orElse(T other) : 如果值存在就回傳其值，否則回傳other的值
 	}
 
 	//查詢全部
@@ -75,7 +76,7 @@ public class MemberService {
 	
 	//使用身分證字號查詢
 	public MemberVO findByUid(String memUid) {
-		Optional<MemberVO> optional = repository.findByUid(memUid);
+		Optional<MemberVO> optional = repository.findByAccount(memUid);
 		return optional.orElse(null);
 	}
 }

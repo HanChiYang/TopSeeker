@@ -98,6 +98,10 @@ background-color: white !important;
 	width:50px !important;
 }
 
+
+
+
+
 </style>
 <link rel="stylesheet" th:href="@{/css/common.css}">
 </head>
@@ -135,7 +139,7 @@ background-color: white !important;
                    	</div>
                 </td>
                 <td>
-                    <form method="post" th:action="@{/protected/follow/delete}" style="margin-bottom: 0px;">
+                    <form method="post" th:action="@{/follow/delete}" style="margin-bottom: 0px;">
                         <input type="submit" value="取消追隨" class="btn btn-danger" id="cancelFollow">
                         <input type="hidden" name="followedMemNo" th:value="${followVO.beFollowedMemberVO.memNo}">
                     </form>
@@ -146,16 +150,26 @@ background-color: white !important;
 		</table>
 		
 		
+		
+       <form id="followForm" style="margin-bottom: 0px;">
+            <input type="button" value="追隨此會員" class="btn btn-primary" id="test">
+            <input type="hidden" name="beFollowedMemNo" value="1002">
+        </form>
+		
+		
+		
 		 <a href="/protected/member/indexMem" class="btn btn-success">回到會員專區</a>
 	</div>
-<div th:insert="~{/front-end/notification/notification.html}"></div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script
+	src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 
 <script>
 	$(document).ready(function() {
-		$('#example').DataTable({
+		$('#example')
+			.DataTable(
+			{
 				"lengthMenu" : [ 10, 20, 50 ],
 				"searching" : false, //搜尋功能, 預設是開啟
 				"paging" : true, //分頁功能, 預設是開啟
@@ -203,7 +217,5 @@ background-color: white !important;
         });
     });
 </script>
-<script src="/js/common.js"></script>
-
 </body>
 </html>

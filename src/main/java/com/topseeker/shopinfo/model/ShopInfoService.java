@@ -8,8 +8,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.topseeker.shop.productpic.model.ShopProductPicVO;
-
 @Service("shopInfoService")
 public class ShopInfoService {
 
@@ -46,13 +44,6 @@ public class ShopInfoService {
 	public List<ShopInfoVO> getAll() {
 		return repository.findAll();
 	}
-	
-	//取單一圖片
-	public ShopInfoVO getShopInfoPic(Integer infoNo) {
-		return repository.getShopInfoPic(infoNo);
-	}
-	
-
 	
 //	//複合搜尋
 //	public List<ShopInfoVO> getAll(Map<String, String[]> map) {

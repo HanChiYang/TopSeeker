@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.topseeker.artpic.model.ArtPicRepository;
-import com.topseeker.artpic.model.ArtPicVO;
 
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Article;
 
@@ -33,13 +32,9 @@ public class ArticleService {
 	public void addArticle(ArticleVO articleVO) {
 		repository.save(articleVO);
 	}
-	
-	@Transactional
+
 	public void updateArticle(ArticleVO articleVO) {
-		
-		for (ArtPicVO artPicVO : articleVO.getArtPics()) {
-            artPicRepository.save(artPicVO);
-        }
+		repository.save(articleVO);
 	}
 	@Transactional
 	public void deleteArticle(Integer artNo) {

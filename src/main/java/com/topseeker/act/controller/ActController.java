@@ -81,6 +81,7 @@ public class ActController {
 	/*
 	 * This method will be called on addEmp.html form submission, handling POST request It also validates the user input
 	 */
+	
 	@PostMapping("insert")
 	public String insert(
 			/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
@@ -307,17 +308,19 @@ public class ActController {
 	    }
 
 	    List<ActVO> list = actSvc.getAll().stream()
+	    		//判斷登入的會員
 	            .filter(p -> p.getMemberVO().getMemNo().equals(loggedInMember.getMemNo()))
-	            .collect(Collectors.toList());
+	            
+	        	// 取得待審核人數和當前參與人數
+//	            .peek(act -> {
+//                    actSvc.updateActCurrentAndCheckCount(act.getActNo());
+//                    
+//                })
+	            .collect(Collectors.toList());//加入集合
 
 	    model.addAttribute("memMyAct", list);
 		return "front-end/act/memMyAct";
-	}
-    
-    @GetMapping("/check")
-    public String check(Model model) {
-    	return "front-end/participant/participantCheck";
-    }
+	}    
     
     @GetMapping("/actBackEnd")
     public String actBackEnd(Model model) {

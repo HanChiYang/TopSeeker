@@ -37,6 +37,10 @@
         border: 1px solid black; /* 新增邊框樣式 */
         border-collapse: collapse;
      }
+     
+     .no-wrap {
+	    white-space: nowrap;
+	 }
     </style>    
 </head>
 <body>
@@ -126,15 +130,15 @@
                             <tr>
                                 <td th:text="${actVOStat.count}"></td>
                                 <td th:text="${actVO.memberVO.memAccount} + '-(' + ${actVO.memberVO.memName} + ')'"></td>
-                                <td th:text="${actVO.actTitle}"></td>                                                                <td th:text="${actVO.actMaxCount}"></td>
+                                <td th:text="${actVO.actTitle}"></td>                                                                
+                                <td th:text="${actVO.actMaxCount}"></td>
                                 <td th:text="${actVO.actMinCount}"></td>
                                 <td th:text="${actVO.actCurrentCount}"></td>
-                                <td>
+                                <td class="no-wrap">
                                     <span th:text="${actVO.actCheckCount}"></span>
-                                    <form th:action="@{/act/check}" method="get" style="display:inline;">
-                                        <button type="submit" class="btn btn-primary ms-2" th:classappend="${actVO.actCheckCount == 0} ? 'disabled' : ''" th:disabled="${actVO.actCheckCount == 0}">審核</button>
-                                        <input type="hidden" name="actNo" th:value="${actVO.actNo}">
-                                    </form>
+                                    <form th:action="@{/participant/participantCheck}" method="get" style="display:inline;">
+									    <button type="submit" class="btn btn-primary ms-2" th:classappend="${actVO.actCheckCount == 0} ? 'disabled' : ''" th:disabled="${actVO.actCheckCount == 0}">審核</button>
+									</form>
                                 </td>
                                 <td th:text="${actVO.actEnrollBegin}"></td>
                                 <td th:text="${actVO.actEnrollEnd}"></td>
