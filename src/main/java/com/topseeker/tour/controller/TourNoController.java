@@ -201,11 +201,12 @@ public class TourNoController {
 	
 	//tourGroup單筆查詢
 	@PostMapping("/addOrder")
-    public String addOrder(@RequestParam("groupNo") Integer groupNo, Model model) {
+    public String addOrder(@RequestParam("groupNo") Integer groupNo,
+    		@RequestParam("groupNo") Integer groupNo,Model model) {
         // 在這裡處理 groupNo，例如查詢相關的行程信息並添加到 model 中
 		
 		TourGroupVO tourGroupVO = tourGroupSvc.getOneTourGroup(Integer.valueOf(groupNo));
-
+		
 		List<TourGroupVO> list = tourGroupSvc.getAll();
 		model.addAttribute("tourGroupListData", list);     // for select_page.html 第97 109行用
 		model.addAttribute("tourVO", new TourVO());  // for select_page.html 第133行用
