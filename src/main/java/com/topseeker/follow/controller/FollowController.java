@@ -26,7 +26,7 @@ import com.topseeker.member.model.MemberVO;
 
 @Controller
 @Validated
-@RequestMapping("/follow")
+@RequestMapping("/protected/follow")
 public class FollowController {
 
 	@Autowired

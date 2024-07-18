@@ -31,8 +31,7 @@ public class MailManager {
         properties.setProperty("mail.smtp.connectiontimeout", "10000");
         properties.setProperty("mail.smtp.timeout", "10000");
         properties.setProperty("mail.smtp.writetimeout", "10000");
-        properties.setProperty("mail.smtp.starttls.enable", "true"); 
-        // 是否啟用STARTTLS安全協議
+        properties.setProperty("mail.smtp.starttls.enable", "true"); //安全協議 
 
         Authenticator auth = new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -64,14 +63,4 @@ public class MailManager {
     	        e.printStackTrace();
     	    }
     	}
-    
-//    public static void main(String[] args) {
-//        // 確保這裡的user和pwd是正確的
-//        MailManager mailManager = new MailManager("mqvcggslkuzgfbvx", "cia102g2.topseeker@gmail.com");
-//        List<String> to = List.of("leo8152257@gmail.com");
-//        List<String> cc = List.of();
-//        List<String> bcc = List.of();
-//        
-//        mailManager.sentMail("leo8152257@gmail.com", to, cc, bcc, "TopSeeker踏徙客", "TopSeeker會員驗證", "您的會員驗證碼為XXXXX");
-//    }
 }

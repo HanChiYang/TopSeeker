@@ -12,18 +12,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface WeatherRepository extends JpaRepository<WeatherVO, Integer> {
     
+	//以地點及日期搜尋是否已有資料
 	Optional<WeatherVO> findByLocNameAndWxDate(String locName, Date wxDate);
 
+	//每次更新時先刪除表格資料
 	@Modifying
 	@Query(value = "TRUNCATE TABLE weather", nativeQuery = true)
 	void truncateWeatherData();
 	
-	@Query(value = "SELECT DISTINCT loc_name FROM weather", nativeQuery = true)
-	List<String> getPlace();
-	
+	//依地點查詢資料
 	@Query(value = "SELECT * FROM weather WHERE loc_name=?1", nativeQuery = true)
 	List<WeatherVO> getWxByLoc(String locName);
-	
 	
 }
 

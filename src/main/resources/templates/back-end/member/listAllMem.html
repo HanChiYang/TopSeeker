@@ -74,20 +74,16 @@ body {
             <th>性別</th>
             <th>手機</th>
             <th>信箱</th>
-            <!-- <th>身分證</th> -->
             <th>生日</th>
             <th>帳號</th>
-            <!-- <th>密碼</th> -->
             <th>照片</th>
             <th>狀態</th>
             <th>修改</th>
-            <!-- <th>刪除</th> -->
         </tr>
     </thead>
     <tbody>
         <th:block th:each="memberVO : ${memListData}">
             <tr>
-                <!-- <td th:text="${memberVOStat.count}"></td> -->
                 <td th:text="${memberVO.memNo}"></td>
                 <td th:text="${memberVO.memName}"></td>
                 <td>
@@ -98,10 +94,8 @@ body {
                 </td>
                 <td th:text="${memberVO.memPhone}"></td>
                 <td th:text="${memberVO.memEmail}"></td>
-                <!-- <td th:text="${memberVO.memUid}"></td> -->
                 <td th:text="${memberVO.memBirthday}"></td>
                 <td th:text="${memberVO.memAccount}"></td>
-                <!-- <td th:text="${memberVO.memPassword}"></td> -->
                 <td><img th:src="@{/member/DBGifReader} + '?memNo=' + ${memberVO.memNo}" width="50px"></td>
                 <td>
                     <span th:switch="${memberVO.memStatus}">
@@ -111,7 +105,7 @@ body {
                     </span>
                 </td>
                 <td>
-                    <form method="post" th:action="@{/member/backend_protected/update}" style="margin-bottom: 0px;">
+                    <form method="post" th:action="@{/backend_protected/member/updatePage}" style="margin-bottom: 0px;">
                         <input type="submit" value="修改">
                         <input type="hidden" name="memNo" th:value="${memberVO.memNo}">
                     </form>

@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface MemberRepository extends JpaRepository<MemberVO, Integer> {
 
-
 	//會員登入
 	@Query(value = "from MemberVO where memAccount=?1 and memPassword =?2")
     Optional<MemberVO> memLogin(String memAccount, String memPassword);
