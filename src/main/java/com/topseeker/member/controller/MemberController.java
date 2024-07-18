@@ -69,7 +69,7 @@ public class MemberController {
 			@RequestParam("memEmail") String memEmail,
 			@RequestParam("memUid") String memUid, HttpSession session) throws IOException {
 
-		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
+		// 去除BindingResult中upFiles欄位的FieldError紀錄
 		result = removeFieldError(memberVO, result, "memImg");
 
 		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
@@ -86,14 +86,8 @@ public class MemberController {
 		if (result.hasErrors()) {
 			return "front-end/member/registrationMem";
 		}
-		
-		
-		
 		//檢查是否有相同名稱帳號
-		
 	    List<String> errorMessages = new LinkedList<>();
-
-
 	    if (memSvc.findByAccount(memAccount) != null) {
 	        errorMessages.add("已有相同名稱帳號");
 	    }
@@ -117,237 +111,12 @@ public class MemberController {
 		return "front-end/member/verifyMem";
 	}
 
-	// 會員驗證頁面mapping
-	@PostMapping("protected/verifyPage")
-	public String verifyMem(Model model) {
-		return "front-end/member/verifyMem";
-	}
-
-	/*************************** 信件驗證功能 **************************/
-	// 1. 發送驗證信
-
-	@GetMapping("sendVerifyMail")
-	@ResponseBody
-	public void sendVerifyMail(HttpSession session) {
-		// 產生隨機碼
-		String allChar = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-		char[] charArray = allChar.toCharArray(); // 轉為陣列
-
-		String verifyString = "";
-		for (int i = 0; i <= 8; i++) {
-			int ranIdx = (int) (Math.random() * allChar.length());
-			verifyString += charArray[ranIdx];
-		}
-
-		// 將驗證碼存於session中
-		session.setAttribute("verifyString", verifyString);
-
-		// 取得會員email並寄出
-		MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
-		String memberEmail = loggedInMember.getMemEmail();
-
-		MailManager mailManager = new MailManager(mailServerPwd, mailServerUser);
-		List<String> to = List.of(memberEmail);
-		List<String> cc = List.of();
-		List<String> bcc = List.of();
-		mailManager.sentMail(memberEmail, to, cc, bcc, "TopSeeker踏徙客", "TopSeeker會員驗證", "您的會員驗證碼為: \n" + verifyString);
-	}
-
-	// 2. 會員輸入驗證碼並驗證
-
-	@PostMapping("verifyMem")
-	public String verifyMem(Model model, HttpSession session, @RequestParam("verifyCode") String verifyCode) {
-		String verifyString = session.getAttribute("verifyString").toString();
-
-		if (verifyString.equals(verifyCode)) {
-			MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
-			Integer loggedInMemberNo = loggedInMember.getMemNo();
-
-			// 修改會員狀態
-			memSvc.verifyMem(loggedInMemberNo);
-
-			// 將原session去除
-			session.removeAttribute("loggedInMember");
-			MemberVO verifiedMember = memSvc.getOneMem(loggedInMemberNo);
-
-			// set新的session
-			session.setAttribute("loggedInMember", verifiedMember);
-
-			return "front-end/member/indexMem";
-
-		} else {
-			// 驗證碼錯誤失敗，顯示錯誤訊息
-			model.addAttribute("verifyError", "驗證碼錯誤");
-			return "front-end/member/verifyMem";
-		}
-
-	}
-
-	/*************************** 修改密碼 ******************/
-
-	// 修改密碼頁面mapping
-	@PostMapping("protected/updatePasswordPage")
-	public String updatePassword(Model model) {
-		return "front-end/member/updatePasswordPage";
-	}
-
-	// 確認並修改密碼
-	@PostMapping("confirmPassword")
-	public String confirmPassword(@RequestParam("password1") String password1,
-			@RequestParam("password2") String password2, ModelMap model, HttpSession session) {
-
-		MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
-
-		// 來自信件重設密碼
-		if (loggedInMember == null) {
-
-			String memEmailFromReset = (String) session.getAttribute("resetMemEmail");
-
-			Optional<MemberVO> memberOpt = memSvc.findByEmail(memEmailFromReset);
-			MemberVO memberFromReset = memberOpt.get();
-			memSvc.updatePassword(password1, memberFromReset.getMemNo());
-			return "front-end/member/loginMem";
-		} else {
-			// 登入後重設密碼
-			memSvc.updatePassword(password1, loggedInMember.getMemNo());
-			return "front-end/member/loginMem";
-		}
-	}
-
-	/*************************** 修改大頭貼 *********************/
-	@PostMapping("updatePic")
-	public String updatePic(@RequestParam("memImg") MultipartFile[] parts, HttpSession session) throws IOException {
-		MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
-
-		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的新圖片時
-			byte[] memImg = memSvc.getOneMem(loggedInMember.getMemNo()).getMemImg();
-			loggedInMember.setMemImg(memImg);
-			memSvc.updateMemImg(memImg, loggedInMember.getMemNo());
-
-		} else {
-			for (MultipartFile multipartFile : parts) {
-				byte[] memImg = multipartFile.getBytes();
-				loggedInMember.setMemImg(memImg);
-				memSvc.updateMemImg(memImg, loggedInMember.getMemNo());
-			}
-		}
-		return "front-end/member/indexMem";
-	}
-
-	/******************** 後台進入單一會員修改頁面 ******************/
-	
-	@PostMapping("backend_protected/update")
-	public String getOne_For_Update(@RequestParam("memNo") String memNo, ModelMap model) {
-		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ******************/
-		/*************************** 2.開始查詢資料 ***************************************/
-		MemberVO memberVO = memSvc.getOneMem(Integer.valueOf(memNo));
-
-		/*************************** 3.查詢完成,準備轉交(Send the Success view) ***********/
-		model.addAttribute("memberVO", memberVO);
-		return "back-end/member/update_mem_input"; 
-	}
-	
-	/******************** 後台修改會員資料 ******************/
-
-	@PostMapping("update")
-	public String update(@Valid MemberVO memberVO, BindingResult result, ModelMap model,
-			@RequestParam("memImg") MultipartFile[] parts) throws IOException {
-
-		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ******************/
-		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
-		result = removeFieldError(memberVO, result, "memImg");
-
-		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的新圖片時
-			byte[] memImg = memSvc.getOneMem(memberVO.getMemNo()).getMemImg();
-			memberVO.setMemImg(memImg);
-		} else {
-			for (MultipartFile multipartFile : parts) {
-				byte[] memImg = multipartFile.getBytes();
-				memberVO.setMemImg(memImg);
-			}
-		}
-		if (result.hasErrors()) {
-			return "back-end/member/update_mem_input";
-		}
-		/*************************** 2.開始修改資料 ***************************************/
-		memSvc.updateMem(memberVO);
-
-		/*************************** 3.修改完成,準備轉交(Send the Success view) ***********/
-		model.addAttribute("success", "- (修改成功)");
-		memberVO = memSvc.getOneMem(Integer.valueOf(memberVO.getMemNo()));
-		model.addAttribute("MemberVO", memberVO);
-		
-		return "back-end/member/listOneMem";
-    
-	}
-	
-	/*************************** 檢視會員資料 ******************/
-
-	@PostMapping("protected/inspect")
-	public String getOne_For_Inspect(HttpSession session, Model model) {
-		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ******************/
-		/*************************** 2.開始查詢資料 ***************************************/
-		MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
-//		Integer loggedInMemberNo = loggedInMember.getMemNo();
-//		MemberVO memberVO = memSvc.getOneMem(Integer.valueOf(memNo));
-
-		/*************************** 3.查詢完成,準備轉交(Send the Success view) ***********/
-		model.addAttribute("memberVO", loggedInMember);
-		return "front-end/member/inspectMem"; 
-	}
-
-	@PostMapping("listMems_ByCompositeQuery")
-    public String listAllMems(HttpServletRequest req, Model model) {
-        Map<String, String[]> map = req.getParameterMap();
-        Map<String, String[]> queryParams = new HashMap<>(map);
-
-        // 處理日期區間查詢條件
-        String startDate = req.getParameter("startDate");
-        String endDate = req.getParameter("endDate");
-
-        if (startDate != null && !startDate.trim().isEmpty() && endDate != null && !endDate.trim().isEmpty()) {
-            queryParams.put("memDateRange", new String[]{startDate + "," + endDate});
-        }
-
-        Session session = sessionFactory.openSession();
-        List<MemberVO> list = HibernateUtil_CompositeQuery_Mem.getAllC(queryParams, session);
-        model.addAttribute("memListData", list); // for listAllEmp.jsp 第85行用
-        return "back-end/member/listAllMem";
-    }
-	
-	//以下Ajax測試用
-	@GetMapping("listAllMembyAjax")
-	public String listAllMemAjax (Model model) {
-		return "back-end/member/listAllMembyAjax";
-	}
-
-	@PostMapping("ajaxSearch")
-	public String ajaxSearch(HttpServletRequest req, Model model, HttpSession session) {
-		Map<String, String[]> map = req.getParameterMap();
-		List<MemberVO> list = memSvc.getAll(map);
-		model.addAttribute("memListData", list); // for listAllEmp.jsp 第85行用
-        return "back-end/member/listAllFragment :: resultsList";
-	}
-	
-	//以下Ajax會員詳情測試用
-	@PostMapping("ajaxDetail")
-	public String ajaxDetail(@RequestParam("memNo") String memNo, HttpServletRequest req, Model model, HttpSession session) {
-			MemberVO memberVO = (MemberVO) memSvc.getOneMem(Integer.valueOf(memNo));
-
-			model.addAttribute("memberVO", memberVO);
-		return "back-end/member/inspectMemFragment :: memberDetail";
-	}
-	
-	@GetMapping("/memberManagement")
-	public String memberManagement() {
-		return "back-end/member/select_page";
-	}
-
 	/*************************** 登出、登入功能 ******************/
 	// 1. 登入
 	@PostMapping("loginMem")
-	public String loginMem(Model model, HttpServletRequest req, HttpServletResponse res, HttpSession session,
-			@RequestParam("memAccount") String memAccount, @RequestParam("memPassword") String memPassword) {
+	public String loginMem(Model model, HttpSession session,
+			@RequestParam("memAccount") String memAccount,
+			@RequestParam("memPassword") String memPassword) {
 
 		String oriURL = session.getAttribute("oriURL") != null ? session.getAttribute("oriURL").toString() : "/";
 
@@ -361,12 +130,12 @@ public class MemberController {
 				model.addAttribute("loginError", "您已被停權");
 				return "front-end/member/loginMem";// 若被停權，無法登入
 			}
-			session.setAttribute("loggedInMember", member); // 將會員信息保存到 session
+			session.setAttribute("loggedInMember", member); // 將會員資料存於session內
 			return "redirect:" + oriURL; // 重導至欲前往的頁面
 
 		} else {
 			model.addAttribute("loginError", "無效的帳號或密碼");
-			return "front-end/member/loginMem"; // 登入失敗，返回登入頁面並顯示錯誤信息
+			return "front-end/member/loginMem";
 		}
 	}
 
@@ -387,8 +156,9 @@ public class MemberController {
 	// 確認信箱
 	@PostMapping("checkEmail")
 	@ResponseBody
-	public ResponseEntity<Map<String, Object>> checkEmail(@RequestParam("memEmail") String memEmail, HttpSession session, HttpServletRequest req) {
-	    Optional<MemberVO> memberOpt = memSvc.findByEmail(memEmail);
+	public ResponseEntity<Map<String, Object>> checkEmail(@RequestParam("memEmail") String memEmail, HttpSession session) {
+	    
+		Optional<MemberVO> memberOpt = memSvc.findByEmail(memEmail);
 	    Map<String, Object> response = new HashMap<>();
 
 	    // 若找到
@@ -417,23 +187,32 @@ public class MemberController {
 
 	// 顯示重設密碼頁面
 	@GetMapping("resetPassword")
-	public String showResetPWPage(@RequestParam("token") String token, HttpSession session, Model model) {
-
-//		TokenService tokSvc = new TokenService();
+	public String showResetPWPage(@RequestParam("token") String token, HttpSession session) {
 
 		// 取得存在redis的會員編號及email
 		MemberVO resetMember = tokSvc.checkToken(token);
 
 		if (resetMember == null) {
-			System.out.println("fail");
 			return "front-end/member/resetFail";
 		} else {
 			String resetMemEmail = resetMember.getMemEmail();
 			session.setAttribute("resetMemEmail", resetMemEmail);
-			return "front-end/member/updatePasswordPage";
+			return "front-end/member/resetPasswordPage";
 		}
 	}
+	
+	@PostMapping("resetPassword")
+	public String resetPassword(@RequestParam("password1") String password1,
+			@RequestParam("password2") String password2, HttpSession session) {
 
+			String memEmailFromReset = (String) session.getAttribute("resetMemEmail");
+
+			Optional<MemberVO> memberOpt = memSvc.findByEmail(memEmailFromReset);
+			MemberVO memberFromReset = memberOpt.get();
+			memSvc.updatePassword(password1, memberFromReset.getMemNo());
+			return "front-end/member/loginMem";
+	}
+	
 	// 去除BindingResult中某個欄位的FieldError紀錄
 	public BindingResult removeFieldError(MemberVO memberVO, BindingResult result, String removedFieldname) {
 		List<FieldError> errorsListToKeep = result.getFieldErrors().stream()
