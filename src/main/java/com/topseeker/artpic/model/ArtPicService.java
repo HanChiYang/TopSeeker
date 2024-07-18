@@ -78,6 +78,10 @@ public class ArtPicService {
 		return artPicVOs;
 	}
 
+	  public void addArtPics(List<ArtPicVO> artPicVOs) {
+	        repository.saveAll(artPicVOs);
+	    }
+
 
 
 }
