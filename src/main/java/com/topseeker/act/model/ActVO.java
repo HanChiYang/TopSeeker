@@ -84,11 +84,11 @@ public class ActVO implements java.io.Serializable {
 	
 	//當前參與人數
 	@Column(name = "act_current_count")
-	private Integer actCurrentCount=0;
+	private Integer actCurrentCount;
 	
 	//待審核人數
 	@Column(name = "act_check_count")
-	private Integer actCheckCount=0;
+	private Integer actCheckCount;
 	
 	@Column(name = "act_enroll_begin")
 	@NotNull(message="報名開始日: 請勿空白")	
