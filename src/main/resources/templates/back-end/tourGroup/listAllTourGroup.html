@@ -12,9 +12,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>所有追蹤會員資料 - listAllFollow.html</title>
+<title>所有行程開團資料 - listAllTourGroup.html</title>
 
-<head th:insert="~{/back-end/follow/included-fragment}"></head>
+<head th:insert="~{/back-end/tourGroup/included-fragment}"></head>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>                                    <!-- ●●js  for jquery datatables 用 -->
 <script	src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>              <!-- ●●js  for jquery datatables 用 -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" /> <!-- ●●css for jquery datatables 用 -->
@@ -23,7 +23,7 @@
 <script>
 	$(document).ready(function() {
 		$('#example').DataTable({
-			"lengthMenu": [3 ,5, 10, 20, 50, 100],
+			"lengthMenu": [5,10, 20, 50, 100],
 			"searching": true,  //搜尋功能, 預設是開啟
 		    "paging": true,     //分頁功能, 預設是開啟
 		    "ordering": true,   //排序功能, 預設是開啟
@@ -60,34 +60,60 @@ body {
 <body>
 
 <nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
-		 <div align="center"> <h2>所有留言資料 - listAllMessage.html</h2>
-		 <h3><a class="navbar-brand" th:href="@{/follow/select_page}"><img th:src="@{/images/back1.gif}">回查詢頁<label th:text="${success}"></label></a></h3></div>
+		 <div align="center"> <h2>所有行程開團資料 - listAllTourGroup.html</h2>
+		 <h3><a class="navbar-brand" th:href="@{/tourGroup/select_page}"><img th:src="@{/images/back1.gif}">回查詢頁<label th:text="${success}"></label></a></h3></div>
 </nav>
 
 <table id="example" class="display" style="width: 100%">
   <thead >
 	<tr style="background-color:#CCCCFF">
-		
-		<th>會員編號</th>
-		<th>以追蹤的會員</th>	
-	
-		<th>取消追蹤</th>
+		<th>計數</th>
+		<th>行程開團編號</th>
+		<th>行程編號</th>
+		<th>行程開團價格</th>
+		<th>行程開始日期</th>
+		<th>行程結束日期</th>
+		<th>報名截止日期</th>
+		<th>行程開團剩餘人數</th>
+		<th>行程開團成行人數</th>
+		<th>行程開團最大人數</th>
+		<th>行程開團狀態</th>
+		<th>圖片</th>
+		<th>修改</th>
+		<th>刪除</th>
 	</tr>
   </thead>
 	
   <tbody>
-		<th:block th:each="followVO : ${followListData}">
+		<th:block th:each="tourGroupVO : ${tourGroupListData}">
 			<tr>
-			
-				<td th:text="${followVO.memNoA}"></td>
-			    <td th:text="${followVO.memNoB}"></td>
-	
+				<td th:text="${tourGroupVOStat.count}"></td>
+				<td th:text="${tourGroupVO.groupNo}"></td>
+				<td th:text="${tourGroupVO.tourVO.tourNo} + '-[' + ${tourGroupVO.tourVO.tourName} + ']'"></td>
+				<td th:text="${tourGroupVO.groupPrice}"></td>
+				<td th:text="${tourGroupVO.groupBegin}"></td>
+				<td th:text="${tourGroupVO.groupEnd}"></td>
+				<td th:text="${tourGroupVO.groupDeadline}"></td>
+				<td th:text="${tourGroupVO.groupBal}"></td>
+				<td th:text="${tourGroupVO.groupMin}"></td>
+				<td th:text="${tourGroupVO.groupMax}"></td>
+				<td th:text="${tourGroupVO.groupStatus}"></td>
+<!-- 				<td><img th:src="@{/tour/DBGifReader} + '?tourNo=' + ${tourVO.tourNo}" width="100px"></td> -->
+				
+				<td><img th:src="@{/tour/DBGifReader} + '?tourNo=' + ${tourGroupVO.tourVO.tourNo}" width="100px"></td>
+				
+				
 			<td>
-			  <form method="post" th:action="@{/follow/delete}" style="margin-bottom: 0px;">
-			     <input type="submit" value="取消追蹤">
-			     <input type="hidden" name="memNoA" th:value="${followVO.memNoA}">
-			     <input type="hidden" name="memNoB" th:value="${followVO.memNoB}">
-			 </form>
+			  <form method="post" th:action="@{/tourGroup/getOne_For_Update}" style="margin-bottom: 0px;">
+			     <input type="submit" value="修改">
+			     <input type="hidden" name="groupNo" th:value="${tourGroupVO.groupNo}"></form>
+			
+			</td>
+			<td>
+			  <form method="post" th:action="@{/tourGroup/delete}" style="margin-bottom: 0px;">
+			     <input type="submit" value="刪除">
+			     <input type="hidden" name="groupNo" th:value="${tourGroupVO.groupNo}"></form>
+			
 			</td>
 			</tr>
 		</th:block>

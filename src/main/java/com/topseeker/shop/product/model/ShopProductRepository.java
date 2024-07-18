@@ -28,6 +28,11 @@ public interface ShopProductRepository extends JpaRepository<ShopProductVO, Inte
 	@Query(value = "SELECT * FROM shop_product WHERE prod_type_no = ?1 AND prod_status = 1 ORDER BY prod_date DESC", nativeQuery = true)
 	List<ShopProductVO> findByProdTypeNo(int prodTypeNo);
 	
+	//商城後台，透過商品編號更改商品上下架狀態
+    @Transactional
+    @Modifying
+    @Query(value = "update shop_product set prod_status = ?2 where prod_no = ?1", nativeQuery = true)
+    void updateProdStatus(int prodNo, int prodStatus);
 	
 	
 }

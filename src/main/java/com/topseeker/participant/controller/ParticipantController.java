@@ -59,31 +59,35 @@ public class ParticipantController {
 	/*
 	 * This method will serve as addEmp.html handler.
 	 */
-	@GetMapping("addParticipant")
-	public String addParticipant(@RequestParam("actNo") Integer actNo, ModelMap model, HttpSession session) {
-		MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
-	    if (loggedInMember == null) {
-	        return "redirect:/member/loginMem";
+	 @GetMapping("addParticipant")
+	    public String addParticipant(@RequestParam("actNo") Integer actNo, ModelMap model, HttpSession session) {
+	        MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+	        if (loggedInMember == null) {
+	            return "redirect:/member/loginMem";
+	        }
+
+	        ParticipantVO participantVO = new ParticipantVO();
+	        ActVO actVO = actSvc.getOneAct(actNo);
+	        participantVO.setActVO(actVO);
+	        participantVO.setMemberVO(loggedInMember);
+
+	        model.addAttribute("participantVO", participantVO);
+	        model.addAttribute("actTitle", actVO.getActTitle());
+	        model.addAttribute("memName", loggedInMember.getMemName());
+	        return "front-end/participant/addParticipant";
 	    }
 
-	    ParticipantVO participantVO = new ParticipantVO();
-	    ActVO actVO = actSvc.getOneAct(actNo);
-	    participantVO.setActVO(actVO);
-	    participantVO.setMemberVO(loggedInMember);
-
-	    model.addAttribute("participantVO", participantVO);
-	    model.addAttribute("actTitle", actVO.getActTitle());
-	    model.addAttribute("memName", loggedInMember.getMemName());
-	    return "front-end/participant/addParticipant";
-	}
-
+	@PostMapping("insert")
+	public String insert(@Valid ParticipantVO participantVO, BindingResult result, ModelMap model,
+	                         MultipartFile[] parts, HttpSession session) throws IOException {
+	    if (result.hasErrors()) {
+	        return "front-end/participant/addParticipant";
+	    }
+	
+	    participantSvc.addParticipant(participantVO);
 	/*
 	 * This method will be called on addEmp.html form submission, handling POST request It also validates the user input
 	 */
-	@PostMapping("insert")
-	public String insert(@Valid ParticipantVO participantVO, BindingResult result, ModelMap model,
-			 MultipartFile[] parts, HttpSession session) throws IOException {
-
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
 		result = removeFieldError(participantVO, result, "upFiles");
@@ -133,6 +137,7 @@ public class ParticipantController {
 		return "redirect:/participant/listMyAllParticipant"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
 	}
 
+
 	/*
 	 * This method will be called on listAllEmp.html form submission, handling POST request
 	 */
@@ -152,35 +157,40 @@ public class ParticipantController {
 	 * This method will be called on update_emp_input.html form submission, handling POST request It also validates the user input
 	 */
 	@PostMapping("update")
-	public String update(@Valid ParticipantVO participantVO, BindingResult result, ModelMap model,
-			 MultipartFile[] parts) throws IOException {
+	public String update(@RequestParam("actPartNo") Integer actPartNo,
+	                     @RequestParam("actJoinCount") Integer actJoinCount,
+	                     @RequestParam("actCommit") Integer actCommit,
+	                     @RequestParam("actStar") Integer actStar,
+	                     @RequestParam("actEva") String actEva,
+	                     ModelMap model) {
+	    // 获取现有的 ParticipantVO
+	    ParticipantVO participantVO = participantSvc.getOneParticipant(actPartNo);
 
-		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
-		result = removeFieldError(participantVO, result, "upFiles");
+	    // 更新需要的字段
+	    if (actJoinCount != null) {
+	        participantVO.setActJoinCount(actJoinCount);
+	    }
+	    if (actCommit != null) {
+	        participantVO.setActCommit(actCommit);
+	    }
+	    if (actStar != null) {
+	        participantVO.setActStar(actStar);
+	    }
+	    if (actEva != null) {
+	        participantVO.setActEva(actEva);
+	    }
 
-//		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的新圖片時
-//			// EmpService empSvc = new EmpService();
-//			byte[] upFiles = participantSvc.getOneParticipant(participantVO.getActPartNo()).getUpFiles();
-//			participantVO.setUpFiles(upFiles);
-//		} else {
-//			for (MultipartFile multipartFile : parts) {
-//				byte[] upFiles = multipartFile.getBytes();
-//				participantVO.setUpFiles(upFiles);
-//			}
-//		}
-		if (result.hasErrors()) {
-			return "front-end/participant/update_participant_input";
-		}
-		/*************************** 2.開始修改資料 *****************************************/
-		// EmpService empSvc = new EmpService();
-		participantSvc.updateParticipant(participantVO);
+	    // 更新 ParticipantVO
+	    participantSvc.updateParticipant(participantVO);
 
-		/*************************** 3.修改完成,準備轉交(Send the Success view) **************/
-		model.addAttribute("success", "- (修改成功)");
-		participantVO = participantSvc.getOneParticipant(Integer.valueOf(participantVO.getActPartNo()));
-		model.addAttribute("participantVO", participantVO);
-		return "front-end/participant/listOneParticipant"; // 修改成功後轉交listOneEmp.html
+	    // 获取关联的 ActVO
+	    ActVO actVO = actSvc.getOneAct(participantVO.getActVO().getActNo());
+
+	    // 添加活动标题到模型
+	    model.addAttribute("participantVO", participantVO);
+	    model.addAttribute("actTitle", actVO.getActTitle());
+
+	    return "redirect:/participant/listMyAllParticipant"; // 修改成功后转交视图
 	}
 
 	/*
