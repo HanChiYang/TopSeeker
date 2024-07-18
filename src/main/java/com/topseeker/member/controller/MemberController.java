@@ -193,7 +193,6 @@ public class MemberController {
 		MemberVO resetMember = tokSvc.checkToken(token);
 
 		if (resetMember == null) {
-			System.out.println("fail");
 			return "front-end/member/resetFail";
 		} else {
 			String resetMemEmail = resetMember.getMemEmail();

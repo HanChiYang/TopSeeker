@@ -75,7 +75,7 @@ public class MemberService {
 	
 	//使用身分證字號查詢
 	public MemberVO findByUid(String memUid) {
-		Optional<MemberVO> optional = repository.findByAccount(memUid);
+		Optional<MemberVO> optional = repository.findByUid(memUid);
 		return optional.orElse(null);
 	}
 }
