@@ -1,0 +1,88 @@
+
+<div>
+	<img id="longlogo" src="/images/SheiPa_long_logo.jpg">
+	<!-- 商城管理系統的導航列 -->
+	<nav id="shopNavbar" class="navbar navbar-expand-lg">
+		<div class="container-fluid">
+			<div>
+				<a class="navbar-brand" th:href="@{/shop/shopManagement}">商城管理系統</a>
+				<button class="navbar-toggler" type="button"
+					data-bs-toggle="collapse" data-bs-target="#newNavbarNav"
+					aria-controls="newNavbarNav" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+			</div>
+
+
+			<div class="collapse navbar-collapse" id="shopViceNavbar">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="nav-item nav-item-spacing"><a
+						class="nav-link shoplink"
+						th:href="@{/shop/shopManagement/select_page}">商品管理</a></li>
+					<li class="nav-item nav-item-spacing"><a
+						class="nav-link shoplink" href="#">最新消息管理</a></li>
+					<li class="nav-item nav-item-spacing"><a
+						class="nav-link shoplink"
+						th:href="@{/shop/category/bag(prodTypeNo=1)}">促銷優惠管理</a></li>
+					<li class="nav-item nav-item-spacing"><a
+						class="nav-link shoplink"
+						th:href="@{/shop/category/shoes(prodTypeNo=2)}">訂單管理</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</div>
+
+<!--     左側側邊欄 -->
+<div class="sidebar">
+	<h4><b>快速選單</b></h4>
+
+	<ul class="nav flex-column">
+		<p>【商品管理】</p>
+		<li class="nav-item"><a class="nav-link" href="/manage-products"
+			th:href="@{/shop/shopManagement/listAllProd}"> <i class="fa fa-box"></i>
+				管理所有商品
+		</a></li>
+		
+		<li class="nav-item"><a class="nav-link" href="/add-product"
+			th:href="@{/shop/shopManagement/addProd}"> <i class="fa fa-plus"></i> 新增商品
+		</a></li>
+		
+		<li class="nav-item"><a class="nav-link" href="/manage-products"
+		th:href="@{/shop/shopManagement/select_page}"> <i class="fa-solid fa-magnifying-glass"></i>
+			搜尋商品
+		</a></li>
+	</ul>
+	<br>
+	<ul class="nav flex-column">
+		<p>【訂單管理】</p>
+		<li class="nav-item"><a class="nav-link" href="/manage-products"
+			th:href="@{/shop/order/listAllOrder}"> <i class="fa-regular fa-clipboard"></i>
+				管理所有訂單
+		</a></li>
+
+	</ul>
+	<br>
+	<ul class="nav flex-column">
+		<p>【優惠活動】</p>
+		<li class="nav-item"><a class="nav-link" href="/manage-products"
+			th:href="@{/shop/sale/listAllSale}"> <i class="fa-solid fa-store"></i>
+				管理所有優惠活動
+		</a></li>
+		<li class="nav-item"><a class="nav-link" href="/add-product"
+			th:href="@{/shop/sale/addSale}"> <i class="fa fa-plus"></i> 新增優惠活動
+		</a></li>
+	</ul>
+	<br>
+	<ul class="nav flex-column">
+		<p>【商城最新消息】</p>
+		<li class="nav-item"><a class="nav-link" href="/manage-products"
+			th:href="@{/shop/shopManagement/listAllShopInfo}"> <i class="fa-regular fa-newspaper"></i>
+				管理所有最新消息
+		</a></li>
+		<li class="nav-item"><a class="nav-link" href="/add-product"
+			th:href="@{/shop/sale/addSale}"> <i class="fa fa-plus"></i> 新增最新消息
+		</a></li>
+	</ul>
+</div>
