@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅遊行程</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 1rem;
+        }
+
+        nav .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 1rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+        .tour-summary {
+            height: 480px;
+        }
+        .left-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            background-color: white;
+            padding: 15px;
+        }
+        .left-section img {
+            width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+        }
+        .left-section .tour-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex: 1;
+        }
+        .left-section .tour-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .left-section .tour-details {
+            margin-bottom: 10px;
+        }
+        .left-section .signup-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            cursor: pointer;
+            align-self: flex-end;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        .left-section .signup-btn:hover {
+            transform: scale(1.1);
+        }
+        .signup-btn span {
+            margin-left: 5px;
+            font-size: 1.2rem;
+        }
+        .right-section {
+            height: 100%;
+            background-color: #f0f0f0;
+            padding: 15px;
+        }
+        .right-section .info-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .right-section .info-detail {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .right-section .info-detail span {
+            flex: 1;
+            text-align: center;
+        }
+        .right-section .info-items {
+            margin-top: 15px;
+        }
+        .right-section .info-items div {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .right-section .info-items div.selected {
+            box-shadow: 0px 0px 10px 0px rgba(255,0,0,0.75);
+            border-radius: 10px;
+            background-color: white;
+        }
+        .main-content {
+            margin-top: 20px;
+        }
+        .day-content {
+            margin-bottom: 20px;
+        }
+        .day-content img {
+            width: 100%;
+            height: auto;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">旅遊網站</div>
+    <ul>
+        <li><a href="#"><i class="fas fa-home"></i> 返回首頁</a></li>
+        <li><a href="#"><i class="fas fa-file-alt"></i> 訂單管理</a></li>
+        <li><a href="#"><i class="fas fa-heart"></i> 行程收藏</a></li>
+        <li><a href="#"><i class="fas fa-sign-in-alt"></i> 會員登入</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 tour-summary">
+            <div class="left-section">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=' + ${tourVO.tourNo}" alt="行程圖片">
+                <div class="tour-info">
+                    <div class="tour-title" th:text="${tourVO.tourName}"></div>
+                    <div class="tour-details" th:text="${tourVO.tourIntro}"></div>
+                </div>
+                <button class="signup-btn" onclick="submitGroupNo()">
+                    <span>NT$ <span th:text="${tourVO.tourPrice}"></span></span>報名
+                </button>
+            </div>
+        </div>
+
+        <div class="col-md-6 tour-summary">
+            <div class="right-section">
+                <div class="info-title">行程資訊</div>
+                <div class="info-detail">
+                    <span>出發日期</span>
+                    <span>回程日期</span>
+                    <span>剩餘名額</span>
+                    <span>行程價格</span>
+                </div>
+                <hr>
+                <div class="info-items">
+                    <th:block th:each="tourGroupVO : ${tourGroupListData}">
+                        <div class="info-item" onclick="selectGroupNo(this)" th:attr="data-groupNo=${tourGroupVO.groupNo},data-price=${tourGroupVO.groupPrice}">
+                            <span th:text="${tourGroupVO.groupBegin}"></span>
+                            <span th:text="${tourGroupVO.groupEnd}"></span>
+                            <span th:text="${tourGroupVO.groupBal}"></span>
+                            <span th:text="${tourGroupVO.groupPrice}"></span>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <th:block th:each="tourDetailVO : ${tourDetailListData2}">
+            <div class="day-content">
+                <h5 th:text="'Day ' + ${tourDetailVO.detailDay}"></h5>
+                <p th:text="${tourDetailVO.detailCon}"></p>
+                <img th:src="@{/tourDetail/DBGifReader} + '?detailNo=' + ${tourDetailVO.detailNo}" alt="Day 圖片">
+            </div>
+        </th:block>
+    </div>
+</div>
+
+<!-- 隱藏表單，用於提交行程編號 -->
+<form id="tourGroupForm" method="post" th:action="@{/tour/addOrder}" style="display:none;">
+    <input type="hidden" name="groupNo" id="groupNo">
+</form>
+
+<script>
+    // 全域變數來存儲選擇的 groupNo
+    let selectedGroupNo = null;
+
+    // 點擊選擇開團日期事件
+    function selectGroupNo(element) {
+        // 取得點擊行程日期的 groupNo
+        selectedGroupNo = element.getAttribute('data-groupNo');
+
+        // 取消其他行程日期的選中狀態，並設置當前行程日期為選中狀態
+        document.querySelectorAll('.info-items .info-item').forEach(item => item.classList.remove('selected'));
+        element.classList.add('selected');
+
+        // 更新報名按鈕上的價格顯示
+        var price = element.getAttribute('data-price');
+        document.querySelector('.signup-btn').setAttribute('data-price', price);
+        document.querySelector('.signup-btn span').textContent = 'NT$ ' + price;
+    }
+
+    // 報名按鈕點擊事件
+    function submitGroupNo() {
+        if (selectedGroupNo !== null) {
+            document.getElementById('groupNo').value = selectedGroupNo;
+            document.getElementById('tourGroupForm').submit();
+        } else {
+            alert('請選擇一個行程日期');
+        }
+    }
+
+    // 報名按鈕 hover 效果
+    document.querySelector('.signup-btn').addEventListener('mouseover', function() {
+        this.style.transform = 'scale(1.1)';
+    });
+
+    document.querySelector('.signup-btn').addEventListener('mouseout', function() {
+        this.style.transform = 'scale(1)';
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
