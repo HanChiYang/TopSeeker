@@ -84,35 +84,35 @@ public class ActVO implements java.io.Serializable {
 	
 	//當前參與人數
 	@Column(name = "act_current_count")
-	private Integer actCurrentCount;
+	private Integer actCurrentCount=0;
 	
 	//待審核人數
 	@Column(name = "act_check_count")
-	private Integer actCheckCount;
+	private Integer actCheckCount=0;
 	
 	@Column(name = "act_enroll_begin")
 	@NotNull(message="報名開始日: 請勿空白")	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 //	@FutureOrPresent(message = "日期必須是今天（含）之後") 
-	private Date actEnrollBegin;
+	private LocalDate actEnrollBegin;
 	
 	@Column(name = "act_enroll_end")
 	@NotNull(message="報名結束日: 請勿空白")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 //	@Future(message="日期必須是在今日(不含)之後", groups = {MemGroup.class})
-	private Date actEnrollEnd;
+	private LocalDate actEnrollEnd;
 	
 	@Column(name = "act_start")	
 	@NotNull(message="活動開始日: 請勿空白")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Future(message="日期必須是在今日(不含)之後", groups = {MemGroup.class})
-	private Date actStart;
+	private LocalDate actStart;
 	
 	@Column(name = "act_end")
 	@NotNull(message="活動結束日: 請勿空白")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Future(message="日期必須是在今日(不含)之後", groups = {MemGroup.class})
-	private Date actEnd;
+	private LocalDate actEnd;
 	
 	@Column(name = "act_place")
 	@NotEmpty(message="活動地點: 請勿空白")	
@@ -227,35 +227,35 @@ public class ActVO implements java.io.Serializable {
 		this.actCheckCount = actCheckCount;
 	}
 
-	public Date getActEnrollBegin() {
+	public LocalDate getActEnrollBegin() {
 		return this.actEnrollBegin;
 	}
 
-	public void setActEnrollBegin(Date actEnrollBegin) {
+	public void setActEnrollBegin(LocalDate actEnrollBegin) {
 		this.actEnrollBegin = actEnrollBegin;
 	}
 
-	public Date getActEnrollEnd() {
+	public LocalDate getActEnrollEnd() {
 		return actEnrollEnd;
 	}
 
-	public void setActEnrollEnd(Date actEnrollEnd) {
+	public void setActEnrollEnd(LocalDate actEnrollEnd) {
 		this.actEnrollEnd = actEnrollEnd;
 	}
 
-	public Date getActStart() {
+	public LocalDate getActStart() {
 		return this.actStart;
 	}
 
-	public void setActStart(Date actStart) {
+	public void setActStart(LocalDate actStart) {
 		this.actStart = actStart;
 	}
 
-	public Date getActEnd() {
+	public LocalDate getActEnd() {
 		return actEnd;
 	}
 
-	public void setActEnd(Date actEnd) {
+	public void setActEnd(LocalDate actEnd) {
 		this.actEnd = actEnd;
 	}
 

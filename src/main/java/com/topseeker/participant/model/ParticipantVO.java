@@ -3,6 +3,7 @@ package com.topseeker.participant.model;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,7 +34,7 @@ public class ParticipantVO implements java.io.Serializable {
 														// TABLE】
 	private Integer actPartNo;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "act_no") // 指定用來join table的column
 	private ActVO actVO;
 
@@ -78,7 +79,12 @@ public class ParticipantVO implements java.io.Serializable {
 	}
 
 	public void setActVO(ActVO actVO) {
-		this.actVO = actVO;
+//		   if (actVO != null && actVO.getActNo() != null) {
+//	            this.actVO = new ActVO();
+//	            this.actVO.setActNo(actVO.getActNo());
+//	        }
+      this.actVO = actVO;
+
 	}
 
 	public MemberVO getMemberVO() {
