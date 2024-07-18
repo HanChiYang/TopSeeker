@@ -14,7 +14,7 @@ public interface TourRepository extends JpaRepository<TourVO, Integer> {
 	@Modifying
 	@Query(value = "delete from tour where tour_no =?1", nativeQuery = true)
 	void deleteByTourNo(int tourNo);
-
+	
 	//● (自訂)條件查詢
 	@Query(value = "from TourVO where tourNo=?1 and tourName like?2 and tourDays=?3 order by tourNo")
 	List<TourVO> findByOthers(int tourNo , String tourName , int tourDays);
