@@ -12,8 +12,8 @@
     }
 
     #taiwan_pic {
-      width: 360px;
-      margin: 10px 50px 0px 20px;
+      height: 550px;
+      margin: 0px 0px 0px 20px;
     }
 
     #weatherContainer {
@@ -23,130 +23,142 @@
     }
 
     .content-container {
+    margin-top: 80px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
     }
     
     .circle {
-      width: 15px;
-      height: 15px;
+      width: 20px;
+      height: 20px;
       background-color: red;
       border-radius: 50%;
       position: fixed;
     }
     
+    .circle:hover {
+     border: 2px solid black;
+    }
+    
     #tps {
-      margin: 110px 200px 400px 300px;
+      margin: 130px 200px 400px 370px;
     }
         
     #hws {
-      margin: 150px 200px 400px 260px;
+      margin: 200px 200px 400px 330px;
     }
         
     #tn {
-      margin: 175px 200px 400px 300px;
+      margin: 275px 200px 400px 370px;
     }
         
     #fy {
-      margin: 200px 200px 400px 290px;
+      margin: 360px 200px 400px 350px;
     }
         
     #awd {
-      margin: 170px 200px 400px 250px;
+      margin: 270px 200px 400px 320px;
     }
         
     #hs {
-      margin: 165px 200px 400px 230px;
+      margin: 245px 200px 400px 290px;
     }
         
     #xt {
-      margin: 200px 200px 400px 213px;
+      margin: 340px 200px 400px 270px;
     }
         
     #kt {
-      margin: 410px 200px 400px 200px;
+      margin: 880px 200px 400px 250px;
     }
     #sl {
-      margin: 380px 200px 400px 200px;
+      margin: 810px 200px 400px 250px;
     }
     #gw {
-      margin: 100px 200px 400px 240px;
+      margin: 110px 200px 400px 300px;
     }
     #dys {
-      margin: 63px 200px 400px 270px;
+      margin: 0px 200px 400px 335px;
     }
     #tz {
-      margin: 270px 200px 400px 200px;
+      margin: 520px 200px 400px 250px;
     }
     #nd {
-      margin: 60px 200px 400px 305px;
+      margin: 0px 200px 400px 375px;
     }
     #myy {
-      margin: 60px 200px 400px 290px;
+      margin: 0px 200px 400px 355px;
     }
     #dxs {
-      margin: 130px 200px 400px 230px;
+      margin: 175px 200px 400px 280px;
     }
     #als {
-      margin: 225px 200px 400px 190px;
+      margin: 420px 200px 400px 250px;
     }
     #wl {
-      margin: 120px 200px 400px 270px;
+      margin: 150px 200px 400px 340px;
     }
     #zb {
-      margin: 320px 200px 400px 240px;
+      margin: 650px 200px 400px 290px;
     }
     #bxs {
-      margin: 145px 200px 400px 230px;
+      margin: 220px 200px 400px 280px;
     }
     #xy {
-      margin: 260px 200px 400px 230px;
+      margin: 490px 200px 400px 280px;
     }
+
+	.tooltip-inner{
+	font-size: 18px;
+	}
   </style>
 </head>
 <body>
   <nav th:insert="~{/front-end/navbar.html}"></nav>
 
-  <div id="search">
-    <h4>風景區天氣查詢</h4>
-    <h5>選擇風景區:</h5>
-    <select name="locName" id="locName">
-      <option th:each="locName : ${placeList}" th:value="${locName}" th:text="${locName}"></option>
-    </select>
-    <button type="button" id="searchWeather">查詢</button>
-  </div>
+<!--   <div id="search"> -->
+<!--     <h4>風景區天氣查詢</h4> -->
+<!--     <h5>選擇風景區:</h5> -->
+<!--     <select name="locName" id="locName"> -->
+<!--       <option th:each="locName : ${placeList}" th:value="${locName}" th:text="${locName}"></option> -->
+<!--     </select> -->
+<!--     <button type="button" id="searchWeather">查詢</button> -->
+<!--   </div> -->
 
   <div class="content-container">
     <div id="taiwan">
       <img src="/images/taiwan.png" id="taiwan_pic">
     </div>
 
-    <div class="circle" id="tps" data-locname="太平山國家森林遊樂區"></div>
-    <div class="circle" id="hws" data-locname="合歡山國家森林遊樂區"></div>
-    <div class="circle" id="tn" data-locname="池南國家森林遊樂區"></div>
-    <div class="circle" id="fy" data-locname="富源國家森林遊樂區"></div>
-    <div class="circle" id="awd" data-locname="奧萬大國家森林遊樂區"></div>
-    <div class="circle" id="hs" data-locname="惠蓀林場森林遊樂區"></div>
-    <div class="circle" id="xt" data-locname="溪頭森林遊樂特定區"></div>
-    <div class="circle" id="kt" data-locname="墾丁國家森林遊樂區"></div>
-    <div class="circle" id="sl" data-locname="雙流國家森林遊樂區"></div>
-    <div class="circle" id="gw" data-locname="觀霧國家森林遊樂區"></div>
-    <div class="circle" id="dys" data-locname="東眼山森林遊樂區"></div>
-    <div class="circle" id="tz" data-locname="藤枝國家森林遊樂區"></div>
-    <div class="circle" id="nd" data-locname="內洞國家森林遊樂區"></div>
-    <div class="circle" id="myy" data-locname="滿月圓國家森林遊樂區"></div>
-    <div class="circle" id="dxs" data-locname="大雪山國家森林遊樂區"></div>
-    <div class="circle" id="als" data-locname="阿里山國家森林遊樂區"></div>
-    <div class="circle" id="wl" data-locname="武陵國家森林遊樂區"></div>
-    <div class="circle" id="zb" data-locname="知本國家森林遊樂區"></div>
-    <div class="circle" id="bxs" data-locname="八仙山國家森林遊樂區"></div>
-    <div class="circle" id="xy" data-locname="向陽國家森林遊樂區"></div>
+
+    <div class="circle" id="tps" data-locname="太平山國家森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right" title="太平山國家森林遊樂區"></div>
+    <div class="circle" id="hws" data-locname="合歡山國家森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right" title="合歡山國家森林遊樂區"></div>
+    <div class="circle" id="tn" data-locname="池南國家森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right" title="池南國家森林遊樂區"></div>
+    <div class="circle" id="fy" data-locname="富源國家森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right" title="富源國家森林遊樂區"></div>
+    <div class="circle" id="awd" data-locname="奧萬大國家森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right" title="奧萬大國家森林遊樂區"></div>
+    <div class="circle" id="hs" data-locname="惠蓀林場森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right" title="惠蓀林場森林遊樂區"></div>
+    <div class="circle" id="xt" data-locname="溪頭森林遊樂特定區" title="溪頭森林遊樂特定區" data-bs-toggle="tooltip" data-bs-placement="right"></div>
+    <div class="circle" id="kt" data-locname="墾丁國家森林遊樂區" title="墾丁國家森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right"></div>
+    <div class="circle" id="sl" data-locname="雙流國家森林遊樂區" title="雙流國家森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right"></div>
+    <div class="circle" id="gw" data-locname="觀霧國家森林遊樂區" title="觀霧國家森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right"></div>
+    <div class="circle" id="dys" data-locname="東眼山森林遊樂區" title="東眼山森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right"></div>
+    <div class="circle" id="tz" data-locname="藤枝國家森林遊樂區" title="藤枝國家森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right"></div>
+    <div class="circle" id="nd" data-locname="內洞國家森林遊樂區" title="內洞國家森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right"></div>
+    <div class="circle" id="myy" data-locname="滿月圓國家森林遊樂區" title="滿月圓國家森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right"></div>
+    <div class="circle" id="dxs" data-locname="大雪山國家森林遊樂區" title="大雪山國家森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right"></div>
+    <div class="circle" id="als" data-locname="阿里山國家森林遊樂區" title="阿里山國家森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right"></div>
+    <div class="circle" id="wl" data-locname="武陵國家森林遊樂區" title="武陵國家森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right"></div>
+    <div class="circle" id="zb" data-locname="知本國家森林遊樂區" title="知本國家森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right"></div>
+    <div class="circle" id="bxs" data-locname="八仙山國家森林遊樂區" title="八仙山國家森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right"></div>
+    <div class="circle" id="xy" data-locname="向陽國家森林遊樂區" title="向陽國家森林遊樂區" data-bs-toggle="tooltip" data-bs-placement="right"></div>
 
     <div id="weatherContainer" style="display:none;">
       <div id="weatherContent" class="border rounded p-2 bg-light shadow-sm"></div>
     </div>
   </div>
+
+
 
   <div th:insert="~{/front-end/notification/notification.html}"></div>
 
@@ -154,7 +166,10 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
   <script src="/js/common.js"></script>
+  <script src="/js/popper.js"></script>
   <script>
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     $(document).ready(function() {
       $('#example').DataTable({
         "lengthMenu": [10],
@@ -220,6 +235,8 @@
           }
         });
       });
+      
+      
     });
   </script>
 </body>

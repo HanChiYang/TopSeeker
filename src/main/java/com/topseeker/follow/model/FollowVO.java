@@ -55,28 +55,10 @@ public class FollowVO implements java.io.Serializable {
 		this.followNo = followNo;
 	}
 
-//	public Integer getMemNo() {
-//		return memNo;
-//	}
-//
-//	public void setMemNo(Integer memNo) {
-//		this.memNo = memNo;
-//	}
-
-//	public Integer getBeFollowedMemNo() {
-//		return beFollowedMemNo;
-//	}
-//
-//	public void setBeFollowedMemNo(Integer beFollowedMemNo) {
-//		this.beFollowedMemNo = beFollowedMemNo;
-//	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 
-	
-	
 }	
 	
 

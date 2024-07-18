@@ -63,12 +63,8 @@ public class WeatherService {
     	weatherRepository.truncateWeatherData();
     }
     
-    //查詢地點
-    public List<String> getPlace() {
-    	return weatherRepository.getPlace();
-    }
 
-    //查詢所有
+    //依地點查詢
     public List<WeatherVO> getWxByLoc(String locName) {
     	return weatherRepository.getWxByLoc(locName);
     }
