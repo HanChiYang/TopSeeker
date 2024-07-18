@@ -48,12 +48,6 @@
     <version>2.13.3</version>
 </dependency>
 
-<dependency>
-    <groupId>com.googlecode.json-simple</groupId>
-    <artifactId>json-simple</artifactId>
-    <version>1.1.1</version>
-</dependency>
-
 		<!-- 用途說明6: for log4j.properties -->
 		<!-- Spring Boot日誌系統預設是使用logback -->
 		<!-- 對於習慣了log4j的開發者，Spring Boot依然有很好的支援 -->

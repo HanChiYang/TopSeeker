@@ -8,8 +8,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.topseeker.act.model.ActRepository;
-import com.topseeker.act.model.ActVO;
 
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Participant;
 
@@ -22,13 +20,8 @@ public class ParticipantService {
 	
 	@Autowired
     private SessionFactory sessionFactory;
-	
-	@Autowired
-    private ActRepository actRepo;
 
 	public void addParticipant(ParticipantVO participantVO) {
-		ActVO managedActVO = actRepo.findById(participantVO.getActVO().getActNo()).orElseThrow();
-        participantVO.setActVO(managedActVO);
 		repository.save(participantVO);
 	}
 

@@ -33,5 +33,19 @@ public interface ActRepository extends JpaRepository<ActVO, Integer> {
     @Query("UPDATE ActVO a SET a.actStatus = :status WHERE a.actNo = :actNo")
     void updateActStatus(@Param("actNo") Integer actNo, @Param("status") Integer status);
 	
+	 // 修改活動的待審核人數
+    @Modifying
+    @Query("UPDATE ActVO a SET a.actCheckCount = :checkCount WHERE a.actNo = :actNo")
+    void updateActCheckCount(@Param("actNo") Integer actNo, @Param("checkCount") Integer checkCount);
+
+	// 修改活動的待審核人數
+//    @Modifying
+//    @Query("UPDATE ActVO a SET a.actCheckCount = :checkCount WHERE a.actNo = :actNo")
+//    void updateActCheckCount(@Param("actNo") Integer actNo, @Param("checkCount") Integer checkCount);
+	
+    // 修改活動的已參與人數
+//    @Modifying
+//    @Query("UPDATE ActVO a SET a.actCurrentCount = :currentCount WHERE a.actNo = :actNo")
+//    void updateActCurrentCount(@Param("actNo") Integer actNo, @Param("currentCount") Integer checkCount);
 }
 

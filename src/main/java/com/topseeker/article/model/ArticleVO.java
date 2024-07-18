@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.ArrayList;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -62,13 +61,13 @@ public class ArticleVO {
 	@Column(name = "art_update_time" , insertable = false)
 	private Timestamp artUpdateTime;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="articleVO")
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="articleVO")
 	@OrderBy("artPic asc")
-	private List<ArtPicVO> artPics = new ArrayList<ArtPicVO>();
+	private Set<ArtPicVO> artPics = new HashSet<ArtPicVO>();
 	
 	 //---------------------------------------------新增的地方
 	 
-	 @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "articleVO")
+	 @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "articleVO")
 	 @OrderBy("commentNo asc") 
 	 private Set<ArtCommentVO> artcomments = new HashSet<ArtCommentVO>();
 	 
@@ -83,11 +82,11 @@ public class ArticleVO {
 	 }
 	// -------------------------------------留言
 
-	public List<ArtPicVO> getArtPics() {
+	public Set<ArtPicVO> getArtPics() {
 		return artPics;
 	}
 
-	public void setArtPics(List<ArtPicVO> artPics) {
+	public void setArtPics(Set<ArtPicVO> artPics) {
 		this.artPics = artPics;
 	}
 

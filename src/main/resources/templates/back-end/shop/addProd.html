@@ -13,189 +13,294 @@
 	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
 	crossorigin="anonymous">
 
-<!-- icon用 -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- 從 Google Fonts 引入 "Playfair Display" 字體 -->
-<link
-	href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap"
-	rel="stylesheet">
+<script>
 
+	$(document).ready(
+			function() {
+				var navbarHeight = $('.navbar').outerHeight();
+				var shopnavbarHeight = $('.shopnavbar').outerHeight();
+				$('.sidebar').css('top', navbarHeight + shopnavbarHeight);
+				$('.content').css('margin-top',
+						navbarHeight + shopnavbarHeight + 20);
+			});
+		
+	$(document).ready(
+			function() {
+				// 預覽上傳圖片
+				$('#prodPic').on(
+						'change',
+						function(event) {
+							console.log('File input changed');
+							var files = event.target.files;
+							$('#preview').empty(); // 清空預覽容器
+							for (var i = 0; i < files.length; i++) {
+								var file = files[i];
+								var reader = new FileReader();
+								reader.onload = function(e) {
+									var img = $('<img>').attr('src',
+											e.target.result).addClass(
+											'img-thumbnail mb-2').css({
+										width : '150px',
+										height : '150px'
+									});
+									$('#preview').append(img);
+								};
+								reader.readAsDataURL(file);
+							}
+						});
+			});
+</script>
 
-<!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<style type="text/css">
+.navbar {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	border-bottom: solid 1px #E0E0E0;
+	z-index: 1000;
+}
 
-<!-- 商城導航列CSS -->
-<link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
+.shopnavbar {
+	background-color: #90c320;
+	font-size: 36px;
+	font-weight: bold;
+	border-bottom: solid 1px #E0E0E0;
+	z-index: 999;
+	position: fixed;
+	top: 56px; /* 確保位於 navbar 下方 */
+	width: 100%;
+}
 
+.sidebar {
+	position: fixed;
+	top: 112px; /* 確保位於 shopnavbar 下方 */
+	bottom: 0;
+	background-color: #f0f8e0;
+	width: 150px;
+	padding-top: 20px;
+	padding-bottom: 20px; /* 確保內容不被 bottom 覆蓋 */
+	color: #333;
+	font-size: 16px;
+	border-right: solid 1px #E0E0E0;
+	overflow-y: auto; /* 確保內容過多時可以滾動 */
+}
 
+.content {
+	flex-grow: 1;
+	padding: 20px;
+	margin-left: 200px; /* 確保不被 sidebar 遮擋 */
+	margin-top: 168px; /* 確保不被 navbar 和 shopnavbar 遮擋 */
+}
 
-<style>
+label, input, span, select {
+	display: table-cell;
+	margin: 5px;
+	text-align: left;
+}
 
+textarea {
+	width: 200px;
+	Height: auto;
+	margin: 5px;
+}
+
+a img {
+	border: none; /* 移除圖片邊框 */
+}
+
+a {
+	text-decoration: none; /* 移除超連結的底線 */
+}
 </style>
 </head>
 <body>
 
-	<!-- topseeker後台Navbar -->
-	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
+	<nav th:insert="~{/back-end/shop/back_end_navbar.html}"></nav>
+	<nav class="shopnavbar">
+		<a th:href="@{/shop/shopManagement/select_page}"> <img id="logo"
+			th:src="@{/images/TopSeeker_logo.png}" width="80px">
+		</a>新增商品
+	</nav>
 
-	<!-- 商城後台用Navbar + 左側邊欄 -->
-	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
+	<div class="sidebar">
+		<ul>
+			<li><h6>
+					<a th:href='@{/shop/shopManagement/select_page}'>查詢商品(主頁)</a>
+				</h6></li>
+			<li><h6>
+					<a th:href='@{/shop/shopManagement/listAllProd}'>檢視所有商品</a>
+				</h6></li>
+			<li><h6>
+					<a href='addProd'>新增商品</a>
+				</h6></li>
+		</ul>
+	</div>
+
+	<div class="content">
+		<h4>
+			<b>＊以下皆為必填欄位</b>
+		</h4>
+		<br>
+		<form th:action="@{insert}" method="post" th:object="${shopProductVO}"
+			enctype="multipart/form-data">
+
+			<!-- 錯誤表列 -->
+			<!-- 		<div class="alert alert-danger" role="alert" th:utext="${errorMessage}">${errorMessage}</div><br> -->
+
+			<div class="mb-3">
+				<label for="prodName" class="form-label">商品名稱:</label> <input
+					type="text" th:field="*{prodName}"
+					onclick="hideContent('prodName.errors')" class="form-control"
+					id="prodName" placeholder="輸入商品全名"> <span
+					class="alert alert-danger" role="alert"
+					th:if="${#fields.hasErrors('prodName')}" th:errors="*{prodName}"
+					id="prodName.errors"></span>
+			</div>
+
+			<div>
+				<label for="prodTypeNo">商品類別:</label> <select
+					th:field="*{shopProductTypeVO.prodTypeNo}" class="form-select"
+					id="prodTypeNo">
+					<option selected value="1">包袋</option>
+					<option value="2">鞋類</option>
+					<option value="3">裝備配件</option>
+					<option value="4">服飾</option>
+				</select> <span class="alert alert-danger" role="alert"
+					th:if="${#fields.hasErrors('shopProductTypeVO.prodTypeNo')}"
+					th:errors="*{shopProductVO.shopProductTypeVO.prodTypeNo}"
+					id="shopProductTypeVO.prodTypeNo.errors"></span>
+			</div>
+
+			<div class="mb-3">
+				<label for="prodPrice" class="form-label">定價:</label> <input
+					type="text" th:field="*{prodPrice}"
+					onclick="hideContent('prodPrice.errors')" class="form-control"
+					id="prodPrice" placeholder="輸入價格"> <span
+					class="alert alert-danger" role="alert"
+					th:if="${#fields.hasErrors('prodPrice')}" th:errors="*{prodPrice}"
+					id="prodPrice.errors"></span>
+			</div>
 
 
-	<main class="shopManagementContent">
-		<div class="shopManagementInput">
-			<h4><b>新增商品</b></h4>
-			<br>
-        <form th:action="@{insert}" method="post" th:object="${shopProductVO}" enctype="multipart/form-data">
-            <!-- 統一顯示錯誤訊息的區域 -->
-            <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors()}">
-                <ul>
-                    <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
-                </ul>
-            </div>
 
-				<!-- 錯誤表列 -->
-				<!-- 		<div class="alert alert-danger" role="alert" th:utext="${errorMessage}">${errorMessage}</div><br> -->
+			<div class="mb-3">
+				<label for="prodInfo" class="form-label">商品介紹:</label>
+				<textarea th:field="*{prodInfo}"
+					onclick="hideContent('prodInfo.errors');" class="form-control"
+					id="prodInfo" rows="5"></textarea>
+				<span class="alert alert-danger" role="alert"
+					th:if="${#fields.hasErrors('prodInfo')}" th:errors="*{prodInfo}"
+					id="prodInfo.errors"></span>
+			</div>
 
-				<div class="mb-3">
-					<label for="prodName" class="form-label">商品名稱:</label> <input
-						type="text" th:field="*{prodName}"
-						class="form-control"
-						id="prodName" placeholder="輸入商品全名"> 
-<!-- 						<span -->
-<!-- 						class="alert alert-danger" role="alert" -->
-<!-- 						th:if="${#fields.hasErrors('prodName')}" th:errors="*{prodName}" -->
-<!-- 						id="prodName.errors"></span> -->
-				</div>
+			<!-- 上傳圖片用 -->
+			<div class="mb-3">
+				<label for="prodPic" class="form-label" th:field="*{shopProductPics}">新增商品圖片</label> <input
+					type="file" name="picSet" id="prodPic" class="form-control"
+					multiple onclick="hideContent('upFiles.errors')">
+				<span  class="alert alert-danger" role="alert" th:utext="${errorMessage}" id="upFiles.errors">${errorMessage} </span>
+				
+				<!-- 預覽圖片容器 -->
+				<div id="preview" class="mt-2"></div>
+			</div>
 
+
+			<div>
+				<input type="hidden" th:field="*{prodDate}" /> <span
+					th:if="${#fields.hasErrors('prodDate')}" th:errors="*{prodDate}"
+					class="error" id="prodDate.errors"></span>
+			</div>
+
+			<div>
+				<input type="hidden" th:field="*{prodStatus}" /> <span
+					th:if="${#fields.hasErrors('prodStatus')}"
+					th:errors="*{prodStatus}" class="error" id="prodStatus.errors"></span>
+			</div>
+
+			<div>
+				<div></div>
 				<div>
-					<label for="prodTypeNo" class="form-label">商品類別:</label> <select
-						th:field="*{shopProductTypeVO.prodTypeNo}" class="form-select"
-						id="prodTypeNo">
-						<option selected value="1">包袋</option>
-						<option value="2">鞋類</option>
-						<option value="3">裝備配件</option>
-						<option value="4">服飾</option>
-					</select> 
-<!-- 					<span class="alert alert-danger" role="alert" -->
-<!-- 						th:if="${#fields.hasErrors('shopProductTypeVO.prodTypeNo')}" -->
-<!-- 						th:errors="*{shopProductVO.shopProductTypeVO.prodTypeNo}" -->
-<!-- 						id="shopProductTypeVO.prodTypeNo.errors"></span> -->
-				</div><br>
-
-				<div class="mb-3">
-					<label for="prodPrice" class="form-label">定價:</label> <input
-						type="text" th:field="*{prodPrice}"
-						class="form-control"
-						id="prodPrice" placeholder="輸入價格"> 
-<!-- 						<span -->
-<!-- 						class="alert alert-danger" role="alert" -->
-<!-- 						th:if="${#fields.hasErrors('prodPrice')}" th:errors="*{prodPrice}" -->
-<!-- 						id="prodPrice.errors"></span> -->
-				</div><br>
-
-
-
-				<div class="mb-3">
-					<label for="prodInfo" class="form-label">商品介紹:</label>
-					<textarea th:field="*{prodInfo}"
-						class="form-control"
-						id="prodInfo" rows="5"></textarea>
-<!-- 					<span class="alert alert-danger" role="alert" -->
-<!-- 						th:if="${#fields.hasErrors('prodInfo')}" th:errors="*{prodInfo}" -->
-<!-- 						id="prodInfo.errors"></span> -->
-				</div><br>
-
-				<!-- 上傳圖片用 -->
-				<div class="mb-3">
-					<label for="prodPic" class="form-label"
-						th:field="*{shopProductPics}">新增商品圖片</label> <input type="file"
-						name="picSet" id="prodPic" class="form-control" multiple> 
-<!-- 						<span -->
-<!-- 						class="alert alert-danger" role="alert" th:utext="${errorMessage}" -->
-<!-- 						id="upFiles.errors">${errorMessage} </span> -->
-
-					<!-- 預覽圖片容器 -->
-					<div id="preview" class="mt-2"></div>
+					<button type="submit" class="btn btn-success" id="submit">
+						送出新增</button>
 				</div>
+				<div></div>
+			</div>
+		</form>
+
+	</div>
 
 
-				<div>
-					<input type="hidden" th:field="*{prodDate}" /> 
-<!-- 					<span -->
-<!-- 						th:if="${#fields.hasErrors('prodDate')}" th:errors="*{prodDate}" -->
-<!-- 						class="error" id="prodDate.errors"></span> -->
-				</div>
-
-				<div>
-					<input type="hidden" th:field="*{prodStatus}" /> 
-<!-- 					<span -->
-<!-- 						th:if="${#fields.hasErrors('prodStatus')}" -->
-<!-- 						th:errors="*{prodStatus}" class="error" id="prodStatus.errors"></span> -->
-				</div><br>
-
-				<div>
-					<div></div>
-					<div>
-						<button type="submit" class="btn btn-success d-flex justify-content-center" id="submit addprodbutton" >
-							送出新增</button>
-					</div>
-					<div></div>
-				</div>
-			</form>
-
-		</div>
-	</main>
-
-	<!-- jQuery -->
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<!-- Bootstrap JavaScript -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-	<!-- 引入 DataTables -->
-	<script
-		src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-
-
-	<!-- topseeker前台Navbar共用JavaScript -->
-	<script src="/js/common.js"></script>
-
-	<!-- topseeker商城用JavaScript -->
-	<script src="/js/shop_front_end.js"></script>
-
+	<!-- JavaScript part -->
 	<script type="text/javascript">
 		$(document).ready(
 				function() {
-					// 預覽上傳圖片
-					$('#prodPic').on(
-							'change',
-							function(event) {
-								console.log('File input changed');
-								var files = event.target.files;
-								$('#preview').empty(); // 清空預覽容器
-								for (var i = 0; i < files.length; i++) {
-									var file = files[i];
-									var reader = new FileReader();
-									reader.onload = function(e) {
-										var img = $('<img>').attr('src',
-												e.target.result).addClass(
-												'img-thumbnail mb-2').css({
-											width : '150px',
-											height : '150px'
-										});
-										$('#preview').append(img);
-									};
-									reader.readAsDataURL(file);
-								}
-							});
+					var navbarHeight = $('.navbar').outerHeight();
+					var shopnavbarHeight = $('.shopnavbar').outerHeight();
+					$('.sidebar').css('top', navbarHeight + shopnavbarHeight);
+					$('.content').css('margin-top',
+							navbarHeight + shopnavbarHeight + 20);
 				});
 
 		//清除提示信息
-// 		function hideContent(d) {
-// 			document.getElementById(d).style.display = "none";
-// 		}
+		function hideContent(d) {
+			document.getElementById(d).style.display = "none";
+		}
+
+		//照片上傳-預覽用
+		var filereader_support = typeof FileReader != 'undefined';
+		if (!filereader_support) {
+			alert("No FileReader support");
+		}
+		acceptedTypes = {
+			'image/png' : true,
+			'image/jpeg' : true,
+			'image/gif' : true
+		};
+		function previewImage() {
+			var upfile1 = document.getElementById("prodPic");
+			upfile1.addEventListener("change", function(event) {
+				var files = event.target.files || event.dataTransfer.files;
+				for (var i = 0; i < files.length; i++) {
+					previewfile(files[i])
+				}
+			}, false);
+		}
+		function previewfile(file) {
+			if (filereader_support === true
+					&& acceptedTypes[file.type] === true) {
+				var reader = new FileReader();
+				reader.onload = function(event) {
+					var image = new Image();
+					image.src = event.target.result;
+					image.width = 100;
+					image.height = 75;
+					image.border = 2;
+					if (blob_holder.hasChildNodes()) {
+						blob_holder.removeChild(blob_holder.childNodes[0]);
+					}
+					blob_holder.appendChild(image);
+				};
+				reader.readAsDataURL(file);
+				document.getElementById('submit').disabled = false;
+			} else {
+				blob_holder.innerHTML = "<div  style='text-align: left;'>"
+						+ "● filename: "
+						+ file.name
+						+ "<br>"
+						+ "● ContentTyp: "
+						+ file.type
+						+ "<br>"
+						+ "● size: "
+						+ file.size
+						+ "bytes"
+						+ "<br>"
+						+ "● 上傳ContentType限制: <b> <font color=red>image/png、image/jpeg、image/gif </font></b></div>";
+				document.getElementById('submit').disabled = true;
+			}
+		}
 	</script>
 
 </body>

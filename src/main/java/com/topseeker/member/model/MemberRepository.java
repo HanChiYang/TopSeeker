@@ -1,3 +1,5 @@
+// https://docs.spring.io/spring-data/jpa/docs/current/reference/html/
+
 package com.topseeker.member.model;
 
 import java.util.Optional;
@@ -9,6 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public interface MemberRepository extends JpaRepository<MemberVO, Integer> {
+
+//	@Modifying
+//	@Query(value = "delete from member where mem_no =?1", nativeQuery = true)
+//	void deleteByMemNo(int memNo);
 
 	//會員登入
 	@Query(value = "from MemberVO where memAccount=?1 and memPassword =?2")
@@ -35,9 +41,9 @@ public interface MemberRepository extends JpaRepository<MemberVO, Integer> {
 
 	//註冊會員時，確認帳號是否重複時使用
 	@Query(value = "from MemberVO where memAccount=?1")
-	Optional<MemberVO> findByAccount(String memAccount);
+	Optional<MemberVO> findByAccount(String Account);
 	
 	//註冊會員時，確認身分證字號是否重複時使用
 	@Query(value = "from MemberVO where memUid=?1")
-	Optional<MemberVO> findByUid(String memUid);
+	Optional<MemberVO> findByUid(String Uid);
 }

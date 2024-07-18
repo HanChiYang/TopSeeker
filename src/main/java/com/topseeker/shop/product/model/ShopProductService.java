@@ -59,14 +59,9 @@ public class ShopProductService {
 		return repository.findByProdTypeNo(prodTypeNo);
 	}
 	
-	//後台商品的複合搜尋
+	
 	public List<ShopProductVO> getAll(Map<String, String[]> map) {
 		return HibernateUtil_CompositeQuery_ShopProduct.getAllC(map, sessionFactory.openSession());
 	}
-	
-	// 後台依【商品編號】，更改商品狀態
-    public void updateProdStatus(int prodNo, int prodStatus) {
-        repository.updateProdStatus(prodNo, prodStatus);
-    }
 	
 }

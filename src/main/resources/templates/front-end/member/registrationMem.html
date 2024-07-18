@@ -6,7 +6,8 @@
 <title>會員註冊</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<link rel="stylesheet" th:href="@{/css/common.css}">
 
 <style type="text/css">
 	
@@ -50,7 +51,7 @@ margin:8px;
 }
 
 #main {
-margin-top: 95px;
+margin-top: 70px;
 
 }
 
@@ -80,110 +81,6 @@ margin: 0;
 
 #submit{
 width: 100%;
-}
-
-#notificationContent {
-position: fixed;
-top: 75px;
-left: 500px;
-}
-
-#notification {
-font-size: 12px;
-}
-
-#moreNoti {
-	text-align: right;
-	font-size: 12px;
-	
-}
-.nav-link {
-    cursor: pointer;
-}
-
-body > nav > nav {
-	padding:0 !important;
-}
-body > nav > nav > div {
-	background-color: #CEDEBD;
-}
-
-nav ul {
-	
- display: flex;
- list-style: none;
- padding: 0;
- margin: 0;
-}
-
-nav ul li {
- position: relative;
- margin-right: 0px;
-}
-
-nav ul li a {
- text-decoration: none;
- color: #333;
- font-weight: bold;
-}
-
-nav ul li:hover ul {
- display: block;
-}
-
-nav ul li ul {
- display: none;
- position: absolute;
- top: 100%;
- left: 0;
- background-color: #fff;
- border: 1px solid #ccc;
- list-style: none;
- padding: 0;
- margin: 0;
-}
-
-nav ul li ul li {
- margin: 0;
-}
-
-nav ul li ul li a {
- padding: 10px;
- display: block;
- white-space: nowrap;
-}
-
-nav ul li ul li a:hover {
- background-color: #f0f0f0;
-}
-
-#logo {
-	margin-right: 20px;
-	
-}
-
-a.nav-link:hover {
-	font-weight: 1000;
-	
-}
-
-body {
-background-color: #FAF1E4;
-}
-
-input.form-control {
-padding: 0;
-}
-
-label.gender {
-width: 50px;
-}
-
-body > div > nav > nav > div {
-background-color: #CEDEBD;
-}
-body > div > nav > nav {
-padding:0 !important;
 }
 
 </style>
@@ -216,10 +113,8 @@ padding:0 !important;
 			
 			<div>
 			<label>性別:</label>
-			<div>
-			<label class="gender"><input type="radio" th:field="*{memSex}" value="m" onclick="hideContent('memSex.errors');" />男</label>
-			<label class="gender"><input type="radio" th:field="*{memSex}" value="f" onclick="hideContent('memSex.errors');" />女</label>
-			</div>
+			<input type="radio" th:field="*{memSex}" value="m" onclick="hideContent('memSex.errors');" />男
+			<input type="radio" th:field="*{memSex}" value="f" onclick="hideContent('memSex.errors');" />女
 			<span  th:if="${#fields.hasErrors('memSex')}" th:errors="*{memSex}" class="error" id="memSex.errors"></span>
 			</div>
 			
@@ -255,19 +150,25 @@ padding:0 !important;
 			
 			<div>
 			<label>密碼:</label>
-			<input type="password" th:field="*{memPassword}" onclick="hideContent('memPassword.errors');" class="form-control"/>
+			<input type="text" th:field="*{memPassword}" onclick="hideContent('memPassword.errors');" class="form-control"/>
 			<span  th:if="${#fields.hasErrors('memPassword')}" th:errors="*{memPassword}" class="error " id="memPassword.errors"></span>
 			</div>
 			
 			<div>
 			<label>照片:</label>
-			<input type="file" th:field="*{memImg}" onclick="previewImage()" multiple="multiple"/>
+			<input type="file" th:field="*{memImg}" onclick="previewImage()" multiple="multiple" />
             <!-- 可以不修改圖片 <span  th:if="${#fields.hasErrors('upFiles')}" th:errors="*{upFiles}" class="error" id="upFiles.errors"></span> -->
 			<div id="blob_holder"><img th:src="@{/member/DBGifReader} + '?memNo=' + ${memberVO.memNo}" width="100px"></div>
 			</div>
 			
-			<button type="submit" id="submit" class="btn btn-lg btn-success w-100"> 送出 </button>
+			
+
 				
+					<button type="submit" id="submit" class="btn btn-lg btn-primary w-100"> 送出 </button>
+				
+
+
+            
 		</form>
 		
 
@@ -319,7 +220,10 @@ function previewfile(file) {
 		reader.readAsDataURL(file);
 		document.getElementById('submit').disabled = false;
 	} else {
-		blob_holder.innerHTML = "<div style='text-align: left; color: red; font-weight: bold;'> 請上傳圖檔 </div>";
+		blob_holder.innerHTML = "<div  style='text-align: left;'>" + "● filename: " + file.name
+				+ "<br>" + "● ContentTyp: " + file.type
+				+ "<br>" + "● size: " + file.size + "bytes"
+				+ "<br>" + "● 上傳ContentType限制: <b> <font color=red>image/png、image/jpeg、image/gif </font></b></div>";
 		document.getElementById('submit').disabled = true;
 	}
 }

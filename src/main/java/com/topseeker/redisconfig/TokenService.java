@@ -21,11 +21,9 @@ public class TokenService {
 			MemberVO memberVO = new MemberVO(memNo, memEmail);
 			// 轉成JSON格式字串
 			String json = gson.toJson(memberVO);
+			System.out.println(json);
 
-			//將傳入的參數token作為key，參數作為值存入redis
 			jedis.set(token, json);
-			
-			//設定180秒後刪除失效
 			jedis.expire(token, 180);
 		}
 	}
