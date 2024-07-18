@@ -1,0 +1,193 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>行程開團資料修改 - update_tourGroup_input.html</title>
+
+<head th:insert="~{/back-end/tourGroup/included-fragment}"></head>
+<style type="text/css">
+	
+	button {
+		padding: 5px;
+	}
+	form {
+		display: table;
+	}
+	form div {
+		display: table-row;
+	}
+	label, input, span, select {
+		display: table-cell;
+		margin: 5px;
+		text-align: left;		
+	}
+	input[type=text], input[type=password], select, textarea {
+		width: 200px;
+		margin: 5px;
+	}
+	form div div {
+		display: table-cell;
+	}
+	.center {
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
+		 <div align="center"> <h2>行程開團資料修改 - update_tourGroup_input.html</h2>
+		 <h3><a class="navbar-brand" th:href="@{/tourGroup/select_page}"><img th:src="@{/images/back1.gif}">回查詢頁</a></h3></div>
+</nav>
+
+	<div align="center">
+		<h3><b>所有欄位皆為必填欄位</b></h3>
+		<form th:action="@{update}" method="post" th:object="${tourGroupVO}" enctype="multipart/form-data">
+			<div>
+			<label>行程開團編號:</label>
+			<input type="text" th:field="*{groupNo}" style="border:0px ; font-weight: bold;" readonly /><br/>
+
+			</div>
+			
+			<div>
+			<label>行程編號:</label>
+			<select th:field="*{tourVO.tourNo}">
+				<option th:each="tourVO : ${tourListData}" th:value="${tourVO.tourNo}" th:text="${tourVO.tourName}" />
+			</select>
+			<span th:if="${#fields.hasErrors('tourVO.tourNo')}" th:errors="*{tourVO.tourNo}" class="error" id="tourVO.tourNo.errors"></span>
+			</div>
+			
+			<div>
+			<label>行程開團價格:</label>
+			<input type="text" th:field="*{groupPrice}" onclick="hideContent('groupPrice.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('groupPrice')}" th:errors="*{groupPrice}" class="error" id="groupPrice.errors"></span>
+			</div>
+			
+			<div>
+			<label>行程開始日期:</label>
+			<input type="date" th:field="*{groupBegin}" onclick="hideContent('groupBegin.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('groupBegin')}" th:errors="*{groupBegin}" class="error" id="groupBegin.errors"></span>
+			</div>
+			
+			<div>
+			<label>行程結束日期:</label>
+			<input type="date" th:field="*{groupEnd}" onclick="hideContent('groupEnd.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('groupEnd')}" th:errors="*{groupEnd}" class="error" id="groupEnd.errors"></span>
+			</div>
+
+			<div>
+			<label>報名截止日期:</label>
+			<input type="date" th:field="*{groupDeadline}" onclick="hideContent('groupDeadline.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('groupDeadline')}" th:errors="*{groupDeadline}" class="error" id="groupDeadline.errors"></span>
+			</div>
+			
+			<div>
+			<label>行程開團剩餘人數:</label>
+			<input type="text" th:field="*{groupBal}" onclick="hideContent('groupBal.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('groupBal')}" th:errors="*{groupBal}" class="error" id="groupBal.errors"></span>
+			</div>
+			
+			<div>
+			<label>行程開團成行人數:</label>
+			<input type="text" th:field="*{groupMin}" onclick="hideContent('groupMin.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('groupMin')}" th:errors="*{groupMin}" class="error" id="groupMin.errors"></span>
+			</div>
+			
+			<div>
+			<label>行程開團最大人數:</label>
+			<input type="text" th:field="*{groupMax}" onclick="hideContent('groupMax.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('groupMax')}" th:errors="*{groupMax}" class="error" id="groupMax.errors"></span>
+			</div>
+			
+			<div>
+			<label>行程開團狀態:</label>
+			<input type="text" th:field="*{groupStatus}" onclick="hideContent('groupStatus.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('groupStatus')}" th:errors="*{groupStatus}" class="error" id="groupStatus.errors"></span>
+			</div>
+			
+			
+				
+			
+			
+<!-- 			<div> -->
+<!-- 			<label>圖片:</label> -->
+<!-- 			<input type="file" th:field="*{tourVO.tourPic}" onclick="previewImage()" multiple="multiple" /> -->
+<!--             可以不修改圖片 <span  th:if="${#fields.hasErrors('tourVO.tourPic')}" th:errors="*{tourVO.tourPic}" class="error" id="tourVO.tourPic.errors"></span> -->
+<!-- 			<div id="blob_holder"><img th:src="@{/tour/DBGifReader} + '?tourNo=' + ${tourVO.tourNo}" width="100px"></div> -->
+<!-- 			</div> -->
+			
+			<div>
+				<div></div>
+				<div><button type="submit" id="submit"> 送出修改 </button></div>
+				<div></div>
+			</div>		
+		</form>
+	
+	</div>
+
+
+<!-- JavaScript part -->
+<script type="text/javascript">
+//清除提示信息
+function hideContent(d) {
+     document.getElementById(d).style.display = "none";
+}
+
+//圖片上傳-預覽用
+var filereader_support = typeof FileReader != 'undefined';
+if (!filereader_support) {
+	alert("No FileReader support");
+}
+acceptedTypes = {
+		'image/png' : true,
+		'image/jpeg' : true,
+		'image/gif' : true
+};
+function previewImage() {
+	var upfile1 = document.getElementById("tourPic");
+	upfile1.addEventListener("change", function(event) {
+		var files = event.target.files || event.dataTransfer.files;
+		for (var i = 0; i < files.length; i++) {
+			previewfile(files[i])
+		}
+	}, false);
+}
+function previewfile(file) {
+	if (filereader_support === true && acceptedTypes[file.type] === true) {
+		var reader = new FileReader();
+		reader.onload = function(event) {
+			var image = new Image();
+			image.src = event.target.result;
+			image.width = 100;
+			image.height = 75;
+			image.border = 2;
+			if (blob_holder.hasChildNodes()) {
+				blob_holder.removeChild(blob_holder.childNodes[0]);
+			}
+			blob_holder.appendChild(image);
+		};
+		reader.readAsDataURL(file);
+		document.getElementById('submit').disabled = false;
+	} else {
+		blob_holder.innerHTML = "<div  style='text-align: left;'>" + "● filename: " + file.name
+				+ "<br>" + "● ContentTyp: " + file.type
+				+ "<br>" + "● size: " + file.size + "bytes"
+				+ "<br>" + "● 上傳ContentType限制: <b> <font color=red>image/png、image/jpeg、image/gif </font></b></div>";
+		document.getElementById('submit').disabled = true;
+	}
+}
+</script>
+
+</body>
+</html>

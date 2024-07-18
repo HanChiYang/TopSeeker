@@ -105,6 +105,7 @@ public class TourNoController {
 //	============傳送tourNo顯示開團日期，顯示行程詳情==============
 	@RequestMapping(value = "getTourNo_For_Display", method = {RequestMethod.GET, RequestMethod.POST})
 //	@PostMapping("getTourNo_For_Display")
+//	@GetMapping("getTourNo_For_Display")
 	public String getTourNo_For_Display(
 		/***************************1.接收請求參數 - 輸入格式的錯誤處理*************************/
 //		@NotEmpty(message="行程編號: 請勿空白")
@@ -242,7 +243,7 @@ public class TourNoController {
 	
 	
 	
-	
+	//排序
 //	=============================================
 	
 	@GetMapping("/sortedByPrice")
