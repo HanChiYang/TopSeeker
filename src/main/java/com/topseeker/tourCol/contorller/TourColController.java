@@ -71,6 +71,26 @@ public class TourColController {
 	}
 
 	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * This method will be called on listAlltourCol.html form submission, handling POST request
+	 */
 	@PostMapping("delete")
 	public String delete(@RequestParam("colNo") Integer colNo, 
              ModelMap model) {
