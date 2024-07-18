@@ -255,13 +255,13 @@ padding:0 !important;
 			
 			<div>
 			<label>密碼:</label>
-			<input type="text" th:field="*{memPassword}" onclick="hideContent('memPassword.errors');" class="form-control"/>
+			<input type="password" th:field="*{memPassword}" onclick="hideContent('memPassword.errors');" class="form-control"/>
 			<span  th:if="${#fields.hasErrors('memPassword')}" th:errors="*{memPassword}" class="error " id="memPassword.errors"></span>
 			</div>
 			
 			<div>
 			<label>照片:</label>
-			<input type="file" th:field="*{memImg}" onclick="previewImage()" multiple="multiple" />
+			<input type="file" th:field="*{memImg}" onclick="previewImage()" multiple="multiple"/>
             <!-- 可以不修改圖片 <span  th:if="${#fields.hasErrors('upFiles')}" th:errors="*{upFiles}" class="error" id="upFiles.errors"></span> -->
 			<div id="blob_holder"><img th:src="@{/member/DBGifReader} + '?memNo=' + ${memberVO.memNo}" width="100px"></div>
 			</div>
@@ -319,10 +319,7 @@ function previewfile(file) {
 		reader.readAsDataURL(file);
 		document.getElementById('submit').disabled = false;
 	} else {
-		blob_holder.innerHTML = "<div  style='text-align: left;'>" + "● filename: " + file.name
-				+ "<br>" + "● ContentTyp: " + file.type
-				+ "<br>" + "● size: " + file.size + "bytes"
-				+ "<br>" + "● 上傳ContentType限制: <b> <font color=red>image/png、image/jpeg、image/gif </font></b></div>";
+		blob_holder.innerHTML = "<div style='text-align: left; color: red; font-weight: bold;'> 請上傳圖檔 </div>";
 		document.getElementById('submit').disabled = true;
 	}
 }

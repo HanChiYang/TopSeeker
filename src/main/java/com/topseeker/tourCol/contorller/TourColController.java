@@ -42,13 +42,6 @@ public class TourColController {
 	@Autowired
 	MemberService memberSvc;
 
-	/*
-	 * This method will serve as addtourCol.html handler.
-	 */
-	
-	
-	
-	
 	@GetMapping("addTourCol")
 	public String addTourCol(ModelMap model) {
 		TourColVO tourColVO = new TourColVO();
@@ -56,9 +49,6 @@ public class TourColController {
 		return "back-end/tourCol/addTourCol";
 	}
 
-	/*
-	 * This method will be called on addtourCol.html form submission, handling POST request It also validates the user input
-	 */
 	@PostMapping("insert")
 	public String insert(@Valid TourColVO tourColVO, BindingResult result, ModelMap model,
 			@RequestParam("tourNo") Integer tourNo,@RequestParam("memNo") Integer memNo) throws IOException {

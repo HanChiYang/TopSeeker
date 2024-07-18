@@ -91,7 +91,6 @@ public class IndexController_inSpringBoot {
     
     @GetMapping("/member/registrationMem")
 	public String registrationMem(Model model) {
-    	System.out.println("123");
 		return "front-end/member/registrationMem";
 	}
     @GetMapping("/member/loginMem")
@@ -130,10 +129,7 @@ public class IndexController_inSpringBoot {
  		return "front-end/participant/listAllParticipant";
  	}
     
-//	@GetMapping("backend-protected/member/memberManagement")
-//	public String memberManagement() {
-//		return "back-end/member/select_page";
-//	}
+
     
     @ModelAttribute("participantListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
  	protected List<ParticipantVO> referenceListData(Model model) {

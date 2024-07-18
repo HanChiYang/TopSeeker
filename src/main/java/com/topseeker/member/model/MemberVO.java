@@ -22,7 +22,6 @@ public class MemberVO implements java.io.Serializable {
 	private Integer memNo;
 	
 	@Column (name = "mem_name")
-//	@NotEmpty(message="姓名: 請勿空白")
 	@Pattern(regexp = "^[(\u4e00-\u9fa5)]{2,10}$", message = "姓名: 只能是中、英文，且長度必需在2到10之間")
 	private String memName;
 	
@@ -32,33 +31,27 @@ public class MemberVO implements java.io.Serializable {
 	private String memSex;
 	
 	@Column (name = "mem_phone")
-//	@NotEmpty(message="手機: 請勿空白")
 	@Pattern(regexp = "^09\\d{8}$", message = "手機格式不符")
 	private String memPhone;
 	
 
 	@Column (name = "mem_email")
-//	@NotEmpty(message="電子信箱: 請勿空白")
 	@Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "信箱格式不符")
 	private String memEmail;
 	
 	@Column (name = "mem_uid")
 	@Pattern(regexp = "^[A-Za-z][1-2]\\d{8}", message = "身分證字號格式不符")
-//	@NotEmpty(message="身分證字號: 請勿空白")
 	private String memUid;
 	
 	@Column (name = "mem_birthday")
-//	@NotNull(message="生日: 請勿空白")	
 	private Date memBirthday;
 	
 	@Column (name = "mem_account")
 	@Pattern(regexp = ".{6,}$", message = "長度為6碼以上")
-//	@NotEmpty(message="帳號: 請勿空白")
 	private String memAccount;
 	
 	@Column (name = "mem_password")
 	@Pattern(regexp = ".{8,}$", message = "長度為8碼以上")
-//	@NotEmpty(message="密碼: 請勿空白")
 	private String memPassword;
 	
 	@Column (name = "mem_img", columnDefinition = "longblob")

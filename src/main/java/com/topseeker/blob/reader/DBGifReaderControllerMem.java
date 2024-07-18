@@ -16,14 +16,11 @@ import com.topseeker.member.model.MemberService;
 
 @Controller
 @RequestMapping("/member")
-public class DBGifReaderController {
+public class DBGifReaderControllerMem {
 
 	@Autowired
 	MemberService memSvc;
 
-	/*
-	 * This method will serve as listOneEmp.html , listAllEmp.html handler.
-	 */
 	@GetMapping("DBGifReader")
 	public void dBGifReader(@RequestParam("memNo") String memNo, HttpServletRequest req, HttpServletResponse res)
 			throws IOException {
@@ -31,7 +28,6 @@ public class DBGifReaderController {
 		ServletOutputStream out = res.getOutputStream();
 
 		try {
-//			EmpService empSvc = new EmpService();
 			out.write(memSvc.getOneMem(Integer.valueOf(memNo)).getMemImg());
 		} catch (Exception e) {
 			byte[] buf = java.util.Base64.getDecoder().decode(

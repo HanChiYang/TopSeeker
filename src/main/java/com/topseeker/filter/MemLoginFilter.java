@@ -18,7 +18,7 @@ public class MemLoginFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		System.out.println("filter init");
+//		System.out.println("filter init");
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class MemLoginFilter implements Filter {
 		HttpServletRequest httpRequest = (HttpServletRequest) req;
 		HttpServletResponse httpResponse = (HttpServletResponse) res;
 		HttpSession session = httpRequest.getSession();
-		System.out.println("dofilter");
+//		System.out.println("dofilter");
 
 		// 檢查是否已登入
 		if (session.getAttribute("loggedInMember") != null) {
@@ -41,7 +41,7 @@ public class MemLoginFilter implements Filter {
 				 oriURL += "?" + queryString;
 			}
 			session.setAttribute("oriURL", oriURL);
-			System.out.println("oriURL:" + oriURL);
+//			System.out.println("oriURL:" + oriURL);
 
 			// 重導到登入頁面
 			String alertMessage = "您尚未登入";
