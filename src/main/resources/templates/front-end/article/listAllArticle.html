@@ -148,8 +148,12 @@ table.dataTable th {
 <nav th:insert="~{/front-end/navbar.html}"></nav>
 <div class="container">登山情報</div>
 <div class="article-details">
-    <button id="btnAddArticle" style="margin-bottom: 10px;">新增文章</button>
-    <button id="btnlistMyArticles" style="margin-bottom: 10px;">我的文章</button>
+	    <a href="/protected/article/addArticle">
+	    <button id="btnAddArticle" style="margin-bottom: 10px;">新增文章</button>
+	</a>
+	<a href="/protected/article/listMyArticles">
+	    <button id="btnlistMyArticles" style="margin-bottom: 10px;">我的文章</button>
+	</a>
     <table id="example" class="display">
         <thead>
             <tr>
@@ -211,17 +215,7 @@ $(document).ready(function() {
     });
 });
 
-$('#btnAddArticle').on('click', function() {
-    window.location.href = 'http://localhost:8080/protected/article/addArticle';
-});
 
-$('#btnlistAllArtReport').on('click', function() {
-    window.location.href = 'http://localhost:8080/artreport/listAllArtReport';
-});
-
-$('#btnlistMyArticles').on('click', function() {
-    window.location.href = 'http://localhost:8080/protected/article/listMyArticles';
-});
 </script>
 </body>
 </html>
