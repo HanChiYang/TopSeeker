@@ -81,6 +81,23 @@ public class TourColController {
 	}
 
 	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/*
 	 * This method will be called on listAlltourCol.html form submission, handling POST request
 	 */
