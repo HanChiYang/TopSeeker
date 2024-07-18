@@ -94,25 +94,25 @@ public class ActVO implements java.io.Serializable {
 	@NotNull(message="報名開始日: 請勿空白")	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 //	@FutureOrPresent(message = "日期必須是今天（含）之後") 
-	private LocalDate actEnrollBegin;
+	private Date actEnrollBegin;
 	
 	@Column(name = "act_enroll_end")
 	@NotNull(message="報名結束日: 請勿空白")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 //	@Future(message="日期必須是在今日(不含)之後", groups = {MemGroup.class})
-	private LocalDate actEnrollEnd;
+	private Date actEnrollEnd;
 	
 	@Column(name = "act_start")	
 	@NotNull(message="活動開始日: 請勿空白")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Future(message="日期必須是在今日(不含)之後", groups = {MemGroup.class})
-	private LocalDate actStart;
+	private Date actStart;
 	
 	@Column(name = "act_end")
 	@NotNull(message="活動結束日: 請勿空白")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Future(message="日期必須是在今日(不含)之後", groups = {MemGroup.class})
-	private LocalDate actEnd;
+	private Date actEnd;
 	
 	@Column(name = "act_place")
 	@NotEmpty(message="活動地點: 請勿空白")	
@@ -227,35 +227,35 @@ public class ActVO implements java.io.Serializable {
 		this.actCheckCount = actCheckCount;
 	}
 
-	public LocalDate getActEnrollBegin() {
+	public Date getActEnrollBegin() {
 		return this.actEnrollBegin;
 	}
 
-	public void setActEnrollBegin(LocalDate actEnrollBegin) {
+	public void setActEnrollBegin(Date actEnrollBegin) {
 		this.actEnrollBegin = actEnrollBegin;
 	}
 
-	public LocalDate getActEnrollEnd() {
+	public Date getActEnrollEnd() {
 		return actEnrollEnd;
 	}
 
-	public void setActEnrollEnd(LocalDate actEnrollEnd) {
+	public void setActEnrollEnd(Date actEnrollEnd) {
 		this.actEnrollEnd = actEnrollEnd;
 	}
 
-	public LocalDate getActStart() {
+	public Date getActStart() {
 		return this.actStart;
 	}
 
-	public void setActStart(LocalDate actStart) {
+	public void setActStart(Date actStart) {
 		this.actStart = actStart;
 	}
 
-	public LocalDate getActEnd() {
+	public Date getActEnd() {
 		return actEnd;
 	}
 
-	public void setActEnd(LocalDate actEnd) {
+	public void setActEnd(Date actEnd) {
 		this.actEnd = actEnd;
 	}
 

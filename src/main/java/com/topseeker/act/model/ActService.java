@@ -75,6 +75,14 @@ public class ActService {
 	public void updateActStatus(Integer actNo, Integer newStatus) {
 		  repository.updateActStatus(actNo, newStatus);
 	}
+	//更新待審核人數
+	public void updateActCheckCount(Integer actNo, Integer additionalCount) {
+        ActVO actVO = getOneAct(actNo);
+        if (actVO != null) {
+            int newCheckCount = actVO.getActCheckCount() + additionalCount;
+            repository.updateActCheckCount(actNo, newCheckCount);
+        }
+    }
 	// 從ParticipantRepository取狀態為審核通過的總數，如果為 null 則返回 0
 //	public int getTotalJoinCountByActNoAndCommit(Integer actNo) {
 //        Integer count = participantRepository.findTotalJoinCountByActNoAndCommit(actNo);
