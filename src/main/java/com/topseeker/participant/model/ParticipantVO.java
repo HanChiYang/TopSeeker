@@ -79,10 +79,12 @@ public class ParticipantVO implements java.io.Serializable {
 	}
 
 	public void setActVO(ActVO actVO) {
-		   if (actVO != null && actVO.getActNo() != null) {
-	            this.actVO = new ActVO();
-	            this.actVO.setActNo(actVO.getActNo());
-	        }
+//		   if (actVO != null && actVO.getActNo() != null) {
+//	            this.actVO = new ActVO();
+//	            this.actVO.setActNo(actVO.getActNo());
+//	        }
+      this.actVO = actVO;
+
 	}
 
 	public MemberVO getMemberVO() {
