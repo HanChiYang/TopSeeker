@@ -74,7 +74,6 @@ public class MemberController {
 
 		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
 			memberVO.setMemImg(null); // 可以不上傳
-//			model.addAttribute("errorMessage", "員工照片: 請上傳照片");  --> 由messages.properties 第五行處理錯誤信息
 		} else {
 			for (MultipartFile multipartFile : parts) {
 				byte[] buf = multipartFile.getBytes();
