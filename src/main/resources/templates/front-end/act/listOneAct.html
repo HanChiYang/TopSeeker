@@ -168,7 +168,7 @@
                 event.preventDefault();
                 var beFollowedMemNo = $("input[name='beFollowedMemNo']").val();
                 $.ajax({
-                    url: "/protected/follow/insert",
+                    url: "/follow/insert",
                     method: "POST",
                     data: { beFollowedMemNo: beFollowedMemNo },
                     success: function(response) {

@@ -1,7 +1,7 @@
 #notificationContent {
 position: fixed;
-top: 80px;
-left: 825px;
+top: 75px;
+left: 720px;
 }
 
 #notification {
@@ -82,3 +82,170 @@ a.nav-link:hover {
 	font-weight: 1000;
 	
 }
+
+/* 以下為新增的css */
+.navbar-nav .nav-item .nav-link {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav .nav-item .nav-link i {
+  margin-right: 8px; /* 图标和文本之间的间距 */
+}
+
+/* 下拉菜单样式 */
+.navbar-nav .nav-item .dropdown-menu .dropdown-item {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav .nav-item .dropdown-menu .dropdown-item i {
+  margin-right: 8px; /* 图标和文本之间的间距 */
+}
+
+/* 下拉菜单中的下拉菜单样式 */
+.navbar-nav .dropdown-menu .dropdown-menu {
+  left: 100%;
+  top: 0;
+  margin-top: 0;
+  margin-left: 0.1rem;
+}
+
+.dropdown-menu > li {
+  position: relative;
+}
+
+.dropdown-menu > li > a::after {
+  content: "\f105"; /* 使用 Font Awesome 的右箭头图标 */
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  position: absolute;
+  right: 1rem;
+}
+
+.dropdown-menu .dropdown-menu .dropdown-item::after {
+  content: none;
+}
+
+.dropdown-menu > li > a {
+  display: flex;
+  align-items: center;
+}
+
+/* 导航栏样式 */
+.navbar-nav .nav-item .nav-link {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav .nav-item .nav-link i {
+  margin-right: 8px; /* 图标和文本之间的间距 */
+}
+
+/* 下拉菜单样式 */
+.navbar-nav .nav-item .dropdown-menu .dropdown-item {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav .nav-item .dropdown-menu .dropdown-item i {
+  margin-right: 8px; /* 图标和文本之间的间距 */
+}
+
+/* 下拉菜单中的下拉菜单样式 */
+.navbar-nav .dropdown-menu .dropdown-menu {
+  left: 100%;
+  top: 0;
+  margin-top: 0;
+  margin-left: 0.1rem;
+}
+
+.dropdown-menu > li {
+  position: relative;
+}
+
+.dropdown-menu > li > a::after {
+  content: "\f105"; /* 使用 Font Awesome 的右箭头图标 */
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  position: absolute;
+  right: 1rem;
+}
+
+.dropdown-menu .dropdown-menu .dropdown-item::after {
+  content: none;
+}
+
+.dropdown-menu > li > a {
+  display: flex;
+  align-items: center;
+}
+/* 样式表 */
+.navbar-nav .nav-item {
+  position: relative;
+}
+
+.navbar-nav .nav-item .nav-link {
+  border: 2px solid transparent;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 5px;
+  transition: all 0.3s ease;
+}
+
+/*邊框的css */
+
+.navbar-nav .nav-item {
+  position: relative;
+}
+
+.navbar-nav .nav-item .nav-link {
+  border: 2px solid transparent;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 5px;
+  transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+  border-color: #007bff; /* 边框颜色 */
+  background-color: rgba(0, 123, 255, 0.1); /* 背景颜色 */
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* 陰影效果 */
+}
+
+.navbar-nav .dropdown-menu {
+  border: 2px solid #007bff; /* 边框颜色 */
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* 陰影效果 */
+}
+
+.navbar-nav .dropdown-item {
+  border: 2px solid transparent;
+  border-radius: 10px;
+  padding: 5px 10px; /* 调整内边距 */
+  margin: 5px;
+  transition: all 0.3s ease;
+}
+
+.navbar-nav .dropdown-item:hover {
+  border-color: #007bff; /* 边框颜色 */
+  background-color: rgba(0, 123, 255, 0.1); /* 背景颜色 */
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* 陰影效果 */
+}
+
+.bellIcon {
+  transition: transform 0.3s ease;
+}
+
+#navbarNav > ul.navbar-nav.me-auto > li:nth-child(6) > span > a{
+	padding: 0px;
+}
+.bellIcon:hover {
+  transform: scale(1.1);
+}
+
+  
+.nav-link {
+   align-items: center;
+  }
