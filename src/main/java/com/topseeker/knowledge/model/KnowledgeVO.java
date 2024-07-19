@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Entity
@@ -31,15 +32,16 @@ public class KnowledgeVO implements java.io.Serializable{
 	private String knowContent;
 	
 	@Column(name ="know_pic", columnDefinition = "longblob")
-	@NotEmpty(message="商品照片: 請上傳照片")
+//	@NotNull(message="商品照片: 請上傳照片")
 	private byte[] knowPic;
 	
-	@NotEmpty(message="發布日期: 請勿空白")
-	@Column(name ="know_publishime", updatable = false)
+	@NotNull(message="發布日期: 請勿空白")
+	@Column(name ="know_publish_date", updatable = false)
 	private Date knowPublishDate;
 	
 	@Column(name ="know_status")
 	private Integer knowStatus;
+
 
 	public Integer getKnowNo() {
 		return knowNo;

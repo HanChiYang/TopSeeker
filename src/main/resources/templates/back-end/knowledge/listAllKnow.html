@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>檢視/管理所有商品</title>
+<title>檢視/管理所有新手知識</title>
 
 <!-- Bootstrap CSS -->
 <link
@@ -24,7 +24,7 @@
 
 
 <!-- Topseeker前台導航列CSS -->
-<link rel="stylesheet" th:href="@{/css/common.css}">
+<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
@@ -39,126 +39,98 @@
 <!-- ●●css for jquery datatables 用 -->
 
 
-
-
 <style type="text/css">
 
-/* .container { */
-/*     display: flex; */
-/* } */
+main.knowManagementContent{
+width: 70%;
+padding: 20px 40px;
+margin: 0 auto;
 
-/* .sidebar { */
-/*     width: 200px; */
-/*     height: 100vh; /* 適當的高度，視需求可調整 */ */
-/*     background-color: #f4f4f4; */
-/*     padding: 20px; */
-/*     box-shadow: 2px 0 5px rgba(0,0,0,0.1); */
-/*     position: -webkit-sticky; /* For Safari */ */
-/*     position: sticky; */
-/*     top: 0; */
-/* } */
-
-/* .main-content { */
-/*     flex-grow: 1; */
-/*     padding: 20px; */
-/*     height: 800px; */
-/* } */
-
-
+}
 
 
 </style>
 </head>
+
 <body>
 
 	<!-- topseeker後台Navbar -->
 	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
 
-
-
-	<!-- 商城後台用Navbar + 左側邊欄 -->
-	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
-
-
-<!-- 	<div class="container"> -->
-	
-	
-
-	<main class="shopManagementContent main-content">
-	<div class="listAllProdDisplay">
+	<main class="knowManagementContent">
+	<div class="listAllKnowDisplay">
 		<table id="example" class="display">
 			<thead>
 				<tr style="background-color: #d9ead3">
-					<th>商品編號</th>
-					<th>商品類別</th>
-					<th>商品圖片</th>
-					<th>商品名稱</th>
-					<th>商品介紹</th>
-					<th>商品定價</th>
-					<th>商品建立時間</th>
-					<th>商品狀態</th>
+					<th>知識編號</th>
+					<th>發布日期</th>
+					<th>圖片</th>
+					<th>標題</th>
+					<th>內容</th>
+					<th width="150px">知識狀態</th>
 					<th>修改</th>
 					<!-- 					<th>刪除</th> -->
 				</tr>
 			</thead>
 			<tbody>
-				<th:block th:each="shopProductVO : ${shopListData}">
+				<th:block th:each="knowledgeVO : ${knowListData}"> 
 					<tr>
-						<td width="50px" th:text="${shopProductVO.prodNo}"></td>
-						<td th:text="${shopProductVO.shopProductTypeVO.prodTypeName}"></td>
+						<td th:text="${knowledgeVO.knowNo}"></td>
+						<td th:text="${knowledgeVO.knowPublishDate}"></td>
 						<td><img
-							th:src="@{/shop/DBGifReader} + '?prodNo=' + ${shopProductVO.prodNo} "
-							width="80px"></td>
-						<td width="150px" th:text="${shopProductVO.prodName}"></td>
-						<td width="200px"
-							th:text="${#strings.abbreviate(shopProductVO.prodInfo, 20)}"></td>
-						<td width="80px" th:text="'$' + ${shopProductVO.prodPrice}"></td>
-						<td width="100px" th:text="${shopProductVO.prodDate}"></td>
-						<td>
-						<!-- 賦一個隱藏的值給DataTable排序用 -->
-						<span style="display:none" th:text="${shopProductVO.prodStatus}"></span>
+							th:src="@{/knowledge/DBGifReader} + '?knowNo=' + ${knowledgeVO.knowNo} "
+							width="50px"></td>
+							
+						<td th:text="${knowledgeVO.knowTitle}"></td>
 						
+						<td
+							th:text="${#strings.abbreviate(knowledgeVO.knowContent, 100)}"></td>
+
+						<td width="100px">
+							<!-- 賦一個隱藏的值給DataTable排序用 -->
+							<span style="display:none" th:text="${knowledgeVO.knowStatus}"></span>
+
 							<div class="btn-group" role="group"
 								aria-label="Basic radio toggle button group">
 								<!-- 上架中按鈕 -->
 								<input type="radio" class="btn-check"
-									th:name="'prodStatus-' + ${shopProductVO.prodNo}"
-									th:id="'success-outlined-' + ${shopProductVO.prodNo}"
+									th:name="'knowStatus-' + ${knowledgeVO.knowNo}"
+									th:id="'success-outlined-' + ${knowledgeVO.knowNo}"
 									autocomplete="off"
-									th:checked="${shopProductVO.prodStatus == 1}"> <label
+									th:checked="${knowledgeVO.knowStatus == 1}"> <label
 									class="btn btn-outline-success"
-									th:for="'success-outlined-' + ${shopProductVO.prodNo}"
-									th:onclick="'updateStatus(' + ${shopProductVO.prodNo} + ', 1)'" th:value="${shopProductVO.prodStatus}">上架中</label>
+									th:for="'success-outlined-' + ${knowledgeVO.knowNo}"
+									th:onclick="'updateknowStatus(' + ${knowledgeVO.knowNo} + ', 1)'" th:value="${knowledgeVO.knowStatus}">上架中</label>
 
 								<!-- 下架按鈕 -->
 								<input type="radio" class="btn-check"
-									th:name="'prodStatus-' + ${shopProductVO.prodNo}"
-									th:id="'secondary-outlined-' + ${shopProductVO.prodNo}"
+									th:name="'knowStatus-' + ${knowledgeVO.knowNo}"
+									th:id="'secondary-outlined-' + ${knowledgeVO.knowNo}"
 									autocomplete="off"
-									th:checked="${shopProductVO.prodStatus == 0}"> <label
+									th:checked="${knowledgeVO.knowStatus == 0}"> <label
 									class="btn btn-outline-secondary"
-									th:for="'secondary-outlined-' + ${shopProductVO.prodNo}"
-									th:onclick="'updateStatus(' + ${shopProductVO.prodNo} + ', 0)'" th:value="${shopProductVO.prodStatus}">下架</label>
+									th:for="'secondary-outlined-' + ${knowledgeVO.knowNo}"
+									th:onclick="'updateknowStatus(' + ${knowledgeVO.knowNo} + ', 0)'" th:value="${knowledgeVO.knowStatus}">下架</label>
 							</div>
 
 
-						</td>
-						<td>
+<!-- 						</td> -->
+						<td width="100px">
 							<form method="post"
-								th:action="@{/shop/shopManagement/getOne_For_Update}"
+								th:action="@{getOneKnow_For_Update}"
 								style="margin-bottom: 0;">
 								<button type="submit" class="btn btn-warning text-white">
 									<i class="fas fa-edit"></i> 修改
 								</button>
-								<input type="hidden" name="prodNo"
-									th:value="${shopProductVO.prodNo}">
+								<input type="hidden" name="knowNo"
+									th:value="${knowledgeVO.knowNo}">
 							</form>
 						</td>
 						<!-- 						<td> -->
-						<!-- 							<form method="post" th:action="@{/shop/shopManagement/delete}" -->
+						<!-- 							<form method="post" th:action="@{/knowledge/delete}" -->
 						<!-- 								style="margin-bottom: 0px;"> -->
 						<!-- 								<input type="submit" value="刪除"> <input type="hidden" -->
-						<!-- 									name="prodNo" th:value="${shopProductVO.prodNo}"> -->
+						<!-- 									name="knowNo" th:value="${knowledgeVO.knowNo}"> -->
 						<!-- 							</form> -->
 						<!-- 						</td> -->
 					</tr>
@@ -167,8 +139,6 @@
 		</table>
 	</div>
 	</main>
-	
-<!-- 	</div> -->
 
 
 	<!-- ●● jquery datatables 設定 -->
@@ -189,10 +159,10 @@
 													"loadingRecords" : "載入中...",
 													"lengthMenu" : "顯示 _MENU_ 筆結果",
 													"zeroRecords" : "沒有符合的結果",
-													"info" : "顯示第 _START_ 至 _END_ 筆結果，共<font color=red> _TOTAL_ </font>筆",
-													"infoEmpty" : "顯示第 0 至 0 筆結果，共 0 筆",
-													"infoFiltered" : "(從 _MAX_ 筆結果中過濾)",
-													"infoPostFix" : "",
+													"know" : "顯示第 _START_ 至 _END_ 筆結果，共<font color=red> _TOTAL_ </font>筆",
+													"knowEmpty" : "顯示第 0 至 0 筆結果，共 0 筆",
+													"knowFiltered" : "(從 _MAX_ 筆結果中過濾)",
+													"knowPostFix" : "",
 													"search" : "搜尋:",
 													"paginate" : {
 														"first" : "第一頁",
@@ -209,19 +179,19 @@
 						});
 		
 				//Ajax修改商品上下架狀態
-				function updateStatus(prodNo, status) {
+				function updateknowStatus(knowNo, status) {
 					$.ajax({
 						type : "POST",
-						url : "/shop/shopManagement/updateStatus",
+						url : "/knowledge/updateknowStatus",
 						data : {
-							prodNo : prodNo,
-							prodStatus : status
+							knowNo : knowNo,
+							knowStatus : status
 						},
 						success : function(response) {
- 							//console.log("狀態更新成功");
+ 							console.log("狀態更新成功");
 						},
 						error : function(xhr, status, error) {
-							//console.log("狀態更新失敗: " + error);
+							console.log("狀態更新失敗: " + error);
 						}
 					});
 				}
