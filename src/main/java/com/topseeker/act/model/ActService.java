@@ -23,7 +23,7 @@ public class ActService {
 	ActRepository repository;
 	
 	@Autowired
-	ParticipantRepository participantrepository;
+	ParticipantRepository participantRepository;
 	
 	@Autowired
     private ParticipantService participantService;
@@ -75,8 +75,36 @@ public class ActService {
 	public void updateActStatus(Integer actNo, Integer newStatus) {
 		  repository.updateActStatus(actNo, newStatus);
 	}
+	//更新待審核人數
+	public void updateActCheckCount(Integer actNo, Integer additionalCount) {
+        ActVO actVO = getOneAct(actNo);
+        if (actVO != null) {
+            int newCheckCount = actVO.getActCheckCount() + additionalCount;
+            repository.updateActCheckCount(actNo, newCheckCount);
+        }
+    }
+	// 從ParticipantRepository取狀態為審核通過的總數，如果為 null 則返回 0
+//	public int getTotalJoinCountByActNoAndCommit(Integer actNo) {
+//        Integer count = participantRepository.findTotalJoinCountByActNoAndCommit(actNo);
+//        return count != null ? count : 0;
+//    }
+	// 從ParticipantRepository取狀態為待審核的總數，如果為 null 則返回 0
+//    public int getPendingJoinCountByActNo(Integer actNo) {
+//        Integer count = participantRepository.findPendingJoinCountByActNo(actNo);
+//        return count != null ? count : 0;
+//    }
+    //更新 actCurrentCount、actCheckCount，並在獲取活動列表時調用這個方法
+//    @Transactional
+//    public void updateActCurrentAndCheckCount(Integer actNo) {
+//        int currentCount = getTotalJoinCountByActNoAndCommit(actNo);
+//        int pendingCount = getPendingJoinCountByActNo(actNo);
+//
+//        repository.updateActCurrentCount(actNo, currentCount);
+//        repository.updateActCheckCount(actNo, pendingCount);
+//    }
 	
-	//送出參團人數後修改待審核人數
+	
+	
 	
 
    

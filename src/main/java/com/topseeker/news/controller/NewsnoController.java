@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -99,7 +100,7 @@ public class NewsnoController {
 	    return new ModelAndView("back-end/news/select_page", "errorMessage", "請修正以下錯誤:<br>"+message);
 	}
 	
-	@PostMapping("newsDetails")
+	@GetMapping("newsDetails")
     public String getNewsDetails(@RequestParam("newsNo") String newsNo, Model model) {
 		System.out.println(newsNo);
 		NewsVO newsVO = newsSvc.getOneNews(Integer.valueOf(newsNo));
