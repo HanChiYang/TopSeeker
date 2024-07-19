@@ -1,19 +1,35 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>購物車</title>
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+	crossorigin="anonymous">
 
+<!-- icon用 -->
 <link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+<!-- 從 Google Fonts 引入 "Playfair Display" 字體 -->
+<link
+	href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap"
+	rel="stylesheet">
+
+
+<!-- Topseeker前台導航列CSS -->
+<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<!-- 商城導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/shop_front_end.css}">
 <style>
-* {
-  box-sizing: border-box;
-}
-body{
-  margin: 0;
-}
-img.jpg {
-	/*width:300px;*/
+/* ===================購物車本體================================= */
+
+
+td.prodPic img.jpg {
 	height: 150px;
 }
 
@@ -21,7 +37,7 @@ img.jpg {
 	display: none;
 }
 .btn-del{
-  	background-color: rgb(199, 220, 167);
+  	background-color:white;
      border: none;
 
 }
@@ -29,23 +45,23 @@ img.jpg {
  .btn-del:hover, 
  .btn-del:focus { 
      font-size:x-large;
-     background-color: rgb(199, 220, 167);
+     background-color:white;
      border: none;
  }
 
-a {
+button.next a {
 	text-decoration: none;
 	color:rgb(222, 249, 196);
 }
 
-a:visited {
-	color:rgb(222, 249, 196);
+button.next a:visited {
+	color:rgb(222, 249, 196);;
 }
 
-a:hover{
+button.next a:hover{ 
 
-	color:#003C9D;
-}
+ 	color:#003C9D; 
+} 
  
  button.next,
  form button.next {
@@ -66,45 +82,47 @@ form button.next:hover {
   border:2px #003C9D solid;
 }
  
- th{
- 	color: white;
- }
  
  tbody,
  td {
  	background-color: rgb(199, 220, 167);
+ }
+ 
+ td.prodQty input{
+ 	font-size: 20px;
+ 
  } 
 
 thead,
-.bg1 {
+.bg1 th{
 	background-color: rgb(54, 94, 50);
+	color: white;
 }
 
 
 /*固定結帳區*/
 .check-sticky {
 	position: sticky;
-	bottom: 10px;
+	bottom: 0px;
 	z-index: 1000;
 	background-color: rgb(128, 175, 129);
 	width: 100%;
-	height: 100px;
-	
+	height: 130px;
+	 
 }
 
 .check-sticky div.btns{
 	padding: 20px 20px;
 	display: flex;
     justify-content: center;
-    align-items: center; /* 控制板块的垂直对齐方式 */
+    align-items: center;
    	gap: 20px;
-
 }
 
 /* 表格滾動 */
 .scrollable-table tbody {
 	display: block;
-	max-height: 800px;
+	max-height: 1000px;
 	overflow-y: auto;
 }
 
@@ -112,14 +130,15 @@ thead,
 	display: table;
 	width: 100%;
 	table-layout: fixed;
+	text-align: center;
+	vertical-align: middle;
 }
 
 .scrollable-table {
 	width: 100%;
 	margin: auto;
+	padding-top: 0;
 }
-
-
 
 
 span.sum {
@@ -127,135 +146,153 @@ span.sum {
 	font-size: 25px;
 	color: rgb(214, 239, 216);
 }
+
+
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body id="body">
+<!-- topseeker前台Navbar -->
+	<nav th:insert="~{/front-end/navbar.html}"></nav>
 
-
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<!-- 商城用Navbar -->
+	<nav th:insert="~{/front-end/shop/shop_front_end_nav.html}"></nav>
 	
-	<h3>購物車</h3>
-
-	<div class="scrollable-table">
+	<main>
+		<div class="scrollable-table">
 	
-		<table width="100%" class="table table-hover table-striped mt-0">
-			<thead>
-				<tr class="bg1">
+			<table width="100%" class="table">
+				<thead>
+					<tr class="bg1">
+						
+						<th style="width: 23vw">商品圖片</th>
+						<th style="width: 7.5vw">商品編號</th>
+						<th style="width: 13vw">名稱</th>
+						<th style="width: 7.5vw">售價</th>
+						<th style="width: 7.5vw">購買數量</th>
+						<th style="width: 7.5vw">小計</th>
+	
+						<!-- 刪除商品 -->
+						<th style="width: 13vw"></th>
+					</tr>
+				</thead>
+				<tbody id="tbody">
+					<tr th:each="cartDetail : ${cartDetail}" id="lists">
+	<!-- 				會員編號 -->
+					<td align="center" class="vertical hidden" style="width: 5vw" th:value="${cartDetail.memberVO.memNo}"></td>
 					
-					<th style="width: 23vw">商品圖片</th>
-					<th style="width: 7.5vw">商品編號</th>
-					<th style="width: 13vw">名稱</th>
-					<th style="width: 7.5vw">售價</th>
-					<th style="width: 7.5vw">購買數量</th>
-					<th style="width: 7.5vw">小計</th>
-
-					<!-- 刪除商品 -->
-					<th style="width: 13vw"></th>
-				</tr>
-			</thead>
-			<tbody id="tbody">
-				<tr th:each="cartDetail : ${cartDetail}" id="lists">
-<!-- 				會員編號 -->
-				<td align="center" class="vertical hidden" style="width: 5vw" th:value="${cartDetail.memberVO.memNo}"></td>
+	<!-- 				購物車編號 不要刪 -->
+						<td align="center" class="vertical cartNo hidden" style="width: 5vw" th:text="${cartDetail.cartNo}"></td>
+						
+	<!-- 				商品圖片連結 -->
+						<td class="prodPic" align="center" style="width: 23vw">
+							<img th:src="@{/shop/DBGifReader(prodNo=${cartDetail.shopProductVO.prodNo})}" class="jpg">					
+						</td>
+						
+	<!-- 					商品編號 -->
+						<td align="center" class="prodNo" style="width: 7.5vw"
+							th:text="${cartDetail.shopProductVO.prodNo}"></td>
+							
+	<!-- 					商品名稱	 -->
+						<td align="center" class="" style="width: 13vw"
+							th:text="${cartDetail.shopProductVO.prodName}">
+						</td>
+						
+	<!-- 					商品售價 -->
+						<td align="center" class="prodPrice vertical" style="width: 7.5vw"
+							th:text="${cartDetail.shopProductVO.prodPrice}"></td>
+	
+							
+	<!-- 					商品數量	 -->
+						<td align="center" class="prodQty vertical" style="width: 7.5vw">
+						   <input type="number" min="1" max="99" step="1"
+								th:value="${cartDetail.prodQty}" class="num" name="prodQty"
+								th:id="'prodQty_' + ${cartDetail.shopProductVO != null ? cartDetail.shopProductVO.prodNo : 'N/A'}">
+						</td>
+						
+						<!-- 小計 -->
+						<td align="center" class="sub vertical" style="width: 7.5vw"></td>
+						
+	
+						<!--  刪除商品 -->
+						<td align="center" class="vertical" style="width: 13vw">
+							<form th:action="@{/protected/cart/deleteOne}" method="post"
+								th:object="${cartDetail}">
+								<button class="btn-del" type="submit"
+									data-bs-toggle="modal">
+									<i class="fa-solid fa-trash-can fa-lg" style="color: #74C0FC;"></i>
+									<input type="hidden" name="prodNo" th:value="${cartDetail.shopProductVO.prodNo}">
+								</button>
+							</form>
+	
+						</td>
+					</tr>
+	
+				</tbody>
+			</table>
+			
+	
+			<div th:if="${#lists.isEmpty(cartDetail)}" align="center">
+				<h1>目前購物車沒有商品</h1>
+			</div>
+			
+			<div style="text-align:center;" class="check-sticky">
+	<!-- 		總金額 -->
+				<span class="sum">總金額:</span>
+				<span class="totalAmount sum" name="totalAmount"></span>
 				
-<!-- 				購物車編號 -->
-					<td align="center" class="vertical cartNo hidden" style="width: 5vw" th:text="${cartDetail.cartNo}"></td>
+				<!-- 折扣金額 -->
+				<span class="sum">折扣名稱:</span>
+				<span class="saleName sum" name="saleName"></span>
+				
+				<span class="sum">折扣後金額:</span>
+				<span class="discountedAmount sum" name="discountedAmount"></span>
+				
+				<!-- 繼續購物 -->
+				<div class="btns">
+					<button class="next">
+						<a th:href="@{/shop/homepage}">繼續購物</a>
+					</button>
+				<!--  清空購物車 -->	
+					<form th:action="@{deleteMemAllCart}" method="post">
+						<button class="next" type="submit">清空購物車</button>
+					</form>
+				<!-- 結帳 -->	
+					<form th:action="@{checkOut}" method="post" th:object="${cartDetail}">
+						<button class="next checkout" type="submit">結帳</button>
+					</form>
 					
-<!-- 				商品圖片連結 -->
-					<td align="center" style="width: 23vw">
-						<img th:src="@{/shop/DBGifReader(prodNo=${cartDetail.shopProductVO.prodNo})}" class="jpg">					
-					</td>
-					
-<!-- 					商品編號 -->
-					<td align="center" class="prodNo" style="width: 7.5vw"
-						th:text="${cartDetail.shopProductVO.prodNo}"></td>
-						
-<!-- 					商品名稱	 -->
-					<td align="center" class="" style="width: 13vw"
-						th:text="${cartDetail.shopProductVO.prodName}">
-					</td>
-					
-<!-- 					商品售價 -->
-					<td align="center" class="prodPrice vertical" style="width: 7.5vw"
-						th:text="${cartDetail.shopProductVO.prodPrice}"></td>
-
-						
-<!-- 					商品數量	 -->
-					<td align="center" class="prodQty vertical" style="width: 7.5vw">
-					   <input type="number" min="1" max="99" step="1"
-							th:value="${cartDetail.prodQty}" class="num" name="prodQty"
-							th:id="'prodQty_' + ${cartDetail.shopProductVO != null ? cartDetail.shopProductVO.prodNo : 'N/A'}">
-					</td>
-					
-					<!-- 小計 -->
-					<td align="center" class="sub vertical" style="width: 7.5vw"></td>
-					
-
-					<!--  刪除商品 -->
-					<td align="center" class="no-wrap vertical" style="width: 13vw">
-						<form th:action="@{/protected/cart/deleteOne}" method="post"
-							th:object="${cartDetail}">
-							<button class="btn-del delete1" type="submit"
-								data-bs-toggle="modal">
-								<i class="fa-solid fa-trash-can fa-lg" style="color: #74C0FC;"></i>
-								<input type="hidden" name="prodNo" th:value="${cartDetail.shopProductVO.prodNo}">
-							</button>
-						</form>
-
-					</td>
-				</tr>
-
-			</tbody>
-		</table>
+				</div>
 		
-
-		<div th:if="${#lists.isEmpty(cartDetail)}" align="center">
-			<h1>目前購物車沒有商品</h1>
-		</div>
-		
-		<div style="text-align:center;" class="check-sticky">
-<!-- 		總金額 -->
-			<span class="sum">總金額:</span>
-			<span class="totalAmount sum" name="totalAmount"></span>
 			
-			<!-- 折扣金額 -->
-			<span class="sum">折扣名稱:</span>
-			<span class="saleName sum" name="saleName"></span>
-			
-			<span class="sum">折扣後金額:</span>
-			<span class="discountedAmount sum" name="discountedAmount"></span>
-			
-			<!-- 繼續購物 -->
-			<div class="btns">
-				<button class="next">
-					<a th:href="@{/shop/homepage}">繼續購物</a>
-				</button>
-			<!--  清空購物車 -->	
-				<form th:action="@{deleteMemAllCart}" method="post">
-					<button class="next" type="submit">清空購物車</button>
-				</form>
-			<!-- 結帳 -->	
-				<form th:action="@{checkOut}" method="post" th:object="${cartDetail}">
-					<button class="next checkout" type="submit">結帳</button>
-				</form>
 				
 			</div>
-	
-		
 			
+
 		</div>
-			
 
-	</div>
+	</main>
+	
 
 	
 
-	<script type="text/javascript">
-	
+<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<!-- Bootstrap JavaScript -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- 引入 DataTables -->
+	<script
+		src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 		
+	<!-- topseeker前台Navbar共用JavaScript -->
+	<script src="/js/common.js"></script>
 	
-		
+	<!-- topseeker商城用JavaScript -->
+	<script src="/js/shop_front_end.js"></script>
+
+	<script type="text/javascript">		
 
 		//進入頁面更新數量及金額
 		$(document).ready(function() {
@@ -357,6 +394,9 @@ span.sum {
 		
 	});
 		
+
+		
+		
 		 function updateAmounts() {
 	           var totalAmount = 0;
 	            $(".num").each(function() {
@@ -430,7 +470,7 @@ span.sum {
 		    var totalAmount = calculateTotalAmount();
 			var maxDiscount = calculateBestDiscount(totalAmount, sales);
 			var saleName = bestDiscountName(totalAmount, sales);
-		   	var discountedAmount = totalAmount * maxDiscount;
+		   	var discountedAmount = totalAmount * (1 - maxDiscount);
 			console.log(saleName);
 			console.log(discountedAmount);
 		        $('.discountedAmount').text("$" + discountedAmount.toFixed(0));
@@ -446,7 +486,7 @@ span.sum {
 		    var maxDiscount = 0;
 		    sales.forEach(function(sale) {
 		        if (totalAmount >= sale.saleAmount) {
-		            maxDiscount = Math.max(maxDiscount, sale.saleDiscount);
+		            maxDiscount = Math.max(maxDiscount, (1 - sale.saleDiscount));
 		        }
 		    });
 		    return maxDiscount;

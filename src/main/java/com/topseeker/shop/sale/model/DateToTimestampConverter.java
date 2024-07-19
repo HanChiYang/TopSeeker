@@ -1,9 +1,9 @@
 package com.topseeker.shop.sale.model;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
-@ComponentScan
+@Component
 public class DateToTimestampConverter implements Converter<java.util.Date, java.sql.Timestamp> {
 
     @Override
@@ -13,5 +13,7 @@ public class DateToTimestampConverter implements Converter<java.util.Date, java.
         }
         return new java.sql.Timestamp(source.getTime());
     }
+    
+    
 
 }
