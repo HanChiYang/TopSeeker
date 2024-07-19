@@ -2,14 +2,15 @@ package com.topseeker.tourGroup.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -200,19 +201,26 @@ public class TourGroupController {
 
 	@PostMapping("listTourGroups_ByCompositeQuery_front")
 	public String listAllTourGroupFront(HttpServletRequest req, Model model) {
+		System.out.println("Start");
 		Map<String, String[]> map = req.getParameterMap();
 		
-//        Map<String, String[]> queryParams = new HashMap<>(map);
-//        String groupBegin = req.getParameter("groupBegin");
-//        String groupEnd = req.getParameter("groupEnd");
-//        if (groupBegin != null && !groupBegin.trim().isEmpty() && groupEnd != null && !groupEnd.trim().isEmpty()) {
-//            queryParams.put("groupDateRange", new String[]{groupBegin + "," + groupEnd});
-//        }
+        Map<String, String[]> queryParams = new HashMap<>();
+        String groupBegin = req.getParameter("groupBegin");
+        String groupEnd = req.getParameter("groupEnd");
+        if (groupBegin != null && !groupBegin.trim().isEmpty() && groupEnd != null && !groupEnd.trim().isEmpty()) {
+            queryParams.put("groupDateRange", new String[]{groupBegin + "," + groupEnd});
+        }
+        queryParams.put("tourName", new String[]{req.getParameter("tourName")});
 //        Session session = sessionFactory.openSession();
 //        
-		List<TourGroupVO> list = tourGroupSvc.getAll(map);
-		model.addAttribute("tourGroupListData", list); // for listAlltourGroup.html 第85行用
-		return "back-end/tourGroup/listAllTourGroup";
+        List<TourGroupVO> list = tourGroupSvc.getAll(queryParams);
+		Set<TourVO> tourList = new HashSet<TourVO>();
+		for (TourGroupVO tourGroup : list) {
+			tourList.add(tourGroup.getTourVO());
+		}
+		model.addAttribute("tourListData", tourList); // for listAlltourGroup.html 第85行用
+		System.out.println("Finish");
+		return "front-end/tour/tourQuery";
 	}
 
 }
