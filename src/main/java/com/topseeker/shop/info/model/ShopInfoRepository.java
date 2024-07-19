@@ -1,4 +1,4 @@
-package com.topseeker.shopinfo.model;
+package com.topseeker.shop.info.model;
 
 import java.util.List;
 
@@ -22,4 +22,14 @@ public interface ShopInfoRepository  extends JpaRepository<ShopInfoVO, Integer>{
 	//取單一圖片
 	@Query(value = "SELECT * FROM shop_info WHERE info_no=?1", nativeQuery = true)
 	ShopInfoVO getShopInfoPic(Integer infoNo);
+	
+	//商城後台，透過最新消息編號更改最新消息上下架狀態
+    @Transactional
+    @Modifying
+    @Query(value = "update shop_info set info_status = ?2 where info_no = ?1", nativeQuery = true)
+    void updateInfoStatus(int infoNo, int infoStatus);
+    
+ // 前台最新消息頁面，取所有上架的最新消息，依新到舊排列
+	@Query(value = "SELECT * FROM shop_info WHERE info_status=1 ORDER BY info_date DESC", nativeQuery = true)
+	List<ShopInfoVO> getAllReleasedInfo();
 }

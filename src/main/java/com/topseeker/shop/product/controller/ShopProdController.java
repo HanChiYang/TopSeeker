@@ -31,6 +31,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
+import com.topseeker.shop.info.model.ShopInfoService;
+import com.topseeker.shop.info.model.ShopInfoVO;
 import com.topseeker.shop.product.model.ShopProductService;
 import com.topseeker.shop.product.model.ShopProductVO;
 import com.topseeker.shop.productpic.model.ShopProductPicService;
@@ -39,8 +41,6 @@ import com.topseeker.shop.producttype.model.ShopProductTypeService;
 import com.topseeker.shop.producttype.model.ShopProductTypeVO;
 import com.topseeker.shop.wishlist.model.ShopWishlistService;
 import com.topseeker.shop.wishlist.model.ShopWishlistVO;
-import com.topseeker.shopinfo.model.ShopInfoService;
-import com.topseeker.shopinfo.model.ShopInfoVO;
 
 @Controller
 @RequestMapping("/shop")
@@ -126,6 +126,21 @@ public class ShopProdController {
 		model.addAttribute("shopWishlistVO", shopWishlistVO);
 		return "front-end/shop/wishlist";
 	}
+	
+	
+	// 商品搜尋結果用 searchResult.html
+	@PostMapping("/searchResult")
+	 public String showShopSearchResult(@RequestParam("keyword") String keyword, ModelMap model) {
+        // 加入模糊搜尋符號
+        String searchKeyword = "%" + keyword + "%";
+        List<ShopProductVO> shopListData = shopProductSvc.findByProdNameOrInfo(searchKeyword);
+
+        model.addAttribute("shopListData", shopListData);
+
+		return "front-end/shop/searchResult";
+	}
+	
+	
 
 	// ============Ajax新增刪除功能============
 
@@ -268,8 +283,6 @@ public class ShopProdController {
 	public String listAllProd(Model model) {
 		return "back-end/shop/listAllProd";
 	}
-	
-//	/shopInfo/getOne_Info_For_Update
 	
 
 	// ============Ajax新增刪除功能============
