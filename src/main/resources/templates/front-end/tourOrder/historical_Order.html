@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>所有訂單資料 - listAllOrder.html</title>
+    <title>我的訂單 - historical_Order.html</title>
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script> <!-- ●●js  for jquery datatables 用 -->
@@ -43,79 +43,151 @@
     </script>
     <style type="text/css">
         body {
-            margin: 1rem 12rem 2rem 12rem;
+            margin: 2rem 2rem 2rem 2rem;
+            background-color: #F5F3E5; /* 淡奶茶色背景 */
         }
+        .navbar {
+            margin-bottom: 2rem;
+            background-color: #D8CAB8; /* 奶茶色背景 */
+            color: white;
+        }
+        .navbar h2, .navbar h3 {
+            color: white;
+        }
+        .sidebar {
+            position: fixed;
+            top: 80px; /* Adjust based on your navbar height */
+            left: 0;
+            width: 220px;
+            padding: 15px;
+            background-color: #F5E8D0; /* 淡卡其色背景 */
+            border-right: 1px solid #E0D6C2; /* 淡奶茶色邊框 */
+            margin-top: 8rem;
+        }
+        .content {
+            margin-left: 240px; /* Adjust based on the sidebar width */
+            margin-top: 12rem;
+        }
+        .btn-primary {
+            background-color: #D8CAB8; /* 奶茶色 */
+            border-color: #D8CAB8;
+        }
+        .btn-primary:hover {
+            background-color: #E6D6C4; /* 奶茶色稍亮 */
+            border-color: #E6D6C4;
+        }
+        .btn-info {
+            background-color: #F5E8D0; /* 淡卡其色 */
+            border-color: #F5E8D0;
+        }
+        .btn-info:hover {
+            background-color: #F5F0E6; /* 淡卡其色稍亮 */
+            border-color: #F5F0E6;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #E0D6C2; /* 淡奶茶色邊框 */
+            padding: 8px;
+        }
+        th {
+            background-color: #D8CAB8; /* 奶茶色背景 */
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #F5E8D0; /* 淡卡其色 */
+        }
+        tr:nth-child(odd) {
+            background-color: #F5F3E5; /* 淡奶茶色 */
+        }
+        
+        .btn-primary, .btn-info {
+    		transition: background-color 0.3s ease, border-color 0.3s ease;
+		}
+		/* 按鈕懸停效果 */
+		.btn-primary:hover, .btn-info:hover {
+		    background-color: #E6D6C4; /* 奶茶色稍亮 */
+		    border-color: #E6D6C4;
+		}
+		
+		/* 表格行懸停效果 */
+		tr:hover {
+		    background-color: #F5DAB1; /* 較亮的卡其色 */
+		}
+		
+		
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
-    <div align="center">
-        <h2>歷史訂單資料 - historical_Order.html</h2>
-        <h3><a class="navbar-brand" th:href="@{/protected/tourOrder/select_root}"><img th:src="@{/images/back1.gif}">回查詢頁<label th:text="${success}"></label></a></h3>
-    </div>
-</nav>
+
 <header>
     <nav th:insert="~{/front-end/navbar.html}"></nav>
 </header>
-<form id="filterForm" method="post" th:action="@{/protected/tourOrder/historical_Order}">
-    <select name="filter" id="filter">
-        <option value="all">所有訂單</option>
-        <option value="week">一周内</option>
-        <option value="month">一個月內</option>
-        <option value="threeMonths">三個月内</option>
-        <option value="sixMonths">六個月内</option>
-    </select>
-    <button type="submit">過濾一下吧</button>
-</form>
 
-<table id="example" class="display" style="width: 100%">
-    <thead>
-        <tr style="background-color: #CCCCFF">
-            <th>訂單編號</th>
-            <th>會員編號</th>
-            <th>開團編號</th>
-            <th>訂單日期</th>
-            <th>出發日期</th>
-            <th>結束日期</th>
-            <th>人數</th>
-            <th>價錢</th>
-            <th>付款方式</th>
-            <th>訂單狀態</th>
-            <th>訂單詳情</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- 使用 th:each 迭代每一筆訂單資料 -->
-        <tr th:each="tourOrderVO : ${tourOrderListData}">
-            <td th:text="${tourOrderVO.orderNo}"></td>
-            <td th:text="${tourOrderVO.memberVO.memNo}"></td>
-            <td th:text="${tourOrderVO.tourGroupVO.groupNo}"></td>
-            <td th:text="${tourOrderVO.orderDate}"></td>
-            <td th:text="${tourOrderVO.tourGroupVO.groupBegin}"></td>
-            <td th:text="${tourOrderVO.tourGroupVO.groupEnd}"></td>
-            <td th:text="${tourOrderVO.orderNums}"></td>
-            <td th:text="${tourOrderVO.orderPrice}"></td>
-            <td>
-                <span th:switch="${tourOrderVO.orderPay}">
-                    <span th:case="1">信用卡</span>
-                    <span th:case="2">轉帳</span>
-                </span>
-            </td>
-            <td>
-                <span th:switch="${tourOrderVO.orderStatus}">
-                    <span th:case="1">已付款</span>
-                    <span th:case="2">待付款</span>
-                    <span th:case="3">已取消</span>
-                </span>
-            </td>
-            <!-- 新增訂單詳情按鈕 -->
-            <td>
-                <a th:href="@{/protected/tourOrder/detail(orderNo=${tourOrderVO.orderNo})}" class="btn btn-info">訂單詳情</a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="sidebar">
+    <form id="filterForm" method="post" th:action="@{/protected/tourOrder/historical_Order}">
+        <select name="filter" id="filter" class="form-select mb-3">
+            <option value="all">所有訂單</option>
+            <option value="week">一周内</option>
+            <option value="month">一個月內</option>
+            <option value="threeMonths">三個月内</option>
+            <option value="sixMonths">六個月内</option>
+        </select>
+        <button type="submit" class="btn btn-primary w-100">過濾一下吧</button>
+    </form>
+</div>
+
+<div class="content">
+    <table id="example" class="display" style="width: 100%">
+        <thead>
+            <tr style="background-color: #D8CAB8; color: white;">
+                <th>訂單編號</th>
+                <th>訂購日期</th>
+                <th>出發日期</th>
+                <th>結束日期</th>
+             	<th>價錢</th>
+                <th>付款方式</th>
+                <th>訂單狀態</th>
+                <th>訂單詳情</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 使用 th:each 迭代每一筆訂單資料 -->
+            <tr th:each="tourOrderVO : ${tourOrderListData}">
+                <td th:text="${tourOrderVO.orderNo}"></td>
+                
+                
+                <td th:text="${tourOrderVO.orderDate}"></td>
+                <td th:text="${tourOrderVO.tourGroupVO.groupBegin}"></td>
+                <td th:text="${tourOrderVO.tourGroupVO.groupEnd}"></td>
+                
+                <td th:text="${tourOrderVO.orderPrice}"></td>
+                <td>
+                    <span th:switch="${tourOrderVO.orderPay}">
+                        <span th:case="1">信用卡</span>
+                        <span th:case="2">轉帳</span>
+                    </span>
+                </td>
+                <td>
+                    <span th:switch="${tourOrderVO.orderStatus}">
+                        <span th:case="1">已付款</span>
+                        <span th:case="2">待付款</span>
+                        <span th:case="3">已取消</span>
+                    </span>
+                </td>
+                <!-- 新增訂單詳情按鈕 -->
+                <td>
+                    <form method="post" th:action="@{/protected/tourOrder/orderDetails}">
+                        <input type="hidden" name="orderNo" th:value="${tourOrderVO.orderNo}">
+                        <button type="submit" class="btn btn-info">訂單詳情</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>

@@ -20,7 +20,7 @@
                                 <p class="card-text">人數上限: <span th:text="${actVO.actMaxCount}"></span></p>
                                 <p class="card-text">當前人數: <span th:text="${actVO.actCurrentCount}"></span></p>
                                 <p class="card-text">活動開始日: <span th:text="${actVO.actStart}"></span></p>
-                                <p class="card-text">團主: <span th:text="${actVO.memberVO.memNo} + '-[' + ${actVO.memberVO.memName} + ']'"></span></p>
+                                <p class="card-text">團主: <span th:text="${actVO.memberVO.memAccount} + '(' + ${actVO.memberVO.memName} + ')'"></span></p>
                                 <p class="card-text">
                                     活動狀態: 
                                     <span th:switch="${actVO.actStatus}">

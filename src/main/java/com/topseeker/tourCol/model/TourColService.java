@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.topseeker.member.model.MemberVO;
 import com.topseeker.tour.model.TourVO;
+import com.topseeker.tourCol.model.TourColVO;
+import com.topseeker.tourCol.model.TourColVO;
 
 //import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_TourCol3;
 

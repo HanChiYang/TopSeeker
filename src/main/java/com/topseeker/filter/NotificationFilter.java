@@ -28,7 +28,7 @@ public class NotificationFilter implements Filter {
 	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		System.out.println("Notification filter init");
+//		System.out.println("Notification filter init");
 	}
 
 	@Override

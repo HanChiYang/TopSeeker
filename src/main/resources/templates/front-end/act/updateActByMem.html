@@ -9,7 +9,14 @@
 <style>
     .container {
         max-width: 800px;
-        margin-top: 80px;
+        margin-top: 20px;
+    }
+    .card-header, .btn-primary {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+    .card-header {
+        color: white;
     }
     .form-label {
         font-weight: bold;
@@ -20,38 +27,23 @@
     .small-date-input {
         width: 30%;
     }
-    .navbar-brand {
-        font-size: 1.5rem;
-    }
-    .navbar h2, .navbar h3 {
-        margin: 0;
-        padding: 0;
-        line-height: 1.5;
-    }
-    .navbar .navbar-brand {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .card-header {
-        background-color: #f8f9fa;
-    }
 </style>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
-<div align="center" class="mb-4">
-   
+<div class="container">
+    <a class="navbar-brand" th:href="@{/act/memMyAct}">
+        <i class="fa-solid fa-person-walking-arrow-loop-left"></i> 回上一頁
+    </a>
 </div>
 
 <div class="container">
-    <div class="card" shadow>
+    <div class="card shadow">
         <div class="card-header text-center">
             <h2>開團活動修改</h2>
         </div>
         <div class="card-body">
-            <form th:action="@{update}" method="post" th:object="${actVO}" enctype="multipart/form-data">
+            <form th:action="@{update}" method="post" th:object="${actVO}" enctype="multipart/form-data" class="needs-validation" novalidate>
                 <div class="mb-3">
                     <label class="form-label">活動編號:</label>
                     <input type="text" class="form-control" th:field="*{actNo}" readonly style="border:0px; font-weight: bold;" />
@@ -62,18 +54,18 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">活動標題:</label>
-                    <input type="text" class="form-control" th:field="*{actTitle}" onclick="hideContent('actTitle.errors');" />
-                    <span th:if="${#fields.hasErrors('actTitle')}" th:errors="*{actTitle}" class="error" id="actTitle.errors"></span>
+                    <input type="text" class="form-control" th:field="*{actTitle}" required>
+                    <div class="invalid-feedback">請填寫活動標題</div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">活動地點:</label>
-                    <input type="text" class="form-control" th:field="*{actPlace}" onclick="hideContent('actPlace.errors');" />
-                    <span th:if="${#fields.hasErrors('actPlace')}" th:errors="*{actPlace}" class="error" id="actPlace.errors"></span>
+                    <input type="text" class="form-control" th:field="*{actPlace}" required>
+                    <div class="invalid-feedback">請填寫活動地點</div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">活動內容:</label>
-                    <textarea class="form-control" th:field="*{actContent}" onclick="hideContent('actContent.errors');" rows="6"></textarea>
-                    <span th:if="${#fields.hasErrors('actContent')}" th:errors="*{actContent}" class="error" id="actContent.errors"></span>
+                    <textarea class="form-control" th:field="*{actContent}" rows="6" required></textarea>
+                    <div class="invalid-feedback">請填寫活動內容</div>
                 </div>
                 <div class="mb-3" id="ActPic">
                     <label class="form-label">活動圖片:</label>
@@ -81,42 +73,37 @@
                         <img th:src="@{/actpicture/DBGifReader} + '?actPicNo=' + ${pic.actPicNo}" class="img-thumbnail mb-2" width="150" height="150">
                         <button type="button" class="btn btn-danger btn-sm" th:data-index="${iterStat.index}" th:data-act-pic-no="${pic.actPicNo}">刪除</button>
                     </div>
-                    <input type="file" name="picSet" id="actPic" class="form-control" multiple/>
+                    <input type="file" name="picSet" id="actPic" class="form-control" multiple>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">可參與最多人數:</label>
-                    <input type="text" class="form-control" th:field="*{actMaxCount}" onclick="hideContent('actMaxCount.errors');" />
-                    <span th:if="${#fields.hasErrors('actMaxCount')}" th:errors="*{actMaxCount}" class="error" id="actMaxCount.errors"></span>
+                    <input type="number" class="form-control" th:field="*{actMaxCount}" required>
+                    <div class="invalid-feedback">請填寫可參與最多人數</div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">可參與最少人數:</label>
-                    <input type="text" class="form-control" th:field="*{actMinCount}" onclick="hideContent('actMinCount.errors');" />
-                    <span th:if="${#fields.hasErrors('actMinCount')}" th:errors="*{actMinCount}" class="error" id="actMinCount.errors"></span>
+                    <input type="number" class="form-control" th:field="*{actMinCount}" required>
+                    <div class="invalid-feedback">請填寫可參與最少人數</div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">報名開始時間:</label>
-                    <input type="date" class="form-control small-date-input" th:field="*{actEnrollBegin}" onclick="hideContent('actEnrollBegin.errors');" />
-                    <span th:if="${#fields.hasErrors('actEnrollBegin')}" th:errors="*{actEnrollBegin}" class="error" id="actEnrollBegin.errors"></span>
+                    <input type="date" class="form-control small-date-input" th:field="*{actEnrollBegin}" required>
+                    <div class="invalid-feedback">請選擇報名開始時間</div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">報名結束時間:</label>
-                    <input type="date" class="form-control small-date-input" th:field="*{actEnrollEnd}" onclick="hideContent('actEnrollEnd.errors');" />
-                    <span th:if="${#fields.hasErrors('actEnrollEnd')}" th:errors="*{actEnrollEnd}" class="error" id="actEnrollEnd.errors"></span>
+                    <input type="date" class="form-control small-date-input" th:field="*{actEnrollEnd}" required>
+                    <div class="invalid-feedback">請選擇報名結束時間</div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">活動開始時間:</label>
-                    <input type="date" class="form-control small-date-input" th:field="*{actStart}" onclick="hideContent('actStart.errors');" />
-                    <span th:if="${#fields.hasErrors('actStart')}" th:errors="*{actStart}" class="error" id="actStart.errors"></span>
+                    <input type="date" class="form-control small-date-input" th:field="*{actStart}" required>
+                    <div class="invalid-feedback">請選擇活動開始時間</div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">活動結束時間:</label>
-                    <input type="date" class="form-control small-date-input" th:field="*{actEnd}" onclick="hideContent('actEnd.errors');" />
-                    <span th:if="${#fields.hasErrors('actEnd')}" th:errors="*{actEnd}" class="error" id="actEnd.errors"></span>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">活動結束時間:</label>
-                    <input type="date" class="form-control small-date-input" th:field="*{actEnd}" onclick="hideContent('actEnd.errors');" />
-                    <span th:if="${#fields.hasErrors('actEnd')}" th:errors="*{actEnd}" class="error" id="actEnd.errors"></span>
+                    <input type="date" class="form-control small-date-input" th:field="*{actEnd}" required>
+                    <div class="invalid-feedback">請選擇活動結束時間</div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">活動狀態:</label>
@@ -130,23 +117,34 @@
                 </div>
                 <div class="text-center">
                     <button type="submit" id="submit" class="btn btn-primary">送出修改</button>
+                    <a th:href="@{/act/memMyAct}" class="btn btn-secondary">取消修改</a>
                 </div>     
             </form>
         </div>
     </div>
 </div>
- <h3><a class="navbar-brand" href="javascript:history.back()">
-        <i class="fa-solid fa-person-walking-arrow-loop-left"></i> 回上一頁
-    </a></h3>
 
-<script>
-	
-    // 隱藏錯誤提示
-    function hideContent(id) {
-        document.getElementById(id).style.display = 'none';
-    }
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    (function () {
+        'use strict'
 
-    // 刪除圖片
+        var forms = document.querySelectorAll('.needs-validation')
+
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                        alert("請填寫所有必填欄位")
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+
     $(document).ready(function() {
         $('.btn-danger').click(function() {
             var index = $(this).data('index');
@@ -156,11 +154,10 @@
             $.ajax({
                 url: '/actpicture/deleteActImage',
                 type: 'POST',
-                data: {actPicNo: actPicNo}
-            
-                ,success: function(response) {
+                data: {actPicNo: actPicNo},
+                success: function(response) {
                     if (response.success) {
-                        alert("圖片刪除成功");
+//                         alert("圖片刪除成功");
                         picElement.remove();
                     } else {
                         alert("圖片刪除失敗");

@@ -37,8 +37,7 @@ public class TourController {
 
 	@Autowired
 	TourAreaService tourAreaSvc;
-      
-	
+
 	/*
 	 * This method will serve as addTour.html handler.
 	 */
