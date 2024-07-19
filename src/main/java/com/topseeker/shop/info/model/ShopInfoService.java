@@ -1,4 +1,4 @@
-package com.topseeker.shopinfo.model;
+package com.topseeker.shop.info.model;
 
 import java.util.List;
 import java.util.Map;
@@ -52,11 +52,15 @@ public class ShopInfoService {
 		return repository.getShopInfoPic(infoNo);
 	}
 	
+	// 後台依【最新消息編號】，更改最新消息狀態
+    public void updateInfoStatus(int infoNo, int infoStatus) {
+        repository.updateInfoStatus(infoNo, infoStatus);
+    }
+    
+    // 前台最新消息頁面，取所有上架的最新消息，依新到舊排列
+    public List<ShopInfoVO> getAllReleasedInfo() {
+    	return repository.getAllReleasedInfo();
+    }
 
-	
-//	//複合搜尋
-//	public List<ShopInfoVO> getAll(Map<String, String[]> map) {
-//		return HibernateUtil_CompositeQuery_ShopInfoVO.getAllC(map, sessionFactory.openSession());
-//	}
 	
 }

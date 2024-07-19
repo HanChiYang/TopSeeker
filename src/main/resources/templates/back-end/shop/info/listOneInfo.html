@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>修改商品結果</title>
+<title>修改消息結果</title>
 
 <!-- Bootstrap CSS -->
 <link
@@ -32,6 +32,10 @@
 
 <style type="text/css">
 
+.content{
+width: 70%
+}
+
 
 .backbutton{
 margin-left: auto;
@@ -58,56 +62,43 @@ margin-right: auto;
 			</div>
 			<div class="card-body">
 				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">商品建立時間:</div>
-					<div class="col-sm-8" th:text="${shopProductVO.prodDate}"></div>
+					<div class="col-sm-4 font-weight-bold">消息修改時間:</div>
+					<div class="col-sm-8" th:text="${shopInfoVO.infoDate}"></div>
 				</div>
 				<div class="row mb-2">
 					<div class="col-sm-4 font-weight-bold">商品狀態:</div>
 					<div class="col-sm-8">
-						<span th:switch="${shopProductVO.prodStatus}"> <span
+						<span th:switch="${shopInfoVO.infoStatus}"> <span
 							th:case="'0'">下架</span> <span th:case="'1'">上架</span>
 						</span>
 					</div>
 				</div>
+
 				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">商品類別:</div>
-					<div class="col-sm-8">
-						<span th:switch="${shopProductVO.shopProductTypeVO.prodTypeNo}">
-							<span th:case="'1'">包袋</span> <span th:case="'2'">鞋類</span> <span
-							th:case="'3'">裝備配件</span> <span th:case="'4'">服飾</span>
-						</span>
-					</div>
+					<div class="col-sm-4 font-weight-bold">消息編號:</div>
+					<div class="col-sm-8" th:text="${shopInfoVO.infoNo}"></div>
 				</div>
 				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">商品編號:</div>
-					<div class="col-sm-8" th:text="${shopProductVO.prodNo}"></div>
+					<div class="col-sm-4 font-weight-bold">標題:</div>
+					<div class="col-sm-8" th:text="${shopInfoVO.infoHead}"></div>
 				</div>
 				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">商品名稱:</div>
-					<div class="col-sm-8" th:text="${shopProductVO.prodName}"></div>
-				</div>
-				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">商品定價:</div>
-					<div class="col-sm-8" th:text="'$' + ${shopProductVO.prodPrice}"></div>
+					<div class="col-sm-4 font-weight-bold">消息內容:</div>
+					<pre class="col-sm-8" th:text="${shopInfoVO.infoContent}"></pre>
 				</div>
 
 				<div class="mb-3">
-					<label for="ProdPic" class="form-label">商品圖片:</label>
-					<div id="ProdPic" class="d-flex flex-row flex-wrap">
-						<div th:each="pic, iterStat : ${shopProductVO.shopProductPics}"
-							class="p-2">
-							<!--測試印出產品圖片編號 -->
-							<!-- 							<input type="text" th:value="${pic.prodPicNo}" -->
-							<!-- 								class="form-control mb-2" readonly>  -->
+					<label for="infoPic" class="form-label">消息圖片:</label>
+					<div th:field="${shopInfoVO.infoNo}" id="infoPic" class="d-flex flex-row flex-wrap">
 							<img
-								th:src="@{/shop/DBGifReader3} + '?prodPicNo=' + ${pic.prodPicNo}"
-								class="img-thumbnail mb-2" width="150" height="150">
+								th:src="@{/shop/DBGifReader4} + '?infoNo=' + *{shopInfoVO.infoNo}"
+								class="img-thumbnail mb-2" width="400" height="300">
 						</div>
 					</div>
 				</div>
 				<div class="text-center">
-					<a th:href="@{/shop/shopManagement/listAllProd}"
-						class="btn btn-success backbutton" role="button">繼續修改商品</a>
+					<a th:href="@{/shop/shopManagement/listAllShopInfo}"
+						class="btn btn-success backbutton" role="button">繼續修改最新消息</a>
 				</div>
 
 			</div>
