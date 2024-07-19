@@ -22,6 +22,9 @@ body {
     align-items: center;
     margin-bottom: 1rem;
 }
+.article-content {
+    white-space: pre-wrap; /* 保留空白字符和換行符 */
+}
 </style>
 </head>
 
@@ -49,12 +52,12 @@ body {
                 </div>
             </div>
             <div class="mb-3">
-                <h4>新聞發布日期</h4>
+                <h4>發布日期</h4>
                 <p th:text="${newsVO.newsPublishTime}" class="form-control"></p>
             </div>
             <div class="mb-3">
                 <h4>新聞內容</h4>
-                <p th:utext="${newsVO.newsContent}" class="form-control"></p>
+                <pre th:utext="${newsVO.newsContent}" class="form-control article-content"></pre>
             </div>
         </div>
         <div class="card-footer text-center">
