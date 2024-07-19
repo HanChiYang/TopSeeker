@@ -89,7 +89,7 @@
     </div>
 
     <div th:if="${getOne_For_Display}">
-        <div th:insert="~{/back-end/emp/listOneEmp :: listOneEmp-div}"></div>
+        <div th:insert="~{/back-end/employee/listOneEmp :: listOneEmp-div}"></div>
     </div>
 
     <h4>員工管理</h4>
@@ -101,7 +101,7 @@
 	<!-- 旗標getOne_For_Display見EmpnoController.java的第74行 -->
     <div class="b" th:if="${getOne_For_Display}">
         <!--使用listOneEmp.html網頁的listOneEmp-div片段--> <!-- 見listOneEmp.html的第35行的th:fragment="listOneEmp-div" --> <!-- 使用th:replace也可 -->
-        <div th:insert="~{/back-end/emp/listOneEmpAuth :: listOneEmp-div}"></div>
+        <div th:insert="~{/back-end/employee/listOneEmpAuth :: listOneEmp-div}"></div>
     </div>
 </body>
 </html>
