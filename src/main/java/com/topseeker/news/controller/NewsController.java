@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -217,13 +219,14 @@ public class NewsController {
     	Map<String, String[]> map = req.getParameterMap();
         Map<String, String[]> queryParams = new HashMap<>(map);
         // 處理日期區間查詢條件
-//        String actStart = req.getParameter("actStart");
-//        String actEnd = req.getParameter("actEnd");
-//
-//        if (actStart != null && !actStart.trim().isEmpty() && actEnd != null && !actEnd.trim().isEmpty()) {
-//            queryParams.put("actDateRange", new String[]{actStart + "," + actEnd});
-//        }
-
+        if (queryParams.containsKey("timeFilter")) {
+            String timeFilter = queryParams.get("timeFilter")[0];
+            if (!timeFilter.equals("all")) {
+                String[] dateRange = getDateRange(timeFilter);
+                queryParams.put("startDate", new String[] { dateRange[0] });
+                queryParams.put("endDate", new String[] { dateRange[1] });
+            }
+        }
         Session session = sessionFactory.openSession();
         List<NewsVO> list = HibernateUtil_CompositeQuery_News.getAllC(queryParams, session);
         model.addAttribute("newsListData", list);       
@@ -232,7 +235,6 @@ public class NewsController {
     //進入新聞頁面先自動載入全部新聞
     @GetMapping("newsSearch")
     public String getAllNews(HttpServletRequest req,Model model) {
-//        List<NewsVO> newsList = newsSvc.getAll();
     	Map<String, String[]> map = req.getParameterMap();
         Map<String, String[]> queryParams = new HashMap<>(map);
         Session session = sessionFactory.openSession();
@@ -240,6 +242,24 @@ public class NewsController {
         model.addAttribute("newsListData", newslist);
         return "front-end/news/newsFragment :: resultsList";
     }
-
+    // 處理篩選日期區間的方法
+    private String[] getDateRange(String timeFilter) {
+        LocalDate endDate = LocalDate.now();
+        LocalDate startDate = endDate;
+        switch (timeFilter) {
+            case "24h":
+                startDate = endDate.minusDays(1);
+                break;
+            case "1w":
+                startDate = endDate.minusWeeks(1);
+                break;
+            case "1y":
+                startDate = endDate.minusYears(1);
+                break;
+            default:
+                return new String[] { "", "" };
+        }
+        return new String[] { startDate.toString(), endDate.toString() };
+    }
     
 }
