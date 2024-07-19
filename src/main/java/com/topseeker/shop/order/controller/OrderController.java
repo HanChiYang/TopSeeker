@@ -2,12 +2,8 @@ package com.topseeker.shop.order.controller;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -21,10 +17,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
+import com.topseeker.notification.model.NotificationService;
+import com.topseeker.notification.model.NotificationVO;
 import com.topseeker.shop.cart.model.CartService;
 import com.topseeker.shop.cart.model.CartVO;
 import com.topseeker.shop.order.model.OrderService;
@@ -50,9 +47,11 @@ public class OrderController {
 	@Autowired
 	ShopProductService shopProductSvc;
 	@Autowired	
-	OrderDetailService orderDetailService;
+	OrderDetailService orderDetailSvc;
 	@Autowired
 	CartService cartSvc;
+	@Autowired
+	NotificationService notiSvc;
 	
 	
 	
@@ -79,7 +78,10 @@ public class OrderController {
             @RequestParam(value = "orderNamecvs", required = false) String orderNamecvs,
             @RequestParam(value = "orderPhonecvs", required = false) String orderPhonecvs,
             @RequestParam(value = "orderAddresscvs", required = false) String orderAddresscvs,
-           
+            @RequestParam("paymentMethod") Integer paymentMethod,
+            @RequestParam(value = "masterNum") String masterNum,
+            @RequestParam(value = "expiryDate") String expiryDate,
+            @RequestParam(value = "cvv") String cvv,
 			ModelMap model
 			)throws IOException {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
@@ -126,7 +128,7 @@ public class OrderController {
 	            orderVO.setOrderPhone(orderPhonecvs);
 	            orderVO.setOrderAddress(orderAddresscvs);
 	        }
-	
+	        
 	      
 			List<CartVO> cartItems = cartSvc.getMemAllList(loginMemNo);
             for (CartVO cartItem : cartItems) {
@@ -143,10 +145,27 @@ public class OrderController {
               
             }
             
+            //繳費狀態改變
+	        if(paymentMethod == 0) {
+	        	orderVO.setPaymentStatus(1);	
+	        }else{
+	        	orderVO.setPaymentStatus(0);
+	        }
+               
 			orderSvc.addOrderWithOrderDetail(orderVO);
+			
+			
+			NotificationVO notificationVO = new NotificationVO();
+			notificationVO.setMemNo(loginMemNo);
+			notificationVO.setNotiContent("訂單編號" + orderVO.getOrderNo() + "已完成訂購。");
+			notificationVO.setNotiTime(orderVO.getOrderDate());
+			notificationVO.setNotiStatus((byte)0);
+			
+			notiSvc.addNoti(notificationVO);		
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+		
 		}
 		
 		 
@@ -161,7 +180,7 @@ public class OrderController {
 	@GetMapping("checkoutResult")
     public String checkoutResult(@RequestParam("orderNo") Integer orderNo, ModelMap model) {
         OrderVO orderVO = orderSvc.getOneOrder(orderNo);
-        List<OrderDetailVO> orderDetails = orderDetailService.findOrderDetailsByOrderNo(orderNo);
+        List<OrderDetailVO> orderDetails = orderDetailSvc.findOrderDetailsByOrderNo(orderNo);
 
         model.addAttribute("orderVO", orderVO);
         model.addAttribute("orderDetails", orderDetails);
@@ -173,10 +192,11 @@ public class OrderController {
 	@PostMapping("getOne_For_Update")
 	public String getOne_For_Update(@RequestParam("orderNo") String orderNo, ModelMap model) {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
+			
 		/*************************** 2.開始查詢資料 *****************************************/
 		OrderVO orderVO = orderSvc.getOneOrder(Integer.valueOf(orderNo));
 		
-		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
+	    /*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("orderVO", orderVO);
 		return "back-end/shop/order/updateOrder";// 查詢完成後轉交updateOrder.html
 	}
@@ -186,30 +206,62 @@ public class OrderController {
 			) throws IOException {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		if (result.hasErrors()) {
+			List<OrderDetailVO> orderDetailData = orderDetailSvc.findOrderDetailsByOrderNo(Integer.valueOf(orderVO.getOrderNo()));
+	        model.addAttribute("orderDetailData", orderDetailData);
 			return "back-end/shop/order/updateOrder";
 		}
 		/*************************** 2.開始修改資料 *****************************************/
+		//更新訂單
 		orderSvc.updateOrder(orderVO);
-		
 		/*************************** 3.修改完成,準備轉交(Send the Success view) **************/
 		orderVO = orderSvc.getOneOrder(Integer.valueOf(orderVO.getOrderNo()));
-		model.addAttribute("orderVO", orderVO);
-		model.addAttribute("orderDetails", orderVO.getOrderDetails());
-		return "back-end/shop/order/listOneOrder";
+	    List<OrderDetailVO> orderDetailData = orderDetailSvc.findOrderDetailsByOrderNo(Integer.valueOf(orderVO.getOrderNo()));
+	    
+	    //同時發通知給會員
+		NotificationVO notificationVO = new NotificationVO();
+		notificationVO.setMemNo(orderVO.getMemberVO().getMemNo());
 		
+		String orderStatusText = getOrderStatusText(orderVO.getOrderStatus());
+        
+		notificationVO.setNotiContent("您的訂單編號" + orderVO.getOrderNo() +
+				"狀態已更新為" + orderStatusText);
+		notificationVO.setNotiTime(new Timestamp(System.currentTimeMillis()));
+		notificationVO.setNotiStatus((byte)0);
+		
+		notiSvc.addNoti(notificationVO);
+	    
+	    
+	    model.addAttribute("orderVO", orderVO);
+	    model.addAttribute("orderDetailData", orderDetailData);
+		return "back-end/shop/order/listAllOrder";
 	}
 	
+//	更新訂單狀態通知用
+	private String getOrderStatusText(Integer orderStatus) {
+        switch (orderStatus) {
+            case 0: return "訂單成立";
+            case 1: return "出貨中";
+            case 2: return "已出貨";
+            case 3: return "已收貨";
+            case 4: return "訂單取消";
+            case 5: return "一般結案";
+            case 6: return "鑑賞期內退貨結案";
+            case 7: return "瑕疵品退貨結案";
+            default: return "未知狀態";
+        }
+    }
+	
 //刪除
-	@PostMapping("delete")
-	public String delete(@RequestParam("orderNo") String orderNo, ModelMap model) {
-		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		/*************************** 2.開始刪除資料 *****************************************/
-		orderSvc.deleteOrder(Integer.valueOf(orderNo));
-		/*************************** 3.刪除完成,準備轉交(Send the Success view) **************/
-		List<OrderVO> list = orderSvc.getAll();
-		model.addAttribute("orderListData", list);
-		return "back-end/shop/order/listAllOrder";// 刪除完成後轉交listAllOrder.html
-	}
+//	@PostMapping("delete")
+//	public String delete(@RequestParam("orderNo") String orderNo, ModelMap model) {
+//		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
+//		/*************************** 2.開始刪除資料 *****************************************/
+//		orderSvc.deleteOrder(Integer.valueOf(orderNo));
+//		/*************************** 3.刪除完成,準備轉交(Send the Success view) **************/
+//		List<OrderVO> list = orderSvc.getAll();
+//		model.addAttribute("orderListData", list);
+//		return "back-end/shop/order/listAllOrder";// 刪除完成後轉交listAllOrder.html
+//	}
 	
 	//顯示全部訂單
 	@GetMapping("listAllOrder")
@@ -218,7 +270,7 @@ public class OrderController {
 	}
 	
 	
-	//顯示會員訂單
+	//前台顯示會員訂單
 	@GetMapping("memOrders")
 	public String listMemAllOrder(HttpSession session, Model model) {
 		MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
@@ -236,16 +288,15 @@ public class OrderController {
 		return "front-end/shop/order/memOrderList";
 	}
 	
-	
 
-	@PostMapping("listOrders_ByCompositeQuery")
-	public String listAllOrder(HttpServletRequest req, Model model) {
-		Map<String, String[]> map = req.getParameterMap();
-		List<OrderVO> list = orderSvc.getAll(map);
-		model.addAttribute("orderListData", list); 
-		return "back-end/shop/order/listAllOrder";
-	}
-	
+//	@PostMapping("listOrders_ByCompositeQuery")
+//	public String listAllOrder(HttpServletRequest req, Model model) {
+//		Map<String, String[]> map = req.getParameterMap();
+//		List<OrderVO> list = orderSvc.getAll(map);
+//		model.addAttribute("orderListData", list); 
+//		return "back-end/shop/order/listAllOrder";
+//	}
+//	
 	
 
 	//商品顯示用
