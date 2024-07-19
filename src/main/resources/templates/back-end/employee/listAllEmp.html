@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>所有員工資料 - listAllEmp.html</title>
 
-<head th:insert="~{/back-end/emp/included-fragment}"></head>
+<head th:insert="~{/back-end/employee/included-fragment}"></head>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" />
@@ -104,7 +104,7 @@ input[type="submit"]:hover {
 
 <nav class="navbar navbar-expand-md navbar-dark fixed-top justify-content-center">
          <div align="center"> <h2>所有員工資料 - listAllEmp.html</h2>
-         <h3><a class="navbar-brand" th:href="@{/emp/select_page}"><img th:src="@{/images/wolf.jpg}">回查詢頁<label th:text="${success}"></label></a></h3></div>
+         <h3><a class="navbar-brand" th:href="@{/employee/select_page}"><img th:src="@{/images/wolf.jpg}">回查詢頁<label th:text="${success}"></label></a></h3></div>
 </nav>
 
 <table id="example" class="display" style="width: 100%">
@@ -142,21 +142,24 @@ input[type="submit"]:hover {
               <span th:if="${empVO.empStatus == 0}" th:text="'離職'">離職</span>
           </td>
           
-          <td>
-			    <span th:each="empAuth, iterStat : ${empVO.empAuths}">
-			        <span th:text="${empAuth.authVO.authName}"></span>
-			        <!-- 如果不是最後一個元素，添加分隔符 -->
+          
+         	<td>
+			    <span th:each="empAuth, iterStat : ${empVO.empAuthVO}">
+			        <span th:text="${empAuth.authorityVO.authName}"></span>
+			        
 			        <span th:if="${not iterStat.last}">,</span>
 			    </span>
-		  </td>
+			</td>
+
+         
           
             <td>
-                 <form method="post" th:action="@{/emp/getOne_For_Update}" style="margin-bottom: 0px;">
+                 <form method="post" th:action="@{/employee/getOne_For_Update}" style="margin-bottom: 0px;">
                     <input type="submit" value="修改">
                     <input type="hidden" name="empNo" th:value="${empVO.empNo}">
 <!--                     <input type="hidden" name="authNo" th:value="${authVO.authNo}"> -->
                 </form> 
-                <form method="post" th:action="@{/emp/delete}" style="margin-bottom: 0px;">
+                <form method="post" th:action="@{/employee/delete}" style="margin-bottom: 0px;">
 				     <input type="submit" value="刪除">
 				     <input type="hidden" name="empNo" th:value="${empVO.empNo}">
 				     

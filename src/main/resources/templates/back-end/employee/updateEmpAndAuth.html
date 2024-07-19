@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>Edit Employee</h1>
-    <form th:action="@{/emp/editEmp}" th:object="${employeeVO}" method="post">
+    <form th:action="@{/employee/editEmp}" th:object="${employeeVO}" method="post">
         <input type="hidden" th:field="*{empNo}"/>
         
         <br>
@@ -32,18 +32,23 @@
 
         <label for="empStatus">Status:</label>
         <select id="empStatus" th:field="*{empStatus}">
-            <option value="1">Active</option>
-            <option value="0">Inactive</option>
+            <option value="1">在職</option>
+            <option value="0">離職</option>
         </select>
                 <br>
         
-
-<div th:each="authority : ${authorities}">
-   <input type="checkbox" th:id="${'auth_' + authority.authNo}" th:value="${authority.authNo}" 
-       name="authNoList" th:checked="${employeeVO.empAuthVO.contains(authority)}"/>
-
-    <label th:for="${'auth_' + authority.authNo}" th:text="${authority.authName}"></label>
-</div>
+   
+        
+        
+         <label for="authorities">Authorities:</label>
+    	<div class="form-group">
+                <label for="authNoList">員工權限</label>
+                <select multiple id="authNoList" name="authNoList" class="form-control">
+                
+                    <option th:each="entry : ${authMapData}" th:value="${entry.key}" th:text="${entry.value}"></option>
+                </select>
+            </div> 
+		
 
         <button type="submit">Save</button>
     </form>

@@ -23,7 +23,6 @@ public class TourGroupService {
 	public List<TourGroupVO> findGroupsByTourNo(Integer tourNo) {
         return repository.findByTourVO_TourNo(tourNo);
     }
-
 	public void addTourGroup(TourGroupVO tourGroupVO) {
 		repository.save(tourGroupVO);
 	}
