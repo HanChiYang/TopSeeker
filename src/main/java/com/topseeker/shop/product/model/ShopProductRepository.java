@@ -28,7 +28,12 @@ public interface ShopProductRepository extends JpaRepository<ShopProductVO, Inte
 	@Query(value = "SELECT * FROM shop_product WHERE prod_type_no = ?1 AND prod_status = 1 ORDER BY prod_date DESC", nativeQuery = true)
 	List<ShopProductVO> findByProdTypeNo(int prodTypeNo);
 	
-	//商城後台，透過商品編號更改商品上下架狀態
+	//商城搜尋用:依搜尋列輸入的文字，搜尋商品名稱或商品資訊中有類似的關鍵字(模糊搜尋)，依上架日期排序
+	@Query(value = "SELECT DISTINCT * FROM shop_product WHERE (prod_name LIKE %?1% OR prod_info LIKE %?1%) AND prod_status = 1 ORDER BY prod_date DESC", nativeQuery = true)
+	List<ShopProductVO> findByProdNameOrInfo(String keyword);
+	
+	
+	//商城後台:透過商品編號更改商品上下架狀態
     @Transactional
     @Modifying
     @Query(value = "update shop_product set prod_status = ?2 where prod_no = ?1", nativeQuery = true)
