@@ -144,8 +144,8 @@
                             <th>活動結束日</th>
                             <th>活動狀態</th>
                             <th>平均評價</th> <!-- 新增欄位 -->
-                            <th>修改</th>
-                            <th>刪除</th>
+                            <th>修改活動</th>
+                            <th>取消活動</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -182,7 +182,7 @@
                                 </td>
                                 <td>
                                     <form method="post" th:action="@{/act/delete}">
-                                        <button type="submit" class="btn btn-danger">刪除</button>
+                                        <button type="submit" class="btn btn-danger">取消</button>
                                         <input type="hidden" name="actNo" th:value="${actVO.actNo}">
                                     </form>
                                 </td>
