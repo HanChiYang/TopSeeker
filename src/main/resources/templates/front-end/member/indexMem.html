@@ -121,7 +121,7 @@ button.function:hover {
     color: white;
 }
 
-body > div > div:nth-child(1) {
+#picArea {
 height: 230px;
 }
 
@@ -164,7 +164,7 @@ font-weight: bold;
 <nav th:insert="~{/front-end/navbar.html}"></nav>
 
 <div>
-<div style="background-image: url('/images/mountains.jpg'); background-size: cover; background-position: center;">
+<div id="picArea" style="background-image: url('/images/mountains.jpg'); background-size: cover; background-position: center;">
     <div id="blob_holder">
         <img th:src="@{/member/DBGifReader} + '?memNo=' + ${session.loggedInMember.memNo}" width="150px">
     </div>
@@ -195,7 +195,7 @@ font-weight: bold;
                 </div>
 
                 <div th:if="${session.loggedInMember.memStatus == 1}" class="mb-8">
-                    <form th:action="@{/member/verifyPage}" method="post">
+                    <form th:action="@{/protected/member/verifyPage}" method="post">
                         <button type="submit" id="verifyBtn" class="btn btn-danger function">驗證信箱</button>
                     </form>
                     <p>信箱尚未驗證</p>
@@ -208,13 +208,13 @@ font-weight: bold;
                 </div>
 
                 <div class="mb-2">
-                    <form th:action="@{/member/inspect}" method="post">
+                    <form th:action="@{/protected/member/inspect}" method="post">
                         <button type="submit" class="btn btn-light function">檢視會員資料</button>
                     </form>
                 </div>
 
                 <div>
-                    <form th:action="@{/member/updatePasswordPage}" method="post">
+                    <form th:action="@{/protected/member/updatePasswordPage}" method="post">
                         <button type="submit" class="btn btn-light function">修改密碼</button>
                     </form>
                 </div>
@@ -229,17 +229,17 @@ font-weight: bold;
             </div>
             
                 <div class="mb-2">
-                    <form th:action="@{/}" method="get">
+                    <form th:action="@{/shop/order/memOrders}" method="get">
                         <button type="submit" class="btn btn-light function">商城訂單</button>
                     </form>
                 </div>
                 <div class="mb-2">
-                    <form th:action="@{/}" method="get">
+                    <form th:action="@{/protected/cart/cart}" method="get">
                         <button type="submit" class="btn btn-light function">購物車</button>
                     </form>
                 </div>
                 <div class="mb-2">
-                    <form th:action="@{/}" method="get">
+                    <form th:action="@{/shop/wishlist}" method="get">
                         <button type="submit" class="btn btn-light function">收藏商品</button>
                     </form>
                 </div>
@@ -253,17 +253,17 @@ font-weight: bold;
                 <h2>揪團</h2>
             </div>
                 <div class="mb-2">
-                    <form th:action="@{/}" method="get">
+                    <form th:action="@{/participant/listMyAllParticipant}" method="get">
                         <button type="submit" class="btn btn-light function">參團管理</button>
                     </form>
                 </div>
                 <div class="mb-2">
-                    <form th:action="@{/}" method="get">
+                    <form th:action="@{/act/memMyAct}" method="get">
                         <button type="submit" class="btn btn-light function">開團管理</button>
                     </form>
                 </div>
                 <div class="mb-2">
-                    <form th:action="@{/follow}" method="get">
+                    <form th:action="@{/protected/follow}" method="get">
                         <button type="submit" class="btn btn-light function" >追蹤會員</button>
                     </form>
                 </div>
@@ -277,7 +277,7 @@ font-weight: bold;
                 <h2>套裝行程</h2>
             </div>
                 <div class="mb-2">
-                    <form th:action="@{/}" method="get">
+                    <form th:action="@{/protected/tourOrder/historical_Order}" method="get">
                         <button type="submit" class="btn btn-light function" >行程訂單</button>
                     </form>
                 </div>
@@ -333,7 +333,7 @@ $(document).ready(function() {
         formData.append("memImg", $("#fileInput")[0].files[0]);
 
         $.ajax({
-            url : "/member/updatePic",
+            url : "/protected/member/updatePic",
             type : "POST",
             data : formData,
             contentType : false,

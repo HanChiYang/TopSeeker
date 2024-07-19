@@ -1,6 +1,7 @@
 package com.topseeker.tourGroup.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -8,6 +9,8 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +23,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.topseeker.tour.model.TourService;
 import com.topseeker.tour.model.TourVO;
@@ -36,6 +38,9 @@ public class TourGroupController {
 
 	@Autowired
 	TourService tourSvc;
+	
+	@Autowired
+    private SessionFactory sessionFactory;
 
 	/*
 	 * This method will serve as addtourGroup.html handler.
@@ -192,10 +197,19 @@ public class TourGroupController {
 		model.addAttribute("tourGroupListData", list); // for listAlltourGroup.html 第85行用
 		return "back-end/tourGroup/listAllTourGroup";
 	}
-	
+
 	@PostMapping("listTourGroups_ByCompositeQuery_front")
 	public String listAllTourGroupFront(HttpServletRequest req, Model model) {
 		Map<String, String[]> map = req.getParameterMap();
+		
+//        Map<String, String[]> queryParams = new HashMap<>(map);
+//        String groupBegin = req.getParameter("groupBegin");
+//        String groupEnd = req.getParameter("groupEnd");
+//        if (groupBegin != null && !groupBegin.trim().isEmpty() && groupEnd != null && !groupEnd.trim().isEmpty()) {
+//            queryParams.put("groupDateRange", new String[]{groupBegin + "," + groupEnd});
+//        }
+//        Session session = sessionFactory.openSession();
+//        
 		List<TourGroupVO> list = tourGroupSvc.getAll(map);
 		model.addAttribute("tourGroupListData", list); // for listAlltourGroup.html 第85行用
 		return "back-end/tourGroup/listAllTourGroup";

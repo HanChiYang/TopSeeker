@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Weather Forecast</title>
+    
+    <style>
+    
+    </style>
+</head>
+<body>
+	<div th:fragment="weatherVOList" th:unless="${#lists.isEmpty(weatherVOList)}" id="results-block">
+    <h1>七天天氣預報</h1>
+    <h2 th:text="${locName}"></h2>
+	<div id="content">
+
+		<table id="example" class="display" style="width: 100%">
+			<thead>
+				<tr style="background-color: #435334; color: white">
+
+					<th>日期</th>
+					<th>最高溫度</th>
+					<th>最低溫度</th>
+					<th>降雨機率</th>
+					<th>天氣狀況</th>
+					<th>紫外線指數</th>
+					<th>紫外線量級</th>
+				</tr>
+			</thead>
+
+			<tbody id="tdArea">
+
+				<th:block th:each="weatherVO : ${weatherVOList}">
+					<tr>
+						<td	th:text="${weatherVO.wxDate}"></td>
+						<td	th:text="${weatherVO.hTemp}"></td>
+						<td	th:text="${weatherVO.mTemp}"></td>
+						<td	th:text="${weatherVO.rainRate}"></td>
+						<td	th:text="${weatherVO.wX}"></td>
+						<td th:text="${weatherVO.uviRate}"></td>
+						<td th:text="${weatherVO.uviDesc}"></td>
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+	</div>
+	
+	</div>
+
+<script>
+$(document).ready(
+function() {
+	$('#example').DataTable({
+				"lengthMenu" : [ 10 ],
+				"searching" : false, //搜尋功能, 預設是開啟
+				"paging" : false, //分頁功能, 預設是開啟
+				"ordering" : false, //排序功能, 預設是開啟
+			    "bInfo": false,
+			    "paging": false,             
+			    "bPaginate": false,
+				"language" : {
+					"processing" : "處理中...",
+					"loadingRecords" : "載入中...",
+					"lengthMenu" : "顯示 _MENU_ 筆結果",
+					"zeroRecords" : "沒有符合的結果",
+					"info" : "顯示第 _START_ 至 _END_ 筆結果，共<font color=red> _TOTAL_ </font>筆",
+					"infoEmpty" : "顯示第 0 至 0 筆結果，共 0 筆",
+					"infoFiltered" : "(從 _MAX_ 筆結果中過濾)",
+					"infoPostFix" : "",
+					"search" : "搜尋:",
+					"paginate" : {
+						"first" : "第一頁",
+						"previous" : "上一頁",
+						"next" : "下一頁",
+						"last" : "最後一頁"
+					},
+					"aria" : {
+						"sortAscending" : ": 升冪排列",
+						"sortDescending" : ": 降冪排列"
+					}
+				}
+			})
+		});
+function goBack() {
+    window.history.back();
+}
+</script>
+</body>
+</html>

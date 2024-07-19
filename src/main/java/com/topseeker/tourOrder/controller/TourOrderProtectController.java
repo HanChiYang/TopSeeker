@@ -77,42 +77,30 @@ public class TourOrderProtectController {
 	    return "front-end/tourOrder/historical_Order";
 	}
 	
-	@PostMapping("insert")
-	public String insert(@Valid TourOrderVO tourOrderVO, BindingResult result, ModelMap model) throws IOException {
+	
+	
+	@PostMapping("/orderDetails")
+    public String getOrderDetail(HttpSession session, @RequestParam String orderNo ,Model model) {
+		MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
 
-		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-
-		if (result.hasErrors()) {
-			return "front-end/tourOrder/addOrder";
-		}
+	    // 检查 loggedInMember 是否为空
+	     // 获取会员编号
+	    Integer loggedInMemberNo = loggedInMember.getMemNo();
 		
-		int pricePerPerson = 16888; // 每人的價格，例如1000元
-		int totalPrice = tourOrderVO.getOrderNums() * pricePerPerson;
-		tourOrderVO.setOrderPrice(totalPrice);
+		TourOrderVO tourOrderVO = tourOrderSvc.getOneOrder(Integer.valueOf(orderNo));// 这里创建或从数据库加载你的订单对象
 		
-		if(tourOrderVO.getOrderPay()== 1 ) {
-			tourOrderVO.setOrderStatus((byte)1);
-		}else {
-			tourOrderVO.setOrderStatus((byte)2);
-		}
-		
-		
-		Date currentDate = Date.valueOf(LocalDate.now());
-		tourOrderVO.setOrderDate(currentDate);
-		
-		if (tourOrderVO.getDepartureDate().before(currentDate)) {
-	        result.rejectValue("departureDate", "error.tourOrderVO", "出發日期必須在訂單日期之後");
-	        return "front-end/tourOrder/addOrder";
-	    }
-		/*************************** 2.開始新增資料 *****************************************/
-		// EmpService empSvc = new EmpService();
-		tourOrderSvc.addOrder(tourOrderVO);
-		/*************************** 3.新增完成,準備轉交(Send the Success view) **************/
-		List<TourOrderVO> list = tourOrderSvc.getAll();
-		model.addAttribute("tourOrderListData", list);
-		model.addAttribute("success", "- (新增成功)");
-		return "front-end/tourOrder/confirmOrder"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
-	}
+		 if (tourOrderVO != null && tourOrderVO.getMemberVO().getMemNo().equals(loggedInMemberNo)) {
+	            model.addAttribute("tourOrderVO", tourOrderVO);
+	            return "front-end/tourOrder/orderDetails";
+	        }
+		 else {
+			 return "front-end/tourOrder/historical_Order";
+		 }
+//	    model.addAttribute("tourOrderVO", tourOrderVO);
+//	    return "front-end/tourOrder/orderDetails"; // 确认订单
+         // 返回訂單詳情頁面
+    }
+	
 	
 	
 	@PostMapping("/historical_Order")
@@ -155,6 +143,46 @@ public class TourOrderProtectController {
 	    // 返回到历史订单页面
 	    return "front-end/tourOrder/historical_Order";
 	}
+	
+	@PostMapping("insert")
+	public String insert(@Valid TourOrderVO tourOrderVO, BindingResult result, ModelMap model) throws IOException {
+
+		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
+
+		if (result.hasErrors()) {
+			return "front-end/tourOrder/addOrder";
+		}
+		
+		int pricePerPerson = 16888; // 每人的價格，例如1000元
+		int totalPrice = tourOrderVO.getOrderNums() * pricePerPerson;
+		tourOrderVO.setOrderPrice(totalPrice);
+		
+		if(tourOrderVO.getOrderPay()== 1 ) {
+			tourOrderVO.setOrderStatus((byte)1);
+		}else {
+			tourOrderVO.setOrderStatus((byte)2);
+		}
+		
+		
+		Date currentDate = Date.valueOf(LocalDate.now());
+		tourOrderVO.setOrderDate(currentDate);
+		
+		if (tourOrderVO.getDepartureDate().before(currentDate)) {
+	        result.rejectValue("departureDate", "error.tourOrderVO", "出發日期必須在訂單日期之後");
+	        return "front-end/tourOrder/addOrder";
+	    }
+		/*************************** 2.開始新增資料 *****************************************/
+		// EmpService empSvc = new EmpService();
+		tourOrderSvc.addOrder(tourOrderVO);
+		/*************************** 3.新增完成,準備轉交(Send the Success view) **************/
+		List<TourOrderVO> list = tourOrderSvc.getAll();
+		model.addAttribute("tourOrderListData", list);
+		model.addAttribute("success", "- (新增成功)");
+		return "front-end/tourOrder/confirmOrder"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
+	}
+	
+	
+	
 	
 	/*
 	 * This method will be called on select_page.html form submission, handling POST request
