@@ -54,6 +54,7 @@ public class SalenoController {
 			model.addAttribute("getOne_For_Display", "true"); 
 			return "back-end/shop/sale/select_page"; 
 	}
+		
 	
 	@ExceptionHandler(value = { ConstraintViolationException.class })
 //	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
