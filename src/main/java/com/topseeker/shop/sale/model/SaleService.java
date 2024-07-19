@@ -1,6 +1,7 @@
 package com.topseeker.shop.sale.model;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,9 +16,7 @@ import org.springframework.stereotype.Service;
 public class SaleService {
 	@Autowired
 	SaleRepository repository;
-	
-	@Autowired
-	private SessionFactory sessionFactory;
+
 	
 	public void addSale(SaleVO saleVO) {
 		repository.save(saleVO);
@@ -47,10 +46,16 @@ public class SaleService {
 		return repository.findByMinimumAmountLessThanEqual(totalAmount,currentTime);
 	}
 	
+	//尋找期間內的優惠活動
+	public List<SaleVO> getCurrentSales() {
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+		return repository.findCurrentSales(now);
+		
+	}
 	
-	
-//	public List<SaleVO> getAll(Map<String, String[]> map) {
-//		return HibernateUtil_CompositeQuery_sale.getAllC(map,sessionFactory.openSession());
-//	}
-
+	//檢查被使用的優惠
+	  public boolean isSaleUsed(Integer saleNo) {
+	        
+	        return repository.isSaleUsed(saleNo);
+	}
 }

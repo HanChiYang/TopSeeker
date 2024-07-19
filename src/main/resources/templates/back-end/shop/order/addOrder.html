@@ -110,58 +110,61 @@ section div {
 			<div>
 				<label>訂單日期 :</label> <input type="text" id="f_date1"
 					th:field="*{orderDate}" placeholder="yyyy-MM-dd HH:mm:ss"
-					onclick="hideContent('orderDate.errors')" /> <span
+					onclick="hideContent('orderDate.errors')" /> 
+					<div
 					th:if="${#fields.hasErrors('orderDate')}" th:errors="*{orderDate}"
-					class="error" id="orderDate.errors"></span>
+					class="error" id="orderDate.errors"></div>
 			</div>
 
 			<div>
 				<label>訂單原始金額 :</label> <input type="text" th:field="*{orderAmount}"
-					onclick="hideContent('orderAmount.errors')" /> <span
+					onclick="hideContent('orderAmount.errors')" /> 
+					<div
 					th:if="${#fields.hasErrors('orderAmount')}"
-					th:errors="*{orderAmount}" class="error" id="orderAmount.errors"></span>
+					th:errors="*{orderAmount}" class="error" id="orderAmount.errors"></div>
 			</div>
 
 			<div>
 				<label>訂單運費 :</label> <input type="text" th:field="*{orderShipment}"
-					onclick="hideContent('orderShipment.errors')" /> <span
+					onclick="hideContent('orderShipment.errors')" /> 
+					<div
 					th:if="${#fields.hasErrors('orderShipment')}"
 					th:errors="*{orderShipment}" class="error"
-					id="orderShipment.errors"></span>
+					id="orderShipment.errors"></div>
 			</div>
 			<div>
 				<label>折扣金額 :</label> <input type="text" th:field="*{orderDiscount}"
-					onclick="hideContent('orderDiscount.errors')" /> <span
+					onclick="hideContent('orderDiscount.errors')" /> <div
 					th:if="${#fields.hasErrors('orderDiscount')}"
 					th:errors="*{orderDiscount}" class="error"
-					id="orderDiscount.errors"></span>
+					id="orderDiscount.errors"></div>
 			</div>
 			<div>
 				<label>訂單實付金額 :</label> <input type="text" th:field="*{orderBill}"
-					onclick="hideContent('orderBill.errors')" /> <span
+					onclick="hideContent('orderBill.errors')" /> <div
 					th:if="${#fields.hasErrors('orderBill')}" th:errors="*{orderBill}"
-					class="error" id="orderBill.errors"></span>
+					class="error" id="orderBill.errors"></div>
 
 			</div>
 			<div>
 				<label>收件人姓名 :</label> <input type="text" th:field="*{orderName}"
-					onclick="hideContent('orderName.errors')" /> <span
+					onclick="hideContent('orderName.errors')" /> <div
 					th:if="${#fields.hasErrors('orderName')}" th:errors="*{orderName}"
-					class="error" id="orderName.errors"></span>
+					class="error" id="orderName.errors"></div>
 
 			</div>
 			<div>
 				<label>收件人電話 :</label> <input type="text" th:field="*{orderPhone}"
-					onclick="hideContent('orderPhone.errors')" /> <span
+					onclick="hideContent('orderPhone.errors')" /> <div
 					th:if="${#fields.hasErrors('orderPhone')}"
-					th:errors="*{orderPhone}" class="error" id="orderPhone.errors"></span>
+					th:errors="*{orderPhone}" class="error" id="orderPhone.errors"></div>
 
 			</div>
 			<div>
 				<label>收件人住址 :</label> <input type="text" th:field="*{orderAddress}"
-					onclick="hideContent('orderAddress.errors')" /> <span
+					onclick="hideContent('orderAddress.errors')" /> <div
 					th:if="${#fields.hasErrors('orderAddress')}"
-					th:errors="*{orderAddress}" class="error" id="orderAddress.errors"></span>
+					th:errors="*{orderAddress}" class="error" id="orderAddress.errors"></div>
 
 			</div>
 			<div>
