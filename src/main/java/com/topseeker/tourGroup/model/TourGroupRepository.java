@@ -16,6 +16,7 @@ public interface TourGroupRepository extends JpaRepository<TourGroupVO, Integer>
 	@Query(value = "delete from tour_group where group_no =?1", nativeQuery = true)
 	void deleteByGroupNo(int groupNo);
 
+
 //	● (自訂)條件查詢
 	@Query(value = "from TourVO where tourNo=?1 and groupPrice =?2  and groupStatus=?3 order by groupNo")
 	List<TourGroupVO> findByOthers(int tourNo , int groupPrice , int groupStatus);

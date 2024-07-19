@@ -99,6 +99,7 @@ public class ArticleController {
             model.addAttribute("errorMessage", "需要先登入才能新增文章");
             return "front-end/member/loginMem";
         }
+        
 
         // 先保存文章
         articleSvc.addArticle(articleVO);  
@@ -179,8 +180,12 @@ public class ArticleController {
 
        
 
-        articleVO.setArtPics(existingArtPics);
-        articleSvc.updateArticle(articleVO);
+        ArticleVO existingArticle = articleSvc.getOneArticle(articleVO.getArtNo());
+        existingArticle.setArtTitle(articleVO.getArtTitle());
+        existingArticle.setArtContent(articleVO.getArtContent());
+        existingArticle.setArtPics(existingArtPics);
+
+        articleSvc.updateArticle(existingArticle);
 
         model.addAttribute("success", "修改成功");
         return "redirect:/article/listAllArticle";
@@ -196,7 +201,7 @@ public class ArticleController {
         List<ArticleVO> list = articleSvc.getAll();
         model.addAttribute("articleListData", list);
         model.addAttribute("success", "- (刪除成功)");
-        return "front-end/article/listAllArticle";
+        return "redirect:/article/listMyArticle";
     }
 
 

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>訂單資料新增 - addOrder.html</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 60px;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .hidden {
+            display: none;
+        }
+        #bankTransferDetails div {
+            margin-bottom: 10px;
+        }
+        #bankTransferDetails label {
+            display: inline-block;
+            width: 120px;
+            margin-right: 10px;
+        }
+        .box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+    </style>
+   
+    <script>
+    
+
+        function togglePaymentDetails() {
+            const paymentMethod = document.getElementById("orderPay").value;
+            const creditCardDetails = document.getElementById("creditCardDetails");
+            const bankTransferDetails = document.getElementById("bankTransferDetails");
+
+            if (paymentMethod === '1') { // 信用卡
+                creditCardDetails.classList.remove('hidden');
+                bankTransferDetails.classList.add('hidden');
+            } else if (paymentMethod === '2') { // 轉帳
+                creditCardDetails.classList.add('hidden');
+                bankTransferDetails.classList.remove('hidden');
+            } else {
+                creditCardDetails.classList.add('hidden');
+                bankTransferDetails.classList.add('hidden');
+            }
+        }
+
+        function validateCreditCard() {
+            const cardNumber = document.getElementById("creditCardNumber").value;
+            const expiryDate = document.getElementById("creditCardExpiry").value;
+            const cvc = document.getElementById("creditCardCVC").value;
+
+            const cardNumberRegex = /^\d{16}$/;
+            const expiryDateRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+            const cvcRegex = /^\d{3}$/;
+
+            return cardNumberRegex.test(cardNumber) && expiryDateRegex.test(expiryDate) && cvcRegex.test(cvc);
+        }
+
+        function validateForm(event) {
+            const paymentMethod = document.getElementById("orderPay").value;
+            if (paymentMethod === '1') { // 信用卡
+                if (!validateCreditCard()) {
+                    event.preventDefault();
+                    alert("請輸入正確的信用卡資訊");
+                } else {
+                    alert("付款成功");
+                }
+            }
+        }
+
+        function calculatePrice() {
+            const orderNums = document.getElementById("orderNums").value;
+            const pricePerPerson = 16888; // 假設每人的價格是16888
+            const totalPrice = orderNums * pricePerPerson;
+            document.getElementById("displayOrderPrice").textContent = totalPrice;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector("form").addEventListener("submit", validateForm);
+            document.getElementById("orderNums").addEventListener("input", calculatePrice);
+        });
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top">
+    <a class="navbar-brand" th:href="@{/tourOrder/select_root}">
+        <img th:src="@{/images/back1.gif}" alt="回查詢頁"> 回查詢頁
+    </a>
+</nav>
+<header>
+  <nav th:insert="~{/front-end/navbar.html}"></nav>
+</header>
+<div class="container">
+    <h2 class="text-center my-4">訂單資料新增 - addOrder.html</h2>
+    <h5 class="text-center mb-4"><b>所有欄位皆為必填欄位</b></h5>
+    <form th:action="@{insert}" method="post" th:object="${tourOrderVO}" enctype="multipart/form-data" class="was-validated">
+        <input type="hidden" name="orderNo" th:value="${tourOrderVO.orderNo}" />
+
+        <div class="form-group">
+		    <label for="departureDate">出發日期:</label>
+		    <input type="date" class="form-control" id="departureDate" th:field="*{departureDate}" required>
+			<div class="invalid-feedback">請選擇出發日期。</div>
+		</div>
+
+
+        <div class="form-group">
+            <label for="orderNums">人數:</label>
+            <input type="number" class="form-control" id="orderNums" th:field="*{orderNums}" required>
+            <div class="invalid-feedback">請輸入人數。</div>
+        </div>
+
+        <div class="form-group">
+            <label>顯示總金額:</label>
+            <span id="displayOrderPrice"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="orderPay">付款方式:</label>
+            <select id="orderPay" class="form-control" th:field="*{orderPay}" onchange="togglePaymentDetails()" required>
+                <option value="">選擇付款方式</option>
+                <option value="1">信用卡</option>
+                <option value="2">轉帳</option>
+            </select>
+            <div class="invalid-feedback">請選擇付款方式。</div>
+        </div>
+
+        <div id="creditCardDetails" class="box hidden">
+            <div class="form-group">
+                <label for="creditCardNumber">信用卡號:</label>
+                <input type="text" class="form-control" id="creditCardNumber" name="creditCardNumber" maxlength="16"/>
+            </div>
+            <div class="form-group">
+                <label for="creditCardExpiry">有效日期:</label>
+                <input type="text" class="form-control" id="creditCardExpiry" name="creditCardExpiry" maxlength="5"/>
+            </div>
+            <div class="form-group">
+                <label for="creditCardCVC">安全碼:</label>
+                <input type="text" class="form-control" id="creditCardCVC" name="creditCardCVC" maxlength="3"/>
+            </div>
+        </div>
+
+        <div id="bankTransferDetails" class="box hidden" style="white-space: pre-line;">
+            <h3><b>請轉帳至topseeker銀行帳戶</b></h3>
+            <div>
+                <label>銀行名稱:</label>
+                <span>topseeker銀行</span>
+            </div>
+            <div>
+                <label>銀行代碼:</label>
+                <span>808</span>
+            </div>
+            <div>
+                <label>帳戶名稱:</label>
+                <span>topseeker公司</span>
+            </div>
+            <div>
+                <label>帳戶號碼:</label>
+                <span>09868888888888</span>
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="memberVO.memNo">會員:</label>
+            <select class="form-control" th:field="*{memberVO.memNo}" required>
+                <option value="">選擇會員</option>
+                <option th:each="memberVO : ${memberListData}" th:value="${memberVO.memNo}" th:text="${memberVO.memName}" />
+            </select>
+            <div class="invalid-feedback">請選擇會員。</div>
+        </div>
+
+        <div class="form-group">
+		    <label for="tourGroupVO.groupNo">開團:</label>
+		    <select class="form-control" id="groupNoSelect" th:field="*{tourGroupVO.groupNo}" required>
+		        <option value="">選擇開團</option>
+		        <option th:each="tourGroupVO : ${tourGroupListData}" th:value="${tourGroupVO.groupNo}">
+		            <span th:text="${tourGroupVO.groupNo} + ' ' + ${tourGroupVO.groupBegin}"></span>
+		        </option>
+		    </select>
+		    <div class="invalid-feedback">請選擇開團</div>
+		</div>
+
+
+
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-success">送出新增</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
