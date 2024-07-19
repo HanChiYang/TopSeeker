@@ -1,12 +1,15 @@
 package com.topseeker.tour.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -17,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.topseeker.member.model.MemberVO;
 import com.topseeker.tour.model.TourService;
 import com.topseeker.tour.model.TourVO;
 import com.topseeker.tourArea.model.TourAreaService;
@@ -34,6 +39,8 @@ import com.topseeker.tourDetail.model.TourDetailService;
 import com.topseeker.tourDetail.model.TourDetailVO;
 import com.topseeker.tourGroup.model.TourGroupService;
 import com.topseeker.tourGroup.model.TourGroupVO;
+import com.topseeker.tourOrder.model.TourOrderService;
+import com.topseeker.tourOrder.model.TourOrderVO;
 
 
 @Controller
@@ -52,6 +59,9 @@ public class TourNoController {
 	
 	@Autowired
 	TourDetailService tourDetailSvc; 
+	
+	@Autowired
+	TourOrderService tourOrderSvc;
 
 	/*
 	 * This method will be called on select_page.html form submission, handling POST
@@ -198,24 +208,60 @@ public class TourNoController {
 	
 	
 	
+	// 抓取seesion內已登入會員的編號
+//	MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+//	if (loggedInMember == null) {
+//		// 如果未登入，重定向到登入頁面
+//		return "redirect:/member/loginMem";
+//	}
+//
+//	Integer loggedInMemberNo = loggedInMember.getMemNo();
+//	List<TourOrderVO> tourOrderVO1 = tourOrderSvc.getHistoricalOrders(loggedInMemberNo);
+//	model.addAttribute("tourOrderVO", tourOrderVO1);
+	
+	
+	
+	
+	
+	
 	
 	//tourGroup單筆查詢
 	@PostMapping("/addOrder")
-    public String addOrder(@RequestParam("groupNo") Integer groupNo,
-    		Model model) {
+    public String addOrder(HttpSession session,@RequestParam("groupNo") Integer groupNo, Model model) {
         // 在這裡處理 groupNo，例如查詢相關的行程信息並添加到 model 中
-		
-		TourGroupVO tourGroupVO = tourGroupSvc.getOneTourGroup(Integer.valueOf(groupNo));
-		
-		List<TourGroupVO> list = tourGroupSvc.getAll();
-		model.addAttribute("tourGroupListData", list);     // for select_page.html 第97 109行用
-		model.addAttribute("tourVO", new TourVO());  // for select_page.html 第133行用
-		List<TourVO> list2 = tourSvc.getAll();
-    	model.addAttribute("tourListData",list2);    // for select_page.html 第135行用
-		
-		/***************************3.查詢完成,準備轉交(Send the Success view)*****************/
-		model.addAttribute("tourGroupVO", tourGroupVO);
-		model.addAttribute("addOrder", "true"); // 旗標getOne_For_Display見select_page.html的第156行 -->
+  System.out.println(groupNo);
+  
+  
+//  ==============登入================
+//抓取seesion內已登入會員的編號
+	MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+	if (loggedInMember == null) {
+		// 如果未登入，重定向到登入頁面
+		return "redirect:/member/loginMem";
+	}
+
+	Integer loggedInMemberNo = loggedInMember.getMemNo();
+	List<TourOrderVO> tourOrderVO1 = tourOrderSvc.getHistoricalOrders(loggedInMemberNo);
+	model.addAttribute("tourOrderVO", tourOrderVO1);
+  
+//	  TourOrderVO tourOrderVO = tourOrderSvc.getOneTourGroup(Integer.valueOf(groupNo));
+
+  
+  
+  TourGroupVO tourGroupVO = tourGroupSvc.getOneTourGroup(Integer.valueOf(groupNo));
+
+//  List<TourGroupVO> list = tourGroupSvc.getAll();
+//  model.addAttribute("tourGroupListData", list);     // for select_page.html 第97 109行用
+//  model.addAttribute("tourVO", new TourVO());  // for select_page.html 第133行用
+//  List<TourVO> list2 = tourSvc.getAll();
+//     model.addAttribute("tourListData",list2);    // for select_page.html 第135行用
+  
+  /***************************3.查詢完成,準備轉交(Send the Success view)*****************/
+     
+     
+     model.addAttribute("tourOrderVO", new TourOrderVO());
+     model.addAttribute("tourGroupVO", tourGroupVO);
+  model.addAttribute("addOrder", "true"); // 旗標getOne_For_Display見select_page.html的第156行 -->
         model.addAttribute("groupNo", groupNo);
         return "front-end/tour/addOrder"; // 返回 addOrder 頁面
     }
