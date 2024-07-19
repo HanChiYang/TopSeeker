@@ -17,6 +17,7 @@ public interface CartRepository extends JpaRepository<CartVO, Integer> {
 	@Query(value = "DELETE FROM shop_cart WHERE mem_no =?1" , nativeQuery = true)
 	void deleteByMemNo(Integer memNo);
 	
+	
 	@Transactional
 	@Modifying
 	@Query(value = "DELETE FROM shop_cart WHERE mem_no =?1 AND prod_no =?2" , nativeQuery = true)
@@ -40,5 +41,7 @@ public interface CartRepository extends JpaRepository<CartVO, Integer> {
 	@Query(value = "update CartVO c set c.prodQty =?1 where c.cartNo =?2")
 	void updateQty(Integer prodQty, Integer cartNo);
 
+	
+	
 	
 }

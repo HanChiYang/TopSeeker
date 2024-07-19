@@ -21,13 +21,13 @@
 						class="nav-link shoplink"
 						th:href="@{/shop/shopManagement/select_page}">商品管理</a></li>
 					<li class="nav-item nav-item-spacing"><a
-						class="nav-link shoplink" href="#">最新消息管理</a></li>
+						class="nav-link shoplink" th:href="@{/shop/shopManagement/listAllShopInfo}">最新消息管理</a></li>
 					<li class="nav-item nav-item-spacing"><a
 						class="nav-link shoplink"
-						th:href="@{/shop/category/bag(prodTypeNo=1)}">促銷優惠管理</a></li>
+						th:href="@{/shop/sale/listAllSale}">促銷優惠管理</a></li>
 					<li class="nav-item nav-item-spacing"><a
 						class="nav-link shoplink"
-						th:href="@{/shop/category/shoes(prodTypeNo=2)}">訂單管理</a></li>
+						th:href="@{/shop/order/listAllOrder}">訂單管理</a></li>
 				</ul>
 			</div>
 		</div>
@@ -82,7 +82,7 @@
 				管理所有最新消息
 		</a></li>
 		<li class="nav-item"><a class="nav-link" href="/add-product"
-			th:href="@{/shop/sale/addSale}"> <i class="fa fa-plus"></i> 新增最新消息
+			th:href="@{/shop/shopManagement/addInfo}"> <i class="fa fa-plus"></i> 新增最新消息
 		</a></li>
 	</ul>
 </div>

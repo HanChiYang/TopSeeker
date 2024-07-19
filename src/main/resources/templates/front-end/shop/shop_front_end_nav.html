@@ -1,44 +1,58 @@
-	<div>
-		<img id="longlogo" src="/images/Yushan_long_logo.png">
-		<!-- 商城的導航列 -->
-		<nav id="shopNavbar" class="navbar navbar-expand-lg">
-			<div class="container-fluid">
-				<div>
-					<a class="navbar-brand" th:href="@{/shop/homepage}">戶外用品購物商城</a>
-					<button class="navbar-toggler" type="button"
-						data-bs-toggle="collapse" data-bs-target="#newNavbarNav"
-						aria-controls="newNavbarNav" aria-expanded="false"
-						aria-label="Toggle navigation">
-						<span class="navbar-toggler-icon"></span>
-					</button>
-				</div>
-				<div class="collapse navbar-collapse" id="shopViceNavbar">
-					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-						<li class="nav-item nav-item-spacing"><a
-							class="nav-link shoplink" th:href="@{/shop/homepage}">首頁</a></li>
-						<li class="nav-item nav-item-spacing"><a
-							class="nav-link shoplink" href="#">最新優惠</a></li>
-						<li class="nav-item nav-item-spacing"><a
-							class="nav-link shoplink" th:href="@{/shop/category/bag(prodTypeNo=1)}">包袋</a></li>
-						<li class="nav-item nav-item-spacing"><a
-							class="nav-link shoplink" th:href="@{/shop/category/shoes(prodTypeNo=2)}">鞋類</a></li>
-						<li class="nav-item nav-item-spacing"><a
-							class="nav-link shoplink" th:href="@{/shop/category/clothes(prodTypeNo=4)}">服飾</a></li>
-						<li class="nav-item nav-item-spacing"><a
-							class="nav-link shoplink" th:href="@{/shop/category/accessory(prodTypeNo=3)}">裝備配件</a></li>
-					</ul>
-					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-						<li class="search-bar"><input type="text"
-							placeholder="搜尋商品..."></li>
-					</ul>
-					<ul class="navbar-nav ml-auto mb-2 mb-lg-0">
-						<li class="nav-item"><a class="nav-link shoplink wishlist"
-							th:href="@{/shop/wishlist}"><i class="fa-solid fa-heart"></i> 我的收藏</a></li>
-						<li class="nav-item"><a class="nav-link shoplink wishlist"
-							th:href="@{/protected/cart/cart}"> <i class="fas fa-shopping-cart"></i> 購物車
-						</a></li>
-					</ul>
-				</div>
+
+<div>
+	<img id="longlogo" src="/images/Yushan_long_logo.png">
+	<!-- 商城的導航列 -->
+	<nav id="shopNavbar" class="navbar navbar-expand-lg">
+		<div class="container-fluid">
+			<div>
+				<a class="navbar-brand" th:href="@{/shop/homepage}">戶外用品購物商城</a>
+				<button class="navbar-toggler" type="button"
+					data-bs-toggle="collapse" data-bs-target="#newNavbarNav"
+					aria-controls="newNavbarNav" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
 			</div>
-		</nav>
-	</div>
+			<div class="collapse navbar-collapse" id="shopViceNavbar">
+				<ul class="navbar-nav mb-2 mb-lg-0">
+					<li class="nav-item nav-item-spacing"><a
+						class="nav-link shoplink" th:href="@{/shop/homepage}">首頁</a></li>
+					<li class="nav-item nav-item-spacing"><a
+						class="nav-link shoplink" th:href="@{/shop/shopInfo}">最新優惠</a></li>
+					<li class="nav-item nav-item-spacing"><a
+						class="nav-link shoplink"
+						th:href="@{/shop/category/bag(prodTypeNo=1)}">包袋</a></li>
+					<li class="nav-item nav-item-spacing"><a
+						class="nav-link shoplink"
+						th:href="@{/shop/category/shoes(prodTypeNo=2)}">鞋類</a></li>
+					<li class="nav-item nav-item-spacing"><a
+						class="nav-link shoplink"
+						th:href="@{/shop/category/clothes(prodTypeNo=4)}">服飾</a></li>
+					<li class="nav-item nav-item-spacing"><a
+						class="nav-link shoplink"
+						th:href="@{/shop/category/accessory(prodTypeNo=3)}">裝備配件</a></li>
+				</ul>
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="search-bar">
+						<form id="searchForm" th:action="@{/shop/searchResult}" method="post">
+							<input type="text" name="keyword" id="searchInput"
+								placeholder="搜尋商品...">
+							<button type="submit">
+			                    <i class="fa fa-search"></i>
+			                </button>
+						</form>
+					</li>
+				</ul>
+				<ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+					<li class="nav-item"><a class="nav-link shoplink wishlist"
+						th:href="@{/shop/wishlist}"><i class="fa-solid fa-heart"></i>
+							我的收藏</a></li>
+					<li class="nav-item"><a class="nav-link shoplink wishlist"
+						th:href="@{/cart/cart}"> <i class="fas fa-shopping-cart"></i>
+							購物車
+					</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</div>

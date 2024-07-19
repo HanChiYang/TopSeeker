@@ -1,4 +1,4 @@
-package com.topseeker.shopinfo.model;
+package com.topseeker.shop.info.model;
 
 import java.sql.Date;
 
@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Entity
@@ -30,10 +31,10 @@ public class ShopInfoVO implements java.io.Serializable{
 	private String infoContent;
 	
 	@Column(name ="info_pic", columnDefinition = "longblob")
-	@NotEmpty(message="商品照片: 請上傳照片")
+//	@NotNull(message="最新消息圖片: 請上傳圖片")
 	private byte[] infoPic;
 	
-	@NotEmpty(message="發布日期: 請勿空白")
+	@NotNull(message="發布日期: 請勿空白")
 	@Column(name ="info_date", updatable = false)
 	private Date infoDate;
 	
@@ -45,7 +46,7 @@ public class ShopInfoVO implements java.io.Serializable{
 	}
 
 	public void setInfoNo(Integer infoNo) {
-		infoNo = infoNo;
+		this.infoNo = infoNo;
 	}
 
 	public String getInfoHead() {
