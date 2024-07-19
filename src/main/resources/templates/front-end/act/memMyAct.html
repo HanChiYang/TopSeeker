@@ -173,7 +173,7 @@
                                     <span th:case="2">活動已完成</span>
                                     <span th:case="3">活動已取消</span>
                                 </td>
-                                <td th:text="${actVO.evalSum == 0 ? '尚無評價' : #numbers.formatDecimal(actVO.actRateSum / actVO.evalSum, 1, 1)}"></td> <!-- 計算平均評價 -->
+<!--                                 <td th:text="${actVO.evalSum == 0 ? '尚無評價' : #numbers.formatDecimal(actVO.actRateSum / actVO.evalSum, 1, 1)}"></td> 計算平均評價 -->
                                 <td>
                                     <form method="post" th:action="@{/act/updateActByMem}">
                                         <button type="submit" class="btn btn-warning modify-btn" th:classappend="${actVO.actStatus != 0} ? 'btn-secondary' : 'btn-warning'" th:disabled="${actVO.actStatus != 0}" th:data-status="${actVO.actStatus}">修改</button>
