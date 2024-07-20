@@ -1,9 +1,12 @@
 package com.topseeker.tourCol.contorller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Digits;
@@ -16,11 +19,15 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.topseeker.act.model.ActVO;
+import com.topseeker.follow.model.FollowVO;
 import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
 import com.topseeker.tour.model.TourService;
@@ -99,6 +106,26 @@ public class TourColNoController {
 //		return "back-end/tourCol/listOnetourCol";  // 查詢完成後轉交listOnetourCol.html
 		return "back-end/tourCol/select_page"; // 查詢完成後轉交select_page.html由其第158行insert listOnetourCol.html內的th:fragment="listOnetourCol-div
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

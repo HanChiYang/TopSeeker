@@ -4,39 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>旅遊行程</title>
-  <!-- 引入 Bootstrap CSS -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <!-- 自訂 CSS -->
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
   <style>
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #333;
-      padding: 1rem;
+    .container {
+      position: relative;
     }
 
-    nav .logo {
-      color: white;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      margin: 0;
-      padding: 0;
-    }
-
-    nav ul li {
-      margin: 0 1rem;
-    }
-
-    nav ul li a {
-      color: white;
-      text-decoration: none;
-      font-size: 1rem;
+    .tour-list-container {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 75%;
+      padding: 20px;
     }
 
     .tour-item {
@@ -46,10 +28,11 @@
       margin-bottom: 20px;
       padding: 15px;
       background-color: #f8f9fa;
-      position: relative; /* 為了讓 a 標籤的絕對定位有效 */
+      position: relative;
+      width: 600px;
     }
     .tour-item img {
-      width: 300px;
+      width: 380px;
       height: auto;
       margin-right: 15px;
     }
@@ -79,10 +62,6 @@
       padding: 15px;
       margin-bottom: 20px;
     }
-    .sort-options {
-      margin-bottom: 20px;
-    }
-    
     .col-md-9 a {
       position: absolute;
       top: 0;
@@ -92,119 +71,73 @@
       z-index: 1;
       text-decoration: none;
     }
-    
     .tour-item:hover {
-      cursor: pointer; /* 改變游標為指示連結的手形 */
+      cursor: pointer;
     }
     
-    
-    
-    .tour img {
-      width: 100px;
-      height: auto;
-      margin-right: 15px;
-    }
   </style>
 </head>
 <body>
-  <!-- 導覽列 -->
-  <nav>
-    <div class="logo">旅遊網站</div>
-    <ul>
-      <li><a href="#"><i class="fas fa-home"></i> 返回首頁</a></li>
-      <li><a href="#"><i class="fas fa-file-alt"></i> 訂單管理</a></li>
-      <li><a href="#"><i class="fas fa-heart"></i> 行程收藏</a></li>
-      <li><a href="#"><i class="fas fa-sign-in-alt"></i> 會員登入</a></li>
-    </ul>
-  </nav>
+    <nav th:insert="~{/front-end/navbar.html}"></nav>
 
-  <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-3">
-        <!-- 側邊欄位 - 搜尋開始日期區間 -->
-        <form method="post" th:action="@{listTours_ByCompositeQuery_front}">
-        <div class="search-container">
-<!--           <label for="startDateFrom">搜尋開始日期區間：</label> -->
-<!--           <input type="date" id="startDateFrom" name="startDateFrom"><br><br> -->
-<!--           <input type="date" id="startDateTo" name="startDateTo"><br><br> -->
-          <label for="destination">目的地：</label>
-          <br>
-		  <input type="text" name="tourName" id="destination" class="form-control" placeholder="輸入目的地">
-          <button type="submit" class="btn btn-primary">搜尋</button>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-3">
+                <form method="post" th:action="@{/tourGroup/listTourGroups_ByCompositeQuery_front}">
+                    <div class="search-container">
+                        <div class="form-group">
+                            <label for="start-date">出發日期區間：</label>
+                            <input type="date" name="groupBegin" id="start-date" class="form-control" placeholder="開始日期">
+                        </div>
+                        <div class="form-group">
+                            <label for="end-date">&nbsp;</label>
+                            <input type="date" name="groupEnd" id="end-date" class="form-control" placeholder="結束日期">
+                        </div>
+                        <div class="form-group">
+                            <label for="destination">目的地：</label>
+                            <input type="text" name="tourName" id="destination" class="form-control" placeholder="輸入目的地">
+                        </div>
+                        <button type="submit" class="btn btn-primary">送出</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="col-md-9 tour-list-container" id="tourList">
+                <!-- 旅遊行程列表 -->
+                <div th:each="tourVO : ${tourListData}">
+                    <div class="tour-item" th:data-tourNo="${tourVO.tourNo}">
+                        <img th:src="@{/tour/DBGifReader} + '?tourNo=' + ${tourVO.tourNo}" alt="行程圖片">
+                        <div class="tour-details">
+                            <div class="tour-title" th:text="${tourVO.tourName}"></div>
+                            <div class="tour-info" th:text="${tourVO.tourIntro}"></div>
+                            <div class="tour-price" th:text="'NT$ ' + ${tourVO.tourPrice}"></div>
+                            <div class="tour-info">評論人數: <span th:text="${tourVO.tourGuys}"></span></div>
+                            <div class="tour-info">評分: <span th:text="${tourVO.tourStar}"></span></div>
+                        </div>
+                    </div>
+                    <div class="addCol-button">
+                    <form id="followForm" class="ms-3" style="margin-bottom: 0;">
+			            <input type="button" value="收藏行程" class="btn btn-primary ms-2 test">
+			            <input type="hidden" name="tourNo" th:value="${tourVO.tourNo}">
+			        </form> 
+                	</div>
+            </div>
         </div>
-        </form>
-        
-        
 
-        <!-- 側邊欄位 - 行程排序 -->
-        <div class="sort-options">
-        
-          <h5>行程排序</h5>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="sort" id="priceLowToHigh" value="tourPrice,asc" checked>
-            <label class="form-check-label" for="priceLowToHigh">
-              價格 (低到高)
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="sort" id="priceHighToLow" value="tourPrice,desc">
-            <label class="form-check-label" for="priceHighToLow">
-              價格 (高到低)
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="sort" id="starLowToHigh" value="tourStar,asc">
-            <label class="form-check-label" for="starLowToHigh">
-              評分 (低到高)
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="sort" id="starHighToLow" value="tourStar,desc">
-            <label class="form-check-label" for="starHighToLow">
-              評分 (高到低)
-            </label>
-          </div>
-        </div>
-      </div>
-      <div id="tourList"></div>
-
-      <div class="col-md-9">
         <!-- 隱藏表單，用於提交行程編號 -->
         <form id="tourForm" method="post" th:action="@{/tour/getTourNo_For_Display}" style="display:none;">
-          <input type="text" name="tourNo" id="tourNo">
+            <input type="text" name="tourNo" id="tourNo">
         </form>
 
-        <!-- 旅遊行程列表 -->
         
-            
-        <div th:each="tourVO : ${tourListData}">
-          <div class="tour-item" th:data-tourNo="${tourVO.tourNo}">
-            
-            <img th:src="@{/tour/DBGifReader} + '?tourNo=' + ${tourVO.tourNo}" alt="行程圖片">
-            
-            <div class="tour-details">
-              <div class="tour-title" th:text="${tourVO.tourName}"></div>
-              <div class="tour-info" th:text="${tourVO.tourIntro}"></div>
-              <div class="tour-price" th:text="'NT$ ' + ${tourVO.tourPrice}"></div>
-              <div class="tour-info">評論人數: <span th:text="${tourVO.tourGuys}"></span></div>
-              <div class="tour-info">評分: <span th:text="${tourVO.tourStar}"></span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      
-      
-      
     </div>
-  </div>
 
   <!-- 引入 Bootstrap JavaScript -->
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-	<script src="app.js"></script>	
-	<script>
-//  =========================
-	document.addEventListener('DOMContentLoaded', function () {
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
       var tourItems = document.querySelectorAll('.tour-item');
       
       tourItems.forEach(function (item) {
@@ -217,33 +150,46 @@
         });
       });
     });
-	
-	
-	
-// 	=============================
-	document.querySelectorAll('input[name="sort"]').forEach((radio) => {
-    radio.addEventListener('change', function() {
-        const [sortField, sortDirection] = this.value.split(',');
-        fetch(`/tours/sorted?sortField=${sortField}&sortDirection=${sortDirection}`)
-            .then(response => response.json())
-            .then(data => {
-                const tourList = document.getElementById('tourList');
-                tourList.innerHTML = ''; // 清空舊的列表
-                data.forEach(tour => {
-                    const tourItem = document.createElement('div');
-                    tourItem.innerHTML = `
-                        <h3>${tourVO.tourName}</h3>
-                        <p>tourPrice: $${tourVO.tourPrice}</p>
-                        <p>tourStar: ${tourVO.tourStar}</p>
-                    `;
-                    tourList.appendChild(tourItem);
-                });
-            })
-            .catch(error => console.error('Error:', error));
+
+    $(document).ready(function() {
+      $(".test").on("click", function(event) {
+        event.preventDefault();
+        var tourNo = $(this).next().val();
+        $.ajax({
+          url: "/tourCol/insert",
+          method: "POST",
+          data: { tourNo: tourNo },
+          success: function(response) {
+            var jsonResponse = JSON.parse(response);
+            alert(jsonResponse.message);
+          },
+          error: function() {
+            alert("發生錯誤");
+          }
+        });
+      });
     });
-});
 
-	</script>
+    function toggleHeart(element) {
+      const tourNo = $(element).data('tourNo');
+      const isCollected = $(element).hasClass('fas');
 
+      if (!isLoggedIn) {
+        window.location.href = '/member/loginMem'; // Redirect to login page
+        return;
+      }
+
+      $.ajax({
+        type: 'POST',
+        url: isCollected ? '/tourCol/remove' : '/tourCol/insert',
+        data: { tourNo: tourNo },
+        success: function(response) {
+          if (response.message === '已收藏' || response.message === '收藏成功') {
+            $(element).toggleClass('fas far');
+          }
+        }
+      });
+    }
+  </script>
 </body>
 </html>
