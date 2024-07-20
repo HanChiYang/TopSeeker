@@ -21,9 +21,9 @@
         max-width: 800px;
         margin-top: 20px;
     }
-    .card-header, .btn-primary {
-        background-color: #28a745;
-        border-color: #28a745;
+    .card-header {
+        background-color: #9EB384;
+        border-color: #9EB384;
     }
     .card-header {
         color: white;
@@ -74,37 +74,37 @@
                 
                 <div class="mb-3">
                     <label class="form-label">活動人數上限:</label>
-                    <input type="number" class="form-control" th:field="*{actMaxCount}" required>
+                    <input type="number" class="form-control" id="actMaxCount" th:field="*{actMaxCount}" required>
                     <div class="invalid-feedback">請填寫活動人數上限</div>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">活動最少人數:</label>
-                    <input type="number" class="form-control" th:field="*{actMinCount}" required>
+                    <input type="number" class="form-control" id="actMinCount" th:field="*{actMinCount}" required>
                     <div class="invalid-feedback">請填寫活動最少人數</div>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">報名開始日:</label>
-                    <input type="date" class="form-control small-date-input" th:field="*{actEnrollBegin}" required>
+                    <input type="date" class="form-control small-date-input" id="actEnrollBegin" th:field="*{actEnrollBegin}" readonly required>
                     <div class="invalid-feedback">請選擇報名開始日</div>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">報名結束日:</label>
-                    <input type="date" class="form-control small-date-input" th:field="*{actEnrollEnd}" required>
+                    <input type="date" class="form-control small-date-input" id="actEnrollEnd" th:field="*{actEnrollEnd}" required>
                     <div class="invalid-feedback">請選擇報名結束日</div>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">活動開始日:</label>
-                    <input type="date" class="form-control small-date-input" th:field="*{actStart}" required>
+                    <input type="date" class="form-control small-date-input" id="actStart" th:field="*{actStart}" required>
                     <div class="invalid-feedback">請選擇活動開始日</div>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">活動結束日:</label>
-                    <input type="date" class="form-control small-date-input" th:field="*{actEnd}" required>
+                    <input type="date" class="form-control small-date-input" id="actEnd" th:field="*{actEnd}" required>
                     <div class="invalid-feedback">請選擇活動結束日</div>
                 </div>
                                                                      
@@ -129,15 +129,31 @@
         Array.prototype.slice.call(forms)
             .forEach(function (form) {
                 form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity() || !validateFileInput()) {
+                    var valid = true;
+                    if (!form.checkValidity()) {
+                        valid = false;
+                    }
+
+                    if (!validateFileInput() || !validateDateInputs() || !validateCountInputs()) {
+                        valid = false;
+                    }
+
+                    if (!valid) {
                         event.preventDefault()
                         event.stopPropagation()
-                        alert("請填寫所有必填欄位並上傳圖片")
+                        if (!form.checkValidity()) {
+                            alert("請填寫所有必填欄位並上傳圖片");
+                        }
                     }
 
                     form.classList.add('was-validated')
                 }, false)
             })
+
+        // Set default date for actEnrollBegin
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById('actEnrollBegin').value = today;
+
     })()
 
     function validateFileInput() {
@@ -151,6 +167,54 @@
             fileInput.classList.remove('is-invalid');
             return true;
         }
+    }
+
+    function validateDateInputs() {
+        var actEnrollBegin = document.getElementById('actEnrollBegin').value;
+        var actEnrollEnd = document.getElementById('actEnrollEnd').value;
+        var actStart = document.getElementById('actStart').value;
+        var actEnd = document.getElementById('actEnd').value;
+
+        var valid = true;
+        var errorMsg = "";
+
+        if (actEnrollEnd < actEnrollBegin) {
+            valid = false;
+            errorMsg += "報名結束日不能早於報名開始日。\n";
+        }
+        if (actStart <= actEnrollEnd) {
+            valid = false;
+            errorMsg += "活動開始日一定要晚於報名結束日。\n";
+        }
+        if (actEnd < actStart) {
+            valid = false;
+            errorMsg += "活動結束日不能早於活動開始日。\n";
+        }
+
+        if (!valid) {
+            alert(errorMsg);
+        }
+
+        return valid;
+    }
+
+    function validateCountInputs() {
+        var actMaxCount = document.getElementById('actMaxCount').value;
+        var actMinCount = document.getElementById('actMinCount').value;
+
+        var valid = true;
+        var errorMsg = "";
+
+        if (parseInt(actMinCount) > parseInt(actMaxCount)) {
+            valid = false;
+            errorMsg += "活動最少人數不能超過活動人數上限。\n";
+        }
+
+        if (!valid) {
+            alert(errorMsg);
+        }
+
+        return valid;
     }
 </script>
 

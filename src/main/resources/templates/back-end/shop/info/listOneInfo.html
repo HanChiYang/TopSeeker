@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>修改消息結果</title>
+<title>修改結果</title>
 
 <!-- Bootstrap CSS -->
 <link
@@ -66,7 +66,7 @@ margin-right: auto;
 					<div class="col-sm-8" th:text="${shopInfoVO.infoDate}"></div>
 				</div>
 				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">商品狀態:</div>
+					<div class="col-sm-4 font-weight-bold">消息狀態:</div>
 					<div class="col-sm-8">
 						<span th:switch="${shopInfoVO.infoStatus}"> <span
 							th:case="'0'">下架</span> <span th:case="'1'">上架</span>
@@ -83,12 +83,12 @@ margin-right: auto;
 					<div class="col-sm-8" th:text="${shopInfoVO.infoHead}"></div>
 				</div>
 				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">消息內容:</div>
+					<div class="col-sm-4 font-weight-bold">內容:</div>
 					<pre class="col-sm-8" th:text="${shopInfoVO.infoContent}"></pre>
 				</div>
 
 				<div class="mb-3">
-					<label for="infoPic" class="form-label">消息圖片:</label>
+					<label for="infoPic" class="form-label">圖片:</label>
 					<div th:field="${shopInfoVO.infoNo}" id="infoPic" class="d-flex flex-row flex-wrap">
 							<img
 								th:src="@{/shop/DBGifReader4} + '?infoNo=' + *{shopInfoVO.infoNo}"
