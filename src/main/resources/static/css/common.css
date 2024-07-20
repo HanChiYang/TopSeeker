@@ -249,10 +249,3 @@ a.nav-link:hover {
 .nav-link {
    align-items: center;
   }
-  
-.navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000; /* 可以根据需要调整 z-index 的值 */
-}
