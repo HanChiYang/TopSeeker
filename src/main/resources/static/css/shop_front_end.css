@@ -53,7 +53,7 @@ nav.shopMainNavbar{
 .search-bar {
     display: flex;
     align-items: center;
-    margin-left: 30px;
+    margin-left: 40px;
 }
 
 .search-bar input[type="text"] {
@@ -86,20 +86,41 @@ nav.shopMainNavbar{
 
 .shoplink {
 	color: #FFFFFF;
+	padding: 5px 5px;
+	
+}
+
+.shoplink:hover {
+	color: #435334;
+	padding: 5px 5px;
 }
 
 .wishlist {
 	color: #404040;
-	font-size: 18px
+	font-size: 18px;
+	font-weight: 500;
+	padding: 0 10px;
 }
 
-.nav-item{
+.wishlist:hover {
+	color: white;
+/* 	font-size: 18px; */
+/* 	font-weight: 500; */
+/* 	padding: 0 5px; */
+}
+
+.shop-item{
 	font-size: 20px
 	
 }
 
 .nav-item-spacing {
- 	margin: 0 5px; /*左右間距，可以根據需求調整 */
+ 	margin: 0 8px; /*左右間距，可以根據需求調整 */
+}
+
+nav ul li a {
+    text-decoration: none;
+    font-weight: 550;
 }
 
 img#longlogo {

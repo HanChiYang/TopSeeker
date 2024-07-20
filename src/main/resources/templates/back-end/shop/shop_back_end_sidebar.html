@@ -1,0 +1,50 @@
+<!--     商城左側側邊欄 -->
+	<h4><b>【快速選單】</b></h4>
+
+	<ul class="nav flex-column">
+		<p><b> 商品管理</b></p>
+		<li class="shop-item"><a class="nav-link" href="/manage-products"
+			th:href="@{/shop/shopManagement/listAllProd}"> <i class="fa fa-box"></i>
+				管理商品
+		</a></li>
+		
+		<li class="shop-item"><a class="nav-link" href="/add-product"
+			th:href="@{/shop/shopManagement/addProd}"> <i class="fa fa-plus"></i> 新增商品
+		</a></li>
+		
+		<li class="shop-item"><a class="nav-link" href="/manage-products"
+		th:href="@{/shop/shopManagement/select_page}"> <i class="fa-solid fa-magnifying-glass"></i>
+			搜尋商品
+		</a></li>
+	</ul>
+	<br>
+	<ul class="nav flex-column">
+		<p><b> 訂單管理</b></p>
+		<li class="shop-item"><a class="nav-link" href="/manage-products"
+			th:href="@{/shop/order/listAllOrder}"> <i class="fa-regular fa-clipboard"></i>
+				管理訂單
+		</a></li>
+
+	</ul>
+	<br>
+	<ul class="nav flex-column">
+		<p><b> 優惠活動</b></p>
+		<li class="shop-item"><a class="nav-link" href="/manage-products"
+			th:href="@{/shop/sale/listAllSale}"> <i class="fa-solid fa-store"></i>
+				管理優惠活動
+		</a></li>
+		<li class="shop-item"><a class="nav-link" href="/add-product"
+			th:href="@{/shop/sale/addSale}"> <i class="fa fa-plus"></i> 新增優惠活動
+		</a></li>
+	</ul>
+	<br>
+	<ul class="nav flex-column">
+		<p><b> 商城最新消息</b></p>
+		<li class="shop-item"><a class="nav-link" href="/manage-products"
+			th:href="@{/shop/shopManagement/listAllShopInfo}"> <i class="fa-regular fa-newspaper"></i>
+				管理最新消息
+		</a></li>
+		<li class="shop-item"><a class="nav-link" href="/add-product"
+			th:href="@{/shop/shopManagement/addInfo}"> <i class="fa fa-plus"></i> 新增最新消息
+		</a></li>
+	</ul>
