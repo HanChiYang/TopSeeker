@@ -94,7 +94,7 @@
                 </tr>
                 <tr>
                     <th><label for="memPassword">密碼:</label></th>
-                    <td><input type="text" id="memPassword" th:field="*{memPassword}"
+                    <td><input id="memPassword" type="password" name="memPassword" th:value="*{memPassword}"
                                onclick="hideContent('memPassword.errors');">
                         <span th:if="${#fields.hasErrors('memPassword')}" th:errors="*{memPassword}" class="error"
                               id="memPassword.errors"></span></td>

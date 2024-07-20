@@ -39,16 +39,13 @@ public class KnowledgeController {
 	public String showKnowledge(ModelMap model) {
 		List<KnowledgeVO> knowListData = knowledgeSvc.getAllReleasedKnow();
 
-		model.addAttribute("konwListData", knowListData);
+		model.addAttribute("knowListData", knowListData);
 
 		return "front-end/knowledge/knowledgeInfo";
 	}
 
 
-
 	// ============Ajax新增刪除功能============
-
-
 	
 
 	// ============後端管理頁面============
@@ -64,10 +61,8 @@ public class KnowledgeController {
 		return "back-end/knowledge/listAllKnow";
 	}
 	
-	
 
 	// ============Ajax新增刪除功能============
-	
 	
 	// 依照消息編號更改上下架狀態
 	@PostMapping("/updateKnowStatus")
@@ -145,7 +140,7 @@ public class KnowledgeController {
 	// 修改新手知識
 	@PostMapping("/updateKnow")
 	public String update(@Valid KnowledgeVO KnowledgeVO, BindingResult result, ModelMap model,
-			@RequestParam("KnowPic") MultipartFile[] parts) throws IOException {
+			@RequestParam("knowPic") MultipartFile[] parts) throws IOException {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 	    // 設定修改當下的日期
@@ -167,7 +162,7 @@ System.out.println("有進來修改");
 			}
 		}
 		if (result.hasErrors()) {
-			return "back-end/knowledge/update_know_input";
+			return "back-end/knowledge/listOneKnow";
 		}
 		/*************************** 2.開始修改資料 *****************************************/
 		// EmpService empSvc = new EmpService();

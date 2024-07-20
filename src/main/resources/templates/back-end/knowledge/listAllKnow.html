@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>檢視/管理所有新手知識</title>
+<title>管理所有新手知識</title>
 
 <!-- Bootstrap CSS -->
 <link
@@ -178,11 +178,11 @@ margin: 0 auto;
 											});
 						});
 		
-				//Ajax修改商品上下架狀態
+				//Ajax修改新手知識上下架狀態
 				function updateknowStatus(knowNo, status) {
 					$.ajax({
 						type : "POST",
-						url : "/knowledge/updateknowStatus",
+						url : "/knowledge/updateKnowStatus",
 						data : {
 							knowNo : knowNo,
 							knowStatus : status
