@@ -1,18 +1,51 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8">
-<title>討論區文章管理</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta charset="utf-8">
+    <title>討論區文章管理</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet" th:href="@{/css/navbar.css}" />
 <link rel="stylesheet" th:href="@{/css/common.css}">
 <link rel="stylesheet" th:href="@{/css/participant.css}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+ <style>
+    .modal {
+        display: none; 
+        position: fixed; 
+        z-index: 1; 
+        padding-top: 100px; 
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto; 
+        background-color: rgb(0,0,0); 
+        background-color: rgba(0,0,0,0.4); 
+    }
 
-<style>
-</style>
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    </style>
 </head>
 <body>
 <nav th:insert="~{/front-end/navbar.html}"></nav>
@@ -20,7 +53,7 @@
 <div class="container"><h2>揪團去玩</h2></div>
 
 <div class="article-details">
-  <form class="add-article" th:action="@{/participant/insert}" method="post" th:object="${participantVO}" enctype="multipart/form-data">
+  <form class="add-article" th:action="@{/participant/insert}" method="post" th:object="${participantVO}" enctype="multipart/form-data" id="participantForm">
       <div>
       <label>參團人數:</label>
       <select th:field="*{actJoinCount}">
@@ -36,35 +69,142 @@
     <div>
       <label>活動名稱:</label>
       <input type="text" th:value="${actTitle}" readonly />
-      <input type="hidden" th:field="*{actVO.actNo}" />
+      <input type="hidden" th:field="*{actVO.actNo}" id="actNo"/>
     </div>
 
     <div>
       <label>會員名稱:</label>
       <input type="text" th:value="${memName}" readonly />
-      <input type="hidden" th:field="*{memberVO.memNo}" />
+      <input type="hidden" th:field="*{memberVO.memNo}" id="memNo"/>
     </div>
 
     <div>
-      <button type="submit" id="submit">送出新增</button>
+      <button type="button" id="submit">送出新增</button>
     </div>
   </form>
 </div>
 
+<!-- 確認報名彈窗 -->
+<div id="confirmModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeConfirmModal">&times;</span>
+    <p>你確定要報名這個活動嗎？</p>
+    <button id="confirmSubmit">確認</button>
+    <button id="cancelConfirm">取消</button>
+  </div>
+</div>
+
+<!-- 報名成功彈窗 -->
+<div id="successModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeSuccessModal">&times;</span>
+    <p>你已成功報名該活動！</p>
+    <button id="closeSuccess">確認</button>
+  </div>
+</div>
+
+<!-- 已報名彈窗 -->
+<div id="alreadySignedUpModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeAlreadySignedUpModal">&times;</span>
+    <p>你已報名該活動！</p>
+    <button id="closeAlreadySignedUp">確認</button>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+
 <script>
 $(document).ready(function() {
     $('#example').DataTable();
-});
-</script>
 
-<script type="text/javascript">
-function hideContent(d) {
-    document.getElementById(d).style.display = "none";
-}
-function cancelAdd() {
-    history.back();
-}
+    // 获取模态框
+    var confirmModal = document.getElementById("confirmModal");
+    var successModal = document.getElementById("successModal");
+    var alreadySignedUpModal = document.getElementById("alreadySignedUpModal");
+
+    // 获取 <span> 元素，设置关闭模态框按钮
+    var closeConfirmModal = document.getElementById("closeConfirmModal");
+    var closeSuccessModal = document.getElementById("closeSuccessModal");
+    var closeSuccess = document.getElementById("closeSuccess");
+    var closeAlreadySignedUpModal = document.getElementById("closeAlreadySignedUpModal");
+    var closeAlreadySignedUp = document.getElementById("closeAlreadySignedUp");
+
+    // 获取触发模态框的按钮
+    var submitBtn = document.getElementById("submit");
+    var confirmSubmitBtn = document.getElementById("confirmSubmit");
+    var cancelConfirmBtn = document.getElementById("cancelConfirm");
+
+    // 点击按钮打开模态框
+    submitBtn.onclick = function() {
+        var actNo = document.getElementById("actNo").value;
+        var memNo = document.getElementById("memNo").value;
+        $.ajax({
+            url: '/participant/checkIfSignedUp',
+            method: 'POST',
+            data: {
+                actNo: actNo,
+                memNo: memNo
+            },
+            success: function(response) {
+                if (response.signedUp) {
+                    alreadySignedUpModal.style.display = "block";
+                } else {
+                    confirmModal.style.display = "block";
+                }
+            },
+            error: function() {
+                alert("發生錯誤，請稍後再試。");
+            }
+        });
+    }
+
+    // 点击 <span> 元素关闭模态框
+    closeConfirmModal.onclick = function() {
+        confirmModal.style.display = "none";
+    }
+
+    closeSuccessModal.onclick = function() {
+        successModal.style.display = "none";
+    }
+
+    closeSuccess.onclick = function() {
+        successModal.style.display = "none";
+    }
+
+    closeAlreadySignedUpModal.onclick = function() {
+        alreadySignedUpModal.style.display = "none";
+    }
+
+    closeAlreadySignedUp.onclick = function() {
+        alreadySignedUpModal.style.display = "none";
+    }
+
+    // 点击取消按钮关闭模态框
+    cancelConfirmBtn.onclick = function() {
+        confirmModal.style.display = "none";
+    }
+
+    // 点击确认按钮提交表单并打开成功模态框
+    confirmSubmitBtn.onclick = function() {
+        confirmModal.style.display = "none";
+        var participantForm = document.getElementById("participantForm");
+        participantForm.submit();
+        successModal.style.display = "block";
+    }
+
+    // 在用户点击模态框外部时关闭模态框
+    window.onclick = function(event) {
+        if (event.target == confirmModal) {
+            confirmModal.style.display = "none";
+        } else if (event.target == successModal) {
+            successModal.style.display = "none";
+        } else if (event.target == alreadySignedUpModal) {
+            alreadySignedUpModal.style.display = "none";
+        }
+    }
+});
 </script>
 
 </body>
