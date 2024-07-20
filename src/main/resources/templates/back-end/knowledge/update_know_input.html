@@ -25,7 +25,7 @@
 
 
 <!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<link rel="stylesheet" th:href="@{/css/common.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
@@ -50,7 +50,7 @@
 	<main class="shopManagementContent">
 		<div class="updateknowDisplay">
 			<H3>新手知識修改</H3>
-			<form th:action="@{/Knowledge/getOneKnow_For_Update}" method="post"
+			<form th:action="@{/knowledge/updateKnow}" method="post"
 				th:object="${knowledgeVO}" enctype="multipart/form-data">
 
 				
@@ -89,20 +89,15 @@
 				<div class="mb-3">
 					<label for="knowPic" class="form-label">圖片:</label>
 					<div id="knowPic">
-						<div th:field="${knowledgeVO.knowPic}">
+						<div>
 							<img th:src="@{/knowledge/DBGifReader} + '?knowNo=' + *{knowNo}"
 								class="img-thumbnail mb-2" width="400" height="300">
-							<!--刪除按鈕 -->
-							<!-- 						<button type="button" class="btn btn-danger btn-sm" -->
-							<!-- 							th:data-index="${iterStat.index}" -->
-							<!-- 							th:data-prod-pic-no="${Pic}" id="" -->
-							<!-- 							th:value="${Pic}">刪除</button> -->
 						</div>
 
 						<br>
 						<br> 
 						<label for="knowPic" class="form-label">新增圖片</label>
-						<input type="file" name="knowPic" id="knowPic"
+						<input type="file" name="knowPic" id="knowPic" th:field="${knowledgeVO.knowPic}"
 							class="form-control">
 
 						<!-- 預覽圖片容器 -->
