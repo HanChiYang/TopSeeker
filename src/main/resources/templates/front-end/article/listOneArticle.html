@@ -6,9 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet" th:href="@{/css/navbar.css}" />
 <link rel="stylesheet" th:href="@{/css/common.css}">
-<link rel="stylesheet" th:href="@{/css/article.css}">
+<link rel="stylesheet" th:href="@{/css/articleindex.css}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
 <style>
@@ -36,9 +35,30 @@
 .button:active {
     background-color: #004085;
 }
+textarea {
+    width: 100%;
+    height: 150px; /* 更改這裡的高度來放大文本框 */
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    resize: vertical; /* 允許用戶調整高度 */
+}
 </style>
 </head>
 <body>
+    <div class="video-background">
+        <video autoplay muted loop id="video1">
+            <source src="/images/waterfall.mp4" type="video/mp4">
+        </video>
+        <video autoplay muted loop id="video2" style="display: none;">
+            <source src="/images/waterfall.mp4" type="video/mp4">
+        </video>
+        <video autoplay muted loop id="video3" style="display: none;">
+            <source src="/images/waterfall.mp4" type="video/mp4">
+        </video>
+    </div>
+    
 <nav th:insert="~{/front-end/navbar.html}"></nav>
 
 <div class="container"><h4>登山情報</h4></div>
@@ -97,6 +117,8 @@
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<script src="/js/article.js"></script>
+
 <script>
  
 </script>
