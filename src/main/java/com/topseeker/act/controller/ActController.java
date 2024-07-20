@@ -300,6 +300,18 @@ public class ActController {
 	            
 	            .collect(Collectors.toList());//加入集合
 
+	    Map<Integer, Double> ratingMap = new HashMap<>();
+		//計算評價
+	    for (ActVO act : list) {
+	        double rating = 0;
+	        if (act.getEvalSum() != 0) {
+	        	// 四捨五入到小數點後一位
+	            rating = Math.round((double) 
+	            		act.getActRateSum() / act.getEvalSum() * 10.0) / 10.0;
+	        }
+	        ratingMap.put(act.getActNo(), rating); 
+	    }
+	    model.addAttribute("ratingMap", ratingMap);  // 傳遞 ratingMap 到前端
 	    model.addAttribute("memMyAct", list);
 		return "front-end/act/memMyAct";
 	}    
@@ -347,8 +359,8 @@ public class ActController {
 
         Session session = sessionFactory.openSession();
         List<ActVO> list = HibernateUtil_CompositeQuery_Act.getAllC(queryParams, session);
-     // 按開始日期降序排列
-        list.sort((a, b) -> b.getActStart().compareTo(a.getActStart()));
+     // 按報名截止日升序排列
+        list.sort((a, b) -> a.getActEnrollEnd().compareTo(b.getActEnrollEnd()));
         model.addAttribute("actListData", list);
         return "front-end/act/listAllActFragment :: resultsList";
 	}
@@ -362,8 +374,8 @@ public class ActController {
         Map<String, String[]> queryParams = new HashMap<>(map);
         Session session = sessionFactory.openSession();
         List<ActVO> list = HibernateUtil_CompositeQuery_Act.getAllC(queryParams, session);
-     // 按開始日期降序排列
-        list.sort((a, b) -> b.getActStart().compareTo(a.getActStart()));
+     // 按報名截止日升序排列
+        list.sort((a, b) -> a.getActEnrollEnd().compareTo(b.getActEnrollEnd()));
         model.addAttribute("actListData", list);
         return "front-end/act/listAllActFragment :: resultsList";
     }

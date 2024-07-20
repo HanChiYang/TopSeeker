@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TopSeeker-開團列表</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://kit.fontawesome.com/de9b92a469.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">    
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" />
@@ -24,7 +25,7 @@
      }
 
      table.dataTable {
-        font-size: 14px;
+        font-size: 12px;
      }
 
      .card {
@@ -36,10 +37,11 @@
         border-collapse: collapse;
      }
      
-     .no-wrap {
-        white-space: nowrap;
-        max-width: 30px;
-     }
+     
+     table.dataTable.row-border tbody tr:first-child th, table.dataTable.row-border tbody tr:first-child td, table.dataTable.display tbody tr:first-child th, table.dataTable.display tbody tr:first-child td {
+	    border-top: none;
+	    white-space: nowrap;
+	 }
      
      /* 彈窗美化 */
     .modal-header {
@@ -66,6 +68,9 @@
     .max-min-title-column {
         max-width: 30px;        
     }
+    .date-title-column {
+        max-width: 45px;        
+    }
     
     div.container {
 	    max-width: 90%;
@@ -82,11 +87,17 @@
 	    color:#435334;
 	    font-weight: bold;
 	}
+	.star-rating .fa-star,
+        .star-rating .fa-star-half-alt,
+        .star-rating .far.fa-star {
+            color: #f8ce0b;
+        }
     </style>    
 </head>
 <body>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>   
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
 <!-- jQuery DataTables 設定 -->
 <script th:inline="none">
@@ -180,6 +191,22 @@
             var successModal = new bootstrap.Modal(document.getElementById('successModal'));
             successModal.show();
         }
+        // 動態生成星星評價
+        $('.star-rating').each(function() {
+            var rating = $(this).data('rating');
+            var fullStars = Math.floor(rating);
+            var halfStar = rating % 1 !== 0;
+
+            for (var i = 0; i < fullStars; i++) {
+                $(this).append('<i class="fas fa-star"></i>');
+            }
+            if (halfStar) {
+                $(this).append('<i class="fas fa-star-half-alt"></i>');
+            }
+            for (var i = fullStars + (halfStar ? 1 : 0); i < 5; i++) {
+                $(this).append('<i class="far fa-star"></i>');
+            }
+        });
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -208,10 +235,10 @@
                             <th class="max-min-title-column">最低人數</th>
                             <th class="current-title-column">已參與人數</th>
                             <th>待審核人數</th>
-                            <th class="date-column">報名起始日</th>
-                            <th class="date-column">報名截止日</th>
-                            <th class="date-column">活動開始日</th>
-                            <th class="date-column">活動結束日</th>
+                            <th class="date-title-column">報名起始</th>
+                            <th class="date-title-column">報名截止</th>
+                            <th class="date-title-column">活動開始</th>
+                            <th class="date-title-column">活動結束</th>
                             <th>狀態</th>
                             <th>評價</th> 
                             <th>修改活動</th>
@@ -242,7 +269,11 @@
                                     <span th:case="2">已完成</span>
                                     <span th:case="3">已取消</span>
                                 </td>
-                                <td th:text="${actVO.evalSum == 0 ? '尚無評價' : #numbers.formatDecimal(actVO.actRateSum / actVO.evalSum, 1, 1)}"></td>
+<!--                                 <td th:text="${actVO.evalSum == 0 ? '尚無評價' : #numbers.formatDecimal(actVO.actRateSum / actVO.evalSum, 1, 1)}"></td> -->
+                                <td>
+                                    <div class="star-rating" th:attr="data-rating=${ratingMap[actVO.actNo]}"></div>
+                                </td>
+                                
                                 <td>
                                     <form method="post" th:action="@{/act/updateActByMem}">
                                         <button type="submit" class="btn btn-warning modify-btn" th:classappend="${actVO.actStatus != 0} ? 'btn-secondary' : 'btn-warning'" th:disabled="${actVO.actStatus != 0 || actVO.actStatus == 3}" th:data-status="${actVO.actStatus}">修改</button>
@@ -274,11 +305,11 @@
                             <th class="max-min-title-column">人數上限</th>
                             <th class="max-min-title-column">最低人數</th>
                             <th class="current-title-column">已參與人數</th>
-                            <th class="no-wrap">待審核人數</th>
-                            <th>報名起始日</th>
-                            <th>報名截止日</th>
-                            <th>活動開始日</th>
-                            <th>活動結束日</th>
+                            <th>待審核人數</th>
+                            <th class="date-title-column">報名起始</th>
+                            <th class="date-title-column">報名截止</th>
+                            <th class="date-title-column">活動開始</th>
+                            <th class="date-title-column">活動結束</th>
                             <th>狀態</th>
                             <th>評價</th>
                             <th>修改活動</th>
