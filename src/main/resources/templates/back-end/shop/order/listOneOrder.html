@@ -1,9 +1,60 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>訂單詳情</title>
+
+<!-- ●●js  for jquery datatables 用 -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" /> <!-- ●●css for jquery datatables 用 -->
+
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+	crossorigin="anonymous">
+
+<!-- icon用 -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- 從 Google Fonts 引入 "Playfair Display" 字體 -->
+<link
+	href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap"
+	rel="stylesheet">
+
+<!-- 商城導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
+
+
+
 <style type="text/css">
-	
+main{ 
+     margin-top: 20px; 
+     margin-left: 250px; 
+     padding: 20px; 
+}
+
+/* ========main區======	 */
+	div.container{
+		display: flex;
+		flex-wrap: nowrap;
+		position: relative;
+		padding: 20px;
+		justify-content: space-evenly;
+	}
+	div.left{
+		position: relative;
+		width: 50%;
+		overflow-wrap:break-word; 
+	}
+	div.right{
+		position: relative;
+		width: 50%
+		
+	}
+
     span {
 		display: inline-block;
 		width: 150px;
@@ -11,76 +62,93 @@
 		font-weight: bold;
 	}
 	
-	h3 span {
+	h3{
 		text-align: center
 	}
 	
-	table, td, th{
-  		border: 1px solid black;
- 		border-collapse: collapse;
- 		width: 500px;
- 		text-align: left;
+	table{
+		position: relative;
+		background-color: rgb(255, 254, 211);
+		border-radius: 20px;
+		left: 20px;
 	}
 	
-	th{
-		background-color:aqua;
+	
+	th,
+	thead{
+		text-align: center;
+		font-size: 18px;
 	}
+ 
+ 	tbody,
+ 	td {
+ 		text-align: center;
+ 		font-size: 16px;
+	 } 
+	
 </style>
 </head>
 <body>
-<nav>
-	<div align="center">
-		<h3>Topseeker - 訂單詳情</h3></br>
-		<h3><a th:href="@{/shop/order/listAllOrder}"><img th:src="@{/images/tomcat.gif}" width="100" height="100" border="0">回訂單總覽</a></h3></div>
-</nav>
-	<div align="center" th:fragment="listOneOrder-div"> 
-		<h3><span>查詢結果</span></h3>
+	<!-- topseeker後台Navbar -->
+	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
+
+	<!-- 商城後台用Navbar + 左側邊欄 -->
+	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
 		
-		<span>訂單編號	:</span><span th:text="${orderVO.orderNo}"></span><br/>
-		<span>會員編號	:</span><span th:text="${orderVO.memberVO.memNo}"></span><br/>
-		<span>會員姓名	:</span><span th:text="${orderVO.memberVO.memName}"></span><br/>
-		<span>促銷活動名稱	:</span><span th:text="${orderVO.saleVO.saleName}"></span><br/>
-		<span>訂單日期	:</span><span th:text="${orderVO.orderDate}"></span><br/>
-		<span>訂單原始金額	:</span><span th:text="${orderVO.orderAmount}"></span><br/>
-		<span>訂單運費	:</span><span th:text="${orderVO.orderShipment}"></span><br/>
-		<span>折扣金額	:</span><span th:text="${orderVO.orderDiscount}"></span><br/>
-		<span>訂單實付金額	:</span><span th:text="${orderVO.orderBill}"></span><br/>
-		<span>收件人姓名	:</span><span th:text="${orderVO.orderName}"></span><br/>
-		<span>收件人電話	:</span><span th:text="${orderVO.orderPhone}"></span><br/>
-		<span>收件人住址	:</span><span th:text="${orderVO.orderAddress}"></span><br/>
-		<span>訂單狀態	:</span><span class="orderStatus" th:text="${orderVO.orderStatus}"></span><br/>
-		<span>付款狀態	:</span><span class="paymentStatus" th:text="${orderVO.paymentStatus}"></span><br/>
-		<span>付款方式	:</span><span class="paymentMethod" th:text="${orderVO.paymentMethod}"></span><br/>
-		<span>運送方式	:</span><span class="deliveryMethod" th:text="${orderVO.deliveryMethod}"></span><br/>
-		<span>訂單備註	:</span><span th:text="${orderVO.remarks}"></span><br/>
-		<br/> 
-		<form method="post" th:action="@{/shop/order/getOne_For_Update}" style="margin-bottom: 0px;">
-			 <input type="submit" value="修改">
-			 <input type="hidden" name="orderNo" th:value="${orderVO.orderNo}"></form>
-		 
-顯示 OrderDetailVO 資料
-        <h3>訂單明細</h3>
-        <table id="orderDetailList" class="display" style="width: 100%">
-            <thead>
-                <tr style="background-color:aqua">
-                    <th>所購商品名稱</th>
-                    <th>價格</th>
-                    <th>購買數量</th>
-                </tr>
-            </thead>
-            <tbody>
-                <th:block th:each="orderDetail : ${orderDetails}">
-                <tr>
-                    <td th:text="${orderDetail.productVO.prodName}"></td>
-                    <td th:text="${orderDetail.orderPrice}"></td>
-                    <td th:text="${orderDetail.orderQty}"></td>
-                </tr>
-                </th:block>
-            </tbody>
-            </table>
-			
-		</div> 
+	<main class="content" align="center"> 
+		<h3>查詢結果</h3>
+		<div class="container">
+			<div class="left">
+				<span>訂單編號	:</span><span th:text="${orderVO.orderNo}"></span><br/>
+				<span>會員編號	:</span><span th:text="${orderVO.memberVO.memNo}"></span><br/>
+				<span>會員姓名	:</span><span th:text="${orderVO.memberVO.memName}"></span><br/>
+				<span>促銷活動名稱	:</span><span th:text="${orderVO.saleVO.saleName}"></span><br/>
+				<span>訂單日期	:</span><span th:text="${orderVO.orderDate}"></span><br/>
+				<span>訂單原始金額	:</span><span th:text="${orderVO.orderAmount}"></span><br/>
+				<span>訂單運費	:</span><span th:text="${orderVO.orderShipment}"></span><br/>
+				<span>折扣金額	:</span><span th:text="${orderVO.orderDiscount}"></span><br/>
+				<span>訂單實付金額	:</span><span th:text="${orderVO.orderBill}"></span><br/>
+				<span>收件人姓名	:</span><span th:text="${orderVO.orderName}"></span><br/>
+				<span>收件人電話	:</span><span th:text="${orderVO.orderPhone}"></span><br/>
+				<span>收件人住址	:</span><span th:text="${orderVO.orderAddress}"></span><br/>
+				<span>訂單狀態	:</span><span class="orderStatus" th:text="${orderVO.orderStatus}"></span><br/>
+				<span>付款狀態	:</span><span class="paymentStatus" th:text="${orderVO.paymentStatus}"></span><br/>
+				<span>付款方式	:</span><span class="paymentMethod" th:text="${orderVO.paymentMethod}"></span><br/>
+				<span>運送方式	:</span><span class="deliveryMethod" th:text="${orderVO.deliveryMethod}"></span><br/>
+				<span>訂單備註	:</span><span th:text="${orderVO.remarks}"></span><br/>
+			</div>
+			<div class="right">
+				<!-- 	顯示 OrderDetailVO 資料 -->
+		        <table id="orderDetailData" class="display" style="width: 80%">
+		            <thead>
+		                <tr>
+		                    <th>購買項目</th>
+		                    <th>商品單價</th>
+		                    <th>購買數量</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+		                <th:block th:each="details : ${orderDetailData}">
+		                <tr>
+		                    <td th:text="${details.shopProductVO.prodName}"></td>
+		                    <td th:text="${details.orderPrice}" style="width: 30%"></td>
+		                    <td th:text="${details.orderQty}" style="width: 30%"></td>
+		                </tr>
+		                </th:block>
+		             </tbody>
+		          </table>
+				</div>
+		
+			</div>
+		<button onclick="goBack()" class="btn btn-success">回訂單列表</button>		
+		</main> 
 	<script>
+	
+		function goBack() {
+	    	window.history.back();
+		}
+	
+	
 		var orderStatusElements = document.querySelectorAll(".orderStatus");
 		orderStatusElements.forEach(function (e) {
             var orderStatus = e.textContent.trim();
