@@ -59,8 +59,9 @@
         font-weight: bold;
     }
     .title-column {
-        max-width: 90px; /* 設置活動標題欄位的最大寬度 */
-        word-wrap: break-word;
+        width: 90px; /* 設置活動標題欄位的最大寬度 */
+        word-wrap: break-word; /* 使內容在超過寬度時自動換行 */
+        white-space: normal; /* 使內容正常換行 */
     }
     .current-title-column {
         max-width: 45px;        
@@ -71,9 +72,12 @@
     .date-title-column {
         max-width: 45px;        
     }
+    .count-column {
+        max-width: 20px;        
+    }
     
     div.container {
-	    max-width: 90%;
+	    max-width: 96%;
 	    padding: 20px;
 	    background-color: #CEDEBD;
 	    border-radius: 10px;
@@ -229,7 +233,7 @@
                 <table id="example" class="display table table-striped table-bordered">
                     <thead>
                         <tr style="background-color: #90c320;">
-                            <th>計數</th>
+                            <th class="count-column">計數</th>
                             <th class="title-column">活動標題</th>                           
                             <th class="max-min-title-column">人數上限</th>
                             <th class="max-min-title-column">最低人數</th>
@@ -249,7 +253,12 @@
                         <th:block th:each="actVO : ${memMyAct}">
                             <tr th:classappend="${actVO.actStatus == 3} ? 'cancelled' : ''">
                                 <td th:text="${actVOStat.count}"></td>
-                                <td class="title-column" th:text="${actVO.actTitle}"></td>                                                                
+                                <td>
+                                	<form method="post" th:action="@{/act/details}" id="detailForm">
+                                        <input type="hidden" name="actNo" th:value="${actVO.actNo}" />
+                                        <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 14px; text-align: left;" th:text="${actVO.actTitle}"></button>
+                                    </form>
+                                </td>                                                                
                                 <td th:text="${actVO.actMaxCount}"></td>
                                 <td th:text="${actVO.actMinCount}"></td>
                                 <td th:text="${actVO.actCurrentCount}"></td>
@@ -259,10 +268,10 @@
 									    <button type="submit" class="btn btn-primary ms-2" th:classappend="${actVO.actCheckCount == 0 || actVO.actStatus == 3} ? 'disabled' : ''" th:disabled="${actVO.actCheckCount == 0 || actVO.actStatus == 3}">審核</button>
 									</form>
                                 </td>
-                                <td class="no-wrap" th:text="${actVO.actEnrollBegin}"></td>
-                                <td class="no-wrap" th:text="${actVO.actEnrollEnd}"></td>
-                                <td class="no-wrap" th:text="${actVO.actStart}"></td>
-                                <td class="no-wrap" th:text="${actVO.actEnd}"></td>
+                                <td class="date-title-column" th:text="${actVO.actEnrollBegin}"></td>
+                                <td class="date-title-column" th:text="${actVO.actEnrollEnd}"></td>
+                                <td class="date-title-column" th:text="${actVO.actStart}"></td>
+                                <td class="date-title-column" th:text="${actVO.actEnd}"></td>
                                 <td th:switch="${actVO.actStatus}">
                                     <span th:case="0">揪團中</span>
                                     <span th:case="1">已成團</span>
@@ -301,7 +310,7 @@
                     <thead>
                         <tr style="background-color: #dc3545;">
                             <th>計數</th>
-                            <th>活動標題</th>
+                            <th class="title-column">活動標題</th>
                             <th class="max-min-title-column">人數上限</th>
                             <th class="max-min-title-column">最低人數</th>
                             <th class="current-title-column">已參與人數</th>
