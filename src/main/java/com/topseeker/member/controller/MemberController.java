@@ -173,12 +173,10 @@ public class MemberController {
 	        String contextPath = null;
 	        if (index != -1) {
 	        	contextPath = fullURL.substring(0, index);
-	            System.out.println(contextPath);
 	        }
 	        
 	        String url = contextPath + "/member/resetPassword?token=" + token;
-	        String url2 = request.getContextPath() + "/member/resetPassword?token=" + token;
-	        String message = "請於三分鐘內點擊超連結以重設密碼: \n" + url + "\n" + url2;
+	        String message = "請於三分鐘內點擊超連結以重設密碼: \n" + url;
 
 	        MailManager mailManager = new MailManager(mailServerPwd, mailServerUser);
 	        List<String> to = List.of(memEmail);
