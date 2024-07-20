@@ -42,7 +42,6 @@ public class CartController {
 	@Autowired
 	private MemberService memberSvc;
 	
-
 	
 //////////////////////////////////////////	
 	//購物車顯示畫面
@@ -159,6 +158,7 @@ public class CartController {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
 		Integer loginMemNo = loggedInMember.getMemNo();
+		
 		/*************************** 2.開始刪除資料 *****************************************/
 		cartSvc.deleteMemAllCart(loginMemNo);
 		/*************************** 3.刪除完成,準備轉交(Send the Success view) **************/
@@ -191,11 +191,11 @@ public class CartController {
 	    CartVO cartVO = new CartVO();
 	    for (int i = 0; i < cartDetails.size(); i++) {
 	        cartVO = cartDetails.get(i);
-	        Integer cartNo = cartVO.getCartNo();
-	        Integer prodNo = cartVO.getShopProductVO().getProdNo();
-	        String prodName = cartVO.getShopProductVO().getProdName();
-	        Integer prodPrice = cartVO.getShopProductVO().getProdPrice();
-	        Integer cartQty = cartVO.getProdQty();
+	        cartVO.getCartNo();
+	        cartVO.getShopProductVO().getProdNo();
+	        cartVO.getShopProductVO().getProdName();
+	        cartVO.getShopProductVO().getProdPrice();
+	        cartVO.getProdQty();
 	      
 
 	        model.addAttribute("cartVO", cartVO);

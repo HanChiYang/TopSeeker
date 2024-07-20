@@ -129,7 +129,7 @@ public class OrderController {
 	            orderVO.setOrderAddress(orderAddresscvs);
 	        }
 	        
-	      
+	        //加入訂單明細
 			List<CartVO> cartItems = cartSvc.getMemAllList(loginMemNo);
             for (CartVO cartItem : cartItems) {
                 OrderDetailVO detail = new OrderDetailVO();
