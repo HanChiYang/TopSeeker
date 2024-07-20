@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.management.Notification;
+
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.topseeker.notification.model.NotificationRepository;
 import com.topseeker.shop.orderdetail.model.OrderDetailRepository;
 import com.topseeker.shop.orderdetail.model.OrderDetailVO;
 
@@ -27,6 +30,9 @@ public class OrderService {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
+	@Autowired
+	NotificationRepository notirepository;
+	
 	
 	@Transactional
 	public void addOrderWithOrderDetail(OrderVO orderVO) {		
@@ -37,13 +43,26 @@ public class OrderService {
             detail.setOrderVO(orderVO);
             odrepository.save(detail);
         }
-		
+       
 	}
 
-	
+	@Transactional
 	public void updateOrder(OrderVO orderVO) {
-		repository.save(orderVO);
+		
+        Optional<OrderVO> existingOrderOpt = repository.findById(orderVO.getOrderNo());
+        if (existingOrderOpt.isPresent()) {
+            OrderVO existingOrder = existingOrderOpt.get();
+            existingOrder.setOrderName(orderVO.getOrderName());
+            existingOrder.setOrderPhone(orderVO.getOrderPhone());
+            existingOrder.setOrderAddress(orderVO.getOrderAddress());
+            existingOrder.setOrderStatus(orderVO.getOrderStatus());
+            existingOrder.setPaymentStatus(orderVO.getPaymentStatus());
+            existingOrder.setRemarks(orderVO.getRemarks());
+                       
+            repository.save(existingOrder);
+        }
 	}
+	
 	
 	public void deleteOrder(Integer orderNo) {
 		if (repository.existsById(orderNo))

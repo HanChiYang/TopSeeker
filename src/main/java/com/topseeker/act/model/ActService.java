@@ -43,9 +43,13 @@ public class ActService {
 	}
 	//刪除
 	public void deleteAct(Integer actNo) {
-		if (repository.existsById(actNo))
-			repository.deleteByActNo(actNo);
-
+//		if (repository.existsById(actNo))
+//			repository.deleteByActNo(actNo);
+	    ActVO act = repository.findById(actNo)
+	            .orElseThrow(() -> new IllegalArgumentException("Invalid article ID: " + actNo));
+	    
+	    act.setActStatus(3);
+	    repository.save(act);
 	}
 
 	public ActVO getOneAct(Integer actNo) {
