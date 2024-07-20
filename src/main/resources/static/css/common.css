@@ -250,7 +250,7 @@ a.nav-link:hover {
    align-items: center;
   }
   
-  .navbar {
+.navbar {
     position: fixed;
     top: 0;
     width: 100%;
