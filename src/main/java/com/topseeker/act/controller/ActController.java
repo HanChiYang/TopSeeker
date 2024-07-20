@@ -352,6 +352,8 @@ public class ActController {
 
         Session session = sessionFactory.openSession();
         List<ActVO> list = HibernateUtil_CompositeQuery_Act.getAllC(queryParams, session);
+     // 按開始日期降序排列
+        list.sort((a, b) -> b.getActStart().compareTo(a.getActStart()));
         model.addAttribute("actListData", list);
         return "front-end/act/listAllActFragment :: resultsList";
 	}
@@ -365,6 +367,8 @@ public class ActController {
         Map<String, String[]> queryParams = new HashMap<>(map);
         Session session = sessionFactory.openSession();
         List<ActVO> list = HibernateUtil_CompositeQuery_Act.getAllC(queryParams, session);
+     // 按開始日期降序排列
+        list.sort((a, b) -> b.getActStart().compareTo(a.getActStart()));
         model.addAttribute("actListData", list);
         return "front-end/act/listAllActFragment :: resultsList";
     }
