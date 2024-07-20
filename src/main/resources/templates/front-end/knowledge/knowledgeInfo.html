@@ -22,9 +22,28 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    margin: 0;
+    margin-top: 70;
     padding: 20px;
     color: #333;
+}
+
+div.knowMainContent {
+    margin: 0 auto;
+    margin-top: 100px;
+    max-width: 600px;
+}
+
+h1.page-title {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #333;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%; /* 使標題寬度與 news-item 相同 */
+    box-sizing: border-box;
 }
 
 .news-container {
@@ -38,12 +57,25 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
 .news-item img {
     max-width: 100%;
     height: auto;
     border-radius: 8px;
+    position: relative;
+}
+
+.news-item .publish-date {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: #555;
+    font-size: 14px;
 }
 
 .news-item h2 {
@@ -78,6 +110,8 @@ body {
 .news-item .read-more-btn:hover {
     background-color: #333924;
 }
+
+
 </style>
 </head>
 <body>
@@ -85,15 +119,21 @@ body {
     <nav th:insert="~{/front-end/navbar.html}"></nav>
 
 
+<div class="knowMainContent">
+	<h1 class="page-title">登山新手知識</h1>
+	
     <div class="news-container">
         <div class="news-item" th:each="knowledgeVO: ${knowListData}" th:data-know-no="${knowledgeVO.knowNo}">
-<!--             <img th:src="@{/knowledge/DBGifReader} + '?knowNo=' + ${knowledgeVO.knowNo}" alt="文章圖片"> -->
+            <div class="publish-date" th:text="'發布日期：' + ${#dates.format(knowledgeVO.knowPublishDate, 'yyyy-MM-dd')}"></div>
+            <br>
+            <img th:src="@{/knowledge/DBGifReader(knowNo=${knowledgeVO.knowNo})}" alt="文章圖片">
             <h2 th:text="${knowledgeVO.knowTitle}"></h2>
-            <p class="content-preview" th:text="${#strings.abbreviate(knowledgeVO.knowContent, 200)}"></p>
+            <p class="content-preview" th:text="${#strings.abbreviate(knowledgeVO.knowContent, 100)}"></p>
             <p class="full-content" th:text="${knowledgeVO.knowContent}"></p>
             <button class="read-more-btn" onclick="toggleContent(this)">觀看更多</button>
         </div>
     </div>
+</div>
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
