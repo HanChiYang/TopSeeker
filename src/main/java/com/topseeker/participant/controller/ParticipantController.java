@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -41,6 +42,7 @@ import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
 import com.topseeker.participant.model.ParticipantService;
 import com.topseeker.participant.model.ParticipantVO;
+import java.util.HashMap;
 
 @Controller
 @Validated
@@ -326,6 +328,16 @@ public class ParticipantController {
 	    model.addAttribute("participantListData", list);
 	    return "front-end/participant/participantCheck"; 
 	}
-
+	
+	@PostMapping("/checkIfSignedUp")
+	@ResponseBody
+	public Map<String, Object> checkIfSignedUp(@RequestParam("actNo") Integer actNo, @RequestParam("memNo") Integer memNo) {
+	    Map<String, Object> response = new HashMap<>();
+	    List<ParticipantVO> participants = participantSvc.getAll();
+	    boolean signedUp = participants.stream()
+	                                    .anyMatch(p -> p.getActVO().getActNo().equals(actNo) && p.getMemberVO().getMemNo().equals(memNo));
+	    response.put("signedUp", signedUp);
+	    return response;
+	}
 
 }
