@@ -20,9 +20,9 @@ font-size: 12px;
 body > nav > nav {
 	padding:0 !important;
 }
-body > nav > nav > div {
-	background-color: #CEDEBD;
-}
+/* body > nav > nav > div { */
+/* 	background-color: #CEDEBD; */
+/* } */
 
 nav ul {
 	

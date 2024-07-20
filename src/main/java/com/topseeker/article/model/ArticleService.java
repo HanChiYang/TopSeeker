@@ -44,13 +44,11 @@ public class ArticleService {
 	@Transactional
 	public void deleteArticle(Integer artNo) {
 		 
-		ArticleVO article = repository.findById(artNo).orElseThrow(() -> new IllegalArgumentException("Invalid article ID: " + artNo));
-
-	       
-		artPicRepository.deleteByArticleVO(article);
-		if (repository.existsById(artNo))
-			repository.deleteByActMsgNo(artNo);
-//		    repository.deleteById(actPartNo);
+	    ArticleVO article = repository.findById(artNo)
+	            .orElseThrow(() -> new IllegalArgumentException("Invalid article ID: " + artNo));
+	    
+	    article.setArtStatus(2);
+	    repository.save(article);
 	}
 
 	public ArticleVO getOneArticle(Integer artNo) {

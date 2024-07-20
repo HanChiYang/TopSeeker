@@ -1,6 +1,7 @@
 package com.topseeker.shop.order.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ import com.topseeker.shop.order.model.OrderService;
 import com.topseeker.shop.order.model.OrderVO;
 import com.topseeker.shop.orderdetail.model.OrderDetailService;
 import com.topseeker.shop.orderdetail.model.OrderDetailVO;
+import com.topseeker.shop.product.model.ShopProductVO;
 import com.topseeker.shop.sale.model.SaleService;
 import com.topseeker.shop.sale.model.SaleVO;
 
@@ -45,7 +47,7 @@ public class OrdernoController {
 	@Autowired
 	OrderDetailService orderDetailSvc;
 	
-	//會員中心顯示用
+	//前台會員中心訂單詳情顯示用
 	@PostMapping("memOneOrder")
 	public String getmemOneOrder(
 			 @Valid
@@ -76,6 +78,7 @@ public class OrdernoController {
 			return "front-end/shop/order/memOneOrder"; 
 	}
 	
+	//後台訂單詳情顯示
 	@PostMapping("getOne_For_Display")
 	public String getOne_For_Display(
 			 @Valid
@@ -97,6 +100,9 @@ public class OrdernoController {
 			List<MemberVO> list3 = memSvc.getAll();
 			model.addAttribute("memListData", list3);
 			
+			List<OrderDetailVO> orderDetailData = orderDetailSvc.findOrderDetailsByOrderNo(Integer.valueOf(orderNo));
+			model.addAttribute("orderDetailData", orderDetailData);
+			
 			if (orderVO == null) {
 				model.addAttribute("errorMessage", "查無資料");
 				return "back-end/shop/order/select_page";
@@ -105,6 +111,15 @@ public class OrdernoController {
 			model.addAttribute("orderVO", orderVO);
 			model.addAttribute("getOne_For_Display", "true"); 
 			return "back-end/shop/order/listOneOrder"; 
+	}
+	
+	//複合查詢
+	@PostMapping("listOrder_ByCompositeQuery")
+	public String listAllOrder(HttpServletRequest req, Model model) {
+		Map<String, String[]> map = req.getParameterMap();
+		List<OrderVO> list = orderSvc.getAll(map);
+		model.addAttribute("orderListData", list);
+		return "back-end/shop/order/listAllOrder";
 	}
 	
 	@ExceptionHandler(value = { ConstraintViolationException.class })

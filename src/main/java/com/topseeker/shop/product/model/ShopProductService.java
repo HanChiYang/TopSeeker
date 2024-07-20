@@ -59,6 +59,12 @@ public class ShopProductService {
 		return repository.findByProdTypeNo(prodTypeNo);
 	}
 	
+	//商城搜尋用:依搜尋列輸入的文字，搜尋商品名稱或商品資訊中有類似的關鍵字(模糊搜尋)，依上架日期排序
+	public List<ShopProductVO> findByProdNameOrInfo(String keyword) {
+		return repository.findByProdNameOrInfo(keyword);
+	}
+	
+	
 	//後台商品的複合搜尋
 	public List<ShopProductVO> getAll(Map<String, String[]> map) {
 		return HibernateUtil_CompositeQuery_ShopProduct.getAllC(map, sessionFactory.openSession());

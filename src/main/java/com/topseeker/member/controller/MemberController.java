@@ -74,7 +74,6 @@ public class MemberController {
 
 		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
 			memberVO.setMemImg(null); // 可以不上傳
-//			model.addAttribute("errorMessage", "員工照片: 請上傳照片");  --> 由messages.properties 第五行處理錯誤信息
 		} else {
 			for (MultipartFile multipartFile : parts) {
 				byte[] buf = multipartFile.getBytes();
@@ -156,7 +155,8 @@ public class MemberController {
 	// 確認信箱
 	@PostMapping("checkEmail")
 	@ResponseBody
-	public ResponseEntity<Map<String, Object>> checkEmail(@RequestParam("memEmail") String memEmail, HttpSession session) {
+	public ResponseEntity<Map<String, Object>> checkEmail(@RequestParam("memEmail") String memEmail
+			, HttpSession session, HttpServletRequest request) {
 	    
 		Optional<MemberVO> memberOpt = memSvc.findByEmail(memEmail);
 	    Map<String, Object> response = new HashMap<>();
@@ -167,9 +167,18 @@ public class MemberController {
 	        String token = UUID.randomUUID().toString();
 
 	        tokSvc.saveToken(token, memNo, memEmail);
-
-	        String url = "http://localhost:8080/member/resetPassword?token=" + token;
-	        String message = "請於三分鐘內點擊超連結以重設密碼: \n" + url;
+	        
+	        String fullURL = request.getRequestURL().toString();
+	        int index = fullURL.indexOf("/member");
+	        String contextPath = null;
+	        if (index != -1) {
+	        	contextPath = fullURL.substring(0, index);
+	            System.out.println(contextPath);
+	        }
+	        
+	        String url = contextPath + "/member/resetPassword?token=" + token;
+	        String url2 = request.getContextPath() + "/member/resetPassword?token=" + token;
+	        String message = "請於三分鐘內點擊超連結以重設密碼: \n" + url + "\n" + url2;
 
 	        MailManager mailManager = new MailManager(mailServerPwd, mailServerUser);
 	        List<String> to = List.of(memEmail);

@@ -24,7 +24,7 @@
 
 
 <!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<link rel="stylesheet" th:href="@{/css/common.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
@@ -43,6 +43,29 @@
 
 <style type="text/css">
 
+/* .container { */
+/*     display: flex; */
+/* } */
+
+/* .sidebar { */
+/*     width: 200px; */
+/*     height: 100vh; /* 適當的高度，視需求可調整 */ */
+/*     background-color: #f4f4f4; */
+/*     padding: 20px; */
+/*     box-shadow: 2px 0 5px rgba(0,0,0,0.1); */
+/*     position: -webkit-sticky; /* For Safari */ */
+/*     position: sticky; */
+/*     top: 0; */
+/* } */
+
+/* .main-content { */
+/*     flex-grow: 1; */
+/*     padding: 20px; */
+/*     height: 800px; */
+/* } */
+
+
+
 
 </style>
 </head>
@@ -51,10 +74,17 @@
 	<!-- topseeker後台Navbar -->
 	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
 
+
+
 	<!-- 商城後台用Navbar + 左側邊欄 -->
 	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
 
-	<main class="shopManagementContent">
+
+<!-- 	<div class="container"> -->
+	
+	
+
+	<main class="shopManagementContent main-content">
 	<div class="listAllProdDisplay">
 		<table id="example" class="display">
 			<thead>
@@ -81,7 +111,7 @@
 							width="80px"></td>
 						<td width="150px" th:text="${shopProductVO.prodName}"></td>
 						<td width="200px"
-							th:text="${#strings.abbreviate(shopProductVO.prodInfo, 100)}"></td>
+							th:text="${#strings.abbreviate(shopProductVO.prodInfo, 20)}"></td>
 						<td width="80px" th:text="'$' + ${shopProductVO.prodPrice}"></td>
 						<td width="100px" th:text="${shopProductVO.prodDate}"></td>
 						<td>
@@ -137,6 +167,8 @@
 		</table>
 	</div>
 	</main>
+	
+<!-- 	</div> -->
 
 
 	<!-- ●● jquery datatables 設定 -->
