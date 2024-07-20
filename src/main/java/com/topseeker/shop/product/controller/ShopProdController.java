@@ -76,8 +76,10 @@ public class ShopProdController {
 	@GetMapping("/homepage")
 	public String showShopProduct(ModelMap model) {
 		List<ShopProductVO> shopListData = shopProductSvc.getAllReleasedProd();
-
+		List<ShopInfoVO> shopInfoListData = shopInfoSvc.getAllReleasedInfo();
+	
 		model.addAttribute("shopListData", shopListData);
+		model.addAttribute("shopInfoListData", shopInfoListData);
 
 		return "front-end/shop/homepage";
 	}
