@@ -22,7 +22,7 @@ body {
     align-items: center;
     margin-bottom: 1rem;
 }
-.article-content {
+.news-content {
     white-space: pre-wrap; /* 保留空白字符和換行符 */
 }
 </style>
@@ -57,7 +57,7 @@ body {
             </div>
             <div class="mb-3">
                 <h4>新聞內容</h4>
-                <pre th:utext="${newsVO.newsContent}" class="form-control article-content"></pre>
+                <pre th:utext="${newsVO.newsContent}" class="form-control news-content"></pre>
             </div>
         </div>
         <div class="card-footer text-center">
