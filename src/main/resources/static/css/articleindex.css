@@ -37,17 +37,39 @@ img {
 }
 
 div.container {
-    margin-top: 100px;
+    margin: 0px;
     max-width: 90%;
     padding: 20px;
     background-color: rgba(255, 255, 255, 0.8); /* 设置白色背景，透明度为0.8 */
-
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
     font-size: 20px;
     font-weight: bold;
 }
+div.container2 {
+    margin: 100px auto;
+    max-width: 90%;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* 设置白色背景，透明度为0.8 */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+div.container3 {
+    margin: 100px auto;
+    max-width: 90%;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* 设置白色背景，透明度为0.8 */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
 
 div.article-details {
     background-color: rgba(255, 255, 255, 0.8); /* 设置白色背景，透明度为0.8 */
@@ -61,12 +83,12 @@ div.article-details {
     margin-bottom: 20px;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,  h3, h4, h5, h6 {
     position: relative;
     padding-left: 35px; /* 调整左边距以为图标腾出空间 */
 }
 
-h1::before, h2::before, h3::before, h4::before, h5::before, h6::before {
+h1::before, h3::before, h4::before, h5::before, h6::before {
     content: "";
     position: absolute;
     left: 0;
