@@ -26,9 +26,7 @@
                                 <p class="card-text">報名截止: <span th:text="${actVO.actEnrollEnd}"></span></p>
                                 <p class="card-text">人數上限: <span th:text="${actVO.actMaxCount}"></span></p>
                                 <p class="card-text">當前人數: <span th:text="${actVO.actCurrentCount}"></span></p>
-                               	<p class="card-text">團長: 
-								    <a th:href="@{/act/memActList(memNo=${actVO.memberVO.memNo})}" th:text="${actVO.memberVO.memAccount} + '(' + ${actVO.memberVO.memName} + ')'"></a>
-								</p>
+                               	<p class="card-text">團長: <span th:text="${actVO.memberVO.memAccount} + '(' + ${actVO.memberVO.memName} + ')'"></span></p>
                                 <p class="card-text">
                                     <span th:switch="${actVO.actStatus}">
                                         <span th:case="0">揪團中</span>
