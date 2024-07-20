@@ -123,7 +123,7 @@ background-color: white !important;
         <th:block th:each="followVO : ${followListData}">
             <tr>
                 <td th:text="${followVO.beFollowedMemberVO.memAccount}"></td>
-                <td><img th:src="@{/member/DBGifReader} + '?memNo=' + ${followVO.memberVO.memNo}" width="100px"></td>
+                <td><img th:src="@{/member/DBGifReader} + '?memNo=' + ${followVO.beFollowedMemberVO.memNo}" width="100px"></td>
                 <td>
                    	<div th:each="actVOList : ${beFollowedMemActMap[followVO.beFollowedMemberVO.memNo]}">
                        	<div th:each="actVO : ${actVOList}">
