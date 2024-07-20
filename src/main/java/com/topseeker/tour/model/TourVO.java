@@ -58,7 +58,22 @@ public class TourVO implements java.io.Serializable {
 
 	public TourVO() { //必需有一個不傳參數建構子(JavaBean基本知識)
 	}
-	
+//	===============================
+	 @Column(name = "collected")
+	    private Boolean collected;
+
+	    
+	public Boolean getCollected() {
+		return collected;
+	}
+
+
+	public void setCollected(Boolean collected) {
+		this.collected = collected;
+	}
+
+//	===============================
+
 	@Id //@Id代表這個屬性是這個Entity的唯一識別屬性，並且對映到Table的主鍵 
 	@Column(name = "tour_no")  //@Column指這個屬性是對應到資料庫Table的哪一個欄位   //【非必要，但當欄位名稱與屬性名稱不同時則一定要用】
 	@GeneratedValue(strategy = GenerationType.IDENTITY) //@GeneratedValue的generator屬性指定要用哪個generator //【strategy的GenerationType, 有四種值: AUTO, IDENTITY, SEQUENCE, TABLE】
