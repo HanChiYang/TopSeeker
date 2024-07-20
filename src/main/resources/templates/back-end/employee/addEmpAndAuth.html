@@ -1,47 +1,48 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>新增员工</title>
+    <title>新增員工</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
     <div class="container">
-        <h2>新增员工</h2>
-        <form th:action="@{/emp/addEmpTest}" th:object="${employeeVO}" method="post">
+        <h2>新增員工</h2>
+        <form th:action="@{/employee/addEmpTest}" th:object="${employeeVO}" method="post">
             <div class="form-group">
-                <label for="empName">员工姓名</label>
+                <label for="empName">員工姓名</label>
                 <input type="text" id="empName" th:field="*{empName}" class="form-control" required />
             </div>
             <br>
             <div class="form-group">
-                <label for="empAccount">员工账号</label>
+                <label for="empAccount">員工帳號</label>
                 <input type="text" id="empAccount" th:field="*{empAccount}" class="form-control" required />
             </div>
             <br>
             <div class="form-group">
-                <label for="empPassword">员工密码</label>
+                <label for="empPassword">員工密碼</label>
                 <input type="password" id="empPassword" th:field="*{empPassword}" class="form-control" required />
             </div>
             <br>
             <div class="form-group">
-                <label for="empHiredate">入职日期</label>
+                <label for="empHiredate">到職日期</label>
                 <input type="date" id="empHiredate" th:field="*{empHiredate}" class="form-control" required />
             </div>
             <br>
             <div class="form-group">
-                <label for="empStatus">员工状态</label>
+                <label for="empStatus">員工狀態</label>
                 <select id="empStatus" th:field="*{empStatus}" class="form-control" required>
-                    <option value="1">在职</option>
-                    <option value="0">离职</option>
+                    <option value="1">在職</option>
+                    <option value="0">離職</option>
                 </select>
             </div>
             
             <br>
             
             <div class="form-group">
-                <label for="authNoList">权限</label>
+                <label for="authNoList">員工權限</label>
                 <select multiple id="authNoList" name="authNoList" class="form-control">
-                    <option th:each="authority : ${authorities}" th:value="${authority.authNo}" th:text="${authority.authName}"></option>
+                
+                    <option th:each="entry : ${authMapData}" th:value="${entry.key}" th:text="${entry.value}"></option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">提交</button>

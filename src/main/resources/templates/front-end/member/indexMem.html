@@ -23,7 +23,7 @@ div.container {
 }
 
 #blob_holder {
-    margin-top: 50px;
+    margin-top: 150px;
     margin-left: 50px;
     display: inline-block;
     width: 150px; /* 确保宽度和高度相等 */
@@ -122,7 +122,7 @@ button.function:hover {
 }
 
 #picArea {
-height: 230px;
+height: 330px;
 }
 
 #functionArea > div {
@@ -150,9 +150,7 @@ font-weight: bold;
 
 }
 
-#blob_holder > img {
-    padding-top: 25px;	
-}
+
 
 
 </style>
@@ -277,7 +275,7 @@ font-weight: bold;
                 <h2>套裝行程</h2>
             </div>
                 <div class="mb-2">
-                    <form th:action="@{/}" method="get">
+                    <form th:action="@{/protected/tourOrder/historical_Order}" method="get">
                         <button type="submit" class="btn btn-light function" >行程訂單</button>
                     </form>
                 </div>

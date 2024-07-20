@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>檢視/管理所有新手知識</title>
+
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+	crossorigin="anonymous">
+
+<!-- icon用 -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- 從 Google Fonts 引入 "Playfair Display" 字體 -->
+<link
+	href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap"
+	rel="stylesheet">
+
+
+<!-- Topseeker前台導航列CSS -->
+<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+
+<!-- 商城導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
+
+
+<!-- ●●js  for jquery datatables 用 -->
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script
+	src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" />
+<!-- ●●css for jquery datatables 用 -->
+
+
+<style type="text/css">
+
+main.knowManagementContent{
+width: 70%;
+padding: 20px 40px;
+margin: 0 auto;
+
+}
+
+
+</style>
+</head>
+
+<body>
+
+	<!-- topseeker後台Navbar -->
+	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
+
+	<main class="knowManagementContent">
+	<div class="listAllKnowDisplay">
+		<table id="example" class="display">
+			<thead>
+				<tr style="background-color: #d9ead3">
+					<th>知識編號</th>
+					<th>發布日期</th>
+					<th>圖片</th>
+					<th>標題</th>
+					<th>內容</th>
+					<th width="150px">知識狀態</th>
+					<th>修改</th>
+					<!-- 					<th>刪除</th> -->
+				</tr>
+			</thead>
+			<tbody>
+				<th:block th:each="knowledgeVO : ${knowListData}"> 
+					<tr>
+						<td th:text="${knowledgeVO.knowNo}"></td>
+						<td th:text="${knowledgeVO.knowPublishDate}"></td>
+						<td><img
+							th:src="@{/knowledge/DBGifReader} + '?knowNo=' + ${knowledgeVO.knowNo} "
+							width="50px"></td>
+							
+						<td th:text="${knowledgeVO.knowTitle}"></td>
+						
+						<td
+							th:text="${#strings.abbreviate(knowledgeVO.knowContent, 100)}"></td>
+
+						<td width="100px">
+							<!-- 賦一個隱藏的值給DataTable排序用 -->
+							<span style="display:none" th:text="${knowledgeVO.knowStatus}"></span>
+
+							<div class="btn-group" role="group"
+								aria-label="Basic radio toggle button group">
+								<!-- 上架中按鈕 -->
+								<input type="radio" class="btn-check"
+									th:name="'knowStatus-' + ${knowledgeVO.knowNo}"
+									th:id="'success-outlined-' + ${knowledgeVO.knowNo}"
+									autocomplete="off"
+									th:checked="${knowledgeVO.knowStatus == 1}"> <label
+									class="btn btn-outline-success"
+									th:for="'success-outlined-' + ${knowledgeVO.knowNo}"
+									th:onclick="'updateknowStatus(' + ${knowledgeVO.knowNo} + ', 1)'" th:value="${knowledgeVO.knowStatus}">上架中</label>
+
+								<!-- 下架按鈕 -->
+								<input type="radio" class="btn-check"
+									th:name="'knowStatus-' + ${knowledgeVO.knowNo}"
+									th:id="'secondary-outlined-' + ${knowledgeVO.knowNo}"
+									autocomplete="off"
+									th:checked="${knowledgeVO.knowStatus == 0}"> <label
+									class="btn btn-outline-secondary"
+									th:for="'secondary-outlined-' + ${knowledgeVO.knowNo}"
+									th:onclick="'updateknowStatus(' + ${knowledgeVO.knowNo} + ', 0)'" th:value="${knowledgeVO.knowStatus}">下架</label>
+							</div>
+
+
+<!-- 						</td> -->
+						<td width="100px">
+							<form method="post"
+								th:action="@{getOneKnow_For_Update}"
+								style="margin-bottom: 0;">
+								<button type="submit" class="btn btn-warning text-white">
+									<i class="fas fa-edit"></i> 修改
+								</button>
+								<input type="hidden" name="knowNo"
+									th:value="${knowledgeVO.knowNo}">
+							</form>
+						</td>
+						<!-- 						<td> -->
+						<!-- 							<form method="post" th:action="@{/knowledge/delete}" -->
+						<!-- 								style="margin-bottom: 0px;"> -->
+						<!-- 								<input type="submit" value="刪除"> <input type="hidden" -->
+						<!-- 									name="knowNo" th:value="${knowledgeVO.knowNo}"> -->
+						<!-- 							</form> -->
+						<!-- 						</td> -->
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+	</div>
+	</main>
+
+
+	<!-- ●● jquery datatables 設定 -->
+	<script>
+		$(document)
+				.ready(
+						function() {
+							$('#example')
+									.DataTable(
+											{
+												"lengthMenu" : [ 5, 10, 20, 50,
+														100 ],
+												"searching" : true, //搜尋功能, 預設是開啟
+												"paging" : true, //分頁功能, 預設是開啟
+												"ordering" : true, //排序功能, 預設是開啟
+												"language" : {
+													"processing" : "處理中...",
+													"loadingRecords" : "載入中...",
+													"lengthMenu" : "顯示 _MENU_ 筆結果",
+													"zeroRecords" : "沒有符合的結果",
+													"know" : "顯示第 _START_ 至 _END_ 筆結果，共<font color=red> _TOTAL_ </font>筆",
+													"knowEmpty" : "顯示第 0 至 0 筆結果，共 0 筆",
+													"knowFiltered" : "(從 _MAX_ 筆結果中過濾)",
+													"knowPostFix" : "",
+													"search" : "搜尋:",
+													"paginate" : {
+														"first" : "第一頁",
+														"previous" : "上一頁",
+														"next" : "下一頁",
+														"last" : "最後一頁"
+													},
+													"aria" : {
+														"sortAscending" : ": 升冪排列",
+														"sortDescending" : ": 降冪排列"
+													}
+												}
+											});
+						});
+		
+				//Ajax修改商品上下架狀態
+				function updateknowStatus(knowNo, status) {
+					$.ajax({
+						type : "POST",
+						url : "/knowledge/updateknowStatus",
+						data : {
+							knowNo : knowNo,
+							knowStatus : status
+						},
+						success : function(response) {
+ 							console.log("狀態更新成功");
+						},
+						error : function(xhr, status, error) {
+							console.log("狀態更新失敗: " + error);
+						}
+					});
+				}
+	</script>
+
+</body>
+</html>

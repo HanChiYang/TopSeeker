@@ -18,7 +18,12 @@ import com.topseeker.artpic.model.ArtPicService;
 import com.topseeker.artpic.model.ArtPicVO;
 import com.topseeker.artreport.model.ArtReportService;
 import com.topseeker.artreport.model.ArtReportVO;
+import com.topseeker.authority.model.AuthorityService;
+import com.topseeker.authority.model.AuthorityVO;
+import com.topseeker.empauth.model.EmpAuthService;
+import com.topseeker.empauth.model.EmpAuthVO;
 import com.topseeker.employee.model.EmployeeService;
+import com.topseeker.employee.model.EmployeeVO;
 import com.topseeker.follow.model.FollowService;
 import com.topseeker.follow.model.FollowVO;
 import com.topseeker.member.model.MemberService;
@@ -81,6 +86,9 @@ public class IndexController_inSpringBoot {
 //	FollowService followSvc;
 	
 	
+	
+	
+	
     @GetMapping("/")
     public String index(Model model) {
         return "front-end/index";
@@ -91,7 +99,6 @@ public class IndexController_inSpringBoot {
     
     @GetMapping("/member/registrationMem")
 	public String registrationMem(Model model) {
-    	System.out.println("123");
 		return "front-end/member/registrationMem";
 	}
     @GetMapping("/member/loginMem")
@@ -271,6 +278,9 @@ public class IndexController_inSpringBoot {
 //    	List<ArtPicVO> list = artpicSvc.getAll();
 // 		return list;
 // 	}
+  //=========== 以下第63~75行是提供給 /src/main/resources/templates/back-end/emp/select_page.html 與 listAllEmp.html 要使用的資料 ===================   
+    
+  //=========== 以下第63~75行是提供給 /src/main/resources/templates/back-end/emp/select_page.html 與 listAllEmp.html 要使用的資料 ===================   
     
     
 }

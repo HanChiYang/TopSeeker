@@ -81,6 +81,7 @@
 	text-decoration: none;
 	font-size: 20px;
 }
+
 </style>
 
 </head>
@@ -152,6 +153,16 @@
 	<script src="/js/shop_front_end.js"></script>
 
 	<script>
+	
+    $(document).ready(function() {
+        // 監聽 Enter 鍵事件
+        $('#searchInput').keypress(function(e) {
+            if (e.which == 13) { // 13 是 Enter 鍵的鍵碼
+                $('#searchForm').submit();
+                return false; // 防止表單的默認行為
+            }
+        });
+    });
 		
 	</script>
 

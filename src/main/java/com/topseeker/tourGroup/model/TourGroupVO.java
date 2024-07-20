@@ -81,6 +81,7 @@ public class TourGroupVO implements java.io.Serializable {
 
 
 
+
 	@Column(name = "group_price")
 	@NotNull(message="行程價格: 請勿空白")
 	public Integer getGroupPrice() {

@@ -1,32 +1,146 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>結帳頁面</title>
 <!-- Font Awesome -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" th:href="@{/css/error.css}"/>
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+	crossorigin="anonymous">
+
+<!-- icon用 -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+<!-- 從 Google Fonts 引入 "Playfair Display" 字體 -->
+<link
+	href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap"
+	rel="stylesheet">
+
+
+<!-- Topseeker前台導航列CSS -->
+<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<!-- 商城導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/shop_front_end_test.css}">
 
 
 <style>
-.last {
-	display: flex;
-	justify-content: flex-end;
-}
-
-.btn-del {
-	background-color: #ef7a70;
-	color: white;
-}
-
-.btn-del:hover, .btn-del:focus {
-	background-color: #f14131;
-}
 
 .hidden {
 	display: none;
 }
 
+main{
+
+	padding-top: 20px;
+}
+
+form{
+	display: flex;
+  	flex-wrap:nowrap;
+	width: 100%;
+	position: relative;
+
+}
+div.maincontainer{
+	width: 100%;
+}
+div.container{
+  	display: flex;
+  	flex-wrap:wrap;
+  	 /* 內部空間放不下就換行 */
+  	border: 4px solid #CCD6A6;
+  	border-radius: 10px;
+  	padding: 0;
+ 	justify-content: flex-end;
+  	margin:10px;
+  	width: 60%;
+  	
+  	}
+  	
+div.count{
+	display: flex;
+  	flex-wrap:wrap;
+  	padding-top: 10px;
+  	position: relative;
+  	width: 35%;
+  	align-items: flex-start; 
+}
+  	
+  	
+.col {
+   	border: 0.5px solid #CCD6A6;
+  	width: calc(100% / 2);
+}
+
+
+.col2.hd{
+	text-align: center;
+ 	font-size: 20px;
+	background-color: #CCD6A6;
+}
+
+.col2.hd.ps{
+	height: 35px;
+	width: 100%;
+	
+}
+
+
+
+.col2.bd{
+ 	font-size: 20px;
+ 	height: 350px;
+	background-color: #FFFBE9;
+	border-radius: 10px;
+
+}
+
+.col2.bd.ps{
+	padding: 5px;
+ 	height: auto;
+ 	width: 100%;
+ 	 
+}
+
+.col2.bd.ps textarea{
+	width: 100%;
+	font-size: 16px;
+	height: 50px
+}
+
+.colps{
+	width:100%;
+}
+
+
+div.col2.bd div.mem{
+	padding: 10px;
+	
+}
+
+.col3{	
+	text-align: center;
+	font-size: 18px;
+	padding: 5px;
+}
+
+.col4{
+	text-align: left;
+	padding: 7px;
+}
+
+.col4 input{
+	
+	width: 100%;
+	font-size: 16px;
+	
+}
 a {
 	text-decoration: none;
 }
@@ -35,525 +149,724 @@ a:visited {
 	color: black;
 }
 
-table {
-	border-collapse: collapse;
-	border-style: double;
-}
-
-table th {
-	border-style: hidden;
-	background-color: rgb(158, 179, 132);
-	color: #ffffff;
-	width: 25vw;
-	height: 75px;
-	font-size: 20px;
-}
-
-table td {
-	border-style: hidden;
-	background-color: rgb(206, 222, 189);
-	color: rgb(67, 83, 52);
-	width: 25vw;
-	height: 50px;
+div.summary{
 	text-align: center;
-	font-size: 15px;
+	width: 100%;
+	position: relative;
+	left: 5%;
+	border: 2px solid  #F7DCB9;
+	border-radius: 10px;
+	justify-content:flex-start;
+	display: flex;
+	overflow-wrap: break-word;
+}
+div#go{
+	display: flex;
+  	flex-wrap:wrap;
+	width: 100%;
+	position: relative;
+	left: 5%;
+	border: 2px solid  #B5C18E;
+	border-radius: 10px;
+	justify-content:flex-start;
 }
 
-  .delivery-form {
+
+div.count div.summary table{
+
+	border-radius: 10px;
+	color: black;
+}
+div.count div.summary table th{
+	border: 5px #F7DCB9;
+	font-size: 18px;	
+	text-align: center;
+	padding-right: 5px;
+	width: auto;
+}
+div.count div.summary table td{
+	border: 5px #F7DCB9;
+	text-align: left;
+	color: black;
+	width: auto;
+}
+
+div#go div#checkout{
+	
+	width: 100%;
+	height: auto;
+}
+
+div#go div#checkout table{
+	width: 100%;
+	position: relative;
+	margin-top: 30px;
+}
+
+div#go div#checkout table th{
+	text-align: center;
+	width: auto;
+	font-size: 18px;
+}
+div#go div#checkout table td{
+	text-align: center;
+	width: auto;
+	font-size: 16px;
+}
+
+div.btns{
+	position: relative;
+	left: 30%;
+	font-size: 18px;
+	padding: 10px;
+	justify-content: space-around;
+}
+
+ul{
+	list-style: none;
+	position: relative;
+	align-content: center;
+}
+
+.delivery-form {
         display: none;
-    }
-    .visible {
+}
+.visible {
         display: block;
-    }
+}
+button#backtoshop a,
+button#backtoshop a:visited{
+	color:white;
+}
+button#backtoshop a:hover{
+	color:#003C9D;
+}
+
+button#backtoshop,
+input#confirmPayment{
+  border:0;
+  background-color:#003C9D;
+  color:white;
+  border-radius:10px;
+  cursor:pointer;
+  }
+  
+button#backtoshop:hover,
+input#confirmPayment:hover{
+  color:#003C9D;
+  background-color:#fff;
+  border:2px #003C9D solid;
+}
+
+
+/*訂單資料驗證 */
+.error {
+        color: red;
+        display: none;
+}
+
+/*小計區*/
+#orderSummary {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+
 </style>
-<style></style>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
 </head>
 
-<body class="bg-light">
-	<div class="container mt-4">
-		<form method="post" id="checkout-form" th:action="@{/shop/order/insert}" th:object="${orderVO}">
-			<h1 class="text-center display-3 mb-4">結帳</h1>
-			<div class="mb-4 border rounded shadow-sm p-3">
-				<h4 class="border-bottom pb-2">訂購人資訊</h4>
-				<div class="row">
-					
-					<div class="col-sm">
-						<span>訂購人姓名:</span> <span class="form-control" id="memName"
-							th:text="${memberVO.memName}"></span> 
-					</div>
-					<div class="col-sm">
-						<span>訂購人聯絡電話: </span> <span class="form-control" id="memPhone"
-							th:text="${memberVO.memPhone}"></span>
-					</div>
-					<div class="col-sm">
-						<span>訂購人電子郵件: </span> <span class="form-control" id="memPhone"
-							th:text="${memberVO.memEmail}"></span>
-					</div>
+<body>
+	<!-- topseeker前台Navbar -->
+	<nav th:insert="~{/front-end/navbar.html}"></nav>
 
-					<!-- 取貨方式 -->
-					<h4 class="border-bottom pb-2">收件方式</h4>
-         <div> 
-            <div>
-                <input type="radio" name="deliveryMethod" value="0" checked> 宅配
-                <input type="radio" name="deliveryMethod" value="1"> 超商取貨
-            </div>
-
-            <div id="tohome" class="delivery-form visible">
-                <div class="col">
-                    <span>收件人姓名:</span> 
-                    <input type="text" name="orderNameth" placeholder="請輸入收件人姓名">
-                    <span class="error" id="error-orderNameth"></span>
-                </div>
-                <div class="col">
-                    <span>收件人電話:</span> 
-                    <input type="text" name="orderPhoneth" placeholder="請輸入收件人連絡電話">
-                    <span class="error" id="error-orderPhoneth"></span>
-                </div>
-                <div class="col">
-                    <span>收件人地址:</span> 
-                    <input type="text" name="orderAddressth" placeholder="請輸入收件人地址">
-                    <span class="error" id="error-orderAddressth"></span>
-                </div>
-            </div>
-
-            <div id="cvspick" class="delivery-form">
-                <div class="col">
-                    <span>收件人姓名: </span> 
-                    <input type="text" name="orderNamecvs" placeholder="請輸入收件人姓名" disabled>
-                	<span class="error" id="error-orderNamecvs"></span>
-                </div>
-                <div class="col">
-                    <span>收件人電話: </span> 
-                    <input type="text" name="orderPhonecvs" placeholder="請輸入收件人連絡電話" disabled>
-                	<span class="error" id="error-orderPhonecvs"></span>
-                </div>
-                <div class="col">
-                    <span>7-11收件門市名稱: </span> 
-                    <input type="text" name="orderAddresscvs" placeholder="請輸入收件門市名稱+店號" disabled>
-                	<span class="error" id="error-orderAddresscvs"></span>
-                </div>
-            </div>
-          </div>
-					
-<!-- 					
-					<!-- 付款方式 -->
-					<div class="mb-4 border rounded shadow-sm p-3">
-						<h4 class="border-bottom pb-2">付款方式</h4>
-						<div th:value="${paymentMethod}">
-							<input type="radio" name="paymentMethod" data-method="信用卡"
-								checked th:value="0"><span name="pm" class="fs-5">信用卡</span>
-							<input type="radio" name="paymentMethod" data-method="轉帳"
-								th:value="1"><span name="pm" class="fs-5">轉帳</span> <input
-								type="radio" name="paymentMethod" data-method="貨到付款"
-								th:value="2"><span name="pm" class="fs-5">貨到付款</span>
+	<!-- 商城用Navbar -->
+	<nav th:insert="~{/front-end/shop/shop_front_end_nav.html}"></nav>
+	
+	<main>
+		<div class="maincontainer">
+			<form style="width:100%" method="post" id="checkout-form" th:action="@{/shop/order/insert}" th:object="${orderVO}">
+				<div class="container">
+					<div class="col member">
+						<div class="col2 hd">訂購人資訊</div>
+						
+						<div class="col2 bd">
+							<label>姓名:</label> 
+							<div class="mem" id="memName"	th:text="${memberVO.memName}"></div> 
+							<label>聯絡電話: </label>
+						    <div class="mem" id="memPhone" th:text="${memberVO.memPhone}"></div>
+							<label>電子郵件: </label> 
+							<div class="mem" id="memPhone"	th:text="${memberVO.memEmail}"></div>
 						</div>
-						<br>
-						<!-- 信用卡 -->
-						<div class="row text-start" id="creditCard">信用卡(綠界)</div>
-
-						<!-- 轉帳 -->
-						<div id="transfer" style="display: none;">轉帳</div>
-
-						<!-- 貨到付款 -->
-						<div id="cashOnDelivery" style="display: none;">貨到付款</div>
-
 					</div>
-					
-					<div class="col">
-                    	<h4>備註: </h4>
-                    	<textarea name="remarks" rows="4" cols="50"></textarea>
-                   	</div>
+					<!-- 取貨方式 -->
+			        <div class="col pick">
+			        	<div class="col2 hd">收件方式</div>
+			        	<div class="col2 bd">
+			        		<div class="col3">
+			                	<input type="radio" name="deliveryMethod" value="0" checked> 宅配
+			                	<input type="radio" name="deliveryMethod" value="1"> 超商取貨
+			            	</div>
+			
+				            <div id="tohome" class="col3 delivery-form visible">
+				            	<div class="col4">
+				            		<label>收件人姓名:</label> 
+				                 	<input type="text" name="orderNameth" th:value="${memberVO.memName}">
 
-					<div class="mb-4 border rounded shadow-sm p-3">
-						<h4 class="border-bottom pb-2">訂單摘要</h4>
-						<table class="table">
+				                	 <div class="error" id="error-orderNameth">請輸入有效的收件人姓名。</div>
+				               		<label>收件人電話:</label> 
+				                 	<input type="text" name="orderPhoneth" th:value="${memberVO.memPhone}">
+				                 	<div class="error" id="error-orderPhoneth">請輸入有效的收件人連絡電話。</div>				                 	
+				           	   		<label>收件人地址:</label> 
+				                	 <input type="text" name="orderAddressth" placeholder="如:320桃園市中壢區復興路46號9樓">
+				                 	<div class="error" id="error-orderAddressth">請輸入有效的收件人地址。</div>
+				            	</div>
+				           	</div>
+		
+				            <div id="cvspick" class="col3 delivery-form">
+				            	<div class="col4">
+					                 <label>收件人姓名:</label> 
+						                <input type="text" name="orderNamecvs" th:value="${memberVO.memName}" disabled>
+						                <div class="error" id="error-orderNamecvs">請輸入有效的收件人姓名。</div>
+					                 <label>收件人手機號碼:</label> 
+					                    <input type="text" name="orderPhonecvs" th:value="${memberVO.memPhone}" disabled>
+					                	<div class="error" id="error-orderPhonecvs">請輸入有效的收件人手機。</div>
+					                 <label>7-11收件門市名稱: </label> 
+					                    <input type="text" name="orderAddresscvs" placeholder="如:214962來來" disabled>
+					                	<div class="error" id="error-orderAddresscvs">請輸入有效的收件收件門市名稱+店號。</div>
+
+					              </div>
+				            </div>
+     	
+			        	</div>
+			           
+	         		 </div>
+											
+						<!-- 付款方式 -->
+					 <div class="col pay">
+					 	<div class="col2 hd">付款方式</div>
+					 	<div class="col2 bd">
+					 		<div class="col3">
+							<input type="radio" name="paymentMethod" data-method="信用卡"
+								checked th:value="0"><span class="fs-5">信用卡</span>
+							<input type="radio" name="paymentMethod" data-method="轉帳"
+								th:value="1"><span class="fs-5">轉帳</span> 
+							<input type="radio" name="paymentMethod" data-method="貨到付款"
+								th:value="2"><span class="fs-5">貨到付款</span>
+							</div>
+							
+							<div class="col3">
+							<!-- 信用卡 -->
+								<div class="col4 paymentForm" id="creditCard">
+									 <div>
+			                         	<label>信用卡號碼</label><br>
+			                        	<input type="text" name="masterNum" id="masterNum" placeholder="oooo oooo oooo oooo">
+			                       	 	<div class="error" id="cardNumberError">請輸入有效的信用卡號碼。</div>
+			                       	 </div>
+			                         <div>
+			                            <label>有效期限(月/年)</label><br>
+			                            <input type="text" name="expiryDate" id="expiryDate" placeholder="MM/YY">
+			                            <div class="error" id="expiryDateError">請輸入有效的到期日期。</div>
+			                         </div>
+			                         <div>
+			                            <label>背面末三碼</label><br>
+			                            <input type="text" name="cvv" id="cvv" placeholder="CVC/CVV">
+			                            <div class="error" id="cvvError">請輸入有效的安全碼。</div>
+			                         </div>
+
+								</div>
+								<!-- 轉帳 -->
+								<div class="col4" id="transfer" style="display: none;">
+									<ul>
+										<li>轉帳名稱: 踏徙客有限公司</li>
+										<li>金融機構: 緯育銀行營業部</li>
+										<li>帳戶: 123456780000</li>
+										<li>備註請註明: 會員姓名+訂單編號</li>
+
+									</ul>			
+								</div>
+								<!-- 貨到付款 -->
+								<div class="col4" id="cashOnDelivery" style="display: none;">貨到付款</div>
+							</div>
+					 	</div>
+					</div>
+					<!-- 備註 -->
+					<div class="colps" align="center">
+						<div class="col2 hd ps">備註</div>
+						<div class="col2 bd ps">
+					       <textarea name="remarks" rows="4" cols="50"></textarea>
+						</div> 
+			        </div>  
+				</div>
+				<div class="count">
+					<div class="summary">
+						<table id=1>
 							<thead>
 								<tr>
-									<th class="text-nowrap">商品名稱</th>
-									<th class="text-nowrap">單價</th>
-									<th class="text-nowrap">數量</th>
-									<th class="text-nowrap">小計</th>
+									<th>商品名稱</th>
+									<th>單價</th>
+									<th>數量</th>
+									<th>小計</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr th:each="cartDetails : ${cartDetails}">
-									<td name="prodName"
-										th:text="${cartDetails.shopProductVO.prodName}"></td>
-									<td class="price num" name="price"
-										th:text="${cartDetails.shopProductVO.prodPrice}"></td>
-									<td class="prodQty" style="text-align: center" name="prodQty"
-										th:text="${cartDetails.prodQty}"></td>
+									<td name="prodName"	th:text="${cartDetails.shopProductVO.prodName}"></td>
+									<td class="price num" name="price" th:text="${cartDetails.shopProductVO.prodPrice}"></td>
+									<td class="prodQty" style="text-align: center" name="prodQty" th:text="${cartDetails.prodQty}"></td>
 									<td class="sub"></td>
-							
 								</tr>
 							</tbody>
 						</table>
 					</div>
-					</section>
-				</div>
-			</div>
-			<table id=2>
-				<thead>
-					<tr>
-						<th>總金額</th>
-						<th>促銷方案</th>
-						<th>折扣金額</th>
-						<th>運費</th>
-						<th>實付金額</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-
-						<td>
-							<div class="totalAmount" id="orderAmount"></div> <input
-							type="hidden" id="hiddenOrderAmount" name="orderAmount">
-						</td>
-						<td>
-							<div class="saleName" id="saleName"></div> <input type="hidden"
-							id="hiddensaleName" name="saleName"> <input type="hidden"
-							id="hiddensaleNo" name="saleNo">
-						</td>
-						<td>
-							<div class="orderDiscount" id="orderDiscount"></div> <input
-							type="hidden" id="hiddenOrderDiscount" name="orderDiscount">
-						</td>
-						<td>
-							<div class="orderShipment" id="orderShipment">30</div> <input
-							type="hidden" id="hiddenOrderShipment" name="orderShipment"
-							value="30">
-						</td>
-						<td>
-							<div class="orderBill" id="orderBill"></div> <input type="hidden"
-							id="hiddenOrderBill" name="orderBill">
-						</td>
-
-					</tr>
-				</tbody>
-			</table>
-			
-			<div style="display:none">
-				<label>訂單編號:</label> <input type="text" th:value="${orderNo}"
-					readonly="readonly" />
-			</div>
-	
+					<div id="go">
+						<div id="checkout">
+							<div id="orderSummary">
+							    <div class="summary-item">
+							        <span class="label">總金額:</span>
+							        <span class="value totalAmount" id="orderAmount"></span>
+							        <input type="hidden" id="hiddenOrderAmount" name="orderAmount">
+							    </div>
+							    <div class="summary-item">
+							        <span class="label">促銷方案:</span>
+							        <span class="value saleName" id="saleName"></span>
+							        <input type="hidden" id="hiddensaleName" name="saleName">
+							        <input type="hidden" id="hiddensaleNo" name="saleNo">
+							    </div>
+							    <div class="summary-item">
+							        <span class="label">折扣後金額:</span>
+							        <span class="value orderDiscount" id="orderDiscount"></span>
+							        <input type="hidden" id="hiddenOrderDiscount" name="orderDiscount">
+							    </div>
+							    <div class="summary-item">
+							        <span class="label">運費:</span>
+							        <span class="value orderShipment" id="orderShipment">30</span>
+							        <input type="hidden" id="hiddenOrderShipment" name="orderShipment" value="30">
+							    </div>
+							    <div class="summary-item">
+							        <span class="label">實付金額:</span>
+							        <span class="value orderBill" id="orderBill"></span>
+							        <input type="hidden" id="hiddenOrderBill" name="orderBill">
+							    </div>
+							</div>
+						
+						
+<!-- 							<table id=2> -->
+<!-- 								<thead> -->
+<!-- 									<tr> -->
+<!-- 										<th>總金額</th> -->
+<!-- 										<th>促銷方案</th> -->
+<!-- 										<th>折扣後金額</th> -->
+<!-- 										<th>運費</th> -->
+<!-- 										<th>實付金額</th> -->
+<!-- 									</tr> -->
+<!-- 								</thead> -->
+<!-- 								<tbody> -->
+<!-- 									<tr> -->
+<!-- 										<td> -->
+<!-- 											<div class="totalAmount" id="orderAmount"></div> <input -->
+<!-- 												type="hidden" id="hiddenOrderAmount" name="orderAmount"> -->
+<!-- 										</td> -->
+<!-- 										<td> -->
+<!-- 											<div class="saleName" id="saleName"></div> <input type="hidden" -->
+<!-- 												id="hiddensaleName" name="saleName"> <input type="hidden" -->
+<!-- 												id="hiddensaleNo" name="saleNo"> -->
+<!-- 										</td> -->
+<!-- 										<td> -->
+<!-- 											<div class="orderDiscount" id="orderDiscount"></div> <input -->
+<!-- 												type="hidden" id="hiddenOrderDiscount" name="orderDiscount"> -->
+<!-- 										</td> -->
+<!-- 										<td> -->
+<!-- 											<div class="orderShipment" id="orderShipment">30</div> <input -->
+<!-- 												type="hidden" id="hiddenOrderShipment" name="orderShipment" -->
+<!-- 												value="30"> -->
+<!-- 										</td> -->
+<!-- 										<td> -->
+<!-- 											<div class="orderBill" id="orderBill"></div> <input type="hidden" -->
+<!-- 												id="hiddenOrderBill" name="orderBill"> -->
+<!-- 										</td> -->
+					
+<!-- 									</tr> -->
+<!-- 								</tbody> -->
+<!-- 							</table> -->
+						
+						</div>
+							
+						
+					</div>
+					
+					<div class="btns">
+							<!-- 	結帳 -->
+						
+							<input type="submit" value="確認付款" id="confirmPayment">
+							<input type="hidden" name="memNo" th:value="${memberVO.memNo}"> 
+							<input type="hidden" name="orderStatus" th:value="0"> 
+							<input type="hidden" name="paymentStatus"> 
 		
-			<div>
-				<input type="submit" value="確認付款" id="confirmPayment"
-					class="btn btn-primary">
-					<input type="hidden" name="memNo" th:value="${memberVO.memNo}"> 
-				    <input type="hidden" name="orderStatus" th:value="0"> 
-				    <input type="hidden" name="paymentStatus" th:value="0"> 
-				    <input type="hidden" name="orderNo" th:value="${orderNo}">
-				    <input type="hidden" name="prodNo" th:value="${prodNo}">
-			</div>
-
-		</form>
-	</div>
-
-	<!-- 繼續購物 -->
-	<div>
-		<button>
-			<a th:href="@{/shop/homepage}">繼續購物</a>
-		</button>
-	</div>
+							<input type="hidden" name="orderNo" th:value="${orderNo}">
+							<input type="hidden" name="prodNo" th:value="${prodNo}">
+						
+							<!-- 繼續購物 -->
+							<button id="backtoshop">
+								<a th:href="@{/shop/homepage}">繼續購物</a>
+							</button>
+						</div>			
+								
+				</div>	
+	
+			</form>
+		
+		</div>
+		</main>
+		
+	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+	<!-- Bootstrap JavaScript -->
+	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+		
+	<!-- topseeker前台Navbar共用JavaScript -->
+	<script src="/js/common.js"></script>
+	
+	<!-- topseeker商城用JavaScript -->
+	<script src="/js/shop_front_end.js"></script>
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script	src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 	<script th:inline="javascript">
-		//付款、取貨方式切換--------------------------------------------------
-		$(document)
-				.ready(
-						function() {
-							paymentMethodChange();
-							//付款方式切換
-							$('[name="paymentMethod"]').on('change',
-									function() {
-										paymentMethodChange();
-									});
-							//收件方式切換
-							$("input[name='deliveryMethod']").on("change", function() {
-					                if ($(this).val() == 0) {
-					                	console.log("方法為" + $(this).val());
-					                    $("#tohome").addClass("visible").find("input").prop("disabled", false);
-					                    $("#cvspick").removeClass("visible").find("input").prop("disabled", true);
-					                } else {
-					                	console.log("方法為" + $(this).val());
-					                    $("#tohome").removeClass("visible").find("input").prop("disabled", true);
-					                    $("#cvspick").addClass("visible").find("input").prop("disabled", false);
-					                }
-					            });
-					//結帳時錯誤提示
-							$('#checkout-form').on('submit', function(event) {
-				                let valid = true;
+	
+// ----信用卡格式------------------
+	
+	$("#masterNum").on('input', function (e) {
+		const input = e.target;
+		const value = input.value;
+		const cursorPosition = input.selectionStart;
+			
+            //驗證為數字
+            const cardNumber = value.replace(/\D+/g, '');
+            //4碼一組
+           	let formattedNumber = '';
+            for (let i = 0; i < cardNumber.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedNumber += ' ';
+                }
+                formattedNumber += cardNumber[i];
+            }
 
-				                if ($('input[name="deliveryMethod"]:checked').val() == 0) {
-				                    // Validate tohome fields
-				                    if ($('input[name="orderNameth"]').val().trim() === '') {
-				                        $('#error-orderNameth').text('請輸入收件人姓名');
-				                        valid = false;
-				                    } else {
-				                        $('#error-orderNameth').text('');
-				                    }
+            //更新input值
+            input.value = formattedNumber;
 
-				                    if ($('input[name="orderPhoneth"]').val().trim() === '') {
-				                        $('#error-orderPhoneth').text('請輸入收件人連絡電話');
-				                        valid = false;
-				                    } else {
-				                        $('#error-orderPhoneth').text('');
-				                    }
+            const addedSpaces = formattedNumber.substring(0, cursorPosition).split(' ').length - 1;
+            input.selectionEnd = cursorPosition + addedSpaces;
+        });
+        
 
-				                    if ($('input[name="orderAddressth"]').val().trim() === '') {
-				                        $('#error-orderAddressth').text('請輸入收件人地址');
-				                        valid = false;
-				                    } else {
-				                        $('#error-orderAddressth').text('');
-				                    }
-				                } else {
-				                    // Validate cvspick fields
-				                    if ($('input[name="orderNamecvs"]').val().trim() === '') {
-				                        $('#error-orderNamecvs').text('請輸入收件人姓名');
-				                        valid = false;
-				                    } else {
-				                        $('#error-orderNamecvs').text('');
-				                    }
+//付款、取貨方式切換--------------------------------------------------
+		$(document).ready(function() {
+			paymentMethodChange();
+				//付款方式切換
+				$('[name="paymentMethod"]').on('change',function() {
+					paymentMethodChange();
+				});
+				//收件方式切換
+				$("input[name='deliveryMethod']").on("change", function() {
+				    if ($(this).val() == 0) {
+			           $("#tohome").addClass("visible").find("input").prop("disabled", false);
+					   $("#cvspick").removeClass("visible").find("input").prop("disabled", true);
+					} else {
+					   $("#tohome").removeClass("visible").find("input").prop("disabled", true);
+					   $("#cvspick").addClass("visible").find("input").prop("disabled", false);
+					 }
+				});
+	//結帳時錯誤提示
+		$('#checkout-form').on('submit', function(event) {
+				let valid = true;
+				const chineseOrEnglishRegex = /^[\u4e00-\u9fa5a-zA-Z]+$/;
+				const phoneRegex = /^(\d{10})$/;
+			
+				if ($('input[name="deliveryMethod"]:checked').val() == 0) {
+				 	//驗證宅配資訊
+				 	const orderNameth = $('input[name="orderNameth"]').val().trim();
+					if (orderNameth === '' || !chineseOrEnglishRegex.test(orderNameth)) {
+						 	$("#error-orderNameth").show();
+						 	valid = false;
+						} else {
+							$("#error-orderNameth").hide();
+						}
+					
+					const orderPhoneth = $('input[name="orderPhoneth"]').val().trim();
+					 if (orderPhoneth === '' || !phoneRegex.test(orderPhoneth)) {
+						 	
+						 	$("#error-orderPhoneth").show();
+						 	valid = false; 
+						 } else {
+							$("#error-orderPhoneth").hide();
+						 }
+		
+					 if ($('input[name="orderAddressth"]').val().trim() === '') {
+						 	
+						 	$("#error-orderAddressth").show();
+						 	valid = false;
+						 } else {
+							$("#error-orderAddressth").hide();
+						 }
+				} else {
+					 //驗證超商取貨資訊
+					 const orderNamecvs = $('input[name="orderNamecvs"]').val().trim();
+					 if (orderNamecvs === '' || !chineseOrEnglishRegex.test(orderNamecvs)) {
+					    
+					     	$("#error-orderNamecvs").show();
+					     	valid = false;
+					 } else {
+					    
+					     	$("#error-orderNamecvs").hide();
+					     }
+					 const orderPhonecvs = $('input[name="orderPhonecvs"]').val().trim();	
+					 if (orderPhonecvs === '' || !phoneRegex.test(orderPhonecvs)) {
+					    
+					     $("#error-orderPhonecvs").show();
+					     valid = false;
+					 } else {
+						 $("#error-orderPhonecvs").hide();
+					     }
+	
+					 if ($('input[name="orderAddresscvs"]').val().trim() === '') {
+					     
+					     $("#error-orderAddresscvs").show();
+					     valid = false;
+					} else {
+						$("#error-orderAddresscvs").hide();
+					}
+				}
+				
+				//付款方式驗證
+				if ($('input[name="paymentMethod"]:checked').val() == 0)  {
+					 //信用卡號碼16碼
+					 const cardNumber = $("#masterNum").val().replace(/\s+/g, '');
+					 if (cardNumber.length !== 16 || !/^\d{16}$/.test(cardNumber)) {
+						 valid = false;
+						$("#cardNumberError").show();
+					 } else {
+					    $("#cardNumberError").hide();
+						}
+	
+					//到期日期
+					 const expiryDate = $("#expiryDate").val();
+				     if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiryDate)) {
+				    	 valid = false;
+						 $("#expiryDateError").show();
+					} else {
+						 $("#expiryDateError").hide();
+						}
+					
+				     //安全碼
+					const cvv = $("#cvv").val();
+					if (!/^\d{3}$/.test(cvv)) {
+						valid = false;
+						$("#cvvError").show();
+					} else {
+						$("#cvvError").hide();
+					}
+					            	  
+					            	  
+				}
+					                
+			 if (!valid) {
+				event.preventDefault();
+				}
+			});
 
-				                    if ($('input[name="orderPhonecvs"]').val().trim() === '') {
-				                        $('#error-orderPhonecvs').text('請輸入收件人連絡電話');
-				                        valid = false;
-				                    } else {
-				                        $('#error-orderPhonecvs').text('');
-				                    }
+		//購買資訊 
+			$('.sub').each(function() {
+				let totalAmount = 0;
+				const price = $(this).closest("tr").find(
+								".price").text();
+				const qty = $(this).closest("tr").find(
+								".prodQty").text();
+						
+				//小計
+				const sub = parseInt(price * qty);
+				$(this).closest("tr").find(".sub").text(sub);
+						
+				$('.sub').each(function() {
+					const sub = parseInt($(this).text());
+						if (!isNaN(sub)) {
+							totalAmount += sub;
+						}
+				})
+		
+	
+				//總金額 
+				$("span.totalAmount").text(totalAmount.toFixed(0));
+				$("span.totalAmount").val(totalAmount.toFixed(0));
 
-				                    if ($('input[name="orderAddresscvs"]').val().trim() === '') {
-				                        $('#error-orderAddresscvs').text('請輸入收件門市名稱+店號');
-				                        valid = false;
-				                    } else {
-				                        $('#error-orderAddresscvs').text('');
-				                    }
-				                }
+				//折購金額
+				const sales = fetchApplicableDiscounts();
+				applyDiscounts(sales);
 
-				                if (!valid) {
-				                    event.preventDefault();
-				                }
-				            });
+				//實付金額
+				calculateOrderBill(totalAmount, sales);
 
-							//購買資訊 
+				});
 
-							$('.sub').each(
-									function() {
-										var totalAmount = 0;
-										var price = $(this).closest("tr").find(
-												".price").text();
-										var qty = $(this).closest("tr").find(
-												".prodQty").text();
-										//小計
-										var sub = parseInt(price * qty);
-										$(this).closest("tr").find(".sub")
-												.text(sub);
-										$('.sub').each(function() {
-											var sub = parseInt($(this).text());
-											if (!isNaN(sub)) {
-												totalAmount += sub;
-											}
-										})
-										//總金額 
-										$("div.totalAmount").text(
-												totalAmount.toFixed(0));
-										$("div.totalAmount").val(
-												totalAmount.toFixed(0));
+			function paymentMethodChange() {
+				const selectedMethod = $('[name="paymentMethod"]:checked').data('method');
+					$('#creditCard, #transfer, #cashOnDelivery').hide();
+				
+					if (selectedMethod === '信用卡') {
+						$('#creditCard').show();
+					} else if (selectedMethod === '轉帳') {
+						$('#transfer').show();
+					} else if (selectedMethod === '貨到付款') {
+						$('#cashOnDelivery').show();
+					}
+			}
+		
+			//計算總金額
+			function calculateTotalAmount() {
+				let totalAmount = 0;
+				const price = $(this).closest("tr").find(".price").text();
+				const qty = $(this).closest("tr").find(".prodQty").text();
+				const sub = parseInt(price * qty);
+				$(this).closest("tr").find(".sub").text(sub);
+				
+				$('.sub').each(function() {
+					const sub = parseInt($(this).text());
+					if (!isNaN(sub)) {
+						totalAmount += sub;
+					}
+				})
 
-										//折購金額
-										var sales = fetchApplicableDiscounts();
-										applyDiscounts(sales);
+				return totalAmount;
+				console.log(totalAmount);
 
-										//實付金額
-										calculateOrderBill(totalAmount, sales);
+			}
 
-									});
+			//包裝總金額至server
+			function fetchApplicableDiscounts() {
+				const totalAmount = calculateTotalAmount();
+				const currentTime = getCurrentDateTime();
+					
+				$.ajax({
+						url : '/shop/sale/applicableSales',
+						type : 'GET',
+						data : {
+								'totalAmount' : totalAmount,
+								'currentTime' : currentTime
+								},
+						success : function(sales) {
+							console.log("Sending AJAX request with totalAmount: ", totalAmount);
+							console.log("促銷方案: ", sales);
+							applyDiscounts(sales);
+						},
+						error : function(xhr, status, error) {
+							console.log("Sending AJAX request with totalAmount: ", totalAmount);
+							console.error("沒有搜到促銷方案", error);
+						}
+				});
+			}
 
-							function paymentMethodChange() {
-								var selectedMethod = $(
-										'[name="paymentMethod"]:checked').data(
-										'method');
+			//使用折扣計算折扣後總金額
+			function applyDiscounts(sales) {
+				if (!Array.isArray(sales) || sales.length === 0) {
+					console.log('沒有合適折扣');
+					return;
+				}
+				const totalAmount = calculateTotalAmount();
+				const bestSale = calculateBestDiscount(totalAmount, sales);
+				const saleNo = bestSale.saleNo;
+// 								console.log(saleNo);
+				const saleName = bestSale.saleName;
+// 								console.log(saleName);
 
-								$('#creditCard, #transfer, #cashOnDelivery')
-										.hide();
+// 				var orderDiscount = totalAmount*(1-bestSale.saleDiscount);
+				const orderDiscount = totalAmount * bestSale.saleDiscount;
+				
+				$("span.orderDiscount").text(orderDiscount.toFixed(0));
+				$("span.orderDiscount").val(orderDiscount.toFixed(0));
+				
+				calculateOrderBill();
+				
+				$('input#hiddensaleNo').val(saleNo);
+				$('input#hiddensaleName').val(saleName);
+				$('span#saleName').text(saleName);
 
-								if (selectedMethod === '信用卡') {
-									$('#creditCard').show();
-								} else if (selectedMethod === '轉帳') {
-									$('#transfer').show();
-								} else if (selectedMethod === '貨到付款') {
-									$('#cashOnDelivery').show();
-								}
-							}
+			}
 
+			//合適最佳折扣
+			function calculateBestDiscount(totalAmount, sales) {
+				let maxDiscount = 0;
+				let bestSale = null;
+				sales.forEach(function(sale) {
+					if (totalAmount >= sale.saleAmount) {
+						maxDiscount = Math.max(maxDiscount,sale.saleDiscount);
+						bestSale = sale;
+					}
+				});
+				return bestSale;
+			}
 
+			//計算實付金額
+			function calculateOrderBill() {
 
-							//計算總金額
-							function calculateTotalAmount() {
-								var totalAmount = 0;
-								var price = $(this).closest("tr")
-										.find(".price").text();
-								var qty = $(this).closest("tr")
-										.find(".prodQty").text();
+	// 			var totalAmount = parseInt($("div.totalAmount").text());
+	// 			console.log("Total Amount: " + totalAmount);
+				const orderDiscount = parseInt($("span.orderDiscount").text());
+					console.log("Order Discount: " + orderDiscount);
+				const orderShipment = parseInt($("span.orderShipment").text());
+					console.log("Order Shipment: " + orderShipment);
+				const orderBill = orderDiscount	+ orderShipment;
+					console.log("Order Bill: " + orderBill);
+				$("span.orderBill").text(orderBill.toFixed(0));
+				$("span.orderBill").val(orderBill.toFixed(0));
+	
+					setHiddenInputs();
 
-								var sub = parseInt(price * qty);
-								$(this).closest("tr").find(".sub").text(sub);
-								$('.sub').each(function() {
-									var sub = parseInt($(this).text());
-									if (!isNaN(sub)) {
-										totalAmount += sub;
-									}
-								})
+			}
 
-								return totalAmount;
-								console.log(totalAmount);
+			function setHiddenInputs() {
+				$('input#hiddenOrderAmount').val($('#orderAmount').text());
+				$('input#hiddensaleNo').val($('#saleNo').text());
+				$('input#hiddensaleName').val($('#saleName').text());
+				$('input#hiddenOrderDiscount').val($('#orderDiscount').text());
+				$('input#hiddenOrderShipment').val($('#orderShipment').text());
+				$('input#hiddenOrderBill').val($('#orderBill').text());
+			}
 
-							}
+			//取出現在時間
+			function getCurrentDateTime() {
+				const now = new Date();
+				const year = now.getFullYear();
+				const month = (now.getMonth() + 1).toString().padStart(2, '0');
+				const day = now.getDate().toString().padStart(2,'0');
+				const hours = now.getHours().toString().padStart(2, '0');
+				const minutes = now.getMinutes().toString().padStart(2, '0');
+			
+				const formattedDateTime = year + '-' + month + '-' + day + ' ' + 
+										  hours + ':' + minutes + ':' + 00;
 
-							//包裝總金額至server
-							function fetchApplicableDiscounts() {
-								var totalAmount = calculateTotalAmount();
-								var currentTime = getCurrentDateTime();
+				return formattedDateTime;
+			}
 
-								$.ajax({
-											url : '/shop/sale/applicableSales',
-											type : 'GET',
-											data : {
-												'totalAmount' : totalAmount,
-												'currentTime' : currentTime
-											},
-											success : function(sales) {
-												console
-														.log(
-																"Sending AJAX request with totalAmount: ",
-																totalAmount);
-												console.log("促銷方案: ", sales);
-												applyDiscounts(sales);
-											},
-											error : function(xhr, status, error) {
-												console
-														.log(
-																"Sending AJAX request with totalAmount: ",
-																totalAmount);
-												console
-														.error("沒有收到促銷方案",
-																error);
-											}
-										});
-							}
+		setHiddenInputs();
 
-							//使用折扣計算折扣後總金額
-							function applyDiscounts(sales) {
-								if (!Array.isArray(sales) || sales.length === 0) {
-									console.log('沒有合適折扣');
-									return;
-								}
-								var totalAmount = calculateTotalAmount();
-								var bestSale = calculateBestDiscount(
-										totalAmount, sales);
+		});
 
-								var saleNo = bestSale.saleNo;
-								console.log(saleNo);
-								var saleName = bestSale.saleName;
-								console.log(saleName);
-
-								var orderDiscount = totalAmount
-										* (1 - bestSale.saleDiscount);
-
-								$("div.orderDiscount").text(
-										orderDiscount.toFixed(0));
-								$("div.orderDiscount").val(
-										orderDiscount.toFixed(0));
-
-								calculateOrderBill();
-
-								$('input#hiddensaleNo').val(saleNo);
-								$('input#hiddensaleName').val(saleName);
-								$('div#saleName').text(saleName);
-
-							}
-
-							//合適最佳折扣
-							function calculateBestDiscount(totalAmount, sales) {
-								var maxDiscount = 0;
-								var bestSale = null;
-								sales.forEach(function(sale) {
-									if (totalAmount >= sale.saleAmount) {
-										maxDiscount = Math.max(maxDiscount,
-												sale.saleDiscount);
-										bestSale = sale;
-									}
-								});
-								return bestSale;
-							}
-
-							//計算實付金額
-							function calculateOrderBill() {
-
-								var totalAmount = parseInt($("div.totalAmount")
-										.text());
-								console.log("Total Amount: " + totalAmount);
-								var orderDiscount = parseInt($(
-										"div.orderDiscount").text());
-								console.log("Order Discount: " + orderDiscount);
-								var orderShipment = parseInt($(
-										"div.orderShipment").text());
-								console.log("Order Shipment: " + orderShipment);
-								var orderBill = totalAmount - orderDiscount
-										+ orderShipment;
-								console.log("Order Bill: " + orderBill);
-								$("div.orderBill").text(orderBill.toFixed(0));
-								$("div.orderBill").val(orderBill.toFixed(0));
-
-								setHiddenInputs();
-
-							}
-
-							function setHiddenInputs() {
-								$('input#hiddenOrderAmount').val(
-										$('#orderAmount').text());
-								$('input#hiddensaleNo')
-										.val($('#saleNo').text());
-								$('input#hiddensaleName').val(
-										$('#saleName').text());
-								$('input#hiddenOrderDiscount').val(
-										$('#orderDiscount').text());
-								$('input#hiddenOrderShipment').val(
-										$('#orderShipment').text());
-								$('input#hiddenOrderBill').val(
-										$('#orderBill').text());
-							}
-
-							//取出現在時間
-							function getCurrentDateTime() {
-								var now = new Date();
-
-								var year = now.getFullYear();
-								var month = (now.getMonth() + 1).toString()
-										.padStart(2, '0'); // Months are zero-based
-								var day = now.getDate().toString().padStart(2,
-										'0');
-								var hours = now.getHours().toString().padStart(
-										2, '0');
-								var minutes = now.getMinutes().toString()
-										.padStart(2, '0');
-
-								// Create a formatted string
-								var formattedDateTime = year + '-' + month
-										+ '-' + day + ' ' + hours + ':'
-										+ minutes + ':' + 00;
-
-								return formattedDateTime;
-							}
-
-							setHiddenInputs();
-
-						});
 	</script>
 </body>
 </html>
