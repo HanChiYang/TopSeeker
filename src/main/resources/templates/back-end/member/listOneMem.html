@@ -33,7 +33,11 @@
     text-align: center; /* 如果內容文字也需要置中 */
     margin-top: 50px;
 }
-	
+	.no-border {
+    border: none;
+    background-color: transparent; /* 背景透明 */
+    color: inherit; /* 使用继承的文字颜色 */
+}
 	
 </style>
 </head>
@@ -56,7 +60,7 @@
 		<span>身分證字號:</span><span th:text="${memberVO.memUid}"></span><br/>
 		<span>生日:</span><span th:text="${memberVO.memBirthday}"></span><br/>
 		<span>帳號:</span><span th:text="${memberVO.memAccount}"></span><br/>
-		<span>密碼:</span><span th:text="${memberVO.memPassword}"></span><br/>
+		<span>密碼:</span><span><input class="no-border" type="password" th:value="${memberVO.memPassword}" readonly></span><br/>
 		
 		<span>狀態:</span>
 		<span th:switch="${memberVO.memStatus}">
