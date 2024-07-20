@@ -78,7 +78,7 @@ h1::before, h2::before, h3::before, h4::before, h5::before, h6::before {
     transform: translateY(-50%);
     width: 35px; /* 根据需要调整宽度 */
     height: 35px; /* 根据需要调整高度 */
-    background-image: url('/images/mountains.png'); /* 图标的路径 */
+    background-image: url('/images/cartoontree.png'); /* 图标的路径 */
     background-size: cover;
     background-repeat: no-repeat;
 }
