@@ -298,11 +298,6 @@ public class ActController {
 	    		//判斷登入的會員
 	            .filter(p -> p.getMemberVO().getMemNo().equals(loggedInMember.getMemNo()))
 	            
-	        	// 取得待審核人數和當前參與人數
-//	            .peek(act -> {
-//                    actSvc.updateActCurrentAndCheckCount(act.getActNo());
-//                    
-//                })
 	            .collect(Collectors.toList());//加入集合
 
 	    model.addAttribute("memMyAct", list);
@@ -373,6 +368,27 @@ public class ActController {
         return "front-end/act/listAllActFragment :: resultsList";
     }
 	
-  
+	@GetMapping("/memActList")
+    public String memAllAct(Model model, Integer memNo) {
+		List<ActVO> list = actSvc.getActsByMem(memNo);
+		Map<Integer, Double> ratingMap = new HashMap<>();
+		//計算評價
+	    for (ActVO act : list) {
+	        double rating = 0;
+	        if (act.getEvalSum() != 0) {
+	        	// 四捨五入到小數點後一位
+	            rating = Math.round((double) 
+	            		act.getActRateSum() / act.getEvalSum() * 10.0) / 10.0;
+	        }
+	        ratingMap.put(act.getActNo(), rating); 
+	    }
+	    //取得團主資料
+		MemberVO memberVO = memberSvc.getOneMem(memNo); 
+	    // 添加資料到模型中
+		model.addAttribute("memberVO", memberVO);
+	    model.addAttribute("memMyAct", list);
+	    model.addAttribute("ratingMap", ratingMap);  // 傳遞 ratingMap 到前端
+    	return "front-end/act/memActList";
+    }
 
 }
