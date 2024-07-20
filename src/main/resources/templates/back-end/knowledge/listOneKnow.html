@@ -62,43 +62,43 @@ margin-right: auto;
 			</div>
 			<div class="card-body">
 				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">消息修改時間:</div>
-					<div class="col-sm-8" th:text="${shopInfoVO.infoDate}"></div>
+					<div class="col-sm-4 font-weight-bold">修改時間:</div>
+					<div class="col-sm-8" th:text="${knowledgeVO.knowPublishDate}"></div>
 				</div>
 				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">消息狀態:</div>
+					<div class="col-sm-4 font-weight-bold">知識狀態:</div>
 					<div class="col-sm-8">
-						<span th:switch="${shopInfoVO.infoStatus}"> <span
+						<span th:switch="${knowledgeVO.knowStatus}"> <span
 							th:case="'0'">下架</span> <span th:case="'1'">上架</span>
 						</span>
 					</div>
 				</div>
 
 				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">消息編號:</div>
-					<div class="col-sm-8" th:text="${shopInfoVO.infoNo}"></div>
+					<div class="col-sm-4 font-weight-bold">知識編號:</div>
+					<div class="col-sm-8" th:text="${knowledgeVO.knowNo}"></div>
 				</div>
 				<div class="row mb-2">
 					<div class="col-sm-4 font-weight-bold">標題:</div>
-					<div class="col-sm-8" th:text="${shopInfoVO.infoHead}"></div>
+					<div class="col-sm-8" th:text="${knowledgeVO.knowTitle}"></div>
 				</div>
 				<div class="row mb-2">
 					<div class="col-sm-4 font-weight-bold">內容:</div>
-					<pre class="col-sm-8" th:text="${shopInfoVO.infoContent}"></pre>
+					<pre class="col-sm-8" th:text="${knowledgeVO.knowContent}"></pre>
 				</div>
 
 				<div class="mb-3">
 					<label for="infoPic" class="form-label">圖片:</label>
-					<div th:field="${shopInfoVO.infoNo}" id="infoPic" class="d-flex flex-row flex-wrap">
+					<div th:field="${knowledgeVO.knowNo}" id="knowPic" class="d-flex flex-row flex-wrap">
 							<img
-								th:src="@{/shop/DBGifReader4} + '?infoNo=' + *{shopInfoVO.infoNo}"
+								th:src="@{/knowledge/DBGifReader} + '?knowNo=' + *{knowledgeVO.knowNo}"
 								class="img-thumbnail mb-2" width="400" height="300">
 						</div>
 					</div>
 				</div>
 				<div class="text-center">
-					<a th:href="@{/shop/shopManagement/listAllShopInfo}"
-						class="btn btn-success backbutton" role="button">繼續修改最新消息</a>
+					<a th:href="@{/knowledge/listAllKnow}"
+						class="btn btn-success backbutton" role="button">繼續修改新手知識</a>
 				</div>
 
 			</div>
