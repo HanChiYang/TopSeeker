@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <link rel="stylesheet" th:href="@{/css/common.css}">
 <link rel="stylesheet" th:href="@{/css/participant.css}">
-<link rel="stylesheet" th:href="@{/css/navbar.css}" />
 <style>
 /* Star Rating Styles */
 .star-rating {
@@ -49,7 +48,7 @@ input[readonly] {
 }
 
 input[type="text"], textarea {
-    background-color: #f8f9fa; /* 更改背景颜色 */
+    background-color: #ACE1AF; /* 更改背景颜色 */
     border: 1px solid #ced4da; /* 保留边框 */
     padding: 10px;
     font-size: 16px;
@@ -62,7 +61,7 @@ textarea {
 }
 
 button#submit {
-    background-color: #007bff;
+    background-color: #CEDEBD;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -76,6 +75,13 @@ button#submit {
 button#submit:hover {
     background-color: #0056b3;
 }
+
+.text-right {
+	color:green;
+    float: left;
+    font-weight: bold;
+    padding-left: 50px; /* 調整間距 */
+}
 </style>
 
 </head>
@@ -87,25 +93,32 @@ button#submit:hover {
  <div class="article-details">
   <form class="add-article" th:action="@{update}" method="post" th:object="${participantVO}" enctype="multipart/form-data">
    <div>
-    <h6><label>參團活動編號:</label></h6> <input type="text" th:field="*{actPartNo}" style="border: 0px; font-weight: bold;" readonly /><br />
+    <h6><label>參團活動編號:</label></h6> <span th:text="*{actPartNo}" class="text-right"></span><br />
    </div>
 
    <div>
-    <h6><label>參團人數:</label> </h6> <input type="text" th:field="*{actJoinCount}" style="border: 0px; font-weight: bold;" readonly /></span>
+    <h6><label>參團人數:</label> </h6> <span th:text="*{actJoinCount}" class="text-right"></span><br />
    </div>
    
    <div>
-    <h6><label>報名狀態:</label> </h6> <input type="text" th:field="*{actCommit}" style="border: 0px; font-weight: bold;" readonly /></span>
+    <h6><label>報名狀態:</label> </h6>
+    <span th:switch="*{actCommit}" class="text-right">
+        <span th:case="0">待審核</span>
+        <span th:case="1">審核通過</span>
+        <span th:case="2">審核不通過</span>
+        <span th:case="3">取消</span>
+        <span th:case="*">未知狀態</span>
+    </span>
    </div>
-  
+  <br>
    <div>
     <h6><label>活動標題:</label></h6> 
-    <input type="text" th:field="*{actVO.actTitle}" readonly /> 
-     <span th:if="${#fields.hasErrors('actVO.actTitle')}" th:errors="*{actVO.actTitle}" class="error" id="actVO.actTitle.errors"></span>
+    <span th:text="*{actVO.actTitle}" class="text-right"></span><br/>
+    <span th:if="${#fields.hasErrors('actVO.actTitle')}" th:errors="*{actVO.actTitle}" class="error" id="actVO.actTitle.errors"></span>
    </div>
 
    <div>
-    <h6><label>會員帳號:</label> </h6><input type="text" th:field="*{memberVO.memAccount}" readonly /> 
+    <h6><label>會員帳號:</label> </h6><span th:text="*{memberVO.memAccount}" class="text-right"></span><br />
     <span th:if="${#fields.hasErrors('memberVO.memAccount')}" th:errors="*{memberVO.memAccount}" class="error" id="memberVO.memAccount.errors"></span>
    </div>
 
