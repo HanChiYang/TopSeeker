@@ -38,10 +38,10 @@
      }
      
      
-     table.dataTable.row-border tbody tr:first-child th, table.dataTable.row-border tbody tr:first-child td, table.dataTable.display tbody tr:first-child th, table.dataTable.display tbody tr:first-child td {
-	    border-top: none;
-	    white-space: nowrap;
-	 }
+/*      table.dataTable.row-border tbody tr:first-child th, table.dataTable.row-border tbody tr:first-child td, table.dataTable.display tbody tr:first-child th, table.dataTable.display tbody tr:first-child td { */
+/* 	    border-top: none; */
+/* 	    white-space: nowrap; */
+/* 	 } */
      
      /* 彈窗美化 */
     .modal-header {
@@ -59,21 +59,29 @@
         font-weight: bold;
     }
     .title-column {
-        width: 90px; /* 設置活動標題欄位的最大寬度 */
+        width: 85px; /* 設置活動標題欄位的最大寬度 */
         word-wrap: break-word; /* 使內容在超過寬度時自動換行 */
         white-space: normal; /* 使內容正常換行 */
     }
-    .current-title-column {
-        max-width: 45px;        
+    .current-title-column{
+        width: 35px;        
+    }
+    .check-title-column{
+    	width: 45px;
+        white-space: nowrap;        
     }
     .max-min-title-column {
-        max-width: 30px;        
+        width: 25px;        
     }
     .date-title-column {
-        max-width: 45px;        
+    	width: 40px;
+        white-space: nowrap;        
     }
     .count-column {
-        max-width: 20px;        
+        width: 15px;        
+    }
+    .edit-column {
+        max-width: 40px;        
     }
     
     div.container {
@@ -239,14 +247,14 @@
                             <th class="max-min-title-column">最低人數</th>
                             <th class="current-title-column">已參與人數</th>
                             <th>待審核人數</th>
-                            <th class="date-title-column">報名起始</th>
+<!--                             <th class="date-title-column">報名起始</th> -->
                             <th class="date-title-column">報名截止</th>
                             <th class="date-title-column">活動開始</th>
                             <th class="date-title-column">活動結束</th>
                             <th>狀態</th>
                             <th>評價</th> 
-                            <th>修改活動</th>
-                            <th>取消活動</th>
+                            <th class="edit-column">修改活動</th>
+                            <th class="edit-column">取消活動</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -262,13 +270,13 @@
                                 <td th:text="${actVO.actMaxCount}"></td>
                                 <td th:text="${actVO.actMinCount}"></td>
                                 <td th:text="${actVO.actCurrentCount}"></td>
-                                <td class="no-wrap">
+                                <td class="check-title-column">
                                     <span th:text="${actVO.actCheckCount}"></span>
                                     <form th:action="@{/participant/participantCheck}" method="get" style="display:inline;">
 									    <button type="submit" class="btn btn-primary ms-2" th:classappend="${actVO.actCheckCount == 0 || actVO.actStatus == 3} ? 'disabled' : ''" th:disabled="${actVO.actCheckCount == 0 || actVO.actStatus == 3}">審核</button>
 									</form>
                                 </td>
-                                <td class="date-title-column" th:text="${actVO.actEnrollBegin}"></td>
+<!--                                 <td class="date-title-column" th:text="${actVO.actEnrollBegin}"></td> -->
                                 <td class="date-title-column" th:text="${actVO.actEnrollEnd}"></td>
                                 <td class="date-title-column" th:text="${actVO.actStart}"></td>
                                 <td class="date-title-column" th:text="${actVO.actEnd}"></td>
