@@ -94,10 +94,12 @@ button#submit:hover {
   <form class="add-article" th:action="@{update}" method="post" th:object="${participantVO}" enctype="multipart/form-data">
    <div>
     <h6><label>參團活動編號:</label></h6> <span th:text="*{actPartNo}" class="text-right"></span><br />
+    <input type="hidden" th:field="*{actPartNo}" />
    </div>
 
    <div>
     <h6><label>參團人數:</label> </h6> <span th:text="*{actJoinCount}" class="text-right"></span><br />
+     <input type="hidden" th:field="*{actJoinCount}" />
    </div>
    
    <div>
@@ -109,6 +111,7 @@ button#submit:hover {
         <span th:case="3">取消</span>
         <span th:case="*">未知狀態</span>
     </span>
+    <input type="hidden" th:field="*{actCommit}" />
    </div>
   <br>
    <div>
