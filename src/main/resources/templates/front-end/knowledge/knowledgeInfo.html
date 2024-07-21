@@ -16,6 +16,7 @@
 
 <!-- Topseeker前台導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/common.css}">
+<link rel="stylesheet" th:href="@{/css/articleindex.css}">
 
 
 <style>
@@ -47,12 +48,12 @@ h1.page-title {
 }
 
 .news-container {
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
 }
 
 .news-item {
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.9); /* 设置白色背景，透明度为0.8 */
     margin-bottom: 20px;
     padding: 20px;
     border-radius: 8px;
@@ -115,6 +116,18 @@ h1.page-title {
 </style>
 </head>
 <body>
+
+<div class="video-background">
+        <video autoplay muted loop id="video1">
+            <source src="/images/waterfall.mp4" type="video/mp4">
+        </video>
+        <video autoplay muted loop id="video2" style="display: none;">
+            <source src="/images/waterfall.mp4" type="video/mp4">
+        </video>
+        <video autoplay muted loop id="video3" style="display: none;">
+            <source src="/images/waterfall.mp4" type="video/mp4">
+        </video>
+    </div>	
     <!-- topseeker前台Navbar -->
     <nav th:insert="~{/front-end/navbar.html}"></nav>
 

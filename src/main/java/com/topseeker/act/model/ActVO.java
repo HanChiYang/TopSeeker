@@ -121,10 +121,10 @@ public class ActVO implements java.io.Serializable {
 	@Column(name = "act_status")	
 	private Integer actStatus;
 
-	
+	//評價總星數
 	@Column(name = "act_rate_sum")
 	private Integer actRateSum=0;
-	
+	//評價總次數
 	@Column(name = "eval_sum")
 	private Integer evalSum=0;
 	
