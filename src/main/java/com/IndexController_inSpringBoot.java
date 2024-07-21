@@ -99,7 +99,6 @@ public class IndexController_inSpringBoot {
     
     @GetMapping("/member/registrationMem")
 	public String registrationMem(Model model) {
-    	System.out.println("123");
 		return "front-end/member/registrationMem";
 	}
     @GetMapping("/member/loginMem")

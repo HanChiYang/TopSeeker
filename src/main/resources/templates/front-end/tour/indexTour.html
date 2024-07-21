@@ -208,42 +208,42 @@
     </div>
 
    <!-- 搜尋列 -->
-<!--     <form method="post" th:action="@{listTours_ByCompositeQuery_front}"> -->
-<!-- <div class="container"> -->
-<!--     <div class="row search-bar justify-content-center"> -->
-<!--         <div class="col-md-3 form-group"> -->
-<!--             <label for="start-date" class="col-form-label">出發日期區間：</label> -->
-<!--             <input type="date" name=groupBegin  id="start-date" class="form-control" placeholder="開始日期"> -->
-<!--         </div> -->
-<!--         <div class="col-md-3 form-group"> -->
-<!--             <label for="end-date" class="col-form-label">&nbsp;</label> -->
-<!--             <input type="date" name=groupEnd id="end-date" class="form-control" placeholder="結束日期"> -->
-<!--         </div> -->
-<!--         <div class="col-md-4 form-group align-items-end d-flex"> -->
-           
-<!--                 <label for="destination" class="col-form-label">目的地：</label> -->
-<!--                 <input type="text" name="tourName" id="destination" class="form-control" placeholder="輸入目的地"> -->
-<!--         </div> -->
-<!--         <div class="col-md-2 form-group align-items-end d-flex"> -->
-<!--             <button type="submit" class="btn btn-primary btn-block">送出</button> -->
-<!--         </div>  -->
-<!--     </div> -->
-<!-- </div> -->
-<!--     </form> -->
-    
-    
-    <br>
-    <form method="post" th:action="@{listTours_ByCompositeQuery_front}">
-        <div class="container search-bar">
-            <label for="destination" class="col-form-label">查找旅遊目的地：</label>
-            <div class="form-group">
-                <input type="text" name="tourName" id="destination" class="form-control" placeholder="輸入目的地">
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">送出</button>
-            </div>
+    <form method="post" th:action="@{/tourGroup/listTourGroups_ByCompositeQuery_front}">
+<div class="container">
+    <div class="row search-bar justify-content-center">
+        <div class="col-md-3 form-group">
+            <label for="start-date" class="col-form-label">出發日期區間：</label>
+            <input type="date" name=groupBegin  id="start-date" class="form-control" placeholder="開始日期">
         </div>
+        <div class="col-md-3 form-group">
+            <label for="end-date" class="col-form-label">&nbsp;</label>
+            <input type="date" name=groupEnd id="end-date" class="form-control" placeholder="結束日期">
+        </div>
+        <div class="col-md-4 form-group align-items-end d-flex">
+           
+                <label for="destination" class="col-form-label">目的地：</label>
+                <input type="text" name="tourName" id="destination" class="form-control" placeholder="輸入目的地">
+        </div>
+        <div class="col-md-2 form-group align-items-end d-flex">
+            <button type="submit" class="btn btn-primary btn-block">送出</button>
+        </div> 
+    </div>
+</div>
     </form>
+    
+    
+<!--     <br> -->
+<!--     <form method="post" th:action="@{listTours_ByCompositeQuery_front}"> -->
+<!--         <div class="container search-bar"> -->
+<!--             <label for="destination" class="col-form-label">查找旅遊目的地：</label> -->
+<!--             <div class="form-group"> -->
+<!--                 <input type="text" name="tourName" id="destination" class="form-control" placeholder="輸入目的地"> -->
+<!--             </div> -->
+<!--             <div class="form-group"> -->
+<!--                 <button type="submit" class="btn btn-primary">送出</button> -->
+<!--             </div> -->
+<!--         </div> -->
+<!--     </form> -->
     
     
     

@@ -1,12 +1,7 @@
 package com.topseeker.act.controller;
-
-import javax.persistence.Column;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
-
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -19,17 +14,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import com.topseeker.act.controller.validation.MemGroup;
 import com.topseeker.act.model.ActService;
 import com.topseeker.act.model.ActVO;
@@ -37,14 +30,8 @@ import com.topseeker.actpicture.model.ActPictureService;
 import com.topseeker.actpicture.model.ActPictureVO;
 import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
-import com.topseeker.news.model.NewsVO;
 import com.topseeker.participant.model.ParticipantVO;
-import com.topseeker.shop.product.model.ShopProductVO;
-import com.topseeker.shop.productpic.model.ShopProductPicVO;
-import com.topseeker.shop.wishlist.model.ShopWishlistVO;
-
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Act;
-
 
 
 
@@ -81,6 +68,7 @@ public class ActController {
 	/*
 	 * This method will be called on addEmp.html form submission, handling POST request It also validates the user input
 	 */
+	
 	@PostMapping("insert")
 	public String insert(
 			/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
@@ -129,10 +117,10 @@ public class ActController {
 
 		actSvc.addAct(actVO);
 		/*************************** 3.新增完成,準備轉交(Send the Success view) **************/
-		List<ActVO> list = actSvc.getAll();
-		model.addAttribute("actListData", list);
-		model.addAttribute("success", "- (新增成功)");
-		return "redirect:/act/memMyAct"; // 新增成功後重導至@GetMapping("/emp/listAllEmp")
+//		List<ActVO> list = actSvc.getAll();
+//		model.addAttribute("actListData", list);
+		model.addAttribute("successMessage", "活動新增成功!");
+		return "redirect:/act/memMyAct?success=true";  // 新增成功後重導至@GetMapping("/emp/listAllEmp")
 	}
 
 	/*
@@ -307,17 +295,19 @@ public class ActController {
 	    }
 
 	    List<ActVO> list = actSvc.getAll().stream()
+	    		//判斷登入的會員
 	            .filter(p -> p.getMemberVO().getMemNo().equals(loggedInMember.getMemNo()))
-	            .collect(Collectors.toList());
+	            
+	        	// 取得待審核人數和當前參與人數
+//	            .peek(act -> {
+//                    actSvc.updateActCurrentAndCheckCount(act.getActNo());
+//                    
+//                })
+	            .collect(Collectors.toList());//加入集合
 
 	    model.addAttribute("memMyAct", list);
 		return "front-end/act/memMyAct";
-	}
-    
-    @GetMapping("/check")
-    public String check(Model model) {
-    	return "front-end/participant/participantCheck";
-    }
+	}    
     
     @GetMapping("/actBackEnd")
     public String actBackEnd(Model model) {
@@ -378,7 +368,6 @@ public class ActController {
         model.addAttribute("actListData", list);
         return "front-end/act/listAllActFragment :: resultsList";
     }
-	
 	
   
 

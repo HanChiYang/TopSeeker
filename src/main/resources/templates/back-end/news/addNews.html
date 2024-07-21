@@ -24,6 +24,7 @@
     .error {
         color: red;
     }
+    
 </style>
 </head>
 <body>
@@ -47,7 +48,6 @@
                     <input type="text" class="form-control" th:field="*{newsTitle}" onclick="hideContent('newsTitle.errors');" />
                     <span th:if="${#fields.hasErrors('newsTitle')}" th:errors="*{newsTitle}" class="error" id="newsTitle.errors"></span>
                 </div>
-                
                 <div class="mb-3">
                     <label class="form-label">新聞內容:</label>
                     <textarea class="form-control" th:field="*{newsContent}" onclick="hideContent('newsContent.errors');" rows="10"></textarea>
@@ -62,14 +62,6 @@
                     <input type="date" class="form-control" th:field="*{newsPublishTime}" onclick="hideContent('newsPublishTime.errors');" />
                     <span th:if="${#fields.hasErrors('newsPublishTime')}" th:errors="*{newsPublishTime}" class="error" id="newsPublishTime.errors"></span>
                 </div>
-
-                <!--
-                <div class="mb-3">
-                    <label for="newsPic" class="form-label">新聞圖片:</label>
-                    <input class="form-control" type="file" name="picSet" id="newsPic" multiple/>
-                </div>
-                -->
-
                 <div class="text-center">
                     <button type="submit" id="submit" class="btn btn-primary">送出新增</button>
                 </div>		

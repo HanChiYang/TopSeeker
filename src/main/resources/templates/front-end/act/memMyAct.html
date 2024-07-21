@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TopSeeker-開團列表</title>
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://kit.fontawesome.com/de9b92a469.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">    
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" th:href="@{/css/common.css}">
@@ -37,9 +34,32 @@
         border: 1px solid black; /* 新增邊框樣式 */
         border-collapse: collapse;
      }
+     
+     .no-wrap {
+	    white-space: nowrap;
+	 }
+	 
+	 /* 彈窗美化 */
+    .modal-header {
+        background-color: #28a745;
+        color: white;
+    }
+    .modal-body {
+        font-size: 1.2rem;
+    }
+    .modal-footer .btn-secondary {
+        background-color: #6c757d;
+    }
+    .success-message {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
     </style>    
 </head>
 <body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>   
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+
 <!-- jQuery DataTables 設定 -->
 <script th:inline="none">
     $(document).ready(function() {
@@ -78,6 +98,12 @@
                 $('#statusModal').modal('show');
             }
         });
+     // 顯示成功訊息
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success') && urlParams.get('success') === 'true') {
+            var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+        }
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -117,6 +143,7 @@
                             <th>活動開始日</th>
                             <th>活動結束日</th>
                             <th>活動狀態</th>
+                            <th>平均評價</th> <!-- 新增欄位 -->
                             <th>修改</th>
                             <th>刪除</th>
                         </tr>
@@ -126,15 +153,15 @@
                             <tr>
                                 <td th:text="${actVOStat.count}"></td>
                                 <td th:text="${actVO.memberVO.memAccount} + '-(' + ${actVO.memberVO.memName} + ')'"></td>
-                                <td th:text="${actVO.actTitle}"></td>                                                                <td th:text="${actVO.actMaxCount}"></td>
+                                <td th:text="${actVO.actTitle}"></td>                                                                
+                                <td th:text="${actVO.actMaxCount}"></td>
                                 <td th:text="${actVO.actMinCount}"></td>
                                 <td th:text="${actVO.actCurrentCount}"></td>
-                                <td>
+                                <td class="no-wrap">
                                     <span th:text="${actVO.actCheckCount}"></span>
-                                    <form th:action="@{/act/check}" method="get" style="display:inline;">
-                                        <button type="submit" class="btn btn-primary ms-2" th:classappend="${actVO.actCheckCount == 0} ? 'disabled' : ''" th:disabled="${actVO.actCheckCount == 0}">審核</button>
-                                        <input type="hidden" name="actNo" th:value="${actVO.actNo}">
-                                    </form>
+                                    <form th:action="@{/participant/participantCheck}" method="get" style="display:inline;">
+									    <button type="submit" class="btn btn-primary ms-2" th:classappend="${actVO.actCheckCount == 0} ? 'disabled' : ''" th:disabled="${actVO.actCheckCount == 0}">審核</button>
+									</form>
                                 </td>
                                 <td th:text="${actVO.actEnrollBegin}"></td>
                                 <td th:text="${actVO.actEnrollEnd}"></td>
@@ -146,6 +173,7 @@
                                     <span th:case="2">活動已完成</span>
                                     <span th:case="3">活動已取消</span>
                                 </td>
+<!--                                 <td th:text="${actVO.evalSum == 0 ? '尚無評價' : #numbers.formatDecimal(actVO.actRateSum / actVO.evalSum, 1, 1)}"></td> 計算平均評價 -->
                                 <td>
                                     <form method="post" th:action="@{/act/updateActByMem}">
                                         <button type="submit" class="btn btn-warning modify-btn" th:classappend="${actVO.actStatus != 0} ? 'btn-secondary' : 'btn-warning'" th:disabled="${actVO.actStatus != 0}" th:data-status="${actVO.actStatus}">修改</button>
@@ -166,9 +194,27 @@
         </div>
     </div>
 </div>
-
+<!-- Bootstrap彈窗 -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">提示</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <i class="bi bi-check-circle-fill text-success" style="font-size: 2rem;"></i>
+        <p class="mt-3 success-message">活動新增成功!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+      </div>
+    </div>
+  </div>
+</div>
 <footer class="bg-light text-center py-4 mt-5">
     <p>&copy; 2024 登山網站. 版權所有.</p>
 </footer>
+
 </body>
 </html>

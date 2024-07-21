@@ -63,7 +63,7 @@
 					<th>圖片</th>
 					<th>標題</th>
 					<th>內容</th>
-<!-- 					<th>消息狀態</th> -->
+					<th width="150px">消息狀態</th>
 					<th>修改</th>
 					<!-- 					<th>刪除</th> -->
 				</tr>
@@ -71,49 +71,49 @@
 			<tbody>
 				<th:block th:each="shopInfoVO : ${shopInfoListData}"> 
 					<tr>
-						<td width="50px" th:text="${shopInfoVO.infoNo}"></td>
-						<td  width="100px" height="90px"; th:text="${shopInfoVO.infoDate}"></td>
+						<td th:text="${shopInfoVO.infoNo}"></td>
+						<td th:text="${shopInfoVO.infoDate}"></td>
 						<td><img
 							th:src="@{/shop/DBGifReader4} + '?infoNo=' + ${shopInfoVO.infoNo} "
 							width="50px"></td>
 							
-						<td width="100px" th:text="${shopInfoVO.infoHead}"></td>
+						<td th:text="${shopInfoVO.infoHead}"></td>
 						
-						<td width="200px"
+						<td
 							th:text="${#strings.abbreviate(shopInfoVO.infoContent, 100)}"></td>
 
-<!-- 						<td> -->
+						<td width="100px">
 							<!-- 賦一個隱藏的值給DataTable排序用 -->
-<!-- 							<span style="display:none" th:text="${shopInfoVO.infoStatus}"></span> -->
+							<span style="display:none" th:text="${shopInfoVO.infoStatus}"></span>
 
-<!-- 							<div class="btn-group" role="group" -->
-<!-- 								aria-label="Basic radio toggle button group"> -->
-<!-- 								上架中按鈕 -->
-<!-- 								<input type="radio" class="btn-check" -->
-<!-- 									th:name="'prodStatus-' + ${shopProductVO.prodNo}" -->
-<!-- 									th:id="'success-outlined-' + ${shopProductVO.prodNo}" -->
-<!-- 									autocomplete="off" -->
-<!-- 									th:checked="${shopProductVO.prodStatus == 1}"> <label -->
-<!-- 									class="btn btn-outline-success" -->
-<!-- 									th:for="'success-outlined-' + ${shopProductVO.prodNo}" -->
-<!-- 									th:onclick="'updateStatus(' + ${shopProductVO.prodNo} + ', 1)'" th:value="${shopProductVO.prodStatus}">上架中</label> -->
+							<div class="btn-group" role="group"
+								aria-label="Basic radio toggle button group">
+								<!-- 上架中按鈕 -->
+								<input type="radio" class="btn-check"
+									th:name="'infoStatus-' + ${shopInfoVO.infoNo}"
+									th:id="'success-outlined-' + ${shopInfoVO.infoNo}"
+									autocomplete="off"
+									th:checked="${shopInfoVO.infoStatus == 1}"> <label
+									class="btn btn-outline-success"
+									th:for="'success-outlined-' + ${shopInfoVO.infoNo}"
+									th:onclick="'updateInfoStatus(' + ${shopInfoVO.infoNo} + ', 1)'" th:value="${shopInfoVO.infoStatus}">上架中</label>
 
-<!-- 								下架按鈕 -->
-<!-- 								<input type="radio" class="btn-check" -->
-<!-- 									th:name="'prodStatus-' + ${shopProductVO.prodNo}" -->
-<!-- 									th:id="'secondary-outlined-' + ${shopProductVO.prodNo}" -->
-<!-- 									autocomplete="off" -->
-<!-- 									th:checked="${shopProductVO.prodStatus == 0}"> <label -->
-<!-- 									class="btn btn-outline-secondary" -->
-<!-- 									th:for="'secondary-outlined-' + ${shopProductVO.prodNo}" -->
-<!-- 									th:onclick="'updateStatus(' + ${shopProductVO.prodNo} + ', 0)'" th:value="${shopProductVO.prodStatus}">下架</label> -->
-<!-- 							</div> -->
+								<!-- 下架按鈕 -->
+								<input type="radio" class="btn-check"
+									th:name="'infoStatus-' + ${shopInfoVO.infoNo}"
+									th:id="'secondary-outlined-' + ${shopInfoVO.infoNo}"
+									autocomplete="off"
+									th:checked="${shopInfoVO.infoStatus == 0}"> <label
+									class="btn btn-outline-secondary"
+									th:for="'secondary-outlined-' + ${shopInfoVO.infoNo}"
+									th:onclick="'updateInfoStatus(' + ${shopInfoVO.infoNo} + ', 0)'" th:value="${shopInfoVO.infoStatus}">下架</label>
+							</div>
 
 
 <!-- 						</td> -->
 						<td width="100px">
 							<form method="post"
-								th:action="@{/shop/shopInfo/getOne_For_Update}"
+								th:action="@{getOneInfo_For_Update}"
 								style="margin-bottom: 0;">
 								<button type="submit" class="btn btn-warning text-white">
 									<i class="fas fa-edit"></i> 修改
@@ -175,19 +175,19 @@
 						});
 		
 				//Ajax修改商品上下架狀態
-				function updateStatus(prodNo, status) {
+				function updateInfoStatus(infoNo, status) {
 					$.ajax({
 						type : "POST",
-						url : "/shop/shopManagement/updateStatus",
+						url : "/shop/shopManagement/updateInfoStatus",
 						data : {
-							prodNo : prodNo,
-							prodStatus : status
+							infoNo : infoNo,
+							infoStatus : status
 						},
 						success : function(response) {
- 							//console.log("狀態更新成功");
+ 							console.log("狀態更新成功");
 						},
 						error : function(xhr, status, error) {
-							//console.log("狀態更新失敗: " + error);
+							console.log("狀態更新失敗: " + error);
 						}
 					});
 				}

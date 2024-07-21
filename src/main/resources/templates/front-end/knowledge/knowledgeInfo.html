@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>登山新手知識</title>
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+<!-- icon用 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- 從 Google Fonts 引入 "Playfair Display" 字體 -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- Topseeker前台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/common.css}">
+
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+.news-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.news-item {
+    background-color: #fff;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.news-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.news-item h2 {
+    font-size: 24px;
+    margin: 15px 0;
+    color: #333;
+}
+
+.news-item .content-preview {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #666;
+}
+
+.news-item .full-content {
+    display: none;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #666;
+}
+
+.news-item .read-more-btn {
+    background-color: #435334;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.news-item .read-more-btn:hover {
+    background-color: #333924;
+}
+</style>
+</head>
+<body>
+    <!-- topseeker前台Navbar -->
+    <nav th:insert="~{/front-end/navbar.html}"></nav>
+
+
+    <div class="news-container">
+        <div class="news-item" th:each="knowledgeVO: ${knowListData}" th:data-know-no="${knowledgeVO.knowNo}">
+<!--             <img th:src="@{/knowledge/DBGifReader} + '?knowNo=' + ${knowledgeVO.knowNo}" alt="文章圖片"> -->
+            <h2 th:text="${knowledgeVO.knowTitle}"></h2>
+            <p class="content-preview" th:text="${#strings.abbreviate(knowledgeVO.knowContent, 200)}"></p>
+            <p class="full-content" th:text="${knowledgeVO.knowContent}"></p>
+            <button class="read-more-btn" onclick="toggleContent(this)">觀看更多</button>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 引入 DataTables -->
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+
+    <!-- topseeker前台Navbar共用JavaScript -->
+    <script src="/js/common.js"></script>
+    <!-- topseeker商城用JavaScript -->
+    <script src="/js/shop_front_end.js"></script>
+
+    <script>
+    function toggleContent(button) {
+        var contentPreview = button.previousElementSibling.previousElementSibling;
+        var fullContent = button.previousElementSibling;
+        var isExpanded = fullContent.style.display === 'block';
+
+        if (isExpanded) {
+            fullContent.style.display = 'none';
+            contentPreview.style.display = 'block';
+            button.textContent = '觀看更多';
+        } else {
+            fullContent.style.display = 'block';
+            contentPreview.style.display = 'none';
+            button.textContent = '顯示較少';
+        }
+    }
+    </script>
+</body>
+</html>
