@@ -3,11 +3,11 @@ package com.topseeker.follow.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
@@ -25,7 +25,6 @@ import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
 
 @Controller
-@Validated
 @RequestMapping("/protected/follow")
 public class FollowController {
 
@@ -70,19 +69,19 @@ public class FollowController {
 
 	@ResponseBody
 	@PostMapping("insert")
-	public String insert(@RequestParam("beFollowedMemNo") Integer beFollowedMemNo, HttpSession session) {
+	public ResponseEntity<String> insert(@RequestParam("beFollowedMemNo") Integer beFollowedMemNo, HttpSession session) {
 
-		MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
-		Integer loggedInMemberNo = loggedInMember.getMemNo();
+	    MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+	    Integer loggedInMemberNo = loggedInMember.getMemNo();
 
-		//確認是否已被追隨過
-		if (followSvc.checkFollowVO(loggedInMemberNo, beFollowedMemNo).isPresent()) {
-			return "{\"message\":\"您已追隨此會員\"}";
-		} else {
-		//若未追隨過，則新增於資料庫
-			followSvc.addFollow(loggedInMemberNo, beFollowedMemNo);
-			return "{\"message\":\"追隨成功\"}";
-		}
+	    if (followSvc.checkFollowVO(loggedInMemberNo, beFollowedMemNo).isPresent()) {
+	        return ResponseEntity.ok("{\"message\":\"您已追隨此會員\"}");
+	    } else if (loggedInMemberNo.equals(beFollowedMemNo)) {
+	        return ResponseEntity.ok("{\"message\":\"這是您的帳號唷！\"}");
+	    } else {
+	        followSvc.addFollow(loggedInMemberNo, beFollowedMemNo);
+	        return ResponseEntity.ok("{\"message\":\"追隨成功\"}");
+	    }
 	}
 
 	@PostMapping("delete")

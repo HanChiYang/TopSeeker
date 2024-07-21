@@ -30,90 +30,101 @@
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
 
 
-<style type="text/css">
+<style>
 
 
-.backbutton{
-margin-left: auto;
-margin-right: auto;
+	main.shopManagementContent {
+		padding: 30px 50px;
+	}
 
-}
+
+	.backbutton{
+	margin-left: auto;
+	margin-right: auto;
+	
+	}
 </style>
 </head>
 <body>
 
+
 	<!-- topseeker後台Navbar -->
 	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
 
-	<!-- 商城後台用Navbar + 左側邊欄 -->
+	<!-- 商城後台用Navbar -->
 	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
-
-
-<main class="shopManagementContent">
-	<div class="content">
-		<!-- 此div被select_page.html第158行insert用 -->
-		<div class="card">
-			<div class="card-header text-center">
-				<h3>修改結果 :</h3>
-			</div>
-			<div class="card-body">
-				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">商品建立時間:</div>
-					<div class="col-sm-8" th:text="${shopProductVO.prodDate}"></div>
-				</div>
-				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">商品狀態:</div>
-					<div class="col-sm-8">
-						<span th:switch="${shopProductVO.prodStatus}"> <span
-							th:case="'0'">下架</span> <span th:case="'1'">上架</span>
-						</span>
+	
+	<div class="shopContent">	
+		
+		<!-- 商城後台用左側邊欄 -->
+		<aside class="sidebar" th:insert="~{/back-end/shop/shop_back_end_sidebar.html}"></aside>
+	
+		<main class="shopManagementContent">
+			<div class="content">
+				<div class="card">
+					<div class="card-header text-center">
+						<h3><b>修改結果 :</b></h3>
 					</div>
-				</div>
-				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">商品類別:</div>
-					<div class="col-sm-8">
-						<span th:switch="${shopProductVO.shopProductTypeVO.prodTypeNo}">
-							<span th:case="'1'">包袋</span> <span th:case="'2'">鞋類</span> <span
-							th:case="'3'">裝備配件</span> <span th:case="'4'">服飾</span>
-						</span>
-					</div>
-				</div>
-				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">商品編號:</div>
-					<div class="col-sm-8" th:text="${shopProductVO.prodNo}"></div>
-				</div>
-				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">商品名稱:</div>
-					<div class="col-sm-8" th:text="${shopProductVO.prodName}"></div>
-				</div>
-				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">商品定價:</div>
-					<div class="col-sm-8" th:text="'$' + ${shopProductVO.prodPrice}"></div>
-				</div>
-
-				<div class="mb-3">
-					<label for="ProdPic" class="form-label">商品圖片:</label>
-					<div id="ProdPic" class="d-flex flex-row flex-wrap">
-						<div th:each="pic, iterStat : ${shopProductVO.shopProductPics}"
-							class="p-2">
-							<!--測試印出產品圖片編號 -->
-							<!-- 							<input type="text" th:value="${pic.prodPicNo}" -->
-							<!-- 								class="form-control mb-2" readonly>  -->
-							<img
-								th:src="@{/shop/DBGifReader3} + '?prodPicNo=' + ${pic.prodPicNo}"
-								class="img-thumbnail mb-2" width="150" height="150">
+					<div class="card-body">
+						<div class="row mb-2">
+							<div class="col-sm-4 font-weight-bold">商品建立時間:</div>
+							<div class="col-sm-8" th:text="${shopProductVO.prodDate}"></div>
 						</div>
+						<div class="row mb-2">
+							<div class="col-sm-4 font-weight-bold">商品狀態:</div>
+							<div class="col-sm-8">
+								<span th:switch="${shopProductVO.prodStatus}"> <span
+									th:case="'0'">下架</span> <span th:case="'1'">上架</span>
+								</span>
+							</div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-sm-4 font-weight-bold">商品類別:</div>
+							<div class="col-sm-8">
+								<span th:switch="${shopProductVO.shopProductTypeVO.prodTypeNo}">
+									<span th:case="'1'">包袋</span> <span th:case="'2'">鞋類</span> <span
+									th:case="'3'">裝備配件</span> <span th:case="'4'">服飾</span>
+								</span>
+							</div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-sm-4 font-weight-bold">商品編號:</div>
+							<div class="col-sm-8" th:text="${shopProductVO.prodNo}"></div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-sm-4 font-weight-bold">商品名稱:</div>
+							<div class="col-sm-8" th:text="${shopProductVO.prodName}"></div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-sm-4 font-weight-bold">商品定價:</div>
+							<div class="col-sm-8" th:text="'$' + ${shopProductVO.prodPrice}"></div>
+						</div>
+		
+						<div class="mb-3">
+							<label for="ProdPic" class="form-label">商品圖片:</label>
+							<div id="ProdPic" class="d-flex flex-row flex-wrap">
+								<div th:each="pic, iterStat : ${shopProductVO.shopProductPics}"
+									class="p-2">
+									<!--測試印出產品圖片編號 -->
+									<!-- 							<input type="text" th:value="${pic.prodPicNo}" -->
+									<!-- 								class="form-control mb-2" readonly>  -->
+									<img
+										th:src="@{/shop/DBGifReader3} + '?prodPicNo=' + ${pic.prodPicNo}"
+										class="img-thumbnail mb-2" width="150" height="150">
+								</div>
+							</div>
+						</div>
+						<div class="text-center">
+							<a th:href="@{/shop/shopManagement/listAllProd}"
+								class="btn btn-success backbutton" role="button">繼續修改商品</a>
+						</div>
+		
 					</div>
 				</div>
-				<div class="text-center">
-					<a th:href="@{/shop/shopManagement/listAllProd}"
-						class="btn btn-success backbutton" role="button">繼續修改商品</a>
-				</div>
-
 			</div>
-		</div>
+		</main>
+	
 	</div>
-</main>
 
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -131,9 +142,5 @@ margin-right: auto;
 	<!-- topseeker商城用JavaScript -->
 	<script src="/js/shop_front_end.js"></script>
 
-
-	<script>
-
-	</script>
 </body>
 </html>
