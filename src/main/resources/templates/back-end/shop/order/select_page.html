@@ -67,6 +67,10 @@ label.hd{
   	width: 600px;
 }
 
+.form-select{
+	margin: 16px 0;
+}
+
 button{
 	position: relative;
   	left: 35%;
@@ -90,20 +94,18 @@ button{
 			<div class="compositeQuery">
 				<form method="post" th:action="@{/shop/order/listOrder_ByCompositeQuery}">
 					
-						<div>
-							<label for="orderNo" class="hd">訂單編號:</label> 
-							<input type="text" name="orderNo" class="bd"
-								placeholder="輸入訂單編號">
+						<div class="form-floating mb-3 hd bd">
+							<input type="text" name="orderNo" class="form-control" placeholder="輸入訂單編號">
+							<label for="orderNo">訂單編號:</label> 
+						</div>
+	
+						<div class="form-floating mb-3 hd bd">
+							<input type="text" name="memNo" class="form-control" placeholder="輸入會員編號，如100X">
+							<label for="memNo">會員編號:</label> 
 						</div>
 	
 						<div>
-							<label for="memNo" class="hd">會員編號:</label> 
-							<input type="text" name="memNo" class="bd" placeholder="輸入會員編號，如100X">
-						</div>
-	
-						<div>
-							<label for="orderStatus" class="hd">訂單狀態:</label>
-							<select name="orderStatus" id="orderStatus" class="bd">
+							<select name="orderStatus" id="orderStatus" class="form-select bd">
 								<option selected value="">請選擇訂單狀態</option>
 								<option value="0">訂單成立</option>
 								<option value="1">出貨中</option>			
@@ -117,8 +119,7 @@ button{
 						</div>
 	
 						<div>
-							<label for="paymentMethod" class="hd">付款方式:</label> 
-							<select name="paymentMethod" id="paymentMethod" class="bd">
+							<select name="paymentMethod" id="paymentMethod" class="form-select bd">
 								<option selected value="">請選擇付款方式</option>
 								<option value="0">信用卡</option>
 								<option value="1">轉帳</option>
@@ -126,16 +127,14 @@ button{
 							</select>
 						</div>
 						<div>
-							<label for="paymentStatus" class="hd">付款狀態:</label> 
-							<select name="paymentStatus" id="paymentStatus" class="bd">
+							<select name="paymentStatus" id="paymentStatus" class="form-select bd">
 								<option selected value="">請選擇付款狀態</option>
 								<option value="0">待繳費</option>
 								<option value="1">已繳費</option>
 							</select>
 						</div>
-						<div class="col1">
-							<label for="deliveryMethod" class="hd">運送方式:</label> 
-							<select name="deliveryMethod" id="deliveryMethod" class="bd">
+						<div class="col1"> 
+							<select name="deliveryMethod" id="deliveryMethod" class="form-select bd">
 								<option selected value="">請選擇運送方式</option>
 								<option value="0">宅配</option>
 								<option value="1">超商取貨</option>

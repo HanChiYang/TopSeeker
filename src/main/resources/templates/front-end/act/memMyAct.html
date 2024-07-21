@@ -278,7 +278,6 @@
                                     <span th:case="2">已完成</span>
                                     <span th:case="3">已取消</span>
                                 </td>
-<!--                                 <td th:text="${actVO.evalSum == 0 ? '尚無評價' : #numbers.formatDecimal(actVO.actRateSum / actVO.evalSum, 1, 1)}"></td> -->
                                 <td>
                                     <div class="star-rating" th:attr="data-rating=${ratingMap[actVO.actNo]}"></div>
                                 </td>
