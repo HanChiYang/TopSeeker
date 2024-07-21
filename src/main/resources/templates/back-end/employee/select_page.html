@@ -3,105 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>員工管理 - select_page.html</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>員工管理</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Custom CSS -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0; /* 淺灰色背景 */
-            color: #444; /* 深灰色文本 */
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
-            padding: 20px;
-            background-color: #ccc; /* 水泥灰色背景 */
-            border: 1px solid #999; /* 深灰色邊框 */
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        form {
-            margin-bottom: 15px;
-        }
-        label, input, select, span {
-            display: block;
-            margin-bottom: 10px;
-        }
-        .errorblock {
-            color: red;
-            margin-bottom: 10px;
-        }
-        h2, h4, h5 {
-            color: #333; /* 深灰色標題 */
-        }
-        a {
-            color: #666; /* 中灰色連結 */
-            text-decoration: none;
-        }
-        a:hover {
-            color: #000; /* 黑色連結 */
-            text-decoration: underline;
-        }
-    </style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    .top-navbar {
+        background-color: #F5F5DC; /* 卡其色 */
+        color: #6F4F28; /* 奶茶色 */
+        padding: 10px 0;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .left-sidebar {
+        width: 250px;
+        background-color: #F5F5DC; /* 卡其色 */
+        color: #6F4F28; /* 奶茶色 */
+        position: fixed;
+        top: 90px; /* 留出顶部导航栏空间 */
+        bottom: 0;
+        left: 0;
+        height: calc(100vh - 60px); /* 高度减去顶部导航栏的高度 */
+        overflow-y: auto;
+        z-index: 1000;
+    }
+
+    .left-sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .left-sidebar li {
+        padding: 15px;
+    }
+
+    .left-sidebar a {
+        color: #6F4F28; /* 奶茶色 */
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+    }
+
+    .left-sidebar i {
+        margin-right: 10px;
+        color: #6F4F28; /* 奶茶色 */
+    }
+
+    .main-content {
+        margin-left: 250px; /* 确保主内容区域不被左侧边栏遮挡 */
+        margin-top: 60px; /* 确保主内容区域不被顶部导航栏遮挡 */
+        padding: 20px;
+    }
+
+    .main-content h1, .main-content h2 {
+        color: #6F4F28; /* 奶茶色 */
+    }
+
+    .btn-primary {
+        background-color: #6F4F28; /* 奶茶色 */
+        border-color: #6F4F28; /* 奶茶色 */
+    }
+
+    .btn-primary:hover {
+        background-color: #D2B48C; /* 浅卡其色 */
+        border-color: #D2B48C; /* 浅卡其色 */
+    }
+
+    .form-control, .form-select {
+        background-color: #F5F5DC; /* 卡其色 */
+        color: #333;
+    }
+
+    .form-control::placeholder {
+        color: #666;
+    }
+
+    .form-select {
+        color: #333;
+    }
+
+    .form-select option {
+        color: #333;
+    }
+</style>
+
 </head>
 <body>
 
-<div class="container">
-	 <div class="user-info">
-        <!-- 使用Thymeleaf语法获取并显示登录用户的用户名 -->
-        <p th:text="'Welcome, ' + ${session.loginUser}" style="font-weight: bold;"></p>
-    </div>
+<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
+
     
-    <nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
-		 <div align="center"> <h2>員工管理 - select_page.html</h2>
-		 <h3><a class="navbar-brand" th:href="@{/}"><img th:src="@{/images/back1.gif}">回index.html</a></h3></div>
-	</nav>
 
-    <h4>資料查詢:</h4>
-    <div class="errorblock" th:utext="${errorMessage}">${errorMessage}</div>
+    <!-- Left Sidebar -->
+    <nav class="left-sidebar">
+        <div class="logo">
+            <h4>Welcome, <span th:text="${#session.getAttribute('loggedInEmployee').empName}">Employee Name</span></h4>
+            
+        </div>
+        <ul>
+            <li><a href="#" onclick="showSection('listAllEmpSection')">
+                <i class="fas fa-th-list"></i>
+                <span class="nav-item">員工列表</span>
+            </a></li>
+            <li><a href="#" onclick="showSection('searchEmpSection')">
+                <i class="fas fa-search"></i>
+                <span class="nav-item">搜尋員工</span>
+            </a></li>
+            <li><a href="#" onclick="showSection('addEmpSection')">
+                <i class="fas fa-user-plus"></i>
+                <span class="nav-item">新增員工</span>
+            </a></li>
+            <li><a th:href="@{/employee/back_end_index}" class="logout">
+                <i class="fas fa-backward"></i>
+                <span class="nav-item">後台首頁</span>
+            </a></li>
+        </ul>
+    </nav>
 
-    <div>
-        <h5><a href='listAllEmp'>List all Emps.</a></h5>
+    <!-- Main Content -->
+    <main class="main-content">
+        <div id="listAllEmpSection" class="search-section" style="display:none;">
+            <h4>資料查詢:</h4>
+            <div class="errorblock" th:utext="${errorMessage}">${errorMessage}</div>
+            <div class="mb-3">
+                <h5><a href='listAllEmp'>List all Emps.</a></h5>
+            </div>
+        </div>
 
-        <form method="post" th:action="@{getOne_For_Display}">
-    輸入員工編號:
-    <input type="text" name="empNo" th:value="${param.empNo}">
-    <input type="submit" value="送出">
-    (輸入如1,2,3...)
-<!--     輸入權限編號: -->
-<!--     <input type="text" name="authNo" th:value="${param.authNo}"> -->
-<!--     <input type="submit" value="送出"> -->
-<!--     (輸入如1,2,3...) -->
-</form>
+        <div id="searchEmpSection" class="search-section" style="display:none;">
+            <h4>資料查詢:</h4>
+            <div class="errorblock" th:utext="${errorMessage}">${errorMessage}</div>
+            <div class="mb-3">
+                <h5>輸入員工編號:</h5>
+                <form method="post" th:action="@{getOne_For_Display}">
+                    <div class="mb-3">
+                        <input type="text" name="empNo" class="form-control" th:value="${param.empNo}" placeholder="輸入員工編號">
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="送出">
+                    <div class="form-text">輸入如1,2,3...</div>
+                </form>
+            </div>
+            <div class="mb-3">
+                <h5>選擇員工編號:</h5>
+                <form method="post" th:action="@{getOne_For_Display}">
+                    <div class="mb-3">
+                        <select name="empNo" class="form-select">
+                            <option th:each="empVO : ${empListData}" th:value="${empVO.empNo}" th:text="${empVO.empNo}" />
+                        </select>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="送出">
+                </form>
+            </div>
+            <div th:if="${getOne_For_Display}">
+                <div th:insert="~{/back-end/employee/listOneEmp :: listOneEmp-div}"></div>
+            </div>
+        </div>
 
-<form method="post" th:action="@{getOne_For_Display}">
-    選擇員工編號:
-    <select name="empNo">
-        <option th:each="empVO : ${empListData}" th:value="${empVO.empNo}" th:text="${empVO.empNo}" />
-    </select>
-    <input type="submit" value="送出">
-<!--     選擇權限編號: -->
-<!--     <select name="authNo"> -->
-<!--         <option th:each="empauthVO : ${empauthListData}" th:value="${empauthVO.authVO.authNo}" th:text="${empauthVO.authVO.authNo}" /> -->
-<!--     </select> -->
-<!--     <input type="submit" value="送出"> -->
-</form>
-    </div>
+        <div id="addEmpSection" class="add-emp-section" style="display:none;">
+            <h4>員工管理</h4>
+            <ul class="list-unstyled">
+                <li><h5><a href='addEmp'>Add a new EmpAuth.</a></h5></li>
+            </ul>
+            <div class="b" th:if="${getOne_For_Display}">
+                <div th:insert="~{/back-end/employee/listOneEmpAuth :: listOneEmp-div}"></div>
+            </div>
+        </div>
+    </main>
 
-    <div th:if="${getOne_For_Display}">
-        <div th:insert="~{/back-end/employee/listOneEmp :: listOneEmp-div}"></div>
-    </div>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables JavaScript -->
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 
-    <h4>員工管理</h4>
-    <ul>
-        <li><h5><a href='addEmp'>Add a new EmpAuth.</a></h5></li>
-    </ul>
-</div>
+    <!-- Custom JavaScript -->
+    <script src="/js/common.js"></script>
+    <script src="/js/shop_front_end.js"></script>
 
-	<!-- 旗標getOne_For_Display見EmpnoController.java的第74行 -->
-    <div class="b" th:if="${getOne_For_Display}">
-        <!--使用listOneEmp.html網頁的listOneEmp-div片段--> <!-- 見listOneEmp.html的第35行的th:fragment="listOneEmp-div" --> <!-- 使用th:replace也可 -->
-        <div th:insert="~{/back-end/employee/listOneEmpAuth :: listOneEmp-div}"></div>
-    </div>
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.getElementById('listAllEmpSection').style.display = 'none';
+            document.getElementById('searchEmpSection').style.display = 'none';
+            document.getElementById('addEmpSection').style.display = 'none';
+            // Show the selected section
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        // Default display
+        showSection('defaultSection');
+    </script>
 </body>
 </html>

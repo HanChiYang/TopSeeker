@@ -53,7 +53,7 @@ nav.shopMainNavbar{
 }
 
 .nav-item-spacing {
-	margin: 0 20px; /* 左右間距設為15像素，可以根據需求調整 */
+	margin: 0 5px; /* 左右間距設為15像素，可以根據需求調整 */
 }
 
 /* 商城導航列的圖片 */
@@ -104,7 +104,7 @@ p {
 main.shopManagementContent {
 	position: relative;
 	left: 230px;
-	display: flex;
+/* 	display: flex; */
 	padding: 30px;
 	/* 	width: calc(100% - 230px);確保內容佔滿剩餘寬度 */
 }
