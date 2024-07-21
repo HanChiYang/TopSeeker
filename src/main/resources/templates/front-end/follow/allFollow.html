@@ -133,7 +133,7 @@ background-color: white !important;
                 <td><img th:src="@{/member/DBGifReader} + '?memNo=' + ${followVO.beFollowedMemberVO.memNo}" width="100px"></td>
                 <td>
                    <div th:if="${#lists.isEmpty(beFollowedMemActMap[followVO.beFollowedMemberVO.memNo])}">
-                       尚無開團
+                       <b>目前尚無開團</b>
                    </div>
                    <div th:unless="${#lists.isEmpty(beFollowedMemActMap[followVO.beFollowedMemberVO.memNo])}">
                        <div th:each="actVO : ${beFollowedMemActMap[followVO.beFollowedMemberVO.memNo]}">
