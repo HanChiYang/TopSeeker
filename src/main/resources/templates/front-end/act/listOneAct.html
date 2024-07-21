@@ -17,7 +17,9 @@
         .card-header {
             font-weight: bold;
             font-size: 1.75rem;
-            background-color: #f8f9fa;
+            background-color: #9EB384;
+            border-color: #9EB384;
+            color: white;
         }
         .card-body .row {
             margin-bottom: 15px;
@@ -85,7 +87,7 @@
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-3 label">團長:</div>
+                    <div class="col-md-3 label fw-bold">團長:</div>
                     <div class="col-md-9 d-flex align-items-center">
                         <a th:href="@{/act/memActList(memNo=${actVO.memberVO.memNo})}" th:text="${actVO.memberVO.memAccount} + '(' + ${actVO.memberVO.memName} + ')'"></a>
                         <form id="followForm" class="ms-3 mb-0">
@@ -95,51 +97,51 @@
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-3 label">活動標題:</div>
+                    <div class="col-md-3 label fw-bold">活動標題:</div>
                     <div class="col-md-9 value" th:text="${actVO.actTitle}"></div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-3 label">活動地點:</div>
+                    <div class="col-md-3 label fw-bold">活動地點:</div>
                     <div class="col-md-9 value" th:utext="${actVO.actPlace}"></div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-3 label">活動內容:</div>
+                    <div class="col-md-3 label fw-bold">活動內容:</div>
                     <div class="col-md-9 value act-content" th:text="${actVO.actContent}"></div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-3 label">人數上限:</div>
+                    <div class="col-md-3 label fw-bold">人數上限:</div>
                     <div class="col-md-9 value" th:text="${actVO.actMaxCount}"></div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-3 label">最少人數:</div>
+                    <div class="col-md-3 label fw-bold">最少人數:</div>
                     <div class="col-md-9 value" th:text="${actVO.actMinCount}"></div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-3 label">當前參與人數:</div>
+                    <div class="col-md-3 label fw-bold">當前參與人數:</div>
                     <div class="col-md-9 value" th:text="${actVO.actCurrentCount}"></div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-3 label">待審核人數:</div>
+                    <div class="col-md-3 label fw-bold">待審核人數:</div>
                     <div class="col-md-9 value" th:text="${actVO.actCheckCount}"></div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-3 label">報名開始日:</div>
+                    <div class="col-md-3 label fw-bold">報名開始日:</div>
                     <div class="col-md-9 value" th:text="${actVO.actEnrollBegin}"></div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-3 label">報名結束日:</div>
+                    <div class="col-md-3 label fw-bold">報名結束日:</div>
                     <div class="col-md-9 value" th:text="${actVO.actEnrollEnd}"></div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-3 label">活動開始日:</div>
+                    <div class="col-md-3 label fw-bold">活動開始日:</div>
                     <div class="col-md-9 value" th:text="${actVO.actStart}"></div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-3 label">活動結束日:</div>
+                    <div class="col-md-3 label fw-bold">活動結束日:</div>
                     <div class="col-md-9 value" th:text="${actVO.actEnd}"></div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-3 label">活動狀態:</div>
+                    <div class="col-md-3 label fw-bold">活動狀態:</div>
                     <div class="col-md-9 value" id="actStatus" th:switch="${actVO.actStatus}">
                         <span th:case="0">揪團中</span>
                         <span th:case="1">已成團</span>
