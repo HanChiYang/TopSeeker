@@ -132,14 +132,17 @@ background-color: white !important;
                 <td th:text="${followVO.beFollowedMemberVO.memAccount}"></td>
                 <td><img th:src="@{/member/DBGifReader} + '?memNo=' + ${followVO.beFollowedMemberVO.memNo}" width="100px"></td>
                 <td>
-                   	<div th:each="actVOList : ${beFollowedMemActMap[followVO.beFollowedMemberVO.memNo]}">
-                       	<div th:each="actVO : ${actVOList}">
-							<form method="post" th:action="@{/act/details}">
-							    <input type="hidden" name="actNo" th:value="${actVO.actNo}" />
-							    <input type="submit" th:value="${actVO.actTitle}" id="actlink" class="btn btn-light"/>
-							</form>
-                       	</div>
-                   	</div>
+                   <div th:if="${#lists.isEmpty(beFollowedMemActMap[followVO.beFollowedMemberVO.memNo])}">
+                       尚無開團
+                   </div>
+                   <div th:unless="${#lists.isEmpty(beFollowedMemActMap[followVO.beFollowedMemberVO.memNo])}">
+                       <div th:each="actVO : ${beFollowedMemActMap[followVO.beFollowedMemberVO.memNo]}">
+                           <form method="post" th:action="@{/act/details}">
+                               <input type="hidden" name="actNo" th:value="${actVO.actNo}" />
+                               <input type="submit" th:value="${actVO.actTitle}" id="actlink" class="btn btn-light"/>
+                           </form>
+                       </div>
+                   </div>
                 </td>
                 <td>
                     <form method="post" th:action="@{/protected/follow/delete}" style="margin-bottom: 0px;">
