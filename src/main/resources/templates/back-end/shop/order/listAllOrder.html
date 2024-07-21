@@ -90,7 +90,7 @@ th .sorting_desc {
 							<td class="paymentStatus" th:text="${orderVO.paymentStatus}"></td>				
 							<td>
 								<form method="post" th:action="@{/shop/order/getOne_For_Display}">
-									<button class="btn btn-primary" type="submit">訂單詳情
+									<button class="btn btn-outline-success" type="submit">訂單詳情
 								     	<input type="hidden" name="orderNo" th:value="${orderVO.orderNo}">
 									</button>
 							     </form>
@@ -98,7 +98,7 @@ th .sorting_desc {
 						    </td>
 						    <td>
 						    	<form method="post" th:action="@{/shop/order/getOne_For_Update}">
-								 <button class="btn btn-primary" type="submit">修改
+								 <button class="btn btn-outline-success" type="submit">修改
 								 	<input type="hidden" name="orderNo" th:value="${orderVO.orderNo}"></form>
 								 </button>
 						    </td>

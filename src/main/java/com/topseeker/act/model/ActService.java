@@ -1,11 +1,14 @@
 package com.topseeker.act.model;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,9 +46,13 @@ public class ActService {
 	}
 	//刪除
 	public void deleteAct(Integer actNo) {
-		if (repository.existsById(actNo))
-			repository.deleteByActNo(actNo);
-
+//		if (repository.existsById(actNo))
+//			repository.deleteByActNo(actNo);
+	    ActVO act = repository.findById(actNo)
+	            .orElseThrow(() -> new IllegalArgumentException("Invalid article ID: " + actNo));
+	    
+	    act.setActStatus(3);
+	    repository.save(act);
 	}
 
 	public ActVO getOneAct(Integer actNo) {
@@ -83,26 +90,26 @@ public class ActService {
             repository.updateActCheckCount(actNo, newCheckCount);
         }
     }
-	// 從ParticipantRepository取狀態為審核通過的總數，如果為 null 則返回 0
-//	public int getTotalJoinCountByActNoAndCommit(Integer actNo) {
-//        Integer count = participantRepository.findTotalJoinCountByActNoAndCommit(actNo);
-//        return count != null ? count : 0;
-//    }
-	// 從ParticipantRepository取狀態為待審核的總數，如果為 null 則返回 0
-//    public int getPendingJoinCountByActNo(Integer actNo) {
-//        Integer count = participantRepository.findPendingJoinCountByActNo(actNo);
-//        return count != null ? count : 0;
-//    }
-    //更新 actCurrentCount、actCheckCount，並在獲取活動列表時調用這個方法
-//    @Transactional
-//    public void updateActCurrentAndCheckCount(Integer actNo) {
-//        int currentCount = getTotalJoinCountByActNoAndCommit(actNo);
-//        int pendingCount = getPendingJoinCountByActNo(actNo);
-//
-//        repository.updateActCurrentCount(actNo, currentCount);
-//        repository.updateActCheckCount(actNo, pendingCount);
-//    }
 	
+	// 定時任務，每天午夜檢查活動狀態
+    @Scheduled(cron = "0 0 0 * * ?") // 每天午夜執行一次
+//    @Scheduled(cron = "*/30 * * * * *") // 每30秒執行一次
+    public void updateActStatusScheduled() {
+        Date today = Date.valueOf(LocalDate.now());
+        List<ActVO> acts = repository.findAll();
+        
+        for (ActVO act : acts) {
+            if (act.getActEnd().before(today)) {
+                if (act.getActCurrentCount() < act.getActMinCount()) {
+                    if (act.getActStatus() != 3) {
+                        repository.updateActStatus(act.getActNo(), 3);
+                    }
+                } else if (act.getActStatus() != 2) {
+                    repository.updateActStatus(act.getActNo(), 2);
+                }
+            }
+        }
+    }
 	
 	
 	

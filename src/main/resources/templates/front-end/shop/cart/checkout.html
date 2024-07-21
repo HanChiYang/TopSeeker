@@ -150,13 +150,12 @@ a:visited {
 }
 
 div.summary{
-	text-align: center;
 	width: 100%;
 	position: relative;
 	left: 5%;
 	border: 2px solid  #F7DCB9;
 	border-radius: 10px;
-	justify-content:flex-start;
+	justify-content:space-evenly;
 	display: flex;
 	overflow-wrap: break-word;
 }
@@ -597,7 +596,7 @@ input#confirmPayment:hover{
 		$('#checkout-form').on('submit', function(event) {
 				let valid = true;
 				const chineseOrEnglishRegex = /^[\u4e00-\u9fa5a-zA-Z]+$/;
-				const phoneRegex = /^(\d{10})$/;
+				const phoneRegex = /^0(\d{9})$/;
 			
 				if ($('input[name="deliveryMethod"]:checked').val() == 0) {
 				 	//驗證宅配資訊
@@ -693,18 +692,18 @@ input#confirmPayment:hover{
 
 		//購買資訊 
 			$('.sub').each(function() {
-				let totalAmount = 0;
-				const price = $(this).closest("tr").find(
+				var totalAmount = 0;
+				var price = $(this).closest("tr").find(
 								".price").text();
-				const qty = $(this).closest("tr").find(
+				var qty = $(this).closest("tr").find(
 								".prodQty").text();
 						
 				//小計
-				const sub = parseInt(price * qty);
+				var sub = parseInt(price * qty);
 				$(this).closest("tr").find(".sub").text(sub);
 						
 				$('.sub').each(function() {
-					const sub = parseInt($(this).text());
+					var sub = parseInt($(this).text());
 						if (!isNaN(sub)) {
 							totalAmount += sub;
 						}
@@ -716,7 +715,7 @@ input#confirmPayment:hover{
 				$("span.totalAmount").val(totalAmount.toFixed(0));
 
 				//折購金額
-				const sales = fetchApplicableDiscounts();
+				var sales = fetchApplicableDiscounts();
 				applyDiscounts(sales);
 
 				//實付金額
@@ -725,7 +724,7 @@ input#confirmPayment:hover{
 				});
 
 			function paymentMethodChange() {
-				const selectedMethod = $('[name="paymentMethod"]:checked').data('method');
+				var selectedMethod = $('[name="paymentMethod"]:checked').data('method');
 					$('#creditCard, #transfer, #cashOnDelivery').hide();
 				
 					if (selectedMethod === '信用卡') {
@@ -739,14 +738,14 @@ input#confirmPayment:hover{
 		
 			//計算總金額
 			function calculateTotalAmount() {
-				let totalAmount = 0;
-				const price = $(this).closest("tr").find(".price").text();
-				const qty = $(this).closest("tr").find(".prodQty").text();
-				const sub = parseInt(price * qty);
+				var totalAmount = 0;
+				var price = $(this).closest("tr").find(".price").text();
+				var qty = $(this).closest("tr").find(".prodQty").text();
+				var sub = parseInt(price * qty);
 				$(this).closest("tr").find(".sub").text(sub);
 				
 				$('.sub').each(function() {
-					const sub = parseInt($(this).text());
+					var sub = parseInt($(this).text());
 					if (!isNaN(sub)) {
 						totalAmount += sub;
 					}
@@ -759,8 +758,8 @@ input#confirmPayment:hover{
 
 			//包裝總金額至server
 			function fetchApplicableDiscounts() {
-				const totalAmount = calculateTotalAmount();
-				const currentTime = getCurrentDateTime();
+				var totalAmount = calculateTotalAmount();
+				var currentTime = getCurrentDateTime();
 					
 				$.ajax({
 						url : '/shop/sale/applicableSales',
@@ -787,15 +786,14 @@ input#confirmPayment:hover{
 					console.log('沒有合適折扣');
 					return;
 				}
-				const totalAmount = calculateTotalAmount();
-				const bestSale = calculateBestDiscount(totalAmount, sales);
-				const saleNo = bestSale.saleNo;
-// 								console.log(saleNo);
-				const saleName = bestSale.saleName;
-// 								console.log(saleName);
+				var totalAmount = calculateTotalAmount();
+				var bestDiscount = calculateBestDiscount(totalAmount, sales);
+				var saleNo = bestDiscount.no;
+								console.log(saleNo);
+				var saleName = bestDiscount.name;
+								console.log(saleName);
 
-// 				var orderDiscount = totalAmount*(1-bestSale.saleDiscount);
-				const orderDiscount = totalAmount * bestSale.saleDiscount;
+				var orderDiscount = totalAmount * bestDiscount.discount;
 				
 				$("span.orderDiscount").text(orderDiscount.toFixed(0));
 				$("span.orderDiscount").val(orderDiscount.toFixed(0));
@@ -810,27 +808,29 @@ input#confirmPayment:hover{
 
 			//合適最佳折扣
 			function calculateBestDiscount(totalAmount, sales) {
-				let maxDiscount = 0;
-				let bestSale = null;
-				sales.forEach(function(sale) {
-					if (totalAmount >= sale.saleAmount) {
-						maxDiscount = Math.max(maxDiscount,sale.saleDiscount);
-						bestSale = sale;
-					}
-				});
-				return bestSale;
+				var bestDiscount = { discount: Number.MAX_VALUE, name: '' };
+			    sales.forEach(function(sale) {
+			        if (totalAmount >= sale.saleAmount) {
+			            if (sale.saleDiscount < bestDiscount.discount) {
+			                bestDiscount.discount = sale.saleDiscount;
+			                bestDiscount.name = sale.saleName;
+			                bestDiscount.no = sale.saleNo;
+			            }
+			        }
+			    });
+			    return bestDiscount;
 			}
 
 			//計算實付金額
 			function calculateOrderBill() {
 
-	// 			var totalAmount = parseInt($("div.totalAmount").text());
+				var totalAmount = parseInt($("span.totalAmount").text());
 	// 			console.log("Total Amount: " + totalAmount);
-				const orderDiscount = parseInt($("span.orderDiscount").text());
+				var orderDiscount = parseInt($("span.orderDiscount").text());
 					console.log("Order Discount: " + orderDiscount);
-				const orderShipment = parseInt($("span.orderShipment").text());
+				var orderShipment = parseInt($("span.orderShipment").text());
 					console.log("Order Shipment: " + orderShipment);
-				const orderBill = orderDiscount	+ orderShipment;
+				var orderBill = orderDiscount	+ orderShipment;
 					console.log("Order Bill: " + orderBill);
 				$("span.orderBill").text(orderBill.toFixed(0));
 				$("span.orderBill").val(orderBill.toFixed(0));
@@ -850,14 +850,14 @@ input#confirmPayment:hover{
 
 			//取出現在時間
 			function getCurrentDateTime() {
-				const now = new Date();
-				const year = now.getFullYear();
-				const month = (now.getMonth() + 1).toString().padStart(2, '0');
-				const day = now.getDate().toString().padStart(2,'0');
-				const hours = now.getHours().toString().padStart(2, '0');
-				const minutes = now.getMinutes().toString().padStart(2, '0');
+				var now = new Date();
+				var year = now.getFullYear();
+				var month = (now.getMonth() + 1).toString().padStart(2, '0');
+				var day = now.getDate().toString().padStart(2,'0');
+				var hours = now.getHours().toString().padStart(2, '0');
+				var minutes = now.getMinutes().toString().padStart(2, '0');
 			
-				const formattedDateTime = year + '-' + month + '-' + day + ' ' + 
+				var formattedDateTime = year + '-' + month + '-' + day + ' ' + 
 										  hours + ':' + minutes + ':' + 00;
 
 				return formattedDateTime;

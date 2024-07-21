@@ -78,7 +78,7 @@
                     <span class="value" th:text="${actVO.memberVO.memAccount} + '('+${actVO.memberVO.memName}+ ')'"></span>
                     <form id="followForm" class="ms-3" style="margin-bottom: 0;">
                         <input type="button" value="追隨此會員" class="btn btn-primary ms-2" id="test">
-                        <input type="hidden" name="beFollowedMemNo" value="${actVO.memberVO.memNo}">
+                        <input type="hidden" name="beFollowedMemNo" th:value="${actVO.memberVO.memNo}">
                     </form>
                 </div>
                 <div class="mb-2"><span>活動編號:</span><span class="value" th:text="${actVO.actNo}"></span></div>
