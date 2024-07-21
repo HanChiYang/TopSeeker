@@ -162,10 +162,12 @@
 
         closeSuccessModal.onclick = function() {
             successModal.style.display = "none";
+            window.location.href = '/act/listAllAct'; // 跳轉到成功頁面
         }
 
         closeSuccess.onclick = function() {
             successModal.style.display = "none";
+            window.location.href = '/act/listAllAct'; // 跳轉到成功頁面
         }
 
         closeAlreadySignedUpModal.onclick = function() {
@@ -197,12 +199,12 @@
             });
         }
 
-        // 在用户点击模态框外部时关闭模态框
         window.onclick = function(event) {
             if (event.target == confirmModal) {
                 confirmModal.style.display = "none";
             } else if (event.target == successModal) {
                 successModal.style.display = "none";
+                window.location.href = '/act/listAllAct'; // 跳轉到成功頁面
             } else if (event.target == alreadySignedUpModal) {
                 alreadySignedUpModal.style.display = "none";
             }

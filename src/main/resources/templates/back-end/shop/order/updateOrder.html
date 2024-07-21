@@ -223,7 +223,7 @@
 			 		<span th:if="${#fields.hasErrors('remarks')}" th:errors="*{remarks}" class="error" id="remarks.errors"></span>
 				</div>
 				
-				<button type="submit" id="submit"> 送出修改 </button>
+				<button type="submit" id="submit" class="btn btn-outline-success"> 送出修改 </button>
 			
 			</div>
 		
@@ -285,7 +285,7 @@ $(document).ready(function() {
 	$('#orderform').on('submit', function(event) {
 		let valid = true;
 		var chineseOrEnglishRegex = /^[\u4e00-\u9fa5a-zA-Z]+$/;
-		var phoneRegex = /^(\d{10})$/;
+		var phoneRegex = /^0(\d{9})$/;
 		 	
 		 	var orderName = $('input[name="orderName"]').val().trim();
 			if (orderName === '' || !chineseOrEnglishRegex.test(orderName)) {

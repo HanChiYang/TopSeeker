@@ -35,8 +35,8 @@
 <style type="text/css">
 main{ 
      margin-top: 20px; 
-     margin-left: 35%; 
-     padding: 20px; 
+     margin-left: 45%; 
+     padding: 15px; 
      
      }
 a {
@@ -108,34 +108,34 @@ a {
 		    </div>
 		<form method="post" th:action="@{insert}" th:object="${saleVO}" id="saleForm">
 		
-			<div>
-				<label>活動名稱:</label>
-				<input type="text" th:field="*{saleName}" onclick="hideContent('saleName.errors')" /><br/>
+			<div class="mb-3">
+				<label class="form-label">活動名稱:</label>
+				<input class="form-control" type="text" th:field="*{saleName}" onclick="hideContent('saleName.errors')" /><br/>
 				<div th:if="${#fields.hasErrors('saleName')}" th:errors="*{saleName}" class="error" id="saleName.errors"></div>
 			</div>
 			
-			<div>
-				<label>活動開始日期:</label>
-				<input type="text" id="f_date1" th:field="*{saleStdate}" onclick="hideContent('saleStdate.errors')" /><br/>
+			<div class="mb-3">
+				<label class="form-label">活動開始日期:</label>
+				<input class="form-control" type="text" id="f_date1" th:field="*{saleStdate}" onclick="hideContent('saleStdate.errors')" /><br/>
 				<div th:if="${#fields.hasErrors('saleStdate')}" th:errors="*{saleStdate}" class="error" id="saleStdate.errors"></div>
 			</div>
-			<div>
-				<label>活動結束日期:</label>
-				<input type="text" id="f_date2" th:field="*{saleEddate}" onclick="hideContent('saleEddate.errors')" /><br/>
+			<div class="mb-3">
+				<label class="form-label">活動結束日期:</label>
+				<input class="form-control" type="text" id="f_date2" th:field="*{saleEddate}" onclick="hideContent('saleEddate.errors')" /><br/>
 				<div th:if="${#fields.hasErrors('saleEddate')}" th:errors="*{saleEddate}" class="error" id="saleEddate.errors"></div>
 			</div>
-			<div>
-				<label>活動金額門檻:</label>
-				<input type="text" th:field="*{saleAmount}" onclick="hideContent('saleAmount.errors')" /><br/>
+			<div class="mb-3">
+				<label class="form-label">活動金額門檻:</label>
+				<input class="form-control" type="text" th:field="*{saleAmount}" onclick="hideContent('saleAmount.errors')" /><br/>
 				<div th:if="${#fields.hasErrors('saleAmount')}" th:errors="*{saleAmount}" class="error" id="saleAmount.errors"></div>
 			</div>
-			<div>
-				<label>活動金額折扣:</label>
-				<input type="text" th:field="*{saleDiscount}" onclick="hideContent('saleDiscount.errors')" /><br/>
+			<div class="mb-3">
+				<label class="form-label">活動金額折扣:</label>
+				<input class="form-control" type="text" th:field="*{saleDiscount}" onclick="hideContent('saleDiscount.errors')" /><br/>
 				<div th:if="${#fields.hasErrors('saleDiscount')}" th:errors="*{saleDiscount}" class="error" id="saleDiscount.errors"></div>
 			</div>
 			
-			<button type="submit" id="submit"> 送出新增 </button>
+			<button type="submit" id="submit" class="btn btn-outline-success"> 送出新增 </button>
 			
 		</form>
 	
@@ -185,7 +185,7 @@ $(document).ready(function(){
      	
      $('#saleForm').on('submit', function(e) {
          e.preventDefault();//先擋住
-         const confirmation = confirm("請再次檢查期間、滿額金額與折扣數，確認後再次點擊確認鍵");
+         const confirmation = confirm("請再次檢查期間、滿額金額與折扣數，確認後再次點擊送出");
          console.log("Confirmation: " + confirmation); 
          
          //確認過後，清除submit事件，並成功submit
