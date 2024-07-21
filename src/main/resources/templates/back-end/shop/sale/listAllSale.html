@@ -91,13 +91,13 @@
 								
 							<td>
 							  <form method="post" th:action="@{/shop/sale/getOne_For_Update}" style="margin-bottom: 0px;">
-							     <input type="submit" value="修改">
+							     <input type="submit" value="修改" class="btn btn-outline-success">
 							     <input type="hidden" name="saleNo" th:value="${saleVO.saleNo}"></form>
 							
 							</td>
 							<td>
 							  <form method="post" th:action="@{/shop/sale/delete}" style="margin-bottom: 0px;">
-							     <input type="submit" value="刪除">
+							     <input type="submit" value="刪除" class="btn btn-outline-success">
 							     <input type="hidden" name="saleNo" th:value="${saleVO.saleNo}"></form>
 							
 							</td>
