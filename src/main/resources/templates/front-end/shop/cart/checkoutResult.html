@@ -22,11 +22,10 @@
    
    th{
    	background-color: rgb(158, 179, 132);
-   
    }
    
    td{
-   	 background-color:#FCFFE0;
+   	 text-align:center;
    
    }
    
@@ -45,7 +44,7 @@
 	<div class="result">
 	  <div class="top">
 	    <h2>訂單完成</h2>
-	    <p class="countdown">5 秒後重導回首頁...</p>
+	    <p class="countdown">10 秒後重導回首頁...</p>
 	   
 	    	<span>訂單編號: </span><span th:text="${orderVO.orderNo}"></span><br>
 	    	<span>訂單日期: </span><span th:text="${#dates.format(orderVO.orderDate, 'yyyy-MM-dd HH:mm:ss')}"></span><br>
@@ -95,7 +94,7 @@
 <!-- 重導 -->
 <script>
 		let countdownElement = document.querySelector('.countdown');
-		let seconds = 5;
+		let seconds = 10;
 
 		const countdownInterval = setInterval(() => {
 			seconds--;

@@ -27,26 +27,25 @@
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
 
-
+<!-- Topseeker前台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/common.css}">
 
 <style type="text/css">
-main{ 
-     margin-top: 20px; 
-     margin-left: 250px; 
-     padding: 20px; 
-}
-
+	main.shopManagementContent {
+		padding: 50px 50px;
+	}
+	
 /* ========main區======	 */
 	div.container{
 		display: flex;
 		flex-wrap: nowrap;
 		position: relative;
-		padding: 20px;
+/* 		padding: 20px; */
 		justify-content: space-evenly;
 	}
 	div.left{
 		position: relative;
-		width: 50%;
+		width: 60%;
 		overflow-wrap:break-word;
 		border: 5px solid rgb(161, 221, 112);
 		border-radius: 20px;
@@ -54,7 +53,7 @@ main{
 	}
 	div.right{
 		position: relative;
-		width: 50%;
+		width: 60%;
 	}
 
     span {
@@ -95,54 +94,56 @@ main{
 
 	<!-- 商城後台用Navbar + 左側邊欄 -->
 	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
-		
-	<main class="content" align="center"> 
-		<h3>查詢結果</h3>
-		<div class="container">
-			<div class="left">
-				<span>訂單編號	:</span><span th:text="${orderVO.orderNo}"></span><br/>
-				<span>會員編號	:</span><span th:text="${orderVO.memberVO.memNo}"></span><br/>
-				<span>會員姓名	:</span><span th:text="${orderVO.memberVO.memName}"></span><br/>
-				<span>促銷活動名稱	:</span><span th:text="${orderVO.saleVO.saleName}"></span><br/>
-				<span>訂單日期	:</span><span th:text="${orderVO.orderDate}"></span><br/>
-				<span>訂單原始金額	:</span><span th:text="${orderVO.orderAmount}"></span><br/>
-				<span>訂單運費	:</span><span th:text="${orderVO.orderShipment}"></span><br/>
-				<span>折扣金額	:</span><span th:text="${orderVO.orderDiscount}"></span><br/>
-				<span>訂單實付金額	:</span><span th:text="${orderVO.orderBill}"></span><br/>
-				<span>收件人姓名	:</span><span th:text="${orderVO.orderName}"></span><br/>
-				<span>收件人電話	:</span><span th:text="${orderVO.orderPhone}"></span><br/>
-				<span>收件人住址	:</span><span th:text="${orderVO.orderAddress}"></span><br/>
-				<span>訂單狀態	:</span><span class="orderStatus" th:text="${orderVO.orderStatus}"></span><br/>
-				<span>付款狀態	:</span><span class="paymentStatus" th:text="${orderVO.paymentStatus}"></span><br/>
-				<span>付款方式	:</span><span class="paymentMethod" th:text="${orderVO.paymentMethod}"></span><br/>
-				<span>運送方式	:</span><span class="deliveryMethod" th:text="${orderVO.deliveryMethod}"></span><br/>
-				<span>訂單備註	:</span><span th:text="${orderVO.remarks}"></span><br/>
-			</div>
-			<div class="right">
-				<!-- 	顯示 OrderDetailVO 資料 -->
-		        <table id="orderDetailData" class="display" style="width: 80%">
-		            <thead>
-		                <tr>
-		                    <th>購買項目</th>
-		                    <th>商品單價</th>
-		                    <th>購買數量</th>
-		                </tr>
-		            </thead>
-		            <tbody>
-		                <th:block th:each="details : ${orderDetailData}">
-		                <tr>
-		                    <td th:text="${details.shopProductVO.prodName}"></td>
-		                    <td th:text="${details.orderPrice}" style="width: 30%"></td>
-		                    <td th:text="${details.orderQty}" style="width: 30%"></td>
-		                </tr>
-		                </th:block>
-		             </tbody>
-		          </table>
+	<div class="shopContent">
+		<aside class="sidebar" th:insert="~{/back-end/shop/shop_back_end_sidebar.html}"></aside>
+		<main class="shopManagementContent content" align="center"> 
+			<div class="container">
+				<div class="left">
+					<span>訂單編號	:</span><span th:text="${orderVO.orderNo}"></span><br/>
+					<span>會員編號	:</span><span th:text="${orderVO.memberVO.memNo}"></span><br/>
+					<span>會員姓名	:</span><span th:text="${orderVO.memberVO.memName}"></span><br/>
+					<span>促銷活動名稱	:</span><span th:text="${orderVO.saleVO.saleName}"></span><br/>
+					<span>訂單日期	:</span><span th:text="${orderVO.orderDate}"></span><br/>
+					<span>訂單原始金額	:</span><span th:text="${orderVO.orderAmount}"></span><br/>
+					<span>訂單運費	:</span><span th:text="${orderVO.orderShipment}"></span><br/>
+					<span>折扣金額	:</span><span th:text="${orderVO.orderDiscount}"></span><br/>
+					<span>訂單實付金額	:</span><span th:text="${orderVO.orderBill}"></span><br/>
+					<span>收件人姓名	:</span><span th:text="${orderVO.orderName}"></span><br/>
+					<span>收件人電話	:</span><span th:text="${orderVO.orderPhone}"></span><br/>
+					<span>收件人住址	:</span><span th:text="${orderVO.orderAddress}"></span><br/>
+					<span>訂單狀態	:</span><span class="orderStatus" th:text="${orderVO.orderStatus}"></span><br/>
+					<span>付款狀態	:</span><span class="paymentStatus" th:text="${orderVO.paymentStatus}"></span><br/>
+					<span>付款方式	:</span><span class="paymentMethod" th:text="${orderVO.paymentMethod}"></span><br/>
+					<span>運送方式	:</span><span class="deliveryMethod" th:text="${orderVO.deliveryMethod}"></span><br/>
+					<span>訂單備註	:</span><span th:text="${orderVO.remarks}"></span><br/>
 				</div>
-		
-			</div>
-		<button onclick="goBack()" class="btn btn-success">回訂單列表</button>		
+				<div class="right">
+					<!-- 	顯示 OrderDetailVO 資料 -->
+			        <table id="orderDetailData" class="display" style="width: 80%">
+			            <thead>
+			                <tr>
+			                    <th>購買項目</th>
+			                    <th>商品單價</th>
+			                    <th>購買數量</th>
+			                </tr>
+			            </thead>
+			            <tbody>
+			                <th:block th:each="details : ${orderDetailData}">
+			                <tr>
+			                    <td th:text="${details.shopProductVO.prodName}"></td>
+			                    <td th:text="${details.orderPrice}" style="width: 30%"></td>
+			                    <td th:text="${details.orderQty}" style="width: 30%"></td>
+			                </tr>
+			                </th:block>
+			             </tbody>
+			          </table>
+					<button onclick="goBack()" class="btn btn-success">回訂單列表</button>		
+					</div>
+			
+				</div>
 		</main> 
+	</div>
+	
 	<script>
 	
 		function goBack() {

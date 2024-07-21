@@ -21,21 +21,19 @@
                             <img th:src="@{/actpicture/DBGifReader2(actNo=${actVO.actNo})}" class="card-img-top img-fluid" alt="活動圖片" style="height: 150px; object-fit: cover;">                 
                             <div class="card-body">
                                 <h5 class="card-title" th:text="${actVO.actTitle}">活動標題</h5>
-                                <p class="card-text">活動地點: <span th:text="${actVO.actPlace}"></span></p>
-                                <p class="card-text">活動開始: <span th:text="${actVO.actStart}"></span></p>
-                                <p class="card-text">報名截止: <span th:text="${actVO.actEnrollEnd}"></span></p>
-                                <p class="card-text">人數上限: <span th:text="${actVO.actMaxCount}"></span></p>
-                                <p class="card-text">當前人數: <span th:text="${actVO.actCurrentCount}"></span></p>
-                               	<p class="card-text">團長: 
-								    <a th:href="@{/act/memActList(memNo=${actVO.memberVO.memNo})}" th:text="${actVO.memberVO.memAccount} + '(' + ${actVO.memberVO.memName} + ')'"></a>
-								</p>
+                                <p class="card-text fa-solid fa-location-dot">活動地點: <span th:text="${actVO.actPlace}"></span></p>
+                                <p class="card-text fa-solid fa-calendar-check">活動開始: <span th:text="${actVO.actStart}"></span></p>
+                                <p class="card-text fa-solid fa-calendar-xmark">報名截止: <span th:text="${actVO.actEnrollEnd}"></span></p>
+                                <p class="card-text fa-solid fa-people-group">人數上限: <span th:text="${actVO.actMaxCount}"></span></p>
+<!--                                 <p class="card-text">當前人數: <span th:text="${actVO.actCurrentCount}"></span></p> -->
+<!--                                	<p class="card-text">團長: <span th:text="${actVO.memberVO.memAccount} + '(' + ${actVO.memberVO.memName} + ')'"></span></p> -->
                                 <p class="card-text">
                                     <span th:switch="${actVO.actStatus}">
-                                        <span th:case="0">揪團中</span>
-                                        <span th:case="1">已成團</span>
-                                        <span th:case="2">活動已完成</span>
-                                        <span th:case="3">活動已取消</span>
-                                    </span>
+                                    <span th:case="0" class="status-label jiutuan">揪團中</span>
+                                    <span th:case="1" class="status-label yimanyu">已額滿</span>
+                                    <span th:case="2" class="status-label yiwancheng">已完成</span>
+                                    <span th:case="3" class="status-label yiquxiao">已取消</span>
+                                	</span>
                                 </p>
                                 
                                 <form method="post" th:action="@{/act/details}" id="detailForm" class="text-center">

@@ -21,18 +21,23 @@
 	href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap"
 	rel="stylesheet">
 
+<!-- Topseeker前台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/common.css}">
+
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
 
 <style type="text/css">
-
-     main{
-     margin-top: 20px;
-     margin-left: 250px;
-     padding: 20px; 
-     }
+	main.shopManagementContent {
+		padding: 50px 50px;
+	}
+	
+	
 
 /* ================表格樣式===================== */
+table.display{
+	width: 100%;
+}
 td {
     white-space: nowrap; 
     overflow: hidden;    
@@ -64,56 +69,62 @@ th .sorting_desc {
 
 	<!-- 商城後台用Navbar + 左側邊欄 -->
 	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
-
-	<main>
-		<div>
-			<table id="orderList" class="display">
-			  <thead>
-				<tr>
-					<th>商品訂單編號</th>
-					<th>會員編號</th>
-					<th>會員姓名</th>
-					<th>訂單狀態</th>
-					<th>付款狀態</th>			
-					<th>訂單詳情</th>
-					<th>修改</th>
-				</tr>
-			  </thead>
+	
+	<div class="shopContent">
+		<aside class="sidebar" th:insert="~{/back-end/shop/shop_back_end_sidebar.html}"></aside>
+		<main class="shopManagementContent">
+			<div>
+				<table id="orderList" class="display">
+				  <thead>
+					<tr>
+						<th>商品訂單編號</th>
+						<th>會員編號</th>
+						<th>會員姓名</th>
+						<th>訂單狀態</th>
+						<th>付款狀態</th>			
+						<th>訂單詳情</th>
+						<th>修改</th>
+					</tr>
+				  </thead>
+					
+				  <tbody>
+						<th:block th:each="orderVO : ${orderListData}">
+							<tr>
+								<td class=orderno th:text="${orderVO.orderNo}"></td>
+								<td th:text="${orderVO.memberVO.memNo}"></td>
+								<td th:text="${orderVO.memberVO.memName}"></td>
+								<td class="orderStatus" th:text="${orderVO.orderStatus}"></td>
+								<td class="paymentStatus" th:text="${orderVO.paymentStatus}"></td>				
+								<td>
+									<form method="post" th:action="@{/shop/order/getOne_For_Display}">
+										<button class="btn btn-outline-success" type="submit">訂單詳情
+									     	<input type="hidden" name="orderNo" th:value="${orderVO.orderNo}">
+										</button>
+								     </form>
 				
-			  <tbody>
-					<th:block th:each="orderVO : ${orderListData}">
-						<tr>
-							<td class=orderno th:text="${orderVO.orderNo}"></td>
-							<td th:text="${orderVO.memberVO.memNo}"></td>
-							<td th:text="${orderVO.memberVO.memName}"></td>
-							<td class="orderStatus" th:text="${orderVO.orderStatus}"></td>
-							<td class="paymentStatus" th:text="${orderVO.paymentStatus}"></td>				
-							<td>
-								<form method="post" th:action="@{/shop/order/getOne_For_Display}">
-									<button class="btn btn-outline-success" type="submit">訂單詳情
-								     	<input type="hidden" name="orderNo" th:value="${orderVO.orderNo}">
-									</button>
-							     </form>
+							    </td>
+							    <td>
+							    	<form method="post" th:action="@{/shop/order/getOne_For_Update}">
+									 <button class="btn btn-outline-success" type="submit">修改
+									 	<input type="hidden" name="orderNo" th:value="${orderVO.orderNo}"></form>
+									 </button>
+							    </td>
+	<!-- 						    <td> -->
+	<!-- 						  		<form method="post" th:action="@{/shop/order/delete}" style="margin-bottom: 0px;"> -->
+	<!-- 							     <input type="submit" value="刪除"> -->
+	<!-- 							     <input type="hidden" name="orderNo" th:value="${orderVO.orderNo}"></form> -->
+	<!-- 							</td> -->
+							  </tr>			
+						</th:block>
+				  </tbody>
+				</table>
+			</div>
 			
-						    </td>
-						    <td>
-						    	<form method="post" th:action="@{/shop/order/getOne_For_Update}">
-								 <button class="btn btn-outline-success" type="submit">修改
-								 	<input type="hidden" name="orderNo" th:value="${orderVO.orderNo}"></form>
-								 </button>
-						    </td>
-<!-- 						    <td> -->
-<!-- 						  		<form method="post" th:action="@{/shop/order/delete}" style="margin-bottom: 0px;"> -->
-<!-- 							     <input type="submit" value="刪除"> -->
-<!-- 							     <input type="hidden" name="orderNo" th:value="${orderVO.orderNo}"></form> -->
-<!-- 							</td> -->
-						  </tr>			
-					</th:block>
-			  </tbody>
-			</table>
-		</div>
-		
-	</main>
+		</main>
+	
+	
+	</div>
+	
 		
 <!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

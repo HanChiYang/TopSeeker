@@ -23,17 +23,17 @@
 <link
 	href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap"
 	rel="stylesheet">
+<!-- Topseeker前台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/common.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
 
 <style type="text/css">
-
-	main{ 
-	     margin-top: 20px; 
-	     margin-left: 250px; 
-	     padding: 20px; 
+	main.shopManagementContent {
+		padding: 30px 50px;
 	}
+
 	.error{
 		color: red;
 		display: none;
@@ -114,124 +114,129 @@
 
 	<!-- 商城後台用Navbar + 左側邊欄 -->
 	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
+	
+	<div class="shopContent">
+		<aside class="sidebar" th:insert="~{/back-end/shop/shop_back_end_sidebar.html}"></aside>
+		<main class="shopManagementContent content" align="center">
+			<form method="post" th:action="@{/shop/order/update}" th:object="${orderVO}" id="orderform">
+				<div class="container">
+				
+					<div class="left">
+						<div class="col1">
+							<label>商品訂單編號 :</label>
+							<input type="text" th:field="*{orderNo}" style="border:0px ; font-weight: bold;" readonly /><br/>
+						</div>
+						<div class="col1">
+							<label>會員編號 :</label>
+							<input type="text" th:field="*{memberVO.memNo}" style="border:0px ; font-weight: bold;" readonly /><br/>
+						</div>
+						<div class="col1">
+							<label>會員姓名 :</label>
+							<input type="text" th:field="*{memberVO.memName}" style="border:0px ; font-weight: bold;" readonly /><br/>
+						</div>
+						<div class="col1">
+							<label>促銷活動編號 :</label>
+							<input type="text" th:field="*{saleVO.saleNo}" style="border:0px ; font-weight: bold;" readonly /><br/>
+						</div>
+						<div class="col1">
+							<label>促銷活動名稱 :</label>
+							<input type="text" th:field="*{saleVO.saleName}" style="border:0px ; font-weight: bold;" readonly /><br/>
+						</div>
+						
+						<div class="col1">
+							<label>訂單日期 :</label>
+							<input type="text" th:field="*{orderDate}" style="border:0px ; font-weight: bold;" readonly /><br/>
+						</div>
+						
+						<div class="col1">
+							<label>訂單原始金額 :</label>
+							<input type="text" th:field="*{orderAmount}" style="border:0px ; font-weight: bold;" readonly /><br/>
+						</div>
+						<div class="col1">
+							<label>訂單運費 :</label>
+							<input type="text" th:field="*{orderShipment}" style="border:0px ; font-weight: bold;" readonly /><br/>
+						</div>
+						<div class="col1">
+							<label>折扣金額 :</label>
+							<input type="text" th:field="*{orderDiscount}" style="border:0px ; font-weight: bold;" readonly /><br/>
+						</div>
+						<div class="col1">
+							<label>訂單實付金額 :</label>
+							<input type="text" th:field="*{orderBill}" style="border:0px ; font-weight: bold;" readonly /><br/>
+						</div>
+						
+					</div>
+					<div class="right">
+						<div class="col2">
+							<label>收件人姓名 :</label>
+							<input name="orderName" type="text" th:field="*{orderName}" onclick="hideContent('orderName.errors')" /><br/>
+					 		<div class="error" id="error-orderName">請輸入有效的收件人姓名。</div>
+						</div>
+						<div class="col2">
+							<label>收件人電話 :</label>
+							<input name="orderPhone" type="text" th:field="*{orderPhone}" onclick="hideContent('orderPhone.errors')" /><br/>
+					 		<div class="error" id="error-orderPhone">請輸入有效的收件人電話。</div>
+						</div>
+						<div class="col2">
+							<label>收件人住址 :</label>
+							<input name="orderAddress" type="text" th:field="*{orderAddress}" onclick="hideContent('orderAddress.errors')" /><br/>
+					 		<div class="error" id="error-orderAddress">請輸入有效的收件人地址。</div>
+						</div>
+						<div class="col2">
+							<label>訂單狀態 :</label>
+							<select th:field="*{orderStatus}">
+								<option th:value="0" th:text="訂單成立">
+								<option th:value="1" th:text="出貨中">
+								<option th:value="2" th:text="已出貨">
+								<option th:value="3" th:text="已收貨">
+								<option th:value="4" th:text="訂單取消">
+								<option th:value="5" th:text="一般結案">
+								<option th:value="6" th:text="鑑賞期內退貨結案">
+								<option th:value="7" th:text="瑕疵品退貨結案">
+							</select>
+						</div>
+						<div class="col2">
+							<label>付款狀態 :</label>
+							<select th:field="*{paymentStatus}">
+								<option th:value="0" th:text="待繳費">
+								<option th:value="1" th:text="已繳費">
+							</select>
+						</div>
+						<div class="col2">
+							<label>付款方式 :</label>
+							<input type="hidden" th:field="*{paymentMethod}" />
+							<span th:switch="*{paymentMethod}">
+								<span th:case="'0'">信用卡</span>
+								<span th:case="'1'">轉帳</span>
+								<span th:case="'2'">貨到付款</span>
+							</span><br/>
+						</div>
+						<div class="col2">
+							<label>運送方式 :</label>
+							<input type="hidden" th:field="*{deliveryMethod}" />
+							<span th:switch="*{deliveryMethod}">
+								<span th:case="'0'">宅配</span>
+								<span th:case="'1'">超商取貨</span>
+							</span><br/>
+						</div>
+						<div class="col2">
+							<label>備註 :</label>
+							<textarea type="text" th:field="*{remarks}" onclick="hideContent('remarks.errors')"></textarea>
+					 		<span th:if="${#fields.hasErrors('remarks')}" th:errors="*{remarks}" class="error" id="remarks.errors"></span>
+						</div>
+						
+						<button type="submit" id="submit" class="btn btn-outline-success"> 送出修改 </button>
+					
+					</div>
+				
+				</div>
+				
+			</form>
+		
+		</main>
+		
+	</div>
 
-<main>
-	<form method="post" th:action="@{/shop/order/update}" th:object="${orderVO}" id="orderform">
-		<div class="container">
-		
-			<div class="left">
-				<div class="col1">
-					<label>商品訂單編號 :</label>
-					<input type="text" th:field="*{orderNo}" style="border:0px ; font-weight: bold;" readonly /><br/>
-				</div>
-				<div class="col1">
-					<label>會員編號 :</label>
-					<input type="text" th:field="*{memberVO.memNo}" style="border:0px ; font-weight: bold;" readonly /><br/>
-				</div>
-				<div class="col1">
-					<label>會員姓名 :</label>
-					<input type="text" th:field="*{memberVO.memName}" style="border:0px ; font-weight: bold;" readonly /><br/>
-				</div>
-				<div class="col1">
-					<label>促銷活動編號 :</label>
-					<input type="text" th:field="*{saleVO.saleNo}" style="border:0px ; font-weight: bold;" readonly /><br/>
-				</div>
-				<div class="col1">
-					<label>促銷活動名稱 :</label>
-					<input type="text" th:field="*{saleVO.saleName}" style="border:0px ; font-weight: bold;" readonly /><br/>
-				</div>
-				
-				<div class="col1">
-					<label>訂單日期 :</label>
-					<input type="text" th:field="*{orderDate}" style="border:0px ; font-weight: bold;" readonly /><br/>
-				</div>
-				
-				<div class="col1">
-					<label>訂單原始金額 :</label>
-					<input type="text" th:field="*{orderAmount}" style="border:0px ; font-weight: bold;" readonly /><br/>
-				</div>
-				<div class="col1">
-					<label>訂單運費 :</label>
-					<input type="text" th:field="*{orderShipment}" style="border:0px ; font-weight: bold;" readonly /><br/>
-				</div>
-				<div class="col1">
-					<label>折扣金額 :</label>
-					<input type="text" th:field="*{orderDiscount}" style="border:0px ; font-weight: bold;" readonly /><br/>
-				</div>
-				<div class="col1">
-					<label>訂單實付金額 :</label>
-					<input type="text" th:field="*{orderBill}" style="border:0px ; font-weight: bold;" readonly /><br/>
-				</div>
-				
-			</div>
-			<div class="right">
-				<div class="col2">
-					<label>收件人姓名 :</label>
-					<input name="orderName" type="text" th:field="*{orderName}" onclick="hideContent('orderName.errors')" /><br/>
-			 		<div class="error" id="error-orderName">請輸入有效的收件人姓名。</div>
-				</div>
-				<div class="col2">
-					<label>收件人電話 :</label>
-					<input name="orderPhone" type="text" th:field="*{orderPhone}" onclick="hideContent('orderPhone.errors')" /><br/>
-			 		<div class="error" id="error-orderPhone">請輸入有效的收件人電話。</div>
-				</div>
-				<div class="col2">
-					<label>收件人住址 :</label>
-					<input name="orderAddress" type="text" th:field="*{orderAddress}" onclick="hideContent('orderAddress.errors')" /><br/>
-			 		<div class="error" id="error-orderAddress">請輸入有效的收件人地址。</div>
-				</div>
-				<div class="col2">
-					<label>訂單狀態 :</label>
-					<select th:field="*{orderStatus}">
-						<option th:value="0" th:text="訂單成立">
-						<option th:value="1" th:text="出貨中">
-						<option th:value="2" th:text="已出貨">
-						<option th:value="3" th:text="已收貨">
-						<option th:value="4" th:text="訂單取消">
-						<option th:value="5" th:text="一般結案">
-						<option th:value="6" th:text="鑑賞期內退貨結案">
-						<option th:value="7" th:text="瑕疵品退貨結案">
-					</select>
-				</div>
-				<div class="col2">
-					<label>付款狀態 :</label>
-					<select th:field="*{paymentStatus}">
-						<option th:value="0" th:text="待繳費">
-						<option th:value="1" th:text="已繳費">
-					</select>
-				</div>
-				<div class="col2">
-					<label>付款方式 :</label>
-					<input type="hidden" th:field="*{paymentMethod}" />
-					<span th:switch="*{paymentMethod}">
-						<span th:case="'0'">信用卡</span>
-						<span th:case="'1'">轉帳</span>
-						<span th:case="'2'">貨到付款</span>
-					</span><br/>
-				</div>
-				<div class="col2">
-					<label>運送方式 :</label>
-					<input type="hidden" th:field="*{deliveryMethod}" />
-					<span th:switch="*{deliveryMethod}">
-						<span th:case="'0'">宅配</span>
-						<span th:case="'1'">超商取貨</span>
-					</span><br/>
-				</div>
-				<div class="col2">
-					<label>備註 :</label>
-					<textarea type="text" th:field="*{remarks}" onclick="hideContent('remarks.errors')"></textarea>
-			 		<span th:if="${#fields.hasErrors('remarks')}" th:errors="*{remarks}" class="error" id="remarks.errors"></span>
-				</div>
-				
-				<button type="submit" id="submit" class="btn btn-outline-success"> 送出修改 </button>
-			
-			</div>
-		
-		</div>
-		
-	</form>
-
-</main>
 
 <!-- Bootstrap JavaScript -->
 	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
