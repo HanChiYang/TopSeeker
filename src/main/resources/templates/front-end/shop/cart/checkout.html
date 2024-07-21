@@ -24,9 +24,9 @@
 
 
 <!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<link rel="stylesheet" th:href="@{/css/common.css}">
 <!-- 商城導航列CSS -->
-<link rel="stylesheet" th:href="@{/css/shop_front_end_test.css}">
+<link rel="stylesheet" th:href="@{/css/shop_front_end.css}">
 
 
 <style>
@@ -40,6 +40,21 @@ main{
 	padding-top: 20px;
 }
 
+/* NAV修正用 */
+.navbar-nav .nav-item .nav-link {
+    border: 0px solid transparent;
+    border-radius: 0px;
+    margin: 0px;
+    }
+    
+.navbar-nav .nav-item .nav-link {
+    border: 0px solid transparent;
+    border-radius: 0px;
+    padding: 0px;
+    margin: 0px;
+}
+
+/* 結帳本體 */
 form{
 	display: flex;
   	flex-wrap:nowrap;
@@ -402,7 +417,7 @@ input#confirmPayment:hover{
 									</ul>			
 								</div>
 								<!-- 貨到付款 -->
-								<div class="col4" id="cashOnDelivery" style="display: none;">貨到付款</div>
+								<div class="col4" id="cashOnDelivery" style="display: none;"></div>
 							</div>
 					 	</div>
 					</div>
