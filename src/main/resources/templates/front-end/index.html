@@ -12,7 +12,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
+ <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
 <style>
         .navbar {
 		    position: fixed;
@@ -37,8 +40,8 @@
     </div>
     
     <div class="container2">
-    <h1 class="indexh1">關於我們</h1>
-    <pre>
+    <h1 class="animate__animated animate__backInLeft">關於我們</h1>
+    <pre class="animate__animated animate__backInLeft" >
 國內的登山健行活動在近幾年漸漸愈受歡迎，然而新手初次接觸卻可能不知道從何下手。
 可以去哪座山或步道? 該準備什麼裝備? 去哪能找到同伴?
 為了解決以上問題，於是誕生了此網站的發想。
@@ -49,12 +52,13 @@
 <nav th:insert="~{/front-end/navbar.html}"></nav>
 
 <div class="container2">
-<h1 class="indexh1" style="margin-bottom:30px;">歡迎來到Topseeker</h1>
-<p th:if="${session.loggedInMember != null}">
-    您好，
-    <span th:text="${session.loggedInMember.memName}"></span>
-    ！
-</p>
+<h1 class="animate__animated animate__backInLeft" style="margin-bottom:30px;">歡迎來到Topseeker</h1>
+
+<h4 class="animate__animated animate__backInLeft">
+<p  th:if="${session.loggedInMember != null}">
+    您好，<span  th:text="${session.loggedInMember.memName}"></span> ！
+   
+</p></h4>
 </div>
 <div th:insert="~{/front-end/notification/notification.html}"></div>
 <div class="navigation-footer">
@@ -69,22 +73,28 @@
 				<div class="social-icons">
 					<div class="buttons-icon">
 						<div class="icon">
-							<div class="icon-11"></div>
+							<a href="https://line.me/tw/" target="_blank">
+						
+							<div class="icon-11"></div></a>
 						</div>
 					</div>
 					<div class="buttons-icon-12">
+				
 						<div class="icon-13">
-							<div class="icon-14"></div>
-						</div>
+						<a href="https://www.facebook.com/PageDavidSeafood/?locale=zh_TW" target="_blank">
+							<div class="icon-14"></div></a>
+						</div></a>
 					</div>
 					<div class="buttons-icon-15">
 						<div class="icon-16">
-							<div class="icon-17"></div>
+							<a href="https://www.youtube.com/" target="_blank">
+							<div class="icon-17"></div></a>
 						</div>
 					</div>
 					<div class="buttons-icon-18">
 						<div class="icon-19">
-							<div class="icon-1a"></div>
+							<a href="https://www.instagram.com/" target="_blank">						
+							<div class="icon-1a"></div></a>
 						</div>
 					</div>
 
