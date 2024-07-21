@@ -1,3 +1,61 @@
-body > nav > nav {
-	z-index: 100;
+body {
+    background-color: #FAF1E4;
+    color: #435334;
+    font-family: 'Noto Sans TC', sans-serif;
+}
+.navbar-custom {
+    background-color: #9EB384;
+}
+.navbar-custom .nav-link {
+    color: #FAF1E4 !important;
+}
+.navbar-custom .nav-link:hover {
+    color: #CEDEBD !important;
+}
+.navbar-custom .navbar-brand img {
+    max-width: 75px;
+}
+h1 {
+    text-align: center;
+    margin-top: 2rem;
+}
+.card {
+    background-color: #CEDEBD;
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.card-header {
+    background-color: #9EB384;
+    color: #FAF1E4;
+    font-weight: bold;
+    font-size: 1.25rem;
+    text-align: center;
+}
+.card-body {
+    padding: 1.5rem;
+}
+.list-group-item {
+    background-color: #FAF1E4;
+    color: #435334;
+}
+.list-group-item:hover {
+    background-color: #9EB384;
+    color: #FAF1E4;
+}
+.dropdown-menu {
+    background-color: #CEDEBD;
+}
+.dropdown-item {
+    color: #435334;
+}
+.dropdown-item:hover {
+    background-color: #9EB384;
+    color: #FAF1E4;
+}
+.navbar-nav {
+    margin: auto;
+}
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
 }
