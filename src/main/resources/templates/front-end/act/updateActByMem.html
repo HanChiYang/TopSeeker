@@ -112,9 +112,9 @@
                     <input type="text" class="form-control" th:field="*{actStatus}" readonly style="border:0px; font-weight: bold; display: none;" />
                     <span th:switch="${actVO.actStatus}">
                         <span th:case="0" class="form-control-plaintext">揪團中</span>
-                        <span th:case="1" class="form-control-plaintext">已成團</span>
-                        <span th:case="2" class="form-control-plaintext">活動已完成</span>
-                        <span th:case="3" class="form-control-plaintext">活動已取消</span>
+                        <span th:case="1" class="form-control-plaintext">已額滿</span>
+                        <span th:case="2" class="form-control-plaintext">已完成</span>
+                        <span th:case="3" class="form-control-plaintext">已取消</span>
                     </span>
                 </div>
                 <div class="text-center">
