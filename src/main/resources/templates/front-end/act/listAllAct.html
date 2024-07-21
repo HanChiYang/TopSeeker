@@ -205,16 +205,20 @@
                     }
                 });
             });
-
+			//卡片綁定點擊事件
             function bindCardClickEvent() {
+            	// 解除之前綁定的點擊事件處理器，防止重複綁定
                 $('.card-clickable').off('click').on('click', function() {
+                	// 獲取卡片的 actNo 屬性值
                     var actNo = $(this).data('actno');
+                 	// 獲取緊接在卡片後面的隱藏表單元素
                     var form = $(this).next('.card-form');
+                 	// 提交隱藏的表單
                     form.submit();
                 });
             }
-
-            bindCardClickEvent(); // 初始綁定事件
+			//卡片在初始加載時就綁定好點擊事件
+            bindCardClickEvent(); 
         });
     </script>
     <footer>

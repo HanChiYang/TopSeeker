@@ -42,19 +42,6 @@
         </div>
     </div>
 
-    <script>
-        $(document).ready(function() {
-            function bindCardClickEvent() {
-                $('.card-clickable').off('click').on('click', function() {
-                    var actNo = $(this).data('actno');
-                    var form = $(this).next('.card-form');
-                    form.submit();
-                });
-            }
-
-            bindCardClickEvent(); // 初始綁定事件
-        });
-    </script>
 </body>
 
 </html>
