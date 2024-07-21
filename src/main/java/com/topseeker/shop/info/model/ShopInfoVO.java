@@ -35,7 +35,7 @@ public class ShopInfoVO implements java.io.Serializable{
 	private byte[] infoPic;
 	
 	@NotNull(message="發布日期: 請勿空白")
-	@Column(name ="info_date", updatable = false)
+	@Column(name ="info_date")
 	private Date infoDate;
 	
 	@Column(name ="info_status")

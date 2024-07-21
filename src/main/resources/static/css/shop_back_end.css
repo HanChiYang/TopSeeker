@@ -4,16 +4,21 @@
 /* 	height:175px; */
 /* } */
 
+
+.shopKanban {
+    position: relative;
+}
+
+
 #shopNavbar {
-	background-color: rgba(67, 83, 52, 0.8);
-	margin-top: 0;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	position: absolute; /* 絕對定位 */
-	width: 100%;
-	z-index: 800; /* 確保在圖片之上 */
-	top: 195px;
+    background-color: rgba(67, 83, 52, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    z-index: 800;
+    bottom: 0; /* 確保與圖片的下緣對齊 */
 }
 
 .navbar-brand {
@@ -62,16 +67,15 @@ nav ul li a {
 }
 
 /* 商城導航列的圖片 */
-img#longlogo {
-	margin-top: 0px;
-	height: 175px;
-	width: 100%;
-	object-fit: cover; /* 保持比例不變形 */
-	border-top: solid 1px lightgray;
-	border-bottom: solid 2px lightgray;
-	position: relative; /* 保持相對定位 */
-	z-index: 100;
+#longlogo {
+    height: 175px;
+    width: 100%;
+    object-fit: cover;
+    border-top: solid 1px lightgray;
+    border-bottom: solid 2px lightgray;
+    z-index: 100;
 }
+
 
 
 body, html {
