@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg navbar-custom">
   <div class="container-fluid">
     <a href="/backend_protected/backEndIndex" class="navbar-brand">
       <img th:src="@{/images/TopSeeker_logo.png}" alt="Logo">
@@ -15,7 +15,7 @@
         </li>
         <li th:if="${session.authNos.contains(3) || session.authNos.contains(6)}" class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="tourDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            套裝行程管理
+            <i class="fa-solid fa-cart-flatbed-suitcase"></i>套裝行程管理
           </a>
           <ul class="dropdown-menu" aria-labelledby="tourDropdown">
             <li><a class="dropdown-item" href="/tour/select_page">行程管理</a></li>
@@ -30,7 +30,7 @@
         </li>
         <li th:if="${session.authNos.contains(4) || session.authNos.contains(6)}" class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="communityDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            社群管理
+            <i class="fa-solid fa-comment"></i>社群管理
           </a>
           <ul class="dropdown-menu" aria-labelledby="communityDropdown">
             <li><a class="dropdown-item" href="/artreport/listAllArtReport">登山情報檢舉管理</a></li>
@@ -40,7 +40,7 @@
         </li>
         <li th:if="${session.authNos.contains(5) || session.authNos.contains(6)}" class="nav-item">
           <a class="nav-link" href="/backend_protected/member/memberManagement">
-            <i class="fas fa-users"></i> 會員管理
+            <i class="fa-solid fa-users-gear"></i></i> 會員管理
           </a>
         </li>
         <li th:if="${session.authNos.contains(6)}" class="nav-item">
