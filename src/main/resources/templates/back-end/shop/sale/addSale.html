@@ -155,7 +155,7 @@ a {
 					</div>
 					<div class="mb-3">
 						<label class="form-label">活動金額門檻:</label>
-						<input class="form-control" type="text" th:field="*{saleAmount}" onclick="hideContent('saleAmount.errors')" /><br/>
+						<input class="form-control" type="number" th:field="*{saleAmount}" onclick="hideContent('saleAmount.errors')" /><br/>
 						<div th:if="${#fields.hasErrors('saleAmount')}" th:errors="*{saleAmount}" class="error" id="saleAmount.errors"></div>
 					</div>
 					<div class="mb-3">

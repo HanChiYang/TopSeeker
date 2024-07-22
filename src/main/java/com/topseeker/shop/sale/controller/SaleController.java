@@ -149,6 +149,13 @@ public class SaleController {
 	public String getOne_For_Update(@RequestParam("saleNo") String saleNo, ModelMap model) {
 		SaleVO saleVO = saleSvc.getOneSale(Integer.valueOf(saleNo));  
 		model.addAttribute("saleVO", saleVO);
+		
+		//檢查該優惠是否被使用
+//	    if (saleSvc.isSaleUsed(Integer.valueOf(saleNo))) {
+//	        model.addAttribute("errorMessage", "該優惠活動已被使用，無法修改內容");
+//	        return "back-end/shop/sale/updateSale";// 查詢完成後轉交updateSale.html
+//	    } 
+		
 		return "back-end/shop/sale/updateSale";// 查詢完成後轉交updateSale.html
 	}
 	
@@ -156,6 +163,7 @@ public class SaleController {
 	public String update(@Valid SaleVO saleVO, BindingResult result, ModelMap model
 			) throws IOException {
 		
+			
 		if(!saleVO.isStartDateBeforeEndDate(saleVO.getSaleStdate(), saleVO.getSaleEddate())) {
 			model.addAttribute("errorMessage", "活動起始日期不得晚於結束日期");
 

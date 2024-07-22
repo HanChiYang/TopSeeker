@@ -70,7 +70,7 @@ public class OrderController {
 			@ModelAttribute("orderVO") OrderVO orderVO,
             BindingResult result,
             HttpSession session,
-			@RequestParam("saleNo") Integer saleNo,
+			@RequestParam(value = "saleNo", required = false) Integer saleNo,
 			@RequestParam("deliveryMethod") Integer deliveryMethod,
 			@RequestParam(value = "orderNameth", required = false) String orderNameth,
             @RequestParam(value = "orderPhoneth", required = false) String orderPhoneth,
