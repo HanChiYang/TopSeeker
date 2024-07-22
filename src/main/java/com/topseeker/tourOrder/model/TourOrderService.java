@@ -1,5 +1,6 @@
 package com.topseeker.tourOrder.model;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -8,9 +9,11 @@ import java.util.Optional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_TourOrder;
+import com.topseeker.tourGroup.model.TourGroupVO;
 
 @Service("tourOrderService")
 public class TourOrderService {
@@ -45,6 +48,11 @@ public class TourOrderService {
 	public List<TourOrderVO> getAll() {
 		return repository.findAll();
 	}
+	
+	
+	public void insertByGOO(Integer memNo, Integer groupNo, Integer orderNums, Byte orderPay, Byte orderStatus, Date orderDate, Integer orderPrice) {
+		repository.insertByGOO(memNo, groupNo, orderNums, orderPay, orderStatus, orderDate, orderPrice);
+	}
 
 	public List<TourOrderVO> getAll(Map<String, String[]> map) {
 		return HibernateUtil_CompositeQuery_TourOrder.getAllC(map,sessionFactory.openSession());
@@ -61,7 +69,7 @@ public class TourOrderService {
         return repository.findByMemberNoAndOrderDateAfter(memNo, startDate);
     }
 	
-	public boolean confirmOrder(Integer orderNo, Byte orderPay) {
+	public boolean confirmOrder(Integer orderNo, byte orderPay) {
 	    TourOrderVO tourOrderVO = getOneOrder(orderNo);
 	    if (tourOrderVO != null) {
 	        tourOrderVO.setOrderStatus((byte) 1); // 設置訂單狀態為已確認，但未支付
@@ -79,12 +87,11 @@ public class TourOrderService {
         }
 		
 	}
+	
+	
 
-//	public List<TourOrderVO> findOrdersByEndDate() {
-//		
-//		return null;
-//	}
-//	
+	
+
 }
 	
 	

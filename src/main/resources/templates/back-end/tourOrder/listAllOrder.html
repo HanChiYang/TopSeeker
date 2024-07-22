@@ -71,7 +71,8 @@ body {
             <th>會員編號</th>
             <th>開團編號</th>
             <th>訂單日期</th>
-            <th>出發日期</th>
+            <th>行程開始</th>
+            <th>行程結束</th>
             <th>人數</th>
             <th>價錢</th>
             <th>付款方式</th>
@@ -88,7 +89,8 @@ body {
             <td th:text="${tourOrderVO.memberVO.memNo}"></td>
             <td th:text="${tourOrderVO.tourGroupVO.groupNo}"></td>
             <td th:text="${tourOrderVO.orderDate}"></td>
-            <td th:text="${tourOrderVO.departureDate}"></td>
+            <td th:text="${tourOrderVO.tourGroupVO.groupBegin}"></td>
+            <td th:text="${tourOrderVO.tourGroupVO.groupEnd}"></td>
             <td th:text="${tourOrderVO.orderNums}"></td>
             <td th:text="${tourOrderVO.orderPrice}"></td>
             <td>

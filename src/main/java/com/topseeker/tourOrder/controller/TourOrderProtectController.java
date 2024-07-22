@@ -145,40 +145,44 @@ public class TourOrderProtectController {
 	}
 	
 	@PostMapping("insert")
-	public String insert(@Valid TourOrderVO tourOrderVO, BindingResult result, ModelMap model) throws IOException {
+	public String insert(HttpSession session
+			,@RequestParam("groupNo") Integer groupNo
+			,@RequestParam("orderNums") Integer orderNums
+			,@RequestParam("orderPay") Byte orderPay
+			,@RequestParam("orderPrice") Integer orderPrice
+			, ModelMap model) throws IOException {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 
-		if (result.hasErrors()) {
-			return "front-end/tourOrder/addOrder";
+		MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+		if (loggedInMember == null) {
+			// 如果未登入，重定向到登入頁面
+			return "redirect:/member/loginMem";
 		}
 		
-		int pricePerPerson = 16888; // 每人的價格，例如1000元
-		int totalPrice = tourOrderVO.getOrderNums() * pricePerPerson;
-		tourOrderVO.setOrderPrice(totalPrice);
+		Byte orderStatus = null;
+		LocalDate orderDate = LocalDate.now(); 
+		Date sqlDate = Date.valueOf(orderDate);
 		
-		if(tourOrderVO.getOrderPay()== 1 ) {
-			tourOrderVO.setOrderStatus((byte)1);
+		System.out.println(sqlDate);
+		if (orderPay == 1) {
+			orderStatus = (byte)1;
 		}else {
-			tourOrderVO.setOrderStatus((byte)2);
+			orderStatus = (byte)2;
 		}
+		Integer loggedInMemberNo = loggedInMember.getMemNo();
 		
-		
-		Date currentDate = Date.valueOf(LocalDate.now());
-		tourOrderVO.setOrderDate(currentDate);
-		
-		if (tourOrderVO.getDepartureDate().before(currentDate)) {
-	        result.rejectValue("departureDate", "error.tourOrderVO", "出發日期必須在訂單日期之後");
-	        return "front-end/tourOrder/addOrder";
-	    }
 		/*************************** 2.開始新增資料 *****************************************/
+		tourOrderSvc.insertByGOO(loggedInMemberNo, groupNo, orderNums, orderPay, orderStatus, sqlDate, orderPrice);
+		
+		tourGroupSvc.updateGroupBal(groupNo, orderNums);
+		
+		List<TourOrderVO> list = tourOrderSvc.getHistoricalOrders(loggedInMemberNo);
 		// EmpService empSvc = new EmpService();
-		tourOrderSvc.addOrder(tourOrderVO);
+//		tourOrderSvc.addOrder(tourOrderVO);
 		/*************************** 3.新增完成,準備轉交(Send the Success view) **************/
-		List<TourOrderVO> list = tourOrderSvc.getAll();
 		model.addAttribute("tourOrderListData", list);
-		model.addAttribute("success", "- (新增成功)");
-		return "front-end/tourOrder/confirmOrder"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
+		return "front-end/tourOrder/historical_Order"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
 	}
 	
 	
