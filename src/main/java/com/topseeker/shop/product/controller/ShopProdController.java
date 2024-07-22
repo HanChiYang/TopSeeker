@@ -83,6 +83,14 @@ public class ShopProdController {
 
 		return "front-end/shop/homepage";
 	}
+	
+	// 商城首頁 prodTest.html
+	@GetMapping("/prodtest")
+	public String showShopTest(ModelMap model) {
+
+
+		return "front-end/shop/homepage";
+	}
 
 	// 商城商品分類頁面 listProdByType.html
 	@GetMapping("/category/{categoryName}")
