@@ -88,7 +88,12 @@
 				<form th:action="@{/knowledge/updateKnow}" method="post"
 					th:object="${knowledgeVO}" enctype="multipart/form-data">
 	
-					
+					<!-- 統一顯示錯誤訊息的區域 -->
+		            <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors()}">
+		                <ul>
+		                    <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+		                </ul>
+		            </div>
 					
 					<!-- 知識編號 -->
 					<input type="hidden" th:field="*{knowNo}" th:value="*{knowNo}">
@@ -124,7 +129,7 @@
 					<div class="mb-3">
 						<label for="knowPic" class="form-label">圖片:</label>
 						<div id="knowPic">
-							<div>
+							<div th:field="${knowledgeVO.knowPic}">
 								<img th:src="@{/knowledge/DBGifReader} + '?knowNo=' + *{knowNo}"
 									class="img-thumbnail mb-2" width="400" height="300">
 							</div>
@@ -132,7 +137,7 @@
 							<br>
 							<br> 
 							<label for="knowPic" class="form-label">新增圖片</label>
-							<input type="file" name="knowPic" id="knowPic" th:field="${knowledgeVO.knowPic}"
+							<input type="file" name="knowPics" id="knowPic" 
 								class="form-control">
 	
 							<!-- 預覽圖片容器 -->

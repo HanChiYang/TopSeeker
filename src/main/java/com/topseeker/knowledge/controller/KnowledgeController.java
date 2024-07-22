@@ -90,11 +90,10 @@ public class KnowledgeController {
 	// 新手知識新增(含圖片)
 	@PostMapping("/insertKnow")
 	public String insert(@Valid KnowledgeVO knowledgeVO, BindingResult result, ModelMap model,
-			@RequestParam("knowPic") MultipartFile[] parts) throws IOException {
+			@RequestParam("knowPics") MultipartFile[] parts) throws IOException {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		// 去除BindingResult中upFiles欄位的FieldError紀錄
-		result = removeFieldError(knowledgeVO, result, "knowPic");
+
 
 		// 使用者未選擇要上傳的圖片時
 		if (parts[0].isEmpty()) { 
@@ -106,6 +105,9 @@ public class KnowledgeController {
 				knowledgeVO.setKnowPic(buf);
 			}
 		}
+		
+		// 去除BindingResult中upFiles欄位的FieldError紀錄
+		result = removeFieldError(knowledgeVO, result, "knowPics");
 		
 		if (result.hasErrors()) {
 			return "back-end/knowledge/addKnow";
@@ -138,7 +140,7 @@ public class KnowledgeController {
 	// 修改新手知識
 	@PostMapping("/updateKnow")
 	public String update(@Valid KnowledgeVO knowledgeVO, BindingResult result, ModelMap model,
-			@RequestParam("knowPic") MultipartFile[] parts) throws IOException {
+			@RequestParam("knowPics") MultipartFile[] parts) throws IOException {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 	    // 設定修改當下的日期
@@ -147,23 +149,21 @@ public class KnowledgeController {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		// 去除BindingResult中upFiles欄位的FieldError紀錄
-		result = removeFieldError(knowledgeVO, result, "KnowPic");
+		result = removeFieldError(knowledgeVO, result, "KnowPics");
 
 		// 使用者未選擇要上傳的新圖片時
 		if (parts[0].isEmpty()) { 
-			byte[] KnowPic = knowledgeSvc.getOneKnowledge(knowledgeVO.getKnowNo()).getKnowPic();
-			knowledgeVO.setKnowPic(KnowPic);
-System.out.println("圖片是空的，存回原圖片");
+			byte[] KnowPics = knowledgeSvc.getOneKnowledge(knowledgeVO.getKnowNo()).getKnowPic();
+			knowledgeVO.setKnowPic(KnowPics);
 		} else {
 			for (MultipartFile multipartFile : parts) {
 				byte[] buf = multipartFile.getBytes();
 				knowledgeVO.setKnowPic(buf);
-System.out.println("圖片有上傳，已存取");
 			}
 		}
 		if (result.hasErrors()) {
 
-			return "back-end/knowledge/listOneKnow";
+			return "back-end/knowledge/update_know_input";
 		}
 		/*************************** 2.開始修改資料 *****************************************/
 

@@ -101,7 +101,7 @@ public class ShopInfoController {
 	// 最新消息新增(含圖片)
 	@PostMapping("/shopManagement/insertInfo")
 	public String insert(@Valid ShopInfoVO shopInfoVO, BindingResult result, ModelMap model,
-			@RequestParam("infoPic") MultipartFile[] parts) throws IOException {
+			@RequestParam("infoPics") MultipartFile[] parts) throws IOException {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 
@@ -118,7 +118,7 @@ public class ShopInfoController {
 		}
 		
 		// 去除BindingResult中upFiles欄位的FieldError紀錄
-		result = removeFieldError(shopInfoVO, result, "infoPic");
+		result = removeFieldError(shopInfoVO, result, "infoPics");
 		
 		if (result.hasErrors()) {
 			return "back-end/shop/info/addInfo";
@@ -152,7 +152,7 @@ public class ShopInfoController {
 	// 修改最新消息
 	@PostMapping("/shopManagement/updateInfo")
 	public String update(@Valid ShopInfoVO shopInfoVO, BindingResult result, ModelMap model,
-			@RequestParam("infoPic") MultipartFile[] parts) throws IOException {
+			@RequestParam("infoPics") MultipartFile[] parts) throws IOException {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 	    // 設定修改當下的日期
 	    java.sql.Date infoDate = new java.sql.Date(System.currentTimeMillis());
@@ -160,13 +160,12 @@ public class ShopInfoController {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		// 去除BindingResult中upFiles欄位的FieldError紀錄
-		result = removeFieldError(shopInfoVO, result, "infoPic");
+		result = removeFieldError(shopInfoVO, result, "infoPics");
 
 		// 使用者未選擇要上傳的新圖片時
 		if (parts[0].isEmpty()) { 
-			byte[] infoPic = shopInfoSvc.getOneShopInfo(shopInfoVO.getInfoNo()).getInfoPic();
-			shopInfoVO.setInfoPic(infoPic);
-			System.out.println("有放入圖片檔案!");
+			byte[] infoPics = shopInfoSvc.getOneShopInfo(shopInfoVO.getInfoNo()).getInfoPic();
+			shopInfoVO.setInfoPic(infoPics);
 		} else {
 			for (MultipartFile multipartFile : parts) {
 				byte[] buf = multipartFile.getBytes();
