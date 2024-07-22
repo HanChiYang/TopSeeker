@@ -24,8 +24,8 @@
 	rel="stylesheet">
 
 
-<!-- Topseeker前台導航列CSS -->
-<link rel="stylesheet" th:href="@{/css/common.css}">
+<!-- Topseeker後台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/back_end.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
@@ -33,13 +33,41 @@
 
 <style type="text/css">
 
-/* 確保內容位於 sidebar 右側 */
-.display {
-	margin-left: 200px; /* 確保內容位於 sidebar 右側 */
-	padding: 20px;
-	width: calc(100% - 200px); /* 確保內容佔滿剩餘寬度 */
-	overflow-x: auto; /* 確保內容過寬時可以滾動 */
+
+.knowContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 50px;
+  
 }
+
+
+.knowTitle h3 {
+  border: 2px solid darkgray;
+  padding: 10px 20px;
+  margin: 0;
+  background-color: #FAF1E4;
+  justify-content: center;
+  border-radius: 20px;
+}
+
+.knowManagementContent {
+	 border: 1px solid lightgray;
+	 padding: 10px;
+	 margin: 0 auto;
+	 justify-content: center;
+	 align-items: center;
+}
+
+.shopManagementInput {
+	margin: 0 auto;
+}
+
+.btn-success {
+	margin: 0 auto;
+}
+
 </style>
 </head>
 <body>
@@ -47,83 +75,90 @@
 	<!-- topseeker後台Navbar -->
 	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
 
-	<main class="shopManagementContent">
-		<div class="updateknowDisplay">
-			<H3>新手知識修改</H3>
-			<form th:action="@{/knowledge/updateKnow}" method="post"
-				th:object="${knowledgeVO}" enctype="multipart/form-data">
 
-				
-				
-				<!-- 知識編號 -->
-				<input type="hidden" th:field="*{knowNo}" th:value="*{knowNo}">
+	<div class="knowContent">
 
-				<div class="mb-3">
-					<label for="knowStatus">最新消息狀態:</label> <select
-						th:field="*{knowStatus}" name="knowStatus" class="form-select"
-						id="knowStatus">
-						<option value="1" th:selected="${knowStatus} == 0">上架</option>
-						<option value="0" th:selected="${knowStatus} == 1">下架</option>
-					</select> <span th:if="${#fields.hasErrors('knowStatus')}"
-						th:errors="*{knowStatus}" class="error" id="knowStatus.errors"></span>
-				</div>
+	<div class="knowTitle">
+		<h3><i class="fa-regular fa-lightbulb"></i><b> 新手知識管理</b></h3>
+	</div>	
 
-				<div class="mb-3">
-					<label for="knowTitle" class="form-label">標題:</label> <input
-						type="text" th:field="*{knowTitle}" class="form-control"
-						id="knowTitle" onclick="hideContent('knowTitle.errors');"> <span
-						th:if="${#fields.hasErrors('knowTitle')}" th:errors="*{knowTitle}"
-						class="error" id="knowTitle.errors"></span>
-				</div>
-
-				<div class="mb-3">
-					<label for="knowContent" class="form-label">內容:</label>
-					<textarea th:field="*{knowContent}"
-						onclick="hideContent('knowContent.errors');" class="form-control"
-						id="knowContent" rows="10"></textarea>
-					<span class="alert alert-danger" role="alert"
-						th:if="${#fields.hasErrors('knowContent')}"
-						th:errors="*{knowContent}" id="knowContent.errors"></span>
-				</div>
-
-				<div class="mb-3">
-					<label for="knowPic" class="form-label">圖片:</label>
-					<div id="knowPic">
-						<div>
-							<img th:src="@{/knowledge/DBGifReader} + '?knowNo=' + *{knowNo}"
-								class="img-thumbnail mb-2" width="400" height="300">
+		<main class="shopManagementContent">
+			<div class="shopManagementInput">
+				<H3><b>修改新手知識</b></H3>
+				<form th:action="@{/knowledge/updateKnow}" method="post"
+					th:object="${knowledgeVO}" enctype="multipart/form-data">
+	
+					
+					
+					<!-- 知識編號 -->
+					<input type="hidden" th:field="*{knowNo}" th:value="*{knowNo}">
+	
+					<div class="mb-3">
+						<label for="knowStatus">最新消息狀態:</label> <select
+							th:field="*{knowStatus}" name="knowStatus" class="form-select"
+							id="knowStatus">
+							<option value="1" th:selected="${knowStatus} == 0">上架</option>
+							<option value="0" th:selected="${knowStatus} == 1">下架</option>
+						</select> <span th:if="${#fields.hasErrors('knowStatus')}"
+							th:errors="*{knowStatus}" class="error" id="knowStatus.errors"></span>
+					</div>
+	
+					<div class="mb-3">
+						<label for="knowTitle" class="form-label">標題:</label> <input
+							type="text" th:field="*{knowTitle}" class="form-control"
+							id="knowTitle" onclick="hideContent('knowTitle.errors');"> <span
+							th:if="${#fields.hasErrors('knowTitle')}" th:errors="*{knowTitle}"
+							class="error" id="knowTitle.errors"></span>
+					</div>
+	
+					<div class="mb-3">
+						<label for="knowContent" class="form-label">內容:</label>
+						<textarea th:field="*{knowContent}"
+							onclick="hideContent('knowContent.errors');" class="form-control"
+							id="knowContent" rows="10"></textarea>
+						<span class="alert alert-danger" role="alert"
+							th:if="${#fields.hasErrors('knowContent')}"
+							th:errors="*{knowContent}" id="knowContent.errors"></span>
+					</div>
+	
+					<div class="mb-3">
+						<label for="knowPic" class="form-label">圖片:</label>
+						<div id="knowPic">
+							<div>
+								<img th:src="@{/knowledge/DBGifReader} + '?knowNo=' + *{knowNo}"
+									class="img-thumbnail mb-2" width="400" height="300">
+							</div>
+	
+							<br>
+							<br> 
+							<label for="knowPic" class="form-label">新增圖片</label>
+							<input type="file" name="knowPic" id="knowPic" th:field="${knowledgeVO.knowPic}"
+								class="form-control">
+	
+							<!-- 預覽圖片容器 -->
+							<div id="preview" class="mt-2"></div>
 						</div>
-
-						<br>
-						<br> 
-						<label for="knowPic" class="form-label">新增圖片</label>
-						<input type="file" name="knowPic" id="knowPic" th:field="${knowledgeVO.knowPic}"
-							class="form-control">
-
-						<!-- 預覽圖片容器 -->
-						<div id="preview" class="mt-2"></div>
 					</div>
-				</div>
-
-				<div>
-					<input type="hidden" th:field="*{knowPublishDate}"> <span
-						th:if="${#fields.hasErrors('knowPublishDate')}" th:errors="*{knowPublishDate}"
-						class="error" id="knowPublishDate.errors"></span>
-				</div>
-
-
-
-				<div>
-					<div></div>
+	
 					<div>
-						<button type="submit" class="btn btn-success" id="submit">送出修改</button>
+						<input type="hidden" th:field="*{knowPublishDate}"> <span
+							th:if="${#fields.hasErrors('knowPublishDate')}" th:errors="*{knowPublishDate}"
+							class="error" id="knowPublishDate.errors"></span>
 					</div>
-					<div></div>
-				</div>
-			</form>
-		</div>
-	</main>
-
+	
+	
+	
+					<div>
+						<div></div>
+						<div>
+							<button type="submit" class="btn btn-success" id="submit">送出修改</button>
+						</div>
+						<div></div>
+					</div>
+				</form>
+			</div>
+		</main>
+	</div>	
 
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

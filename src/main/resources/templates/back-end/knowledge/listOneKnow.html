@@ -23,8 +23,8 @@
 	rel="stylesheet">
 
 
-<!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<!-- Topseeker後台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/back_end.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
@@ -32,9 +32,44 @@
 
 <style type="text/css">
 
-.content{
-width: 70%
+
+.knowContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 50px;
+  
 }
+
+.knowTitle h3 {
+  border: 2px solid darkgray;
+  padding: 10px 20px;
+  margin: 0;
+  background-color: #FAF1E4;
+  justify-content: center;
+  border-radius: 20px;
+}
+
+.knowManagementContent {
+	 border: 1px solid lightgray;
+	 padding: 10px;
+	 margin: 0 auto;
+	 justify-content: center;
+	 align-items: center;
+}
+
+.shopManagementInput {
+	margin: 0 auto;
+}
+
+
+/* .btn { */
+/* 	margin: 0 auto; */
+/* } */
+
+/* .content{ */
+/* width: 70% */
+/* } */
 
 
 .backbutton{
@@ -53,58 +88,66 @@ margin-right: auto;
 	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
 
 
-<main class="shopManagementContent">
-	<div class="content">
-		<!-- 此div被select_page.html第158行insert用 -->
-		<div class="card">
-			<div class="card-header text-center">
-				<h3>修改結果 :</h3>
-			</div>
-			<div class="card-body">
-				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">修改時間:</div>
-					<div class="col-sm-8" th:text="${knowledgeVO.knowPublishDate}"></div>
-				</div>
-				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">知識狀態:</div>
-					<div class="col-sm-8">
-						<span th:switch="${knowledgeVO.knowStatus}"> <span
-							th:case="'0'">下架</span> <span th:case="'1'">上架</span>
-						</span>
+	<div class="knowContent">
+	
+		<div class="knowTitle">
+			<h3><i class="fa-regular fa-lightbulb"></i><b> 新手知識管理</b></h3>
+		</div>	
+
+		<main class="shopManagementContent">
+			<div class="content">
+				<!-- 此div被select_page.html第158行insert用 -->
+				<div class="card">
+					<div class="card-header text-center">
+						<h3>修改結果 :</h3>
 					</div>
-				</div>
-
-<!-- 				<div class="row mb-2"> -->
-<!-- 					<div class="col-sm-4 font-weight-bold">知識編號:</div> -->
-<!-- 					<div class="col-sm-8" th:text="${knowledgeVO.knowNo}"></div> -->
-<!-- 				</div> -->
-				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">標題:</div>
-					<div class="col-sm-8" th:text="${knowledgeVO.knowTitle}"></div>
-				</div>
-				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">內容:</div>
-					<pre class="col-sm-8" th:text="${knowledgeVO.knowContent}"></pre>
-				</div>
-
-				<div class="mb-3">
-					<label for="infoPic" class="form-label">圖片:</label>
-					<div th:field="${knowledgeVO.knowNo}" id="knowPic" class="d-flex flex-row flex-wrap">
-							<img
-								th:src="@{/knowledge/DBGifReader} + '?knowNo=' + *{knowledgeVO.knowNo}"
-								class="img-thumbnail mb-2" width="400" height="300">
+					<div class="card-body">
+						<div class="row mb-2">
+							<div class="col-sm-4 font-weight-bold">修改時間:</div>
+							<div class="col-sm-8" th:text="${knowledgeVO.knowPublishDate}"></div>
 						</div>
+						<div class="row mb-2">
+							<div class="col-sm-4 font-weight-bold">知識狀態:</div>
+							<div class="col-sm-8">
+								<span th:switch="${knowledgeVO.knowStatus}"> <span
+									th:case="'0'">下架</span> <span th:case="'1'">上架</span>
+								</span>
+							</div>
+						</div>
+		
+		<!-- 				<div class="row mb-2"> -->
+		<!-- 					<div class="col-sm-4 font-weight-bold">知識編號:</div> -->
+		<!-- 					<div class="col-sm-8" th:text="${knowledgeVO.knowNo}"></div> -->
+		<!-- 				</div> -->
+						<div class="row mb-2">
+							<div class="col-sm-4 font-weight-bold">標題:</div>
+							<div class="col-sm-8" th:text="${knowledgeVO.knowTitle}"></div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-sm-4 font-weight-bold">內容:</div>
+							<p class="col-sm-8" th:text="${knowledgeVO.knowContent}"></p>
+						</div>
+		
+						<div class="mb-3">
+							<label for="infoPic" class="form-label">圖片:</label>
+							<div th:field="${knowledgeVO.knowNo}" id="knowPic" class="d-flex flex-row flex-wrap">
+									<img
+										th:src="@{/knowledge/DBGifReader} + '?knowNo=' + *{knowledgeVO.knowNo}"
+										class="img-thumbnail mb-2" width="400" height="300">
+								</div>
+							</div>
+						</div>
+						<div class="text-center">
+							<a th:href="@{/knowledge/listAllKnow}"
+								class="btn btn-success backbutton" role="button">繼續修改新手知識</a>
+						</div>
+		
 					</div>
 				</div>
-				<div class="text-center">
-					<a th:href="@{/knowledge/listAllKnow}"
-						class="btn btn-success backbutton" role="button">繼續修改新手知識</a>
-				</div>
-
-			</div>
-		</div>
+		
+		</main>
+		
 	</div>
-</main>
 
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

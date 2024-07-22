@@ -24,8 +24,8 @@
 	rel="stylesheet">
 
 
-<!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<!-- Topseeker後台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/back_end.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
@@ -64,6 +64,13 @@
 				<form th:action="@{/shop/shopManagement/updateInfo}" method="post"
 					th:object="${shopInfoVO}" enctype="multipart/form-data">
 	
+					<!-- 統一顯示錯誤訊息的區域 -->
+		            <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors()}">
+		                <ul>
+		                    <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+		                </ul>
+		            </div>
+	
 	
 					<div class="mb-3" type=hidden>
 					<input type="hidden" th:field="*{infoNo}"
@@ -77,16 +84,18 @@
 							id="infoStatus">
 							<option value="1" th:selected="${infoStatus} == 0">上架</option>
 							<option value="0" th:selected="${infoStatus} == 1">下架</option>
-						</select> <span th:if="${#fields.hasErrors('infoStatus')}"
-							th:errors="*{infoStatus}" class="error" id="infoStatus.errors"></span>
+						</select> 
+<!-- 						<span th:if="${#fields.hasErrors('infoStatus')}" -->
+<!-- 							th:errors="*{infoStatus}" class="error" id="infoStatus.errors"></span> -->
 					</div>
 	
 					<div class="mb-3">
 						<label for="infoHead" class="form-label">標題:</label> <input
 							type="text" th:field="*{infoHead}" class="form-control"
-							id="infoHead" onclick="hideContent('infoHead.errors');"> <span
-							th:if="${#fields.hasErrors('infoHead')}" th:errors="*{infoHead}"
-							class="error" id="infoHead.errors"></span>
+							id="infoHead" onclick="hideContent('infoHead.errors');"> 
+<!-- 							<span -->
+<!-- 							th:if="${#fields.hasErrors('infoHead')}" th:errors="*{infoHead}" -->
+<!-- 							class="error" id="infoHead.errors"></span> -->
 					</div>
 	
 					<div class="mb-3">
@@ -94,9 +103,9 @@
 						<textarea th:field="*{infoContent}"
 							onclick="hideContent('infoContent.errors');" class="form-control"
 							id="infoContent" rows="5"></textarea>
-						<span class="alert alert-danger" role="alert"
-							th:if="${#fields.hasErrors('infoContent')}"
-							th:errors="*{infoContent}" id="infoContent.errors"></span>
+<!-- 						<span class="alert alert-danger" role="alert" -->
+<!-- 							th:if="${#fields.hasErrors('infoContent')}" -->
+<!-- 							th:errors="*{infoContent}" id="infoContent.errors"></span> -->
 					</div>
 	
 					<div class="mb-3">
@@ -113,7 +122,7 @@
 							</div>
 	
 							<br> <br> <label for="infoPic" class="form-label">新增圖片</label>
-							<input type="file" name="infoPic" id="infoPic"
+							<input th:field="*{infoPic}" type="file" name="infoPic" id="infoPic"
 								class="form-control">
 	
 							<!-- 預覽圖片容器 -->

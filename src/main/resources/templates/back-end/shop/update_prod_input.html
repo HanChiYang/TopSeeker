@@ -24,8 +24,8 @@
 	rel="stylesheet">
 
 
-<!-- Topseeker前台導航列CSS -->
-<link rel="stylesheet" th:href="@{/css/common.css}">
+<!-- Topseeker後台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/back_end.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
@@ -64,7 +64,13 @@
 				<H3><b>商品修改</b></H3>
 				<form th:action="@{/shop/shopManagement/update}" method="post"
 					th:object="${shopProductVO}" enctype="multipart/form-data">
-
+					
+					<!-- 統一顯示錯誤訊息的區域 -->
+		            <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors()}">
+		                <ul>
+		                    <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+		                </ul>
+		            </div>
 
 					<div class="mb-3">	
 						<input class="form-control" type="hidden" th:field="*{prodNo}"
@@ -109,7 +115,7 @@
 
 					<div class="mb-3">
 						<label for="prodPrice" class="form-label">商品定價:</label> <input
-							type="text" th:field="*{prodPrice}" class="form-control"
+							type="number" th:field="*{prodPrice}" class="form-control"
 							id="prodPrice" onclick="hideContent('prodPrice.errors');">
 						<span th:if="${#fields.hasErrors('prodPrice')}"
 							th:errors="*{prodPrice}" class="error" id="prodPrice.errors"></span>

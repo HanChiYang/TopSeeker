@@ -89,7 +89,7 @@ body, html {
 /* 	background-color: #f8f9fa; */
 /* } */
 
-.shopContent {
+.shopContent, .knowContent{
     display: flex;
     align-items: stretch;
     min-height: 100vh;
