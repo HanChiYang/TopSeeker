@@ -5,25 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TopSeeker-開團列表</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://kit.fontawesome.com/de9b92a469.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">    
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" th:href="@{/css/common.css}">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     <style>
      body{
-        margin: 7rem 0;
+        margin-top: 7rem;
+        font-family: 'Noto Sans TC', sans-serif;
      }
 
      .dataTables_wrapper .dataTables_filter,
      .dataTables_wrapper .dataTables_length,
      .dataTables_wrapper .dataTables_info,
      .dataTables_wrapper .dataTables_paginate {
-        font-size: 0.8rem;
+        font-size: 14px;
      }
 
      table.dataTable {
-        font-size: 1rem;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle;
      }
 
      .card {
@@ -35,11 +39,13 @@
         border-collapse: collapse;
      }
      
-     .no-wrap {
-	    white-space: nowrap;
-	 }
-	 
-	 /* 彈窗美化 */
+     
+/*      table.dataTable.row-border tbody tr:first-child th, table.dataTable.row-border tbody tr:first-child td, table.dataTable.display tbody tr:first-child th, table.dataTable.display tbody tr:first-child td { */
+/* 	    border-top: none; */
+/* 	    white-space: nowrap; */
+/* 	 } */
+     
+     /* 彈窗美化 */
     .modal-header {
         background-color: #28a745;
         color: white;
@@ -54,16 +60,88 @@
         font-size: 1.5rem;
         font-weight: bold;
     }
+    .title-column {
+        width: 85px; /* 設置活動標題欄位的最大寬度 */
+        word-wrap: break-word; /* 使內容在超過寬度時自動換行 */
+        white-space: normal; /* 使內容正常換行 */
+    }
+    .current-title-column{
+        width: 35px;        
+    }
+    .check-title-column{
+    	width: 45px;
+        white-space: nowrap;        
+    }
+    .max-min-title-column {
+        width: 25px;        
+    }
+    .date-title-column {
+    	width: 40px;
+        white-space: nowrap;        
+    }
+    .count-column {
+        width: 15px;        
+    }
+    .edit-column {
+        max-width: 40px;        
+    }
+    .status-column {
+        width: 40px;        
+    }
+    
+    div.container {
+	    max-width: 96%;
+	    padding: 20px;
+	    background-color: #CEDEBD;
+	    border-radius: 10px;
+	    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	    margin-bottom: -30px;
+	    font-size: 30px;
+	    font-weight: bold;
+	    color:#435334;
+	}
+	.text-center {
+	    color:#435334;
+	    font-weight: bold;
+	}
+	.star-rating .fa-star,
+    .star-rating .fa-star-half-alt,
+    .star-rating .far.fa-star {
+        color: #f8ce0b;
+    }
+    .status-label {
+      font-size:12px;
+      font-weight: bold;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.25rem;
+  }
+  .status-label.yimanyu {
+      background-color: #ffc107; /* 黃色 */
+      color: #212529;
+  }
+  .status-label.jiutuan {
+      background-color: #28a745; /* 綠色 */
+      color: #ffffff;
+  }
+  .status-label.yiwancheng {
+      background-color: #6c757d; /* 灰色 */
+      color: #ffffff;
+  }
+  .status-label.yiquxiao {
+      background-color: #dc3545; /* 紅色 */
+      color: #ffffff;
+  }
     </style>    
 </head>
 <body>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>   
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
 <!-- jQuery DataTables 設定 -->
 <script th:inline="none">
     $(document).ready(function() {
-        $('#example').DataTable({
+        var activeTable = $('#example').DataTable({
             "lengthMenu": [10, 20, 50, 100],
             "searching": true,
             "paging": true,
@@ -90,7 +168,54 @@
                 }
             }
         });
-        
+
+        var cancelledTable = $('#cancelled').DataTable({
+            "lengthMenu": [10, 20, 50, 100],
+            "searching": true,
+            "paging": true,
+            "ordering": true,
+            "order": [[0, 'desc']],  // 預設按第一列降序排列
+            "language": {
+                "processing": "處理中...",
+                "loadingRecords": "載入中...",
+                "lengthMenu": "顯示 _MENU_ 筆結果",
+                "zeroRecords": "沒有符合的結果",
+                "info": "顯示第 _START_ 至 _END_ 筆結果，共 _TOTAL_ 筆",
+                "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
+                "infoFiltered": "(從 _MAX_ 筆結果中過濾)",
+                "search": "搜尋:",
+                "paginate": {
+                    "first": "第一頁",
+                    "previous": "上一頁",
+                    "next": "下一頁",
+                    "last": "最後一頁"
+                },
+                "aria": {
+                    "sortAscending": ": 升冪排列",
+                    "sortDescending": ": 降冪排列"
+                }
+            }
+        });
+
+        // 移動已取消的活動到新資料表
+        $('#example tbody tr').each(function() {
+            var row = $(this);
+            var status = row.find('td:nth-child(11)').text().trim();
+            if (status === '已取消') {
+                var rowData = activeTable.row(row).data();
+                activeTable.row(row).remove().draw();
+                cancelledTable.row.add(rowData).draw();
+            }
+        });
+
+        $('.cancel-btn').on('click', function(event) {
+            event.preventDefault();
+            var form = $(this).closest('form');
+            if (confirm('確定要取消這個活動嗎？')) {
+                form.submit();
+            }
+        });
+
         $('.modify-btn').on('click', function(event) {
             var status = $(this).data('status');
             if (status != 0) {
@@ -98,12 +223,29 @@
                 $('#statusModal').modal('show');
             }
         });
-     // 顯示成功訊息
+
+        // 顯示成功訊息
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('success') && urlParams.get('success') === 'true') {
             var successModal = new bootstrap.Modal(document.getElementById('successModal'));
             successModal.show();
         }
+        // 動態生成星星評價
+        $('.star-rating').each(function() {
+            var rating = $(this).data('rating');
+            var fullStars = Math.floor(rating);
+            var halfStar = rating % 1 !== 0;
+
+            for (var i = 0; i < fullStars; i++) {
+                $(this).append('<i class="fas fa-star"></i>');
+            }
+            if (halfStar) {
+                $(this).append('<i class="fas fa-star-half-alt"></i>');
+            }
+            for (var i = fullStars + (halfStar ? 1 : 0); i < 5; i++) {
+                $(this).append('<i class="far fa-star"></i>');
+            }
+        });
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -111,83 +253,114 @@
 <header>
     <nav th:insert="~{/front-end/navbar.html}"></nav>
 </header>
-
+<div class="container">我的開團列表</div>
 <div class="container mt-5">
-    <div class="row mb-4">
-        <div class="col text-center">
-            <h2>我的開團列表</h2>
-        </div>
-    </div>
-    <div class="row mb-4">
-        <div class="col text-center">
-            <form method="get" th:action="@{/act/addAct}">
-                <button type="submit" class="btn btn-success">我要開團</button>
-            </form>
-        </div>
-    </div>
+    
+    
     <div class="row">
         <div class="col">
             <div class="card shadow">
+	            <div class="col text-center">
+		            <form method="get" th:action="@{/act/addAct}">
+		                <button type="submit" class="btn btn-success">我要開團</button>
+		            </form>
+		        </div>
                 <table id="example" class="display table table-striped table-bordered">
                     <thead>
                         <tr style="background-color: #90c320;">
-                            <th>計數</th>
-                            <th>會員</th>
-                            <th>活動標題</th>                           
-                            <th>活動人數上限</th>
-                            <th>活動人數下限</th>
-                            <th>當前參與人數</th>
+                            <th class="count-column">計數</th>
+                            <th class="title-column">活動標題</th>                           
+                            <th class="max-min-title-column">人數上限</th>
+                            <th class="max-min-title-column">最低人數</th>
+                            <th class="current-title-column">已參與人數</th>
                             <th>待審核人數</th>
-                            <th>報名起始日</th>
-                            <th>報名截止日</th>
-                            <th>活動開始日</th>
-                            <th>活動結束日</th>
-                            <th>活動狀態</th>
-                            <th>平均評價</th> <!-- 新增欄位 -->
-                            <th>修改</th>
-                            <th>刪除</th>
+                            <th class="date-title-column">報名起始</th>
+                            <th class="date-title-column">報名截止</th>
+                            <th class="date-title-column">活動開始</th>
+                            <th class="date-title-column">活動結束</th>
+                            <th class="status-column">狀態</th>
+                            <th>評價</th> 
+                            <th class="edit-column">修改</th>
+                            <th class="edit-column">取消</th>
                         </tr>
                     </thead>
                     <tbody>
                         <th:block th:each="actVO : ${memMyAct}">
-                            <tr>
+                            <tr th:classappend="${actVO.actStatus == 3} ? 'cancelled' : ''">
                                 <td th:text="${actVOStat.count}"></td>
-                                <td th:text="${actVO.memberVO.memAccount} + '-(' + ${actVO.memberVO.memName} + ')'"></td>
-                                <td th:text="${actVO.actTitle}"></td>                                                                
+                                <td>
+                                	<form method="post" th:action="@{/act/details}" id="detailForm">
+                                        <input type="hidden" name="actNo" th:value="${actVO.actNo}" />
+                                        <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 14px; text-align: left;" th:text="${actVO.actTitle}"></button>
+                                    </form>
+                                </td>                                                                
                                 <td th:text="${actVO.actMaxCount}"></td>
                                 <td th:text="${actVO.actMinCount}"></td>
                                 <td th:text="${actVO.actCurrentCount}"></td>
-                                <td class="no-wrap">
+                                <td class="check-title-column">
                                     <span th:text="${actVO.actCheckCount}"></span>
                                     <form th:action="@{/participant/participantCheck}" method="get" style="display:inline;">
-									    <button type="submit" class="btn btn-primary ms-2" th:classappend="${actVO.actCheckCount == 0} ? 'disabled' : ''" th:disabled="${actVO.actCheckCount == 0}">審核</button>
+									    <button type="submit" class="btn btn-primary ms-2" th:classappend="${actVO.actCheckCount == 0 || actVO.actStatus == 3} ? 'disabled' : ''" th:disabled="${actVO.actCheckCount == 0 || actVO.actStatus == 3}">審核</button>
 									</form>
                                 </td>
-                                <td th:text="${actVO.actEnrollBegin}"></td>
-                                <td th:text="${actVO.actEnrollEnd}"></td>
-                                <td th:text="${actVO.actStart}"></td>
-                                <td th:text="${actVO.actEnd}"></td>
-                                <td th:switch="${actVO.actStatus}">
-                                    <span th:case="0">揪團中</span>
-                                    <span th:case="1">已成團</span>
-                                    <span th:case="2">活動已完成</span>
-                                    <span th:case="3">活動已取消</span>
+                                <td class="date-title-column" th:text="${actVO.actEnrollBegin}"></td>
+                                <td class="date-title-column" th:text="${actVO.actEnrollEnd}"></td>
+                                <td class="date-title-column" th:text="${actVO.actStart}"></td>
+                                <td class="date-title-column" th:text="${actVO.actEnd}"></td>
+                                <td class="status-column" th:switch="${actVO.actStatus}">
+                                    <span th:case="0" class="status-label jiutuan">揪團中</span>
+                                    <span th:case="1" class="status-label yimanyu">已額滿</span>
+                                    <span th:case="2" class="status-label yiwancheng">已完成</span>
+                                    <span th:case="3" class="status-label yiquxiao">已取消</span>
                                 </td>
-<!--                                 <td th:text="${actVO.evalSum == 0 ? '尚無評價' : #numbers.formatDecimal(actVO.actRateSum / actVO.evalSum, 1, 1)}"></td> 計算平均評價 -->
+                                <td>
+                                    <div class="star-rating" th:attr="data-rating=${ratingMap[actVO.actNo]}"></div>
+                                </td>
+                                
                                 <td>
                                     <form method="post" th:action="@{/act/updateActByMem}">
-                                        <button type="submit" class="btn btn-warning modify-btn" th:classappend="${actVO.actStatus != 0} ? 'btn-secondary' : 'btn-warning'" th:disabled="${actVO.actStatus != 0}" th:data-status="${actVO.actStatus}">修改</button>
+                                        <button type="submit" class="btn btn-warning modify-btn" th:classappend="${actVO.actStatus != 0} ? 'btn-secondary' : 'btn-warning'" th:disabled="${actVO.actStatus == 2 || actVO.actStatus == 3}" th:data-status="${actVO.actStatus}">修改</button>
                                         <input type="hidden" name="actNo" th:value="${actVO.actNo}">
                                     </form>
                                 </td>
                                 <td>
                                     <form method="post" th:action="@{/act/delete}">
-                                        <button type="submit" class="btn btn-danger">刪除</button>
+                                        <button type="submit" class="btn btn-danger cancel-btn" th:disabled="${actVO.actStatus == 2 || actVO.actStatus == 3}">取消</button>
                                         <input type="hidden" name="actNo" th:value="${actVO.actNo}">
                                     </form>
                                 </td>
                             </tr>
                         </th:block>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col">
+            <div class="card shadow">
+                <h3 class="text-center">已取消的活動</h3>
+                <table id="cancelled" class="display table table-striped table-bordered">
+                    <thead>
+                        <tr style="background-color: #dc3545;">
+                            <th class="count-column">計數</th>
+                            <th class="title-column">活動標題</th>
+                            <th class="max-min-title-column">人數上限</th>
+                            <th class="max-min-title-column">最低人數</th>
+                            <th class="current-title-column">已參與人數</th>
+                            <th>待審核人數</th>
+                            <th class="date-title-column">報名起始</th>
+                            <th class="date-title-column">報名截止</th>
+                            <th class="date-title-column">活動開始</th>
+                            <th class="date-title-column">活動結束</th>
+                            <th class="status-column">狀態</th>
+                            <th>評價</th>
+                            <th class="edit-column">修改</th>
+                            <th class="edit-column">取消</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 已取消的活動資料會動態新增到這裡 -->
                     </tbody>
                 </table>
             </div>

@@ -14,18 +14,9 @@ import com.topseeker.artcomment.model.ArtCommentService;
 import com.topseeker.artcomment.model.ArtCommentVO;
 import com.topseeker.article.model.ArticleService;
 import com.topseeker.article.model.ArticleVO;
-import com.topseeker.artpic.model.ArtPicService;
-import com.topseeker.artpic.model.ArtPicVO;
 import com.topseeker.artreport.model.ArtReportService;
 import com.topseeker.artreport.model.ArtReportVO;
-import com.topseeker.authority.model.AuthorityService;
-import com.topseeker.authority.model.AuthorityVO;
-import com.topseeker.empauth.model.EmpAuthService;
-import com.topseeker.empauth.model.EmpAuthVO;
 import com.topseeker.employee.model.EmployeeService;
-import com.topseeker.employee.model.EmployeeVO;
-import com.topseeker.follow.model.FollowService;
-import com.topseeker.follow.model.FollowVO;
 import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
 import com.topseeker.message.model.MessageService;
@@ -37,6 +28,8 @@ import com.topseeker.replymessage.model.ReplyMessageService;
 import com.topseeker.replymessage.model.ReplyMessageVO;
 import com.topseeker.report.model.ReportService;
 import com.topseeker.report.model.ReportVO;
+import com.topseeker.shop.info.model.ShopInfoService;
+import com.topseeker.shop.info.model.ShopInfoVO;
 
 
 
@@ -79,11 +72,8 @@ public class IndexController_inSpringBoot {
 	@Autowired
 	ArtReportService artreportSvc;
 	
-//	@Autowired
-//	ArtPicService artpicSvc;
-	
-//	@Autowired
-//	FollowService followSvc;
+	@Autowired
+	ShopInfoService shopInfoSvc;
 	
 	
 	
@@ -91,6 +81,11 @@ public class IndexController_inSpringBoot {
 	
     @GetMapping("/")
     public String index(Model model) {
+     
+	  List<ShopInfoVO> shopInfoListData = shopInfoSvc.getAllReleasedInfo();
+	
+	  model.addAttribute("shopInfoListData", shopInfoListData);
+  
         return "front-end/index";
     }
 
@@ -272,15 +267,6 @@ public class IndexController_inSpringBoot {
  		return "front-end/artpic/listAllArtPic";
  	}
     
-//    @ModelAttribute("artpicListData")  // for select_page.html 第97 109行用 // for listAllEmp.html 第85行用
-// 	protected List<ArtPicVO> referenceListData7(Model model) {
-// 		
-//    	List<ArtPicVO> list = artpicSvc.getAll();
-// 		return list;
-// 	}
-  //=========== 以下第63~75行是提供給 /src/main/resources/templates/back-end/emp/select_page.html 與 listAllEmp.html 要使用的資料 ===================   
-    
-  //=========== 以下第63~75行是提供給 /src/main/resources/templates/back-end/emp/select_page.html 與 listAllEmp.html 要使用的資料 ===================   
     
     
 }

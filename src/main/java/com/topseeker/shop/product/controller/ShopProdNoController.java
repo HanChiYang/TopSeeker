@@ -71,7 +71,7 @@ public class ShopProdNoController {
 	public String listAllProd(HttpServletRequest req, Model model) {
 		Map<String, String[]> map = req.getParameterMap();
 		List<ShopProductVO> list = shopProductSvc.getAll(map);
-		model.addAttribute("shopListData", list); // for listAllEmp.jsp 第85行用
+		model.addAttribute("shopListData", list);
 		return "back-end/shop/listAllProd";
 	}
 	

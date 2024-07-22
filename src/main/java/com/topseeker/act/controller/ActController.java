@@ -298,13 +298,20 @@ public class ActController {
 	    		//判斷登入的會員
 	            .filter(p -> p.getMemberVO().getMemNo().equals(loggedInMember.getMemNo()))
 	            
-	        	// 取得待審核人數和當前參與人數
-//	            .peek(act -> {
-//                    actSvc.updateActCurrentAndCheckCount(act.getActNo());
-//                    
-//                })
 	            .collect(Collectors.toList());//加入集合
 
+	    Map<Integer, Double> ratingMap = new HashMap<>();
+		//計算評價
+	    for (ActVO act : list) {
+	        double rating = 0;
+	        if (act.getEvalSum() != 0) {
+	        	// 四捨五入到小數點後一位
+	            rating = Math.round((double) 
+	            		act.getActRateSum() / act.getEvalSum() * 10.0) / 10.0;
+	        }
+	        ratingMap.put(act.getActNo(), rating); 
+	    }
+	    model.addAttribute("ratingMap", ratingMap);  // 傳遞 ratingMap 到前端
 	    model.addAttribute("memMyAct", list);
 		return "front-end/act/memMyAct";
 	}    
@@ -352,6 +359,8 @@ public class ActController {
 
         Session session = sessionFactory.openSession();
         List<ActVO> list = HibernateUtil_CompositeQuery_Act.getAllC(queryParams, session);
+     // 按報名截止日升序排列
+        list.sort((a, b) -> a.getActEnrollEnd().compareTo(b.getActEnrollEnd()));
         model.addAttribute("actListData", list);
         return "front-end/act/listAllActFragment :: resultsList";
 	}
@@ -360,15 +369,37 @@ public class ActController {
 	//進入活動列表頁面先自動載入全部活動
 	@GetMapping("ajaxSearchAll")
     public String getAllAct(HttpServletRequest req,Model model) {
-//        List<ActVO> actList = actSvc.getAll();
 		Map<String, String[]> map = req.getParameterMap();
         Map<String, String[]> queryParams = new HashMap<>(map);
         Session session = sessionFactory.openSession();
         List<ActVO> list = HibernateUtil_CompositeQuery_Act.getAllC(queryParams, session);
+        // 按報名截止日升序排列
+        list.sort((a, b) -> a.getActEnrollEnd().compareTo(b.getActEnrollEnd()));
         model.addAttribute("actListData", list);
         return "front-end/act/listAllActFragment :: resultsList";
     }
 	
-  
+	@GetMapping("/memActList")
+    public String memAllAct(Model model, Integer memNo) {
+		List<ActVO> list = actSvc.getActsByMem(memNo);
+		Map<Integer, Double> ratingMap = new HashMap<>();
+		//計算評價
+	    for (ActVO act : list) {
+	        double rating = 0;
+	        if (act.getEvalSum() != 0) {
+	        	// 四捨五入到小數點後一位
+	            rating = Math.round((double) 
+	            		act.getActRateSum() / act.getEvalSum() * 10.0) / 10.0;
+	        }
+	        ratingMap.put(act.getActNo(), rating); 
+	    }
+	    //取得團主資料
+		MemberVO memberVO = memberSvc.getOneMem(memNo); 
+	    // 添加資料到模型中
+		model.addAttribute("memberVO", memberVO);
+	    model.addAttribute("memMyAct", list);
+	    model.addAttribute("ratingMap", ratingMap);  // 傳遞 ratingMap 到前端
+    	return "front-end/act/memActList";
+    }
 
 }

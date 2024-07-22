@@ -1,6 +1,7 @@
 package com.topseeker.shop.cart.model;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -42,6 +43,7 @@ public class CartVO implements Serializable {
 
 	@Transient
 	private Integer prodNo; // 接收JSON中的prodNo
+	
 
 	@Transient
 	private List<CartDetail> cartDetail;
@@ -90,6 +92,7 @@ public class CartVO implements Serializable {
 		this.prodNo = prodNo;
 	}
 
+	
 	public List<CartDetail> getCartDetail() {
 		return cartDetail;
 	}

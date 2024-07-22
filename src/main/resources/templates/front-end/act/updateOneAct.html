@@ -3,70 +3,100 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>活動資料 - listOneAct.html</title>
+<title>TopSeeker-修改成功</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <script src="https://kit.fontawesome.com/de9b92a469.js" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+
 <style type="text/css">
-	.mt-5 {
-	    margin: 2rem;
-	}
-		
+    body {
+        font-family: 'Noto Sans TC', sans-serif;
+    }
+    .mt-5 {
+        margin: 2rem;
+    }
     .card-header {
         font-weight: bold;
         font-size: 1.5rem;
-    }
-    .card-body span {
-        display: inline-block;
-        width: 150px;
-        text-align: right;
-        font-weight: bold;
-    }
-    .card-body span.value {
-        font-weight: normal;
-        text-align: left;
-        margin-left: 10px;
-        white-space: nowrap;
+        background-color: #9EB384;
+        border-color: #9EB384;
+        color: white;
     }
     .back-button {
         margin-bottom: 1rem;
     }
+    .edit-complete {
+        color: #435334;
+    }
+    .act-content {
+        white-space: pre-wrap; /* 保留空白字符和換行符 */
+        text-align: left;
+        font-size: 14px;
+    }
+    .mb-2 {
+	    margin-bottom: .5rem !important;
+	    padding: 0 2rem;
+	}
 </style>
 </head>
 <body>
 <div class="container mt-5">
-    <div class="text-center mb-4">
-        <h2>活動資料修改成功</h2>   
+    <div class="text-center mb-4 edit-complete">
+        <h2>活動修改完成!</h2>
     </div>
     <div class="card mx-auto shadow" style="max-width: 600px;">
         <div class="card-header text-center">
             活動詳細資訊
         </div>
-        <div class="card-body text-center">
-            <div class="mb-3">
-
-                
-                <div th:each="pic : ${actVO.actPictures}" >
-                        <img th:src="@{/actpicture/DBGifReader} + '?actPicNo=' + ${pic.actPicNo}" class="img-thumbnail mb-2" width="300" height="150">
+        <div class="card-body">
+            <div class="mb-3 text-center">
+                <div th:each="pic : ${actVO.actPictures}">
+                    <img th:src="@{/actpicture/DBGifReader} + '?actPicNo=' + ${pic.actPicNo}" class="img-thumbnail mb-2" width="300" height="150">
                 </div>
-                
             </div>
-            <div class="mb-2"><span>會員:</span><span class="value" th:text="${actVO.memberVO.memAccount} + '(' + ${actVO.memberVO.memName} + ')'"></span></div>
-            <div class="mb-2"><span>活動編號:</span><span class="value" th:text="${actVO.actNo}"></span></div>
-            <div class="mb-2"><span>活動標題:</span><span class="value" th:text="${actVO.actTitle}"></span></div>
-            <div class="mb-2"><span>活動地點:</span><span class="value" th:text="${actVO.actPlace}"></span></div>
-            <div class="mb-2"><span>活動內容:</span><span class="value" th:text="${actVO.actContent}"></span></div>
-            <div class="mb-2"><span>人數上限:</span><span class="value" th:text="${actVO.actMaxCount}"></span></div>
-            <div class="mb-2"><span>最少人數:</span><span class="value" th:text="${actVO.actMinCount}"></span></div>
-            <div class="mb-2"><span>報名開始日:</span><span class="value" th:text="${actVO.actEnrollBegin}"></span></div>
-            <div class="mb-2"><span>報名結束日:</span><span class="value" th:text="${actVO.actEnrollEnd}"></span></div>
-            <div class="mb-2"><span>活動開始日:</span><span class="value" th:text="${actVO.actStart}"></span></div>
-            <div class="mb-2"><span>活動結束日:</span><span class="value" th:text="${actVO.actEnd}"></span></div>
-            <div class="mb-2"><span>活動狀態:</span>
-                <span class="value" th:switch="${actVO.actStatus}">
+            <div class="mb-2 d-flex">
+                <span class="fw-bold">活動標題:</span>
+                <span class="ms-2" th:text="${actVO.actTitle}"></span>
+            </div>
+            <div class="mb-2 d-flex">
+                <span class="fw-bold">活動地點:</span>
+                <span class="ms-2" th:text="${actVO.actPlace}"></span>
+            </div>
+            <div class="mb-2">
+                <span class="fw-bold">活動內容:</span>
+                <div class="ms-2 act-content" th:text="${actVO.actContent}"></div>
+            </div>
+            <div class="mb-2 d-flex">
+                <span class="fw-bold">人數上限:</span>
+                <span class="ms-2" th:text="${actVO.actMaxCount}"></span>
+            </div>
+            <div class="mb-2 d-flex">
+                <span class="fw-bold">最少人數:</span>
+                <span class="ms-2" th:text="${actVO.actMinCount}"></span>
+            </div>
+            <div class="mb-2 d-flex">
+                <span class="fw-bold">報名開始日:</span>
+                <span class="ms-2" th:text="${actVO.actEnrollBegin}"></span>
+            </div>
+            <div class="mb-2 d-flex">
+                <span class="fw-bold">報名結束日:</span>
+                <span class="ms-2" th:text="${actVO.actEnrollEnd}"></span>
+            </div>
+            <div class="mb-2 d-flex">
+                <span class="fw-bold">活動開始日:</span>
+                <span class="ms-2" th:text="${actVO.actStart}"></span>
+            </div>
+            <div class="mb-2 d-flex">
+                <span class="fw-bold">活動結束日:</span>
+                <span class="ms-2" th:text="${actVO.actEnd}"></span>
+            </div>
+            <div class="mb-2 d-flex">
+                <span class="fw-bold">活動狀態:</span>
+                <span class="ms-2" th:switch="${actVO.actStatus}">
                     <span th:case="0">揪團中</span>
-                    <span th:case="1">已成團</span>
-                    <span th:case="2">活動已完成</span>
-                    <span th:case="3">活動已取消</span>
+                    <span th:case="1">已額滿</span>
+                    <span th:case="2">已完成</span>
+                    <span th:case="3">已取消</span>
                 </span>
             </div>
             <div class="text-center mt-4">

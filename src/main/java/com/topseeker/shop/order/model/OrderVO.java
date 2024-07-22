@@ -15,8 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -66,15 +66,15 @@ public class OrderVO implements java.io.Serializable {
 	private Integer orderBill;
 	
 	@Column(name = "order_name")
-//	@NotNull(message="請輸入訂購人姓名")
+//	@NotEmpty(message="請輸入收件人姓名")
 	private String orderName;
 	
 	@Column(name = "order_phone")
-//	@NotNull(message="請輸入連絡電話")
+//	@NotEmpty(message="請輸入收件人電話")
 	private String orderPhone;
 	
 	@Column(name = "order_address")
-//	@NotNull(message="請輸入收件地址")
+//	@NotEmpty(message="請輸入收件地址")
 	private String orderAddress;
 	
 	@Column(name = "order_status")

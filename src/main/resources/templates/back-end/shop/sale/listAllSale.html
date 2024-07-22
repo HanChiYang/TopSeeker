@@ -2,130 +2,184 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>促銷方案總覽</title>
-<head th:insert="~{/back-end/shop/sale/included-fragment}"></head>
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>                                    <!-- ●●js  for jquery datatables 用 -->
-<script	src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>              <!-- ●●js  for jquery datatables 用 -->
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<title>TopSeeker優惠活動管理</title>
+
+<!-- ●●js  for jquery datatables 用 -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" /> <!-- ●●css for jquery datatables 用 -->
 
-<!-- ●● jquery datatables 設定 -->
-<script>
-	$(document).ready(function() {
-		$('#saleList').DataTable({
-			"lengthMenu": [3 ,5, 10, 20, 50, 100],
-			"searching": true,  //搜尋功能, 預設是開啟
-		    "paging": true,     //分頁功能, 預設是開啟
-		    "ordering": true,   //排序功能, 預設是開啟
-		    "language": {
-		        "processing": "處理中...",
-		        "loadingRecords": "載入中...",
-		        "lengthMenu": "顯示 _MENU_ 筆結果",
-		        "zeroRecords": "沒有符合的結果",
-		        "info": "顯示第 _START_ 至 _END_ 筆結果，共<font color=red> _TOTAL_ </font>筆",
-		        "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
-		        "infoFiltered": "(從 _MAX_ 筆結果中過濾)",
-		        "infoPostFix": "",
-		        "search": "搜尋:",
-		        "paginate": {
-		            "first": "第一頁",
-		            "previous": "上一頁",
-		            "next": "下一頁",
-		            "last": "最後一頁"
-		        },
-		        "aria": {
-		            "sortAscending":  ": 升冪排列",
-		            "sortDescending": ": 降冪排列"
-		        }
-		    }
-		});
-	});
-</script>
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+	crossorigin="anonymous">
+
+<!-- icon用 -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- 從 Google Fonts 引入 "Playfair Display" 字體 -->
+<link
+	href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap"
+	rel="stylesheet">
+
+
+<!-- Topseeker前台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/common.css}">
+
+<!-- 商城導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
+
+
+
 <style type="text/css">
-body {
-	margin: 1rem 12rem 2rem 12rem;
-}
-
-#example td {
-    white-space: nowrap; /* 防止单元格内容换行 */
-    overflow: hidden;    /* 隐藏溢出内容 */
-    text-overflow: ellipsis; /* 显示省略号以指示溢出内容 */
-}
-
-#example th, #example td {
-    padding: 8px; /* 调整单元格内边距 */
-    text-align: left; /* 调整单元格对齐方式 */
-}
-
-#example th {
-    background-color: #CCCCFF; /* 设置表头背景颜色 */
-    position: relative; /* 相对定位以便排序箭头定位 */
-}
-
-#example th .sorting,
-#example th .sorting_asc,
-#example th .sorting_desc {
-    position: absolute;
-    right: 10px; /* 调整箭头的位置 */
-}
-
-img {
-    max-width: 100px; /* 设置图片最大宽度 */
-    height: auto; /* 保持图片宽高比 */
-}
-</style>
-</head>
-<body>
-
-<nav>
-	<div align="center">
-		<h3><b>TopSeeker</b></h3></br>
-		 <h4><b>促銷方案列表</b></h4>
-		<h3><a th:href="@{/shop/sale/select_page}">回查詢頁面<label th:text="${success}"></label></a></h3></div>
-	</div>
-</nav>
-
-<table id="saleList" class="display" style="width: 100%">
-  <thead>
-	<tr style="background-color:aqua">
-		<th>促銷方案編號</th>
-		<th>促銷方案名稱</th>
-		<th>促銷方案起始日期</th>
-		<th>促銷方案結束日期</th>
-		<th>促銷方案金額門檻</th>
-		<th>促銷方案折扣</th>
-		<th>修改</th>
-		<th>刪除</th>
-	</tr>
-  </thead>
+	main.shopManagementContent {
+		padding: 30px 50px;
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.msg {
+		width: 100%;
+		margin-bottom: 20px; /* Add margin to separate from table */
+	}
+	table.display {
+		padding-top: 20px;
+		width: 100%; /* Ensure table takes full width */
+	}
 	
-  <tbody>
-		<th:block th:each="saleVO : ${saleListData}">
-			<tr>
-				<td th:text="${saleVO.saleNo}"></td>
-				<td th:text="${saleVO.saleName}"></td>
-				<td th:text="${saleVO.saleStdate}"></td>
-				<td th:text="${saleVO.saleEddate}"></td>
-				<td th:text="${saleVO.saleAmount}"></td>
-				<td th:text="${saleVO.saleDiscount}"></td>
+	table#saleList thead tr th{
+		text-align: center;
+	}
+
+</style>
+
+</head>
+<body bgcolor='white'>
+
+	<!-- topseeker後台Navbar -->
+	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
+
+	<!-- 商城後台用Navbar + 左側邊欄 -->
+	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
+
+	<div class="shopContent">
+		<aside class="sidebar" th:insert="~{/back-end/shop/shop_back_end_sidebar.html}"></aside>
+		
+		
+		<main class="shopManagementContent content" align="center">
+			<!-- 		顯示刪除結果提示 -->
+			<div th:if="${errorMessage}" class="msg alert alert-danger" role="alert">
+		    	 <span th:text="${errorMessage}"></span>
+			</div>
+			   
+			<div th:if="${successMessage}" class="msg alert alert-success" role="alert">
+		  		 <span th:text="${successMessage}"></span>
+			</div>
+			
+		    
+			<table id="saleList" class="display">
+			  <thead>
+					<tr style="background-color:rgb(158, 179, 132)">
+						<th>優惠活動編號</th>
+						<th>優惠活動名稱</th>
+						<th>優惠活動起始日期</th>
+						<th>優惠活動結束日期</th>
+						<th>優惠活動金額門檻</th>
+						<th>優惠活動折扣</th>
+						<th>修改</th>
+						<th>刪除</th>
+					</tr>
+			  </thead>
+					
+			  <tbody>
+				<th:block th:each="saleVO : ${saleListData}">
+					<tr>
+						<td th:text="${saleVO.saleNo}"></td>
+						<td th:text="${saleVO.saleName}"></td>
+						<td th:text="${#dates.format(saleVO.saleStdate, 'yyyy-MM-dd hh:mm:ss')}"></td>
+						<td th:text="${#dates.format(saleVO.saleEddate, 'yyyy-MM-dd hh:mm:ss')}"></td>
+						<td th:text="${saleVO.saleAmount}"></td>
+						<td th:text="${saleVO.saleDiscount}"></td>
+								
+				 		<td>
+						   <form method="post" th:action="@{/shop/sale/getOne_For_Update}" style="margin-bottom: 0px;">
+						     <input type="submit" value="修改" class="btn btn-outline-success">
+						     <input type="hidden" name="saleNo" th:value="${saleVO.saleNo}"></form>
+								
+						</td>
+						<td>
+						   <form method="post" th:action="@{/shop/sale/delete}" style="margin-bottom: 0px;">
+						     <input type="submit" value="刪除" class="btn btn-outline-success">
+						     <input type="hidden" name="saleNo" th:value="${saleVO.saleNo}"></form>
+								
+							</td>
+						</tr>
+					</th:block>
+				</tbody>
+			</table>
 				
-			<td>
-			  <form method="post" th:action="@{/shop/sale/getOne_For_Update}" style="margin-bottom: 0px;">
-			     <input type="submit" value="修改">
-			     <input type="hidden" name="saleNo" th:value="${saleVO.saleNo}"></form>
-			
-			</td>
-			<td>
-			  <form method="post" th:action="@{/shop/sale/delete}" style="margin-bottom: 0px;">
-			     <input type="submit" value="刪除">
-			     <input type="hidden" name="saleNo" th:value="${saleVO.saleNo}"></form>
-			
-			</td>
-			</tr>
-		</th:block>
-  </tbody>
-</table>
+		</main>			
+	
+	</div>
+		
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<!-- Bootstrap JavaScript -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- 引入 DataTables -->
+	<script
+		src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+	<!-- topseeker前台Navbar共用JavaScript -->
+	<script src="/js/common.js"></script>
 
+	<!-- topseeker商城用JavaScript -->
+	<script src="/js/shop_front_end.js"></script>		
 
+	<!-- ●● jquery datatables 設定 -->
+	<script>
+		$(document).ready(function() {
+			$('#saleList').DataTable({
+				"lengthMenu": [10, 20, 50, 100],
+				"searching": true,  //搜尋功能, 預設是開啟
+			    "paging": true,     //分頁功能, 預設是開啟
+			    "ordering": true,   //排序功能, 預設是開啟
+			    "language": {
+			        "processing": "處理中...",
+			        "loadingRecords": "載入中...",
+			        "lengthMenu": "顯示 _MENU_ 筆結果",
+			        "zeroRecords": "沒有符合的結果",
+			        "info": "顯示第 _START_ 至 _END_ 筆結果，共<font color=red> _TOTAL_ </font>筆",
+			        "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
+			        "infoFiltered": "(從 _MAX_ 筆結果中過濾)",
+			        "infoPostFix": "",
+			        "search": "搜尋:",
+			        "paginate": {
+			            "first": "第一頁",
+			            "previous": "上一頁",
+			            "next": "下一頁",
+			            "last": "最後一頁"
+			        },
+			        "aria": {
+			            "sortAscending":  ": 升冪排列",
+			            "sortDescending": ": 降冪排列"
+			        }
+			    }
+			});
+		});
+	</script>
+	<script>
+		$(document).ready(
+				function() {
+					var navbarHeight = $('.navbar').outerHeight();
+					var shopnavbarHeight = $('.shopnavbar').outerHeight();
+					$('.sidebar').css('top', navbarHeight + shopnavbarHeight);
+					$('.content').css('margin-top',
+							navbarHeight + shopnavbarHeight + 20);
+				});
+	</script> 
 </body>
 </html>
