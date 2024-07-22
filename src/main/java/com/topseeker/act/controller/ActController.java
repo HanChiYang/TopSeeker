@@ -231,11 +231,30 @@ public class ActController {
 	 * This method will be called on listAllEmp.html form submission, handling POST request
 	 */
 	@PostMapping("delete")
-	public String delete(@RequestParam("actNo") String actNo, ModelMap model) {
+	public String delete(@Valid ActVO actVO, BindingResult result,@RequestParam("actNo") String actNo, ModelMap model) {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
+		// 從資料庫中檢索活動以獲取完整的 `actVO`
+	    ActVO actVO1 = actSvc.getOneAct(Integer.valueOf(actNo));
+	    if (actVO1 == null) {
+	        model.addAttribute("errorMessage", "活動不存在");
+	        return "redirect:/act/memMyAct";
+	    }
 		/*************************** 2.開始刪除資料 *****************************************/
 		// EmpService empSvc = new EmpService();
 		actSvc.deleteAct(Integer.valueOf(actNo));
+		// 獲取所有參與該活動的會員
+	    List<ParticipantVO> participants = participantSvc.findParticipantsByActNo(actVO1.getActNo());
+	    if (participants != null && !participants.isEmpty()) {
+	        String notificationContent = "您報名的活動 \"" + actVO1.getActTitle() + "\" 已被取消。";
+	        for (ParticipantVO participant : participants) {
+	            NotificationVO notification = new NotificationVO();
+	            notification.setMemNo(participant.getMemberVO().getMemNo());
+	            notification.setNotiContent(notificationContent);
+	            notification.setNotiTime(new Timestamp(System.currentTimeMillis()));
+	            notification.setNotiStatus((byte) 0);
+	            notiSvc.addNoti(notification);
+	        }
+	    }
 		/*************************** 3.刪除完成,準備轉交(Send the Success view) **************/
 		List<ActVO> list = actSvc.getAll();
 		model.addAttribute("actListData", list);
