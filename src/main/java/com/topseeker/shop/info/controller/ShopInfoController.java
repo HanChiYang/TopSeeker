@@ -176,6 +176,7 @@ public class ShopInfoController {
 	    // 設定修改當下的日期
 	    java.sql.Date infoDate = new java.sql.Date(System.currentTimeMillis());
 	    shopInfoVO.setInfoDate(infoDate);
+System.out.println("日期有跟著修改:"+ shopInfoVO.getInfoDate());
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		// 去除BindingResult中upFiles欄位的FieldError紀錄
@@ -195,14 +196,15 @@ public class ShopInfoController {
 			return "back-end/shop/info/update_info_input";
 		}
 		/*************************** 2.開始修改資料 *****************************************/
-
+		
+System.out.println("更新前的日期: " + shopInfoSvc.getOneShopInfo(shopInfoVO.getInfoNo()).getInfoDate());
 		shopInfoSvc.updateShopInfo(shopInfoVO);
-
+System.out.println("更新後的日期: " + shopInfoSvc.getOneShopInfo(shopInfoVO.getInfoNo()).getInfoDate());
 		/*************************** 3.修改完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("success", "修改成功");
 		shopInfoVO = shopInfoSvc.getOneShopInfo(Integer.valueOf(shopInfoVO.getInfoNo()));
 		model.addAttribute("shopInfoVO", shopInfoVO);
-		return "back-end/shop/info/listOneInfo"; // 修改成功後轉交listOneEmp.html
+		return "back-end/shop/info/listOneInfo";
 	}
 
 	// ============圖片錯誤訊息刪除用===========
