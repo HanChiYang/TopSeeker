@@ -111,17 +111,28 @@ body > div {
 margin-top: 150px;
 }
 
-#forgetPW > form > button {
+#buttonArea > form > button {
     background-color: #FAF1E4;
+    margin-top:10px;
+    
 }
-#forgetPW > form > button:hover {
+#buttonArea > form > button:hover {
     background-color: #A67B5B;
     color: white;
+    
+}
+
+form.registration {
+display: inline-block;
+margin-right: 115px;
+}
+
+form.forgetPW {
+display: inline-block;
 }
 
     </style>
 
-    <!-- Custom styles for this template -->
     <link href="/css/sign-in.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -153,11 +164,14 @@ margin-top: 150px;
             
         </form>
         
-                <div id="forgetPW">
-                    <form th:action="@{/member/forgetPW}" method="get">
-                        <button type="submit" class="btn btn-light">忘記密碼</button>
-                    </form>
-                </div>
+             <div id="buttonArea">
+                 <form th:action="@{/member/registrationMem}" class="registration" method="get">
+                     <button type="submit" class="btn btn-light">註冊會員</button>
+                 </form>
+                 <form th:action="@{/member/forgetPW}" class="forgetPW" method="get">
+                     <button type="submit" class="btn btn-light">忘記密碼</button>
+                 </form>
+             </div>
         
         
     </main>
