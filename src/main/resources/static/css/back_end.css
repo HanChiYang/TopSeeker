@@ -16,7 +16,7 @@ body {
     max-width: 75px;
 }
 h1 {
-    text-align: center;
+/*     text-align: center; */
     margin-top: 2rem;
 }
 .card {
@@ -52,9 +52,6 @@ h1 {
 .dropdown-item:hover {
     background-color: #9EB384;
     color: #FAF1E4;
-}
-.navbar-nav {
-    margin: auto;
 }
 .nav-item.dropdown:hover .dropdown-menu {
     display: block;
