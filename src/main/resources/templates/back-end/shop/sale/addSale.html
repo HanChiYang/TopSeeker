@@ -26,19 +26,24 @@
 
 
 <!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<link rel="stylesheet" th:href="@{/css/common.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
 
 
 <style type="text/css">
-main{ 
-     margin-top: 20px; 
-     margin-left: 35%; 
-     padding: 20px; 
-     
-     }
+main.shopManagementContent {
+		padding: 50px 50px;
+		display: flex;
+		flex-wrap: wrap;
+	}
+	
+	.msg {
+		width: 100%;
+		margin-bottom: 20px; /* Add margin to separate from table */
+	}
+	
 a {
 	text-decoration: none; /* 移除超連結的底線 */
 	color: black;
@@ -53,6 +58,12 @@ a {
 
 
 /*====================新增表格=========================*/	
+
+	h3{
+		text-align: center;
+		width: 100%;
+	}
+
 	span{
 		padding-left: 10px;
 		font-size: 18px;
@@ -64,22 +75,26 @@ a {
 		left: 200%;
 		
 	}
+	
 	form {
 		display: table;
+		width: 100%;
 	
 	}
 	form div {
 		display: table-row;
 	}
-	label, input, span{
+	
+	label{
+		padding-left: 10%;
+	
+	}
+	
+	label, input{
 		display: table-cell;
 		margin: 5px;
 		text-align: left;
 		font-size: 18px;
-	}
-	input{
-		width: 500px;
-		margin: 10px;
 	}
 	
 
@@ -100,46 +115,56 @@ a {
 
 	<!-- 商城後台用Navbar + 左側邊欄 -->
 	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
-
-	<main>
-		<h3>新增優惠活動</h3>
-			<div th:if="${errorMessage}" class="alert alert-danger" role="alert">
-		        <span th:text="${errorMessage}"></span>
-		    </div>
-		<form method="post" th:action="@{insert}" th:object="${saleVO}" id="saleForm">
-		
-			<div>
-				<label>活動名稱:</label>
-				<input type="text" th:field="*{saleName}" onclick="hideContent('saleName.errors')" /><br/>
-				<div th:if="${#fields.hasErrors('saleName')}" th:errors="*{saleName}" class="error" id="saleName.errors"></div>
-			</div>
-			
-			<div>
-				<label>活動開始日期:</label>
-				<input type="text" id="f_date1" th:field="*{saleStdate}" onclick="hideContent('saleStdate.errors')" /><br/>
-				<div th:if="${#fields.hasErrors('saleStdate')}" th:errors="*{saleStdate}" class="error" id="saleStdate.errors"></div>
-			</div>
-			<div>
-				<label>活動結束日期:</label>
-				<input type="text" id="f_date2" th:field="*{saleEddate}" onclick="hideContent('saleEddate.errors')" /><br/>
-				<div th:if="${#fields.hasErrors('saleEddate')}" th:errors="*{saleEddate}" class="error" id="saleEddate.errors"></div>
-			</div>
-			<div>
-				<label>活動金額門檻:</label>
-				<input type="text" th:field="*{saleAmount}" onclick="hideContent('saleAmount.errors')" /><br/>
-				<div th:if="${#fields.hasErrors('saleAmount')}" th:errors="*{saleAmount}" class="error" id="saleAmount.errors"></div>
-			</div>
-			<div>
-				<label>活動金額折扣:</label>
-				<input type="text" th:field="*{saleDiscount}" onclick="hideContent('saleDiscount.errors')" /><br/>
-				<div th:if="${#fields.hasErrors('saleDiscount')}" th:errors="*{saleDiscount}" class="error" id="saleDiscount.errors"></div>
-			</div>
-			
-			<button type="submit" id="submit"> 送出新增 </button>
-			
-		</form>
 	
-	</main>
+	<div class="shopContent">
+		
+			<aside class="sidebar" th:insert="~{/back-end/shop/shop_back_end_sidebar.html}"></aside>
+		
+			<main class="shopManagementContent" align="center"> 
+	
+				<h3>新增優惠活動</h3>
+				
+				<div th:if="${errorMessage}" class="msg alert alert-danger" role="alert">
+				       <span th:text="${errorMessage}"></span>
+				</div>
+				
+				
+				
+				<form method="post" th:action="@{insert}" th:object="${saleVO}" id="saleForm">
+				
+					<div class="mb-3">
+						<label class="form-label">活動名稱:</label>
+						<input class="form-control" type="text" th:field="*{saleName}" onclick="hideContent('saleName.errors')" /><br/>
+						<div th:if="${#fields.hasErrors('saleName')}" th:errors="*{saleName}" class="error" id="saleName.errors"></div>
+					</div>
+					
+					<div class="mb-3">
+						<label class="form-label">活動開始日期:</label>
+						<input class="form-control" type="text" id="f_date1" th:field="*{saleStdate}" onclick="hideContent('saleStdate.errors')" /><br/>
+						<div th:if="${#fields.hasErrors('saleStdate')}" th:errors="*{saleStdate}" class="error" id="saleStdate.errors"></div>
+					</div>
+					<div class="mb-3">
+						<label class="form-label">活動結束日期:</label>
+						<input class="form-control" type="text" id="f_date2" th:field="*{saleEddate}" onclick="hideContent('saleEddate.errors')" /><br/>
+						<div th:if="${#fields.hasErrors('saleEddate')}" th:errors="*{saleEddate}" class="error" id="saleEddate.errors"></div>
+					</div>
+					<div class="mb-3">
+						<label class="form-label">活動金額門檻:</label>
+						<input class="form-control" type="text" th:field="*{saleAmount}" onclick="hideContent('saleAmount.errors')" /><br/>
+						<div th:if="${#fields.hasErrors('saleAmount')}" th:errors="*{saleAmount}" class="error" id="saleAmount.errors"></div>
+					</div>
+					<div class="mb-3">
+						<label class="form-label">活動金額折扣:</label>
+						<input class="form-control" type="text" th:field="*{saleDiscount}" onclick="hideContent('saleDiscount.errors')" /><br/>
+						<div th:if="${#fields.hasErrors('saleDiscount')}" th:errors="*{saleDiscount}" class="error" id="saleDiscount.errors"></div>
+					</div>
+					
+					<button type="submit" id="submit" class="btn btn-outline-success"> 送出新增 </button>
+					
+				</form>
+			
+		</main>
+	</div>	
 
 
 <script th:src="@{/datetimepicker/jquery.js}"></script>
@@ -185,7 +210,7 @@ $(document).ready(function(){
      	
      $('#saleForm').on('submit', function(e) {
          e.preventDefault();//先擋住
-         const confirmation = confirm("請再次檢查期間、滿額金額與折扣數，確認後再次點擊確認鍵");
+         const confirmation = confirm("請再次檢查期間、滿額金額與折扣數，確認後再次點擊送出");
          console.log("Confirmation: " + confirmation); 
          
          //確認過後，清除submit事件，並成功submit

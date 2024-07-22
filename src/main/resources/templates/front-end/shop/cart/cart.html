@@ -22,10 +22,25 @@
 
 
 <!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<link rel="stylesheet" th:href="@{/css/common.css}">
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_front_end.css}">
 <style>
+/* NAV修正用 */
+.navbar-nav .nav-item .nav-link {
+    border: 0px solid transparent;
+    border-radius: 0px;
+    margin: 0px;
+    }
+    
+.navbar-nav .nav-item .nav-link {
+    border: 0px solid transparent;
+    border-radius: 0px;
+    padding: 0px;
+    margin: 0px;
+}
+
+
 /* ===================購物車本體================================= */
 
 
@@ -363,7 +378,6 @@ span.sum {
 			//折扣後金額
 		    var sales = fetchApplicableDiscounts();
 			var discountedAmount = applyDiscounts(sales);
-			var saleName = bestDiscountName;
 			
 		});
 		
@@ -438,7 +452,7 @@ span.sum {
 		        });
 		        return totalAmount;
 		    }
-		//包裝總金額至server
+		//取出適用的折扣
 		function fetchApplicableDiscounts() {
 			var totalAmount = calculateTotalAmount();
     		var currentTime = getCurrentDateTime();
@@ -464,13 +478,13 @@ span.sum {
 		//使用折扣計算折扣後總金額
 		function applyDiscounts(sales) {
 		    if (!Array.isArray(sales) || sales.length === 0) {
-		        console.log('沒有合適折扣');
+// 		        console.log('沒有合適折扣');
 		        return;
 		    }
 		    var totalAmount = calculateTotalAmount();
-			var maxDiscount = calculateBestDiscount(totalAmount, sales);
-			var saleName = bestDiscountName(totalAmount, sales);
-		   	var discountedAmount = totalAmount * (1 - maxDiscount);
+			var bestDiscount = calculateBestDiscount(totalAmount, sales);
+			var saleName = bestDiscount.name;
+		   	var discountedAmount = totalAmount * bestDiscount.discount;
 			console.log(saleName);
 			console.log(discountedAmount);
 		        $('.discountedAmount').text("$" + discountedAmount.toFixed(0));
@@ -482,25 +496,38 @@ span.sum {
 		}
 		
 		//合適最佳折扣
+// 		function calculateBestDiscount(totalAmount, sales) {
+// 		    var maxDiscount = 0;
+// 		    sales.forEach(function(sale) {
+// 		        if (totalAmount >= sale.saleAmount) {
+// 		            maxDiscount = Math.max(maxDiscount, (1 - sale.saleDiscount));
+// 		        }
+// 		    });
+// 		    return maxDiscount;
+// 		}
+// 		//取出最佳折扣名稱
+// 		function bestDiscountName(totalAmount, sales) {
+// 		    var saleName = "";
+// 		    sales.forEach(function(sale) {
+// 		        if (totalAmount >= sale.saleAmount) {
+// 		        	saleName = sale.saleName;
+// 		        }
+// 		    });
+// 		    return saleName;
+// 		}
 		function calculateBestDiscount(totalAmount, sales) {
-		    var maxDiscount = 0;
+		    var bestDiscount = { discount: Number.MAX_VALUE, name: '' };
 		    sales.forEach(function(sale) {
 		        if (totalAmount >= sale.saleAmount) {
-		            maxDiscount = Math.max(maxDiscount, (1 - sale.saleDiscount));
+		            if (sale.saleDiscount < bestDiscount.discount) {
+		                bestDiscount.discount = sale.saleDiscount;
+		                bestDiscount.name = sale.saleName;
+		            }
 		        }
 		    });
-		    return maxDiscount;
+		    return bestDiscount;
 		}
-		//取出最佳折扣名稱
-		function bestDiscountName(totalAmount, sales) {
-		    var saleName = "";
-		    sales.forEach(function(sale) {
-		        if (totalAmount >= sale.saleAmount) {
-		        	saleName = sale.saleName;
-		        }
-		    });
-		    return saleName;
-		}
+
 		
 		//取出現在時間
 		function getCurrentDateTime() {

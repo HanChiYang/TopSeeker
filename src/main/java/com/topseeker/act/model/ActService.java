@@ -99,12 +99,25 @@ public class ActService {
         List<ActVO> acts = repository.findAll();
         
         for (ActVO act : acts) {
-            if (act.getActEnd().before(today)) {
-                if (act.getActCurrentCount() < act.getActMinCount()) {
-                    if (act.getActStatus() != 3) {
+            // 報名截止日後
+            if (act.getActEnrollEnd().before(today)) {
+                if (act.getActCurrentCount() >= act.getActMinCount()) {
+                    // 若已參與人數達人數下限且狀態為0，狀態改為1(已成團)
+                    if (act.getActStatus() == 0) {
+                        repository.updateActStatus(act.getActNo(), 1);
+                    }
+                } else {
+                    // 若已參與人數未達人數下限且狀態為0，狀態改為3(已取消)
+                    if (act.getActStatus() == 0) {
                         repository.updateActStatus(act.getActNo(), 3);
                     }
-                } else if (act.getActStatus() != 2) {
+                }
+            }
+            
+            // 活動結束日後
+            if (act.getActEnd().before(today)) {
+                // 將狀態為1(已成團)的活動，改狀態為2(已完成)
+                if (act.getActStatus() == 1) {
                     repository.updateActStatus(act.getActNo(), 2);
                 }
             }
