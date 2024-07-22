@@ -56,5 +56,8 @@ public class ParticipantService {
 		return HibernateUtil_CompositeQuery_Participant.getAllC(map,sessionFactory.openSession());
 	}
 	
-
+	// 新增方法根據活動編號查找參與者
+	public List<ParticipantVO> findParticipantsByActNo(int actNo) {
+		return repository.findByActNo(actNo);
+	}
 }

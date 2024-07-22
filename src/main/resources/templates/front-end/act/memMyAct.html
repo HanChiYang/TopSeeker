@@ -15,8 +15,8 @@
      body{
         margin-top: 7rem;
         font-family: 'Noto Sans TC', sans-serif;
+        background-color: #FAF1E4;
      }
-
      .dataTables_wrapper .dataTables_filter,
      .dataTables_wrapper .dataTables_length,
      .dataTables_wrapper .dataTables_info,
@@ -32,18 +32,13 @@
 
      .card {
         padding: 1rem;
+/*         background-color: #FAF1E4; */
      }
      
      table {
         border: 1px solid black; /* 新增邊框樣式 */
         border-collapse: collapse;
      }
-     
-     
-/*      table.dataTable.row-border tbody tr:first-child th, table.dataTable.row-border tbody tr:first-child td, table.dataTable.display tbody tr:first-child th, table.dataTable.display tbody tr:first-child td { */
-/* 	    border-top: none; */
-/* 	    white-space: nowrap; */
-/* 	 } */
      
      /* 彈窗美化 */
     .modal-header {
@@ -319,7 +314,7 @@
                                 
                                 <td>
                                     <form method="post" th:action="@{/act/updateActByMem}">
-                                        <button type="submit" class="btn btn-warning modify-btn" th:classappend="${actVO.actStatus != 0} ? 'btn-secondary' : 'btn-warning'" th:disabled="${actVO.actStatus == 2 || actVO.actStatus == 3}" th:data-status="${actVO.actStatus}">修改</button>
+                                        <button type="submit" class="btn btn-warning modify-btn" th:classappend="${actVO.actStatus != 0} ? 'btn-secondary' : 'btn-warning'" th:disabled="${actVO.actStatus !=0 || actVO.actStatus == 3}" th:data-status="${actVO.actStatus}">修改</button>
                                         <input type="hidden" name="actNo" th:value="${actVO.actNo}">
                                     </form>
                                 </td>
