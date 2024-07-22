@@ -175,7 +175,7 @@ th {
 						<td th:text=" '$' + ${wishlist.shopProductVO.prodPrice}">價格</td>
 						<td>
 
-							<button type="button" class="btn btn-primary">
+							<button type="button" class="btn btn-primary" onclick="addToCart(this)" th:data-id="${wishlist.shopProductVO.prodNo}"> 
 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
 									fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 16">
 							  <path

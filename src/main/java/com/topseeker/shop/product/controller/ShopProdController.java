@@ -109,25 +109,6 @@ public class ShopProdController {
 
 		return "front-end/shop/listOneProdDetail";
 	}
-
-	// 商品收藏頁面用 wishlist.html
-	@GetMapping("/wishlist")
-	public String showwhishlist(HttpSession session, ModelMap model, String memNo) {
-
-		// 抓取seesion內已登入會員的編號
-		MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
-		if (loggedInMember == null) {
-			// 如果未登入，重定向到登入頁面
-			return "redirect:/member/loginMem";
-		}
-
-		Integer loggedInMemberNo = loggedInMember.getMemNo();
-		// 搜尋該會員有收藏的商品編號
-		List<ShopWishlistVO> shopWishlistVO = shopWishlistSvc.showMemWishlist(loggedInMemberNo);
-
-		model.addAttribute("shopWishlistVO", shopWishlistVO);
-		return "front-end/shop/wishlist";
-	}
 	
 	
 	// 商品搜尋結果用 searchResult.html
