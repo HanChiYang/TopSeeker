@@ -153,6 +153,7 @@ public class ShopInfoController {
 	@PostMapping("/shopManagement/updateInfo")
 	public String update(@Valid ShopInfoVO shopInfoVO, BindingResult result, ModelMap model,
 			@RequestParam("infoPics") MultipartFile[] parts) throws IOException {
+
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 	    // 設定修改當下的日期
 	    java.sql.Date infoDate = new java.sql.Date(System.currentTimeMillis());
