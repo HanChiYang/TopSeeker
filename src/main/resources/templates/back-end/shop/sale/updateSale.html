@@ -26,8 +26,8 @@
 	rel="stylesheet">
 
 
-<!-- Topseeker前台導航列CSS -->
-<link rel="stylesheet" th:href="@{/css/common.css}">
+<!-- Topseeker後台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/back_end.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
@@ -35,6 +35,8 @@
 <style type="text/css">
   	main.shopManagementContent {
 		padding: 50px 50px;
+		display: flex;
+		flex-wrap: wrap;
 	}
 
 	a {
@@ -44,8 +46,18 @@
 	
 	.error{
 		color: red;
+		text-align:center;
+		position: relative;
+		top: -20px;
 	}
-	
+	.msg {
+		width: 100%;
+		text-align:center;
+	}
+	h2{
+		text-align: center;
+		width: 100%;
+	}
 /*====================新增表格=========================*/	
 	form {
 		display: table;
@@ -56,11 +68,7 @@
 	form div {
 		display: table-row;
 	}
-	
-	form h2 {
-		position: relative;
-		left: 50%;
-	}
+
 	
 	span{
 		padding-left: 10px;
@@ -73,12 +81,10 @@
 		left: 50%;
 	}
 	label, input, span, select {
-		display: table-cell;
-		text-align: left;		
+		display: table-cell;		
 	}
 	label{
-		position: relative;
-		left:20%;
+		
 		font-size: 18px;
 	}
 	input{
@@ -112,13 +118,14 @@
 		<aside class="sidebar" th:insert="~{/back-end/shop/shop_back_end_sidebar.html}"></aside>
 		
 		<main class="shopManagementContent" align="center"> 
-			<div th:if="${errorMessage}" class="alert alert-danger" role="alert">
-			     <span th:text="${errorMessage}"></span>
+
+			<div th:if="${errorMessage}" class="alert alert-danger msg" role="alert">
+		     	<span th:text="${errorMessage}"></span>
 			</div>
 			
-			
+			<h2>修正優惠活動</h2>    
+
 			<form method="post" th:action="@{update}" th:object="${saleVO}">
-				<h2>更新優惠活動</h2>    
 				<div>
 					<label class="form-label">活動編號:</label>
 					<input class="form-control" type="text" th:field="*{saleNo}" readOnly/><br/>
