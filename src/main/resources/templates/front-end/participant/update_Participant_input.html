@@ -1,83 +1,105 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8">
-<title>討論區文章管理</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet" th:href="@{/css/common.css}">
-<link rel="stylesheet" th:href="@{/css/participant.css}">
-<link rel="stylesheet" th:href="@{/css/navbar.css}" />
-<style>
-/* Star Rating Styles */
-.star-rating {
- display: flex;
- flex-direction: row-reverse;
- justify-content: left;
- padding: 0;
-}
+    <meta charset="utf-8">
+    <title>討論區文章管理</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/participant.css}">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <style>
+    /* Star Rating Styles */
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: left;
+        padding: 0;
+    }
 
-.star-rating input[type="radio"] {
- display: none;
-}
+    .star-rating input[type="radio"] {
+        display: none;
+    }
 
-.star-rating label {
- font-size: 2em;
- color: #d1d1d1;
- cursor: pointer;
- padding: 0 5px;
- transition: color 0.2s;
-}
+    .star-rating label {
+        font-size: 2em;
+        color: #d1d1d1;
+        cursor: pointer;
+        padding: 0 5px;
+        transition: color 0.2s;
+    }
 
-.star-rating input[type="radio"]:checked ~ label {
- color: #ffa500;
-}
+    .star-rating input[type="radio"]:checked ~ label {
+        color: #ffa500;
+    }
 
-.star-rating label:hover,
-.star-rating label:hover ~ label {
- color: #ffa500;
-}
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: #ffa500;
+    }
 
-/* Custom input styles */
-input[readonly] {
-    background-color: transparent;
-    border: none;
-    font-weight: bold;
-}
+    /* Custom input styles */
+    input[readonly] {
+        background-color: transparent;
+        border: none;
+        font-weight: bold;
+    }
 
-input[type="text"], textarea {
-    background-color: #f8f9fa; /* 更改背景颜色 */
-    border: 1px solid #ced4da; /* 保留边框 */
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 4px;
-    width: 100%; /* 调整宽度 */
-}
+    input[type="text"], textarea {
+        background-color: #ACE1AF; /* 更改背景颜色 */
+        border: 1px solid #ced4da; /* 保留边框 */
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 4px;
+        width: 100%; /* 调整宽度 */
+    }
 
-textarea {
-    height: 100px; /* 调整高度 */
-}
+    textarea {
+        height: 100px; /* 调整高度 */
+    }
 
-button#submit {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+    button#submit {
+        background-color: #CEDEBD;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
 
-button#submit:hover {
-    background-color: #0056b3;
-}
-</style>
+    button#submit:hover {
+        background-color: #0056b3;
+    }
 
+    button#cancel {
+        background-color: #FF6347;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button#cancel:hover {
+        background-color: #CD5C5C;
+    }
+
+    .text-right {
+        color:green;
+        float: left;
+        font-weight: bold;
+        padding-left: 50px; /* 調整間距 */
+    }
+    </style>
 </head>
 <body>
 <nav th:insert="~{/front-end/navbar.html}"></nav>
@@ -85,27 +107,37 @@ button#submit:hover {
 <div class="container"><h2>揪團去玩</h2></div>
 
  <div class="article-details">
-  <form class="add-article" th:action="@{update}" method="post" th:object="${participantVO}" enctype="multipart/form-data">
+  <form class="add-article" th:action="@{update}" method="post" th:object="${participantVO}" enctype="multipart/form-data" onsubmit="return validateForm()">
    <div>
-    <h6><label>參團活動編號:</label></h6> <input type="text" th:field="*{actPartNo}" style="border: 0px; font-weight: bold;" readonly /><br />
+    <h6><label>參團活動編號:</label></h6> <span th:text="*{actPartNo}" class="text-right"></span><br />
+    <input type="hidden" th:field="*{actPartNo}" />
    </div>
 
    <div>
-    <h6><label>參團人數:</label> </h6> <input type="text" th:field="*{actJoinCount}" style="border: 0px; font-weight: bold;" readonly /></span>
+    <h6><label>參團人數:</label> </h6> <span th:text="*{actJoinCount}" class="text-right"></span><br />
+     <input type="hidden" th:field="*{actJoinCount}" />
    </div>
    
    <div>
-    <h6><label>報名狀態:</label> </h6> <input type="text" th:field="*{actCommit}" style="border: 0px; font-weight: bold;" readonly /></span>
+    <h6><label>報名狀態:</label> </h6>
+    <span th:switch="*{actCommit}" class="text-right">
+        <span th:case="0">待審核</span>
+        <span th:case="1">審核通過</span>
+        <span th:case="2">審核不通過</span>
+        <span th:case="3">取消</span>
+        <span th:case="*">未知狀態</span>
+    </span>
+    <input type="hidden" th:field="*{actCommit}" />
    </div>
-  
+  <br>
    <div>
     <h6><label>活動標題:</label></h6> 
-    <input type="text" th:field="*{actVO.actTitle}" readonly /> 
-     <span th:if="${#fields.hasErrors('actVO.actTitle')}" th:errors="*{actVO.actTitle}" class="error" id="actVO.actTitle.errors"></span>
+    <span th:text="*{actVO.actTitle}" class="text-right"></span><br/>
+    <span th:if="${#fields.hasErrors('actVO.actTitle')}" th:errors="*{actVO.actTitle}" class="error" id="actVO.actTitle.errors"></span>
    </div>
 
    <div>
-    <h6><label>會員帳號:</label> </h6><input type="text" th:field="*{memberVO.memAccount}" readonly /> 
+    <h6><label>會員帳號:</label> </h6><span th:text="*{memberVO.memAccount}" class="text-right"></span><br />
     <span th:if="${#fields.hasErrors('memberVO.memAccount')}" th:errors="*{memberVO.memAccount}" class="error" id="memberVO.memAccount.errors"></span>
    </div>
 
@@ -138,7 +170,8 @@ button#submit:hover {
    <div>
     <div></div>
     <div>
-     <button type="submit" id="submit">送出修改</button>
+     <button type="submit" id="submit">送出評價</button>
+     <button type="button" id="cancel" onclick="cancelAdd()">取消評價</button>
     </div>
     <div></div>
    </div>
@@ -147,40 +180,36 @@ button#submit:hover {
 
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
  <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
  <script>
   $(document).ready(function() {
    $('#example').DataTable();
   });
- </script>
 
- <script type="text/javascript">
-  //清除提示信息
   function hideContent(d) {
    document.getElementById(d).style.display = "none";
   }
+
   function cancelAdd() {
    // 返回上一個網頁
    history.back();
   }
- </script>
- 
-<script>
-    // Optional: If you want to handle error hiding
-    function hideContent(elementId) {
-        document.getElementById(elementId + '.errors').style.display = 'none';
-    }
-    
-    document.addEventListener('DOMContentLoaded', () => {
-        const stars = document.querySelectorAll('.star-rating input');
-        stars.forEach(star => {
-            star.addEventListener('change', () => {
-                const rating = document.querySelector('.star-rating input:checked').value;
-                console.log(`Rating: ${rating}`);
-            });
-        });
-    });
 
-</script>
+  function validateForm() {
+    const starChecked = document.querySelector('.star-rating input:checked');
+    if (!starChecked) {
+        Swal.fire({
+            title: '錯誤',
+            text: '請點選評價',
+            icon: 'warning',
+            confirmButtonText: '確認'
+        });
+        return false;
+    }
+    return true;
+  }
+ </script>
 
 </body>
 </html>

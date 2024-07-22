@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TopSeeker-會員開團列表</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    
+    <style>
+        body {
+            margin-top: 7rem;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        .dataTables_wrapper .dataTables_filter,
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_info,
+        .dataTables_wrapper .dataTables_paginate {
+            font-size: 14px;
+        }
+        table.dataTable {
+            font-size: 14px;
+        }
+        .card {
+            padding: 1rem;
+        }
+        table {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        .no-wrap {
+        	max-width: 30px;
+/*             white-space: nowrap; */
+        }
+        div.container {
+            max-width: 96%;
+            padding: 20px;
+            background-color: #CEDEBD;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: -30px;
+            font-size: 30px;
+            font-weight: bold;
+            color: #435334;
+        }
+        .text-center {
+            color: #435334;
+            font-weight: bold;
+        }
+        .star-rating .fa-star,
+        .star-rating .fa-star-half-alt,
+        .star-rating .far.fa-star {
+            color: #f8ce0b;
+        }
+        .title-column {
+        max-width: 80px; /* 設置活動標題欄位的最大寬度 */
+        word-wrap: break-word;
+	    }
+	    .current-title-column {
+	        max-width: 30px;        
+	    }
+	    .max-title-column {
+	        max-width: 25px;        
+	    }
+	    .date-title-column {
+	        max-width: 45px;        
+	    }
+    </style>    
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+<!-- jQuery DataTables 設定 -->
+<script th:inline="none">
+    $(document).ready(function() {
+        var activeTable = $('#example').DataTable({
+            "lengthMenu": [10, 20, 50, 100],
+            "searching": true,
+            "paging": true,
+            "ordering": true,
+            "order": [[0, 'desc']],  // 預設按第一列降序排列
+            "language": {
+                "processing": "處理中...",
+                "loadingRecords": "載入中...",
+                "lengthMenu": "顯示 _MENU_ 筆結果",
+                "zeroRecords": "沒有符合的結果",
+                "info": "顯示第 _START_ 至 _END_ 筆結果，共 _TOTAL_ 筆",
+                "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
+                "infoFiltered": "(從 _MAX_ 筆結果中過濾)",
+                "search": "搜尋:",
+                "paginate": {
+                    "first": "第一頁",
+                    "previous": "上一頁",
+                    "next": "下一頁",
+                    "last": "最後一頁"
+                },
+                "aria": {
+                    "sortAscending": ": 升冪排列",
+                    "sortDescending": ": 降冪排列"
+                }
+            }
+        });
+    });
+
+    // 動態設置星星評分
+    function setStars(element, rating) {
+        var fullStars = Math.floor(rating);
+        var halfStar = (rating - fullStars) >= 0.5;
+        var emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+        var starHtml = '';
+        for (var i = 0; i < fullStars; i++) {
+            starHtml += '<i class="fas fa-star"></i>';
+        }
+        if (halfStar) {
+            starHtml += '<i class="fas fa-star-half-alt"></i>';
+        }
+        for (var i = 0; i < emptyStars; i++) {
+            starHtml += '<i class="far fa-star"></i>';
+        }
+        element.innerHTML = starHtml;
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll('.star-rating').forEach(function(starRating) {
+            var rating = parseFloat(starRating.getAttribute('data-rating'));
+            setStars(starRating, rating);
+        });
+    });
+</script>
+
+<header>
+    <nav th:insert="~{/front-end/navbar.html}"></nav>
+</header>
+<div class="container"><span th:text="${memberVO.memAccount}+'('+${memberVO.memName}+')'"></span>的開團列表</div>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <table id="example" class="display table table-striped table-bordered">
+                    <thead>
+                        <tr style="background-color: #90c320;">
+                            <th class="max-title-column">計數</th>
+                            <th>活動標題</th>                           
+                            <th class="max-title-column">人數上限</th>
+                            <th class="current-title-column">已參與人數</th>
+                            <th class="date-title-column">報名起始日</th>
+                            <th class="date-title-column">報名截止日</th>
+                            <th class="date-title-column">活動開始日</th>
+                            <th class="date-title-column">活動結束日</th>
+                            <th>狀態</th>
+                            <th>評價</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <th:block th:each="actVO : ${memMyAct}">
+                            <tr th:classappend="${actVO.actStatus == 3} ? 'cancelled' : ''">
+                                <td th:text="${actVOStat.count}"></td>
+                                <td class="title-column">
+                                	<form method="post" th:action="@{/act/details}" id="detailForm">
+                                        <input type="hidden" name="actNo" th:value="${actVO.actNo}" />
+                                        <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 14px; text-align: left;" th:text="${actVO.actTitle}"></button>
+                                    </form>
+                                </td>                                                                
+                                <td th:text="${actVO.actMaxCount}"></td>
+                                <td th:text="${actVO.actCurrentCount}"></td>
+                                <td th:text="${actVO.actEnrollBegin}"></td>
+                                <td th:text="${actVO.actEnrollEnd}"></td>
+                                <td th:text="${actVO.actStart}"></td>
+                                <td th:text="${actVO.actEnd}"></td>
+                                <td th:switch="${actVO.actStatus}">
+                                    <span th:case="0">揪團中</span>
+                                    <span th:case="1">已額滿</span>
+                                    <span th:case="2">已完成</span>
+                                    <span th:case="3">已取消</span>
+                                </td>
+                                <td>
+                                    <div class="star-rating" th:attr="data-rating=${ratingMap[actVO.actNo]}"></div>
+                                </td>
+                            </tr>
+                        </th:block>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="bg-light text-center py-4 mt-5">
+    <p>&copy; 2024 登山網站. 版權所有.</p>
+</footer>
+
+</body>
+</html>

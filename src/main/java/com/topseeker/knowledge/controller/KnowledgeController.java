@@ -39,17 +39,11 @@ public class KnowledgeController {
 	public String showKnowledge(ModelMap model) {
 		List<KnowledgeVO> knowListData = knowledgeSvc.getAllReleasedKnow();
 
-		model.addAttribute("konwListData", knowListData);
+		model.addAttribute("knowListData", knowListData);
 
 		return "front-end/knowledge/knowledgeInfo";
 	}
 
-
-
-	// ============Ajax新增刪除功能============
-
-
-	
 
 	// ============後端管理頁面============
 
@@ -64,10 +58,8 @@ public class KnowledgeController {
 		return "back-end/knowledge/listAllKnow";
 	}
 	
-	
 
 	// ============Ajax新增刪除功能============
-	
 	
 	// 依照消息編號更改上下架狀態
 	@PostMapping("/updateKnowStatus")
@@ -107,6 +99,7 @@ public class KnowledgeController {
 		// 使用者未選擇要上傳的圖片時
 		if (parts[0].isEmpty()) { 
 			model.addAttribute("errorMessage", "新手知識圖片: 請上傳圖片");
+			knowledgeVO.setKnowPic(null);
 		} else {
 			for (MultipartFile multipartFile : parts) {
 				byte[] buf = multipartFile.getBytes();
@@ -114,7 +107,7 @@ public class KnowledgeController {
 			}
 		}
 		
-		if (result.hasErrors() || parts[0].isEmpty()) {
+		if (result.hasErrors()) {
 			return "back-end/knowledge/addKnow";
 		}
 
@@ -136,7 +129,7 @@ public class KnowledgeController {
 
 		/*************************** 2.開始查詢資料 *****************************************/
 		KnowledgeVO knowledgeVO = knowledgeSvc.getOneKnowledge(Integer.valueOf(KnowNo));
-//System.out.println("PublishTime:" +knowledgeVO.getKnowPublishDate());
+
 		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("knowledgeVO", knowledgeVO);
 		return "back-end/knowledge/update_know_input"; // 查詢完成後轉交update_prod_input.html
@@ -144,38 +137,42 @@ public class KnowledgeController {
 
 	// 修改新手知識
 	@PostMapping("/updateKnow")
-	public String update(@Valid KnowledgeVO KnowledgeVO, BindingResult result, ModelMap model,
-			@RequestParam("KnowPic") MultipartFile[] parts) throws IOException {
+	public String update(@Valid KnowledgeVO knowledgeVO, BindingResult result, ModelMap model,
+			@RequestParam("knowPic") MultipartFile[] parts) throws IOException {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 	    // 設定修改當下的日期
-	    java.sql.Date KnowDate = new java.sql.Date(System.currentTimeMillis());
-	    KnowledgeVO.setKnowPublishDate(KnowDate);
-System.out.println("有進來修改");
+	    java.sql.Date knowDate = new java.sql.Date(System.currentTimeMillis());
+	    knowledgeVO.setKnowPublishDate(knowDate);
+
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		// 去除BindingResult中upFiles欄位的FieldError紀錄
-		result = removeFieldError(KnowledgeVO, result, "KnowPic");
+		result = removeFieldError(knowledgeVO, result, "KnowPic");
 
 		// 使用者未選擇要上傳的新圖片時
 		if (parts[0].isEmpty()) { 
-			byte[] KnowPic = knowledgeSvc.getOneKnowledge(KnowledgeVO.getKnowNo()).getKnowPic();
-			KnowledgeVO.setKnowPic(KnowPic);
+			byte[] KnowPic = knowledgeSvc.getOneKnowledge(knowledgeVO.getKnowNo()).getKnowPic();
+			knowledgeVO.setKnowPic(KnowPic);
+System.out.println("圖片是空的，存回原圖片");
 		} else {
 			for (MultipartFile multipartFile : parts) {
 				byte[] buf = multipartFile.getBytes();
-				KnowledgeVO.setKnowPic(buf);
+				knowledgeVO.setKnowPic(buf);
+System.out.println("圖片有上傳，已存取");
 			}
 		}
 		if (result.hasErrors()) {
-			return "back-end/knowledge/update_know_input";
+
+			return "back-end/knowledge/listOneKnow";
 		}
 		/*************************** 2.開始修改資料 *****************************************/
-		// EmpService empSvc = new EmpService();
-		knowledgeSvc.updateKnowledge(KnowledgeVO);
+
+		knowledgeSvc.updateKnowledge(knowledgeVO);
+		
 		/*************************** 3.修改完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("success", "修改成功");
-		KnowledgeVO = knowledgeSvc.getOneKnowledge(Integer.valueOf(KnowledgeVO.getKnowNo()));
-		model.addAttribute("KnowledgeVO", KnowledgeVO);
+		knowledgeVO = knowledgeSvc.getOneKnowledge(Integer.valueOf(knowledgeVO.getKnowNo()));
+		model.addAttribute("knowledgeVO", knowledgeVO);
 		return "back-end/knowledge/listOneKnow"; // 修改成功後轉交listOneEmp.html
 	}
 

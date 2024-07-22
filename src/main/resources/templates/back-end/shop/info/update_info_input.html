@@ -24,115 +24,132 @@
 	rel="stylesheet">
 
 
-<!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<!-- Topseeker後台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/back_end.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
 
 
-<style type="text/css">
+<style>
 
-/* 確保內容位於 sidebar 右側 */
-.display {
-	margin-left: 200px; /* 確保內容位於 sidebar 右側 */
-	padding: 20px;
-	width: calc(100% - 200px); /* 確保內容佔滿剩餘寬度 */
-	overflow-x: auto; /* 確保內容過寬時可以滾動 */
-}
+	main.shopManagementContent {
+		padding: 30px 50px;
+	}
+
+	button {
+	
+	margin-left: 280px;
+	}
+	
 </style>
 </head>
 <body>
 
+
 	<!-- topseeker後台Navbar -->
 	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
 
-	<!-- 商城後台用Navbar + 左側邊欄 -->
-	<nav class="shopMainNavbar"
-		th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
-
-
-	<main class="shopManagementContent">
-		<div class="updateinfoDisplay">
-			<H3>最新消息修改</H3>
-			<form th:action="@{/shop/shopManagement/updateInfo}" method="post"
-				th:object="${shopInfoVO}" enctype="multipart/form-data">
-
-
-				<div class="mb-3" type=hidden>
-					<label>消息編號:</label> <input type="text" th:field="*{infoNo}"
-						th:value="*{infoNo}" readonly>
-				</div>
-
-				<br>
-				<div class="mb-3">
-					<label for="infoStatus">最新消息狀態:</label> <select
-						th:field="*{infoStatus}" name="infoStatus" class="form-select"
-						id="infoStatus">
-						<option value="1" th:selected="${infoStatus} == 0">上架</option>
-						<option value="0" th:selected="${infoStatus} == 1">下架</option>
-					</select> <span th:if="${#fields.hasErrors('infoStatus')}"
-						th:errors="*{infoStatus}" class="error" id="infoStatus.errors"></span>
-				</div>
-
-				<div class="mb-3">
-					<label for="infoHead" class="form-label">標題:</label> <input
-						type="text" th:field="*{infoHead}" class="form-control"
-						id="infoHead" onclick="hideContent('infoHead.errors');"> <span
-						th:if="${#fields.hasErrors('infoHead')}" th:errors="*{infoHead}"
-						class="error" id="infoHead.errors"></span>
-				</div>
-
-				<div class="mb-3">
-					<label for="infoContent" class="form-label">內容:</label>
-					<textarea th:field="*{infoContent}"
-						onclick="hideContent('infoContent.errors');" class="form-control"
-						id="infoContent" rows="10"></textarea>
-					<span class="alert alert-danger" role="alert"
-						th:if="${#fields.hasErrors('infoContent')}"
-						th:errors="*{infoContent}" id="infoContent.errors"></span>
-				</div>
-
-				<div class="mb-3">
-					<label for="infoPic" class="form-label">圖片:</label>
-					<div id="infoPic">
-						<div th:field="${shopInfoVO.infoPic}">
-							<img th:src="@{/shop/DBGifReader4} + '?infoNo=' + *{infoNo}"
-								class="img-thumbnail mb-2" width="400" height="300">
-							<!--刪除按鈕 -->
-							<!-- 						<button type="button" class="btn btn-danger btn-sm" -->
-							<!-- 							th:data-index="${iterStat.index}" -->
-							<!-- 							th:data-prod-pic-no="${infoPic}" id="" -->
-							<!-- 							th:value="${infoPic}">刪除</button> -->
+	<!-- 商城後台用Navbar -->
+	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
+	
+	<div class="shopContent">	
+		
+		<!-- 商城後台用左側邊欄 -->
+		<aside class="sidebar" th:insert="~{/back-end/shop/shop_back_end_sidebar.html}"></aside>
+	
+		<main class="shopManagementContent">
+			<div class="shopManagementInput">
+				<H3><b>最新消息修改</b></H3>
+				<form th:action="@{/shop/shopManagement/updateInfo}" method="post"
+					th:object="${shopInfoVO}" enctype="multipart/form-data">
+	
+					<!-- 統一顯示錯誤訊息的區域 -->
+		            <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors()}">
+		                <ul>
+		                    <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+		                </ul>
+		            </div>
+	
+	
+					<div class="mb-3" type=hidden>
+					<input type="hidden" th:field="*{infoNo}"
+							th:value="*{infoNo}" readonly>
+					</div>
+	
+					<br>
+					<div class="mb-3">
+						<label for="infoStatus">最新消息狀態:</label> <select
+							th:field="*{infoStatus}" name="infoStatus" class="form-select"
+							id="infoStatus">
+							<option value="1" th:selected="${infoStatus} == 0">上架</option>
+							<option value="0" th:selected="${infoStatus} == 1">下架</option>
+						</select> 
+<!-- 						<span th:if="${#fields.hasErrors('infoStatus')}" -->
+<!-- 							th:errors="*{infoStatus}" class="error" id="infoStatus.errors"></span> -->
+					</div>
+	
+					<div class="mb-3">
+						<label for="infoHead" class="form-label">標題:</label> <input
+							type="text" th:field="*{infoHead}" class="form-control"
+							id="infoHead" onclick="hideContent('infoHead.errors');"> 
+<!-- 							<span -->
+<!-- 							th:if="${#fields.hasErrors('infoHead')}" th:errors="*{infoHead}" -->
+<!-- 							class="error" id="infoHead.errors"></span> -->
+					</div>
+	
+					<div class="mb-3">
+						<label for="infoContent" class="form-label">內容:</label>
+						<textarea th:field="*{infoContent}"
+							onclick="hideContent('infoContent.errors');" class="form-control"
+							id="infoContent" rows="5"></textarea>
+<!-- 						<span class="alert alert-danger" role="alert" -->
+<!-- 							th:if="${#fields.hasErrors('infoContent')}" -->
+<!-- 							th:errors="*{infoContent}" id="infoContent.errors"></span> -->
+					</div>
+	
+					<div class="mb-3">
+						<label for="infoPic" class="form-label">圖片:</label>
+						<div id="infoPic">
+							<div th:field="${shopInfoVO.infoPic}">
+								<img th:src="@{/shop/DBGifReader4} + '?infoNo=' + *{infoNo}"
+									class="img-thumbnail mb-2" width="400" height="300">
+								<!--刪除按鈕 -->
+								<!-- 						<button type="button" class="btn btn-danger btn-sm" -->
+								<!-- 							th:data-index="${iterStat.index}" -->
+								<!-- 							th:data-prod-pic-no="${infoPic}" id="" -->
+								<!-- 							th:value="${infoPic}">刪除</button> -->
+							</div>
+	
+							<br> <br> <label for="infoPic" class="form-label">新增圖片</label>
+							<input th:field="*{infoPic}" type="file" name="infoPic" id="infoPic"
+								class="form-control">
+	
+							<!-- 預覽圖片容器 -->
+							<div id="preview" class="mt-2"></div>
 						</div>
-
-						<br> <br> <label for="infoPic" class="form-label">新增圖片</label>
-						<input type="file" name="infoPic" id="infoPic"
-							class="form-control">
-
-						<!-- 預覽圖片容器 -->
-						<div id="preview" class="mt-2"></div>
 					</div>
-				</div>
-
-				<div>
-					<input type="hidden" th:field="*{infoDate}"> <span
-						th:if="${#fields.hasErrors('infoDate')}" th:errors="*{infoDate}"
-						class="error" id="infoDate.errors"></span>
-				</div>
-
-
-
-				<div>
-					<div></div>
+	
 					<div>
-						<button type="submit" class="btn btn-success" id="submit">送出修改</button>
+						<input type="hidden" th:field="*{infoDate}"> <span
+							th:if="${#fields.hasErrors('infoDate')}" th:errors="*{infoDate}"
+							class="error" id="infoDate.errors"></span>
 					</div>
-					<div></div>
-				</div>
-			</form>
-		</div>
-	</main>
+	
+	
+	
+					<div>
+						<div></div>
+						<div>
+							<button type="submit" class="btn btn-success" id="submit">送出修改</button>
+						</div>
+						<div></div>
+					</div>
+				</form>
+			</div>
+		</main>
+	
+	</div>
 
 
 	<!-- jQuery -->
@@ -164,8 +181,9 @@
 						reader.onload = function(e) {
 							var img = $('<img>').attr('src', e.target.result)
 									.addClass('img-thumbnail mb-2').css({
-										width : '150px',
-										height : '150px'
+										width : '400px',
+										height : 'auto',
+										margin: '10px auto'
 									});
 							$('#preview').append(img);
 						};

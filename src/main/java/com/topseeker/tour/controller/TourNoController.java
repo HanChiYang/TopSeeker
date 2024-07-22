@@ -123,6 +123,8 @@ public class TourNoController {
 //		@Min(value = 1, message = "行程編號: 不能小於{value}")
 //		@Max(value = 999, message = "行程編號: 不能超過{value}")
 		@RequestParam("tourNo") String tourNo,
+//		@RequestParam("collected") Boolean collected,
+		
 		HttpServletRequest req,
 		ModelMap model) {
 		
@@ -259,7 +261,7 @@ public class TourNoController {
   /***************************3.查詢完成,準備轉交(Send the Success view)*****************/
      
      
-     model.addAttribute("tourOrderVO", new TourOrderVO());
+//     model.addAttribute("tourOrderVO", new TourOrderVO());
      model.addAttribute("tourGroupVO", tourGroupVO);
   model.addAttribute("addOrder", "true"); // 旗標getOne_For_Display見select_page.html的第156行 -->
         model.addAttribute("groupNo", groupNo);

@@ -23,8 +23,8 @@
 	rel="stylesheet">
 
 
-<!-- Topseeker前台導航列CSS -->
-<link rel="stylesheet" th:href="@{/css/common.css}">
+<!-- Topseeker後台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/back_end.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
@@ -39,32 +39,7 @@
 <!-- ●●css for jquery datatables 用 -->
 
 
-
-
-<style type="text/css">
-
-/* .container { */
-/*     display: flex; */
-/* } */
-
-/* .sidebar { */
-/*     width: 200px; */
-/*     height: 100vh; /* 適當的高度，視需求可調整 */ */
-/*     background-color: #f4f4f4; */
-/*     padding: 20px; */
-/*     box-shadow: 2px 0 5px rgba(0,0,0,0.1); */
-/*     position: -webkit-sticky; /* For Safari */ */
-/*     position: sticky; */
-/*     top: 0; */
-/* } */
-
-/* .main-content { */
-/*     flex-grow: 1; */
-/*     padding: 20px; */
-/*     height: 800px; */
-/* } */
-
-
+<style>
 
 
 </style>
@@ -74,101 +49,103 @@
 	<!-- topseeker後台Navbar -->
 	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
 
-
-
-	<!-- 商城後台用Navbar + 左側邊欄 -->
+	<!-- 商城後台用Navbar -->
 	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
-
-
-<!-- 	<div class="container"> -->
 	
+	<div class="shopContent">	
+		
+		<!-- 商城後台用左側邊欄 -->
+		<aside class="sidebar" th:insert="~{/back-end/shop/shop_back_end_sidebar.html}"></aside>
 	
-
-	<main class="shopManagementContent main-content">
-	<div class="listAllProdDisplay">
+		<main class="shopManagementContent">
+		<div>
 		<table id="example" class="display">
-			<thead>
-				<tr style="background-color: #d9ead3">
-					<th>商品編號</th>
-					<th>商品類別</th>
-					<th>商品圖片</th>
-					<th>商品名稱</th>
-					<th>商品介紹</th>
-					<th>商品定價</th>
-					<th>商品建立時間</th>
-					<th>商品狀態</th>
-					<th>修改</th>
-					<!-- 					<th>刪除</th> -->
-				</tr>
-			</thead>
-			<tbody>
-				<th:block th:each="shopProductVO : ${shopListData}">
-					<tr>
-						<td width="50px" th:text="${shopProductVO.prodNo}"></td>
-						<td th:text="${shopProductVO.shopProductTypeVO.prodTypeName}"></td>
-						<td><img
-							th:src="@{/shop/DBGifReader} + '?prodNo=' + ${shopProductVO.prodNo} "
-							width="80px"></td>
-						<td width="150px" th:text="${shopProductVO.prodName}"></td>
-						<td width="200px"
-							th:text="${#strings.abbreviate(shopProductVO.prodInfo, 20)}"></td>
-						<td width="80px" th:text="'$' + ${shopProductVO.prodPrice}"></td>
-						<td width="100px" th:text="${shopProductVO.prodDate}"></td>
-						<td>
-						<!-- 賦一個隱藏的值給DataTable排序用 -->
-						<span style="display:none" th:text="${shopProductVO.prodStatus}"></span>
-						
-							<div class="btn-group" role="group"
-								aria-label="Basic radio toggle button group">
-								<!-- 上架中按鈕 -->
-								<input type="radio" class="btn-check"
-									th:name="'prodStatus-' + ${shopProductVO.prodNo}"
-									th:id="'success-outlined-' + ${shopProductVO.prodNo}"
-									autocomplete="off"
-									th:checked="${shopProductVO.prodStatus == 1}"> <label
-									class="btn btn-outline-success"
-									th:for="'success-outlined-' + ${shopProductVO.prodNo}"
-									th:onclick="'updateStatus(' + ${shopProductVO.prodNo} + ', 1)'" th:value="${shopProductVO.prodStatus}">上架中</label>
-
-								<!-- 下架按鈕 -->
-								<input type="radio" class="btn-check"
-									th:name="'prodStatus-' + ${shopProductVO.prodNo}"
-									th:id="'secondary-outlined-' + ${shopProductVO.prodNo}"
-									autocomplete="off"
-									th:checked="${shopProductVO.prodStatus == 0}"> <label
-									class="btn btn-outline-secondary"
-									th:for="'secondary-outlined-' + ${shopProductVO.prodNo}"
-									th:onclick="'updateStatus(' + ${shopProductVO.prodNo} + ', 0)'" th:value="${shopProductVO.prodStatus}">下架</label>
-							</div>
-
-
-						</td>
-						<td>
-							<form method="post"
-								th:action="@{/shop/shopManagement/getOne_For_Update}"
-								style="margin-bottom: 0;">
-								<button type="submit" class="btn btn-warning text-white">
-									<i class="fas fa-edit"></i> 修改
-								</button>
-								<input type="hidden" name="prodNo"
-									th:value="${shopProductVO.prodNo}">
-							</form>
-						</td>
-						<!-- 						<td> -->
-						<!-- 							<form method="post" th:action="@{/shop/shopManagement/delete}" -->
-						<!-- 								style="margin-bottom: 0px;"> -->
-						<!-- 								<input type="submit" value="刪除"> <input type="hidden" -->
-						<!-- 									name="prodNo" th:value="${shopProductVO.prodNo}"> -->
-						<!-- 							</form> -->
-						<!-- 						</td> -->
+				<thead>
+					<tr style="background-color: #d9ead3">
+						<th>編號</th>
+						<th>類別</th>
+						<th >圖片</th>
+						<th>商品名稱</th>
+						<th width="90px">定價</th>
+						<th>商品修改時間</th>
+						<th width="120px" >商品狀態</th>
+						<th width="90px">修改</th>
+						<!-- 					<th>刪除</th> -->
 					</tr>
-				</th:block>
-			</tbody>
-		</table>
-	</div>
-	</main>
+				</thead>
+				<tbody>
+					<th:block th:each="shopProductVO : ${shopListData}">
+						<tr>
+							<td th:text="${shopProductVO.prodNo}"></td>
+							<td th:text="${shopProductVO.shopProductTypeVO.prodTypeName}"></td>
+							<td>
+							  <img width="70px" th:src="@{/shop/DBGifReader} + '?prodNo=' + ${shopProductVO.prodNo}"></td>
+							<td th:text="${shopProductVO.prodName}"></td>
+							<td th:text="'$' + ${shopProductVO.prodPrice}"></td>
+							<td th:text="${shopProductVO.prodDate}"></td>
+							<td>
+							<!-- 賦一個隱藏的值給DataTable排序用 -->
+							<span style="display:none" th:text="${shopProductVO.prodStatus}"></span>
+							
+								<div class="btn-group" role="group"
+									aria-label="Basic radio toggle button group">
+									<!-- 上架中按鈕 -->
+									<input type="radio" class="btn-check"
+										th:name="'prodStatus-' + ${shopProductVO.prodNo}"
+										th:id="'success-outlined-' + ${shopProductVO.prodNo}"
+										autocomplete="off"
+										th:checked="${shopProductVO.prodStatus == 1}"> <label
+										class="btn btn-outline-success"
+										th:for="'success-outlined-' + ${shopProductVO.prodNo}"
+										th:onclick="'updateStatus(' + ${shopProductVO.prodNo} + ', 1)'" th:value="${shopProductVO.prodStatus}">上架中</label>
 	
+									<!-- 下架按鈕 -->
+									<input type="radio" class="btn-check"
+										th:name="'prodStatus-' + ${shopProductVO.prodNo}"
+										th:id="'secondary-outlined-' + ${shopProductVO.prodNo}"
+										autocomplete="off"
+										th:checked="${shopProductVO.prodStatus == 0}"> <label
+										class="btn btn-outline-secondary"
+										th:for="'secondary-outlined-' + ${shopProductVO.prodNo}"
+										th:onclick="'updateStatus(' + ${shopProductVO.prodNo} + ', 0)'" th:value="${shopProductVO.prodStatus}">下架</label>
+								</div>
+	
+	
+							</td>
+							<td>
+								<form method="post"
+									th:action="@{/shop/shopManagement/getOne_For_Update}"
+									style="margin-bottom: 0;">
+									<button type="submit" class="btn btn-warning text-white">
+										<i class="fas fa-edit"></i> 修改
+									</button>
+									<input type="hidden" name="prodNo"
+										th:value="${shopProductVO.prodNo}">
+								</form>
+							</td>
+							<!-- 						<td> -->
+							<!-- 							<form method="post" th:action="@{/shop/shopManagement/delete}" -->
+							<!-- 								style="margin-bottom: 0px;"> -->
+							<!-- 								<input type="submit" value="刪除"> <input type="hidden" -->
+							<!-- 									name="prodNo" th:value="${shopProductVO.prodNo}"> -->
+							<!-- 							</form> -->
+							<!-- 						</td> -->
+						</tr>
+					</th:block>
+				</tbody>
+			</table>
+			</div>
+		</main>
+	
+	</div>
+	
+
+<!-- 	<main class="shopManagementContent main-content"> -->
+<!-- 	<div class="listAllProdDisplay"> -->
+		
 <!-- 	</div> -->
+<!-- 	</main> -->
+	
 
 
 	<!-- ●● jquery datatables 設定 -->

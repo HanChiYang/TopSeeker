@@ -23,8 +23,8 @@
 	rel="stylesheet">
 
 
-<!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<!-- Topseeker後台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/back_end.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
@@ -33,77 +33,90 @@
 
 <style>
 
+	main.shopManagementContent {
+		padding: 30px 50px;
+	}
+
+	button {
+	
+	margin-left: 280px;
+	}
+
 </style>
 </head>
 <body>
 
+
 	<!-- topseeker後台Navbar -->
 	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
 
-	<!-- 商城後台用Navbar + 左側邊欄 -->
+	<!-- 商城後台用Navbar -->
 	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
-
-	<main class="shopManagementContent">
+	
+	<div class="shopContent">	
+		
+		<!-- 商城後台用左側邊欄 -->
+		<aside class="sidebar" th:insert="~{/back-end/shop/shop_back_end_sidebar.html}"></aside>
+	
+		<main class="shopManagementContent">
 		<div class="shopManagementInput">
-			<h4><b>新增最新消息</b></h4>
-			<br>
-        <form th:action="@{insertInfo}" method="post" th:object="${shopInfoVO}" enctype="multipart/form-data">
-            <!-- 統一顯示錯誤訊息的區域 -->
-<!--             <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors()}"> -->
-<!--                 <ul> -->
-<!--                     <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li> -->
-<!--                 </ul> -->
-<!--             </div> -->
-
-				<!-- 錯誤表列 -->
-				<!-- 		<div class="alert alert-danger" role="alert" th:utext="${errorMessage}">${errorMessage}</div><br> -->
-
-				<div class="mb-3">
-					<label for="infoHead" class="form-label">標題:</label> <input
-						type="text" th:field="*{infoHead}"
-						class="form-control"
-						id="infoHead" placeholder="輸入標題"> 
-				</div>
-
-
-				<div class="mb-3">
-					<label for="infoContent" class="form-label">內容:</label>
-					<textarea th:field="*{infoContent}"
-						class="form-control"
-						id="infoContent" rows="5"></textarea>
-				</div><br>
-
-				<!-- 上傳圖片用 -->
-				<div class="mb-3">
-					<label for="infoPic" class="form-label"
-						th:field="*{infoPic}">新增圖片</label> <input type="file"
-						name="infoPic" id="infoPic" class="form-control"> 
-
-					<!-- 預覽圖片容器 -->
-					<div id="preview" class="mt-2"></div>
-				</div>
-
-
-				<div>
-					<input type="hidden" th:field="*{infoDate}" /> 
-				</div>
-
-				<div>
-					<input type="hidden" th:field="*{infoStatus}" /> 
-				</div><br>
-
-				<div>
-					<div></div>
-					<div>
-						<button type="submit" class="btn btn-success d-flex justify-content-center" id="submit addinfobutton" >
-							送出新增</button>
+				<h3><b>新增最新消息</b></h3>
+				<br>
+	        <form th:action="@{insertInfo}" method="post" th:object="${shopInfoVO}" enctype="multipart/form-data">
+		            <!-- 統一顯示錯誤訊息的區域 -->
+		            <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors()}">
+		                <ul>
+		                    <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+		                </ul>
+		            </div>
+	
+					<div class="mb-3">
+						<label for="infoHead" class="form-label">標題:</label> <input
+							type="text" th:field="*{infoHead}"
+							class="form-control"
+							id="infoHead" placeholder="輸入標題"> 
 					</div>
-					<div></div>
-				</div>
-			</form>
-
-		</div>
-	</main>
+	
+	
+					<div class="mb-3">
+						<label for="infoContent" class="form-label">內容:</label>
+						<textarea th:field="*{infoContent}"
+							class="form-control"
+							id="infoContent" rows="5"></textarea>
+					</div><br>
+	
+					<!-- 上傳圖片用 -->
+					<div class="mb-3">
+						<label for="infoPic" class="form-label"
+							>新增圖片</label> <input type="file"
+							th:field="*{infoPic}"  class="form-control"> 
+	
+						<!-- 預覽圖片容器 -->
+						<div id="preview" class="mt-2"></div>
+					</div>
+	
+	
+					<div>
+						<input type="hidden" th:field="*{infoDate}" /> 
+					</div>
+	
+					<div>
+						<input type="hidden" th:field="*{infoStatus}" /> 
+					</div><br>
+	
+					<div>
+						<div></div>
+						<div>
+							<button type="submit" class="btn btn-success d-flex justify-content-center" id="submit addinfobutton" >
+								送出新增</button>
+						</div>
+						<div></div>
+					</div>
+				</form>
+			</div>
+		</main>
+	
+	</div>
 
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

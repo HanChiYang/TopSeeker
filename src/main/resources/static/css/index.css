@@ -18,6 +18,42 @@ h2 {
   color: blue;
   padding: 0rem 1.0rem 0rem 0rem;
 }
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.video-background video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+}
+div.container2 {
+    margin:  auto;
+    max-width: 90%;
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.8); /* 设置白色背景，透明度为0.8 */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+.indexh1 {
+    margin-bottom: 30px;
+  
+    font-size: 2.5rem;
+    color: #333;
+}
 
 .navbar-brand {
   font-size: 25px;
@@ -56,5 +92,252 @@ a:hover, a:active {
 background-color: black;
 	
 	}
+	
+	
+	
+.navigation-footer {
+  position: relative;
+  width: 100%;
+  height: 264px;
+  margin: 114px 0 0 0;
+  background: #ffffff;
+  z-index: 35;
+  overflow: hidden;
+}
+.flex-column-bbd {
+  position: absolute;
+  width: 1280px;
+  height: 149px;
+  top: 1px;
+  left: 80px;
+  z-index: 52;
+}
+.divider {
+  position: relative;
+  width: 1208px;
+  height: 1px;
+  margin: -1px 0 0 0;
+  background: url(../images/youtube.png)
+    no-repeat center;
+  background-size: cover;
+  z-index: 52;
+}
+.phone {
+  display: block;
+  position: relative;
+  height: 36px;
+  margin: 87px 0 0 430px;
+  color: #000000;
+  font-family: Inter, var(--default-font-family);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 36px;
+  text-align: left;
+  white-space: nowrap;
+  z-index: 37;
+}
+.contact-address {
+  display: block;
+  position: relative;
+  height: 36px;
+  margin: -10px 0 0 431px;
+  color: #000000;
+  font-family: Inter, var(--default-font-family);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 36px;
+  text-align: left;
+  white-space: nowrap;
+  z-index: 36;
+}
+.flex-column-e {
+  position: absolute;
+  width: 184px;
+  height: 164px;
+  top: 52px;
+  left: 80px;
+  font-size: 0px;
+  z-index: 39;
+}
+.site-name {
+  display: block;
+  position: relative;
+  height: 36px;
+  margin: 0 0 0 0;
+  color: #000000;
+  font-family: Inter, var(--default-font-family);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 36px;
+  text-align: left;
+  white-space: nowrap;
+  z-index: 38;
+}
+.social-icons {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  gap: 8px;
+  position: relative;
+  width: 184px;
+  margin: 88px 0 0 0;
+  z-index: 39;
+}
+.buttons-icon {
+  flex-shrink: 0;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  z-index: 40;
+  border-radius: 4px;
+}
+.icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  margin: 8px 0 0 8px;
+  z-index: 41;
+  overflow: visible auto;
+}
+.icon-11 {
+  position: relative;
+  width: 20px;
+  height: 19.92px;
+  margin: 2.04px 0 0 2px;
+  background: url(../images/line.png)
+    no-repeat center;
+  background-size: cover;
+  z-index: 42;
+}
+.buttons-icon-12 {
+  flex-shrink: 0;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  z-index: 43;
+  border-radius: 4px;
+}
+.icon-13 {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  margin: 8px 0 0 8px;
+  z-index: 44;
+  overflow: visible auto;
+}
+.icon-14 {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  margin: 3px 0 0 3px;
+  background: url(../images/facebook.png)
+    no-repeat center;
+  background-size: cover;
+  z-index: 45;
+}
+.buttons-icon-15 {
+  flex-shrink: 0;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  z-index: 46;
+  border-radius: 4px;
+}
+.icon-16 {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  margin: 8px 0 0 8px;
+  z-index: 47;
+  overflow: visible auto;
+}
+.icon-17 {
+  position: relative;
+  width: 20px;
+  height: 14px;
+  margin: 5px 0 0 2px;
+  background: url(../images/youtube.png)
+    no-repeat center;
+  background-size: cover;
+  z-index: 48;
+}
+.buttons-icon-18 {
+  flex-shrink: 0;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  z-index: 49;
+  border-radius: 4px;
+}
+.icon-19 {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  margin: 8px 0 0 8px;
+  z-index: 50;
+  overflow: visible auto;
+}
+.icon-1a {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0 2px;
+  background: url(../images/igpic.png)
+    no-repeat center;
+  background-size: cover;
+  z-index: 51;
+}
+.image {
+  position: absolute;
+  width: 1280px;
+  height: 744px;
+  top: 50%;
+  left: 50%;
+  background: url(../images/line.png)
+    no-repeat center;
+  background-size: cover;
+  transform: translate(-49.69%, -117.41%);
+  z-index: 1;
+}
+<!-- -->
+.dropdown {
+      position: relative;
+      display: inline-block;
+        z-index: 60;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+      z-index: 61;
+    }
+
+    .dropdown-content a {
+    
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .dropdown:hover .dropbtn {
+      background-color: #3e8e41;
+    }
+     .welcome-message {
+        font-size: 10px; /* 字體大小 */
+    }
+  
 	
 	

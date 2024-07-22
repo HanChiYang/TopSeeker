@@ -10,12 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 
-import org.hibernate.validator.constraints.time.DurationMax;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -78,7 +76,7 @@ public class SaleVO implements java.io.Serializable {
 	}
 	
 	@Column(name = "sale_amount")
-	@NotNull(message="請輸入活動金額門檻")
+	@NotNull(message="請正確輸入活動金額門檻")
 	public Integer getSaleAmount() {
 		return saleAmount;
 	}
@@ -88,7 +86,7 @@ public class SaleVO implements java.io.Serializable {
 	}
 	
 	@Column(name = "sale_discount")
-	@NotNull(message="請輸入促銷折扣")
+	@NotNull(message="請正確輸入促銷折扣")
 	@DecimalMin(value = "0.01", message = "方案折扣: 不能小於{value}")
 	@DecimalMax(value = "0.99", message = "方案折扣: 不能超過{value}")
 	public Double getSaleDiscount() {
@@ -99,6 +97,16 @@ public class SaleVO implements java.io.Serializable {
 		this.saleDiscount = saleDiscount;
 	}
 	
+	//驗證起始日期早於結束日期
+	public boolean isStartDateBeforeEndDate(Timestamp saleStdate, Timestamp saleEddate) {
+		if (this.saleStdate == null) 
+            this.saleStdate = new Timestamp(System.currentTimeMillis());
+        
+        if (this.saleEddate == null) 
+            this.saleEddate = new Timestamp(System.currentTimeMillis());
+		
+		return this.saleStdate.before(this.saleEddate);
+    }
 	
 
 }

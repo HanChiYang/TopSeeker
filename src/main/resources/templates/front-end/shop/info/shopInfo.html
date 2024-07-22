@@ -29,37 +29,44 @@
 
 
 <style>
-body {
-	font-family: Arial, sans-serif;
-	background-color: #f4f4f4;
-	margin: 0;
-	padding: 20px;
-	color: #333;
-}
+body { 
+margin-bottom: 50px;
+ }
 
 .news-container {
-	max-width: 600px;
+	position: relative;
+	top: 40px;
+	max-width: 800px;
 	margin: 0 auto;
 }
 
 .news-item {
-	background-color: #fff;
+	background-color: rgba(250, 241, 228, 0.8);
 	margin-bottom: 20px;
 	padding: 20px;
 	border-radius: 8px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+.img-container {
+    display: flex; /* 使用Flexbox */
+    justify-content: center; /* 水平居中 */
 }
 
 .news-item img {
 	max-width: 100%;
 	height: auto;
 	border-radius: 8px;
+	display: block; 
 }
 
 .news-item h2 {
 	font-size: 24px;
-	margin: 15px 0;
+	margin: 10px 0;
+	margin-top: 0;
 	color: #333;
+	font-weight: bold;
 }
 
 .news-item p {
@@ -67,6 +74,20 @@ body {
 	line-height: 1.5;
 	color: #666;
 }
+
+
+.news-item .info-date {
+/*     position: absolute; */
+    top: 10px;
+    left: 10px;
+    background-color: rgba(255, 255, 255, 0);
+    padding: 5px 0px;
+    border-radius: 4px;
+    color: rgba(26, 26, 26, 0.8);
+    font-size: 14px;
+    margin-top: 10px;
+}
+
 </style>
 </head>
 <body>
@@ -78,14 +99,18 @@ body {
 
 
 
-	<div class="news-container">
+	<main class="news-container">
 
 
 		<div class="news-item" th:each="shopInfoVO: ${shopInfoListData}"
 			th:data-info-no="${shopInfoVO.infoNo}">
-			<img
-				th:src="@{/shop/DBGifReader4} + '?infoNo=' + ${shopInfoVO.infoNo}"
-				alt="最新消息圖片">
+
+		    <div class="img-container">
+		        <img
+		            th:src="@{/shop/DBGifReader4} + '?infoNo=' + ${shopInfoVO.infoNo}"
+		            alt="最新消息圖片">
+		    </div>
+		    <div class="info-date" th:text="'發布日期：' + ${#dates.format(shopInfoVO.infoDate, 'yyyy-MM-dd')}"></div>
 			<h2 th:text="${shopInfoVO.infoHead}"></h2>
 			<p th:text="${shopInfoVO.infoContent}"></p>
 		</div>
@@ -108,6 +133,6 @@ body {
 		<script src="/js/shop_front_end.js"></script>
 
 
-	</div>
+	</main>
 </body>
 </html>

@@ -23,8 +23,8 @@
 	rel="stylesheet">
 
 
-<!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<!-- Topseeker後台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/back_end.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
@@ -50,91 +50,99 @@
 	<!-- topseeker後台Navbar -->
 	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
 
-	<!-- 商城後台用Navbar + 左側邊欄 -->
+	<!-- 商城後台用Navbar -->
 	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
-
-	<main class="shopManagementContent">
-	<div class="listAllShopInfoDisplay">
-		<table id="example" class="display">
-			<thead>
-				<tr style="background-color: #d9ead3">
-					<th>消息編號</th>
-					<th>發布日期</th>
-					<th>圖片</th>
-					<th>標題</th>
-					<th>內容</th>
-					<th width="150px">消息狀態</th>
-					<th>修改</th>
-					<!-- 					<th>刪除</th> -->
-				</tr>
-			</thead>
-			<tbody>
-				<th:block th:each="shopInfoVO : ${shopInfoListData}"> 
-					<tr>
-						<td th:text="${shopInfoVO.infoNo}"></td>
-						<td th:text="${shopInfoVO.infoDate}"></td>
-						<td><img
-							th:src="@{/shop/DBGifReader4} + '?infoNo=' + ${shopInfoVO.infoNo} "
-							width="50px"></td>
-							
-						<td th:text="${shopInfoVO.infoHead}"></td>
-						
-						<td
-							th:text="${#strings.abbreviate(shopInfoVO.infoContent, 100)}"></td>
-
-						<td width="100px">
-							<!-- 賦一個隱藏的值給DataTable排序用 -->
-							<span style="display:none" th:text="${shopInfoVO.infoStatus}"></span>
-
-							<div class="btn-group" role="group"
-								aria-label="Basic radio toggle button group">
-								<!-- 上架中按鈕 -->
-								<input type="radio" class="btn-check"
-									th:name="'infoStatus-' + ${shopInfoVO.infoNo}"
-									th:id="'success-outlined-' + ${shopInfoVO.infoNo}"
-									autocomplete="off"
-									th:checked="${shopInfoVO.infoStatus == 1}"> <label
-									class="btn btn-outline-success"
-									th:for="'success-outlined-' + ${shopInfoVO.infoNo}"
-									th:onclick="'updateInfoStatus(' + ${shopInfoVO.infoNo} + ', 1)'" th:value="${shopInfoVO.infoStatus}">上架中</label>
-
-								<!-- 下架按鈕 -->
-								<input type="radio" class="btn-check"
-									th:name="'infoStatus-' + ${shopInfoVO.infoNo}"
-									th:id="'secondary-outlined-' + ${shopInfoVO.infoNo}"
-									autocomplete="off"
-									th:checked="${shopInfoVO.infoStatus == 0}"> <label
-									class="btn btn-outline-secondary"
-									th:for="'secondary-outlined-' + ${shopInfoVO.infoNo}"
-									th:onclick="'updateInfoStatus(' + ${shopInfoVO.infoNo} + ', 0)'" th:value="${shopInfoVO.infoStatus}">下架</label>
-							</div>
-
-
-<!-- 						</td> -->
-						<td width="100px">
-							<form method="post"
-								th:action="@{getOneInfo_For_Update}"
-								style="margin-bottom: 0;">
-								<button type="submit" class="btn btn-warning text-white">
-									<i class="fas fa-edit"></i> 修改
-								</button>
-								<input type="hidden" name="infoNo"
-									th:value="${shopInfoVO.infoNo}">
-							</form>
-						</td>
-						<!-- 						<td> -->
-						<!-- 							<form method="post" th:action="@{/shop/shopManagement/delete}" -->
-						<!-- 								style="margin-bottom: 0px;"> -->
-						<!-- 								<input type="submit" value="刪除"> <input type="hidden" -->
-						<!-- 									name="prodNo" th:value="${shopProductVO.prodNo}"> -->
-						<!-- 							</form> -->
-						<!-- 						</td> -->
-					</tr>
-				</th:block>
-			</tbody>
-		</table>
+	
+	<div class="shopContent">	
+		
+		<!-- 商城後台用左側邊欄 -->
+		<aside class="sidebar" th:insert="~{/back-end/shop/shop_back_end_sidebar.html}"></aside>
+	
+		<main class="shopManagementContent">
+			<div class="content">
+				<table id="example" class="display">
+					<thead>
+						<tr style="background-color: #d9ead3">
+							<th>消息編號</th>
+							<th>發布日期</th>
+							<th>圖片</th>
+							<th>標題</th>
+							<th>內容</th>
+							<th width="150px">消息狀態</th>
+							<th>修改</th>
+							<!-- 					<th>刪除</th> -->
+						</tr>
+					</thead>
+					<tbody>
+						<th:block th:each="shopInfoVO : ${shopInfoListData}"> 
+							<tr>
+								<td th:text="${shopInfoVO.infoNo}"></td>
+								<td th:text="${shopInfoVO.infoDate}"></td>
+								<td><img
+									th:src="@{/shop/DBGifReader4} + '?infoNo=' + ${shopInfoVO.infoNo} "
+									width="50px"></td>
+									
+								<td th:text="${shopInfoVO.infoHead}"></td>
+								
+								<td
+									th:text="${#strings.abbreviate(shopInfoVO.infoContent, 100)}"></td>
+		
+								<td width="100px">
+									<!-- 賦一個隱藏的值給DataTable排序用 -->
+									<span style="display:none" th:text="${shopInfoVO.infoStatus}"></span>
+		
+									<div class="btn-group" role="group"
+										aria-label="Basic radio toggle button group">
+										<!-- 上架中按鈕 -->
+										<input type="radio" class="btn-check"
+											th:name="'infoStatus-' + ${shopInfoVO.infoNo}"
+											th:id="'success-outlined-' + ${shopInfoVO.infoNo}"
+											autocomplete="off"
+											th:checked="${shopInfoVO.infoStatus == 1}"> <label
+											class="btn btn-outline-success"
+											th:for="'success-outlined-' + ${shopInfoVO.infoNo}"
+											th:onclick="'updateInfoStatus(' + ${shopInfoVO.infoNo} + ', 1)'" th:value="${shopInfoVO.infoStatus}">上架中</label>
+		
+										<!-- 下架按鈕 -->
+										<input type="radio" class="btn-check"
+											th:name="'infoStatus-' + ${shopInfoVO.infoNo}"
+											th:id="'secondary-outlined-' + ${shopInfoVO.infoNo}"
+											autocomplete="off"
+											th:checked="${shopInfoVO.infoStatus == 0}"> <label
+											class="btn btn-outline-secondary"
+											th:for="'secondary-outlined-' + ${shopInfoVO.infoNo}"
+											th:onclick="'updateInfoStatus(' + ${shopInfoVO.infoNo} + ', 0)'" th:value="${shopInfoVO.infoStatus}">下架</label>
+									</div>
+		
+		
+		<!-- 						</td> -->
+								<td width="100px">
+									<form method="post"
+										th:action="@{getOneInfo_For_Update}"
+										style="margin-bottom: 0;">
+										<button type="submit" class="btn btn-warning text-white">
+											<i class="fas fa-edit"></i> 修改
+										</button>
+										<input type="hidden" name="infoNo"
+											th:value="${shopInfoVO.infoNo}">
+									</form>
+								</td>
+								<!-- 						<td> -->
+								<!-- 							<form method="post" th:action="@{/shop/shopManagement/delete}" -->
+								<!-- 								style="margin-bottom: 0px;"> -->
+								<!-- 								<input type="submit" value="刪除"> <input type="hidden" -->
+								<!-- 									name="prodNo" th:value="${shopProductVO.prodNo}"> -->
+								<!-- 							</form> -->
+								<!-- 						</td> -->
+							</tr>
+						</th:block>
+					</tbody>
+				</table>
+			</div>
+		</main>
+	
 	</div>
-	</main>
+
 
 
 	<!-- ●● jquery datatables 設定 -->

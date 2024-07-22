@@ -23,8 +23,8 @@
 	rel="stylesheet">
 
 
-<!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<!-- Topseeker後台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/back_end.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
@@ -33,6 +33,15 @@
 
 <style>
 
+	main.shopManagementContent {
+		padding: 30px 50px;
+	}
+
+	button {
+	
+	margin-left: 280px;
+	}
+
 </style>
 </head>
 <body>
@@ -40,114 +49,104 @@
 	<!-- topseeker後台Navbar -->
 	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
 
-	<!-- 商城後台用Navbar + 左側邊欄 -->
+	<!-- 商城後台用Navbar -->
 	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
+	
+	<div class="shopContent">	
+		
+		<!-- 商城後台用左側邊欄 -->
+		<aside class="sidebar" th:insert="~{/back-end/shop/shop_back_end_sidebar.html}"></aside>
+	
+		<main class="shopManagementContent">
+			<div class="shopManagementInput">
+				<h3><b>新增商品</b></h3>
+				<br>
+				
+				
+	        <form th:action="@{insert}" method="post" th:object="${shopProductVO}" enctype="multipart/form-data">
+	        
+	        
+	            <!-- 統一顯示錯誤訊息的區域 -->
+	            <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors()}">
+	                <ul>
+	                    <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+	                </ul>
+	            </div>
 
+					<div class="mb-3">
+						<label for="prodName" class="form-label">商品名稱:</label> <input
+							type="text" th:field="*{prodName}"
+							class="form-control"
+							id="prodName" placeholder="輸入商品全名" /> 
 
-	<main class="shopManagementContent">
-		<div class="shopManagementInput">
-			<h4><b>新增商品</b></h4>
-			<br>
-        <form th:action="@{insert}" method="post" th:object="${shopProductVO}" enctype="multipart/form-data">
-            <!-- 統一顯示錯誤訊息的區域 -->
-            <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors()}">
-                <ul>
-                    <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
-                </ul>
-            </div>
-
-				<!-- 錯誤表列 -->
-				<!-- 		<div class="alert alert-danger" role="alert" th:utext="${errorMessage}">${errorMessage}</div><br> -->
-
-				<div class="mb-3">
-					<label for="prodName" class="form-label">商品名稱:</label> <input
-						type="text" th:field="*{prodName}"
-						class="form-control"
-						id="prodName" placeholder="輸入商品全名"> 
-<!-- 						<span -->
-<!-- 						class="alert alert-danger" role="alert" -->
-<!-- 						th:if="${#fields.hasErrors('prodName')}" th:errors="*{prodName}" -->
-<!-- 						id="prodName.errors"></span> -->
-				</div>
-
-				<div>
-					<label for="prodTypeNo" class="form-label">商品類別:</label> <select
-						th:field="*{shopProductTypeVO.prodTypeNo}" class="form-select"
-						id="prodTypeNo">
-						<option selected value="1">包袋</option>
-						<option value="2">鞋類</option>
-						<option value="3">裝備配件</option>
-						<option value="4">服飾</option>
-					</select> 
-<!-- 					<span class="alert alert-danger" role="alert" -->
-<!-- 						th:if="${#fields.hasErrors('shopProductTypeVO.prodTypeNo')}" -->
-<!-- 						th:errors="*{shopProductVO.shopProductTypeVO.prodTypeNo}" -->
-<!-- 						id="shopProductTypeVO.prodTypeNo.errors"></span> -->
-				</div><br>
-
-				<div class="mb-3">
-					<label for="prodPrice" class="form-label">定價:</label> <input
-						type="text" th:field="*{prodPrice}"
-						class="form-control"
-						id="prodPrice" placeholder="輸入價格"> 
-<!-- 						<span -->
-<!-- 						class="alert alert-danger" role="alert" -->
-<!-- 						th:if="${#fields.hasErrors('prodPrice')}" th:errors="*{prodPrice}" -->
-<!-- 						id="prodPrice.errors"></span> -->
-				</div><br>
-
-
-
-				<div class="mb-3">
-					<label for="prodInfo" class="form-label">商品介紹:</label>
-					<textarea th:field="*{prodInfo}"
-						class="form-control"
-						id="prodInfo" rows="5"></textarea>
-<!-- 					<span class="alert alert-danger" role="alert" -->
-<!-- 						th:if="${#fields.hasErrors('prodInfo')}" th:errors="*{prodInfo}" -->
-<!-- 						id="prodInfo.errors"></span> -->
-				</div><br>
-
-				<!-- 上傳圖片用 -->
-				<div class="mb-3">
-					<label for="prodPic" class="form-label"
-						th:field="*{shopProductPics}">新增商品圖片</label> <input type="file"
-						name="picSet" id="prodPic" class="form-control" multiple> 
-<!-- 						<span -->
-<!-- 						class="alert alert-danger" role="alert" th:utext="${errorMessage}" -->
-<!-- 						id="upFiles.errors">${errorMessage} </span> -->
-
-					<!-- 預覽圖片容器 -->
-					<div id="preview" class="mt-2"></div>
-				</div>
-
-
-				<div>
-					<input type="hidden" th:field="*{prodDate}" /> 
-<!-- 					<span -->
-<!-- 						th:if="${#fields.hasErrors('prodDate')}" th:errors="*{prodDate}" -->
-<!-- 						class="error" id="prodDate.errors"></span> -->
-				</div>
-
-				<div>
-					<input type="hidden" th:field="*{prodStatus}" /> 
-<!-- 					<span -->
-<!-- 						th:if="${#fields.hasErrors('prodStatus')}" -->
-<!-- 						th:errors="*{prodStatus}" class="error" id="prodStatus.errors"></span> -->
-				</div><br>
-
-				<div>
-					<div></div>
-					<div>
-						<button type="submit" class="btn btn-success d-flex justify-content-center" id="submit addprodbutton" >
-							送出新增</button>
 					</div>
-					<div></div>
-				</div>
-			</form>
+	
+					<div>
+						<label for="prodTypeNo" class="form-label">商品類別:</label> <select
+							th:field="*{shopProductTypeVO.prodTypeNo}" class="form-select"
+							id="prodTypeNo">
+							<option selected value="1">包袋</option>
+							<option value="2">鞋類</option>
+							<option value="3">裝備配件</option>
+							<option value="4">服飾</option>
+						</select> 
 
-		</div>
-	</main>
+					</div><br>
+	
+					<div class="mb-3">
+						<label for="prodPrice" class="form-label">定價:</label> <input
+							type="number" th:field="*{prodPrice}"
+							class="form-control"
+							id="prodPrice" placeholder="輸入價格"> 
+
+					</div><br>
+	
+	
+	
+					<div class="mb-3">
+						<label for="prodInfo" class="form-label">商品介紹:</label>
+						<textarea th:field="*{prodInfo}"
+							class="form-control"
+							id="prodInfo" rows="5"></textarea>
+
+					</div><br>
+	
+					<!-- 上傳圖片用 -->
+					<div class="mb-3">
+						<label for="prodPic" class="form-label"
+							th:field="*{shopProductPics}">新增商品圖片</label> <input type="file"
+							name="picSet" id="prodPic" class="form-control" multiple> 
+
+	
+						<!-- 預覽圖片容器 -->
+						<div id="preview" class="mt-2"></div>
+					</div>
+	
+	
+					<div>
+						<input type="hidden" th:field="*{prodDate}" /> 
+
+					</div>
+	
+					<div>
+						<input type="hidden" th:field="*{prodStatus}" /> 
+					</div><br>
+	
+					<div>
+						<div></div>
+						<div>
+							<button type="submit" class="btn btn-success d-flex justify-content-center" id="submit addprodbutton" >
+								送出新增</button>
+						</div>
+						<div></div>
+					</div>
+				</form>
+	
+			</div>
+		</main>
+	
+	</div>
+
 
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -166,6 +165,12 @@
 	<script src="/js/shop_front_end.js"></script>
 
 	<script type="text/javascript">
+	
+		//清除提示信息
+		function hideContent(d) {
+		     document.getElementById(d).style.display = "none";
+		}
+	
 		$(document).ready(
 				function() {
 					// 預覽上傳圖片
@@ -192,10 +197,6 @@
 							});
 				});
 
-		//清除提示信息
-// 		function hideContent(d) {
-// 			document.getElementById(d).style.display = "none";
-// 		}
 	</script>
 
 </body>

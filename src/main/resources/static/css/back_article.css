@@ -10,22 +10,23 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
+    background-image: url('/images/mypic1.jpg'); /* 设置背景图片 */
+    background-size: cover; /* 背景图片大小 */
+    background-position: center; /* 背景图片位置 */
+    background-repeat: no-repeat; /* 防止背景图片重复 */
 }
 
 img {
     max-width: 100%;
 }
 
-div.container {
-    margin-top: 20px;
+div.container4 {
+    margin: 20px auto;
     max-width: 90%;
     padding: 20px;
-    background-image: url('/images/broderuse2.jpg'); /* 设置背景图片 */
-    background-size: cover; /* 背景图片大小 */
-    background-position: center; /* 背景图片位置 */
-    background-repeat: no-repeat; /* 防止背景图片重复 */
+  
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.8); /* 设置白色背景，透明度为0.8 */
     margin-bottom: 20px;
     font-size: 20px;
     font-weight: bold;
@@ -36,12 +37,9 @@ div.article-details {
     max-width: 90%;
     margin: 0 auto;
     padding: 20px;
-    background-image: url('/images/broderuse2.jpg'); /* 设置背景图片 */
-    background-size: cover; /* 背景图片大小 */
-    background-position: bottom; /* 背景图片位置 */
-    background-repeat: no-repeat; /* 防止背景图片重复 */
+   
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.8); /* 设置白色背景，透明度为0.8 */
     margin-bottom: 20px;
 }
 h1, h2, h3, h4, h5, h6 {

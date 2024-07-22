@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -41,6 +42,7 @@ import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
 import com.topseeker.participant.model.ParticipantService;
 import com.topseeker.participant.model.ParticipantVO;
+import java.util.HashMap;
 
 @Controller
 @Validated
@@ -80,12 +82,36 @@ public class ParticipantController {
 	    @PostMapping("insert")
 	    public String insert(@Valid ParticipantVO participantVO, BindingResult result, ModelMap model,
 	                         MultipartFile[] parts, HttpSession session) throws IOException {
-	        if (result.hasErrors()) {
-	            return "front-end/participant/addParticipant";
-	        }
+//	        if (result.hasErrors()) {
+//	            return "front-end/participant/addParticipant";
+//	        }
+//
+//	        participantSvc.addParticipant(participantVO);
 
-	        participantSvc.addParticipant(participantVO);
+	    	ActVO actVO = actSvc.getOneAct(participantVO.getActVO().getActNo());
+		    if (actVO != null) {
+		        int currentCount = actVO.getActCurrentCount();
+		        int checkCount = actVO.getActCheckCount();
+		        int totalParticipants = currentCount + checkCount;
 
+		     // 檢查參與人數是否超過限制
+		        if (participantVO.getActJoinCount() > (actVO.getActMaxCount() - totalParticipants)) {
+		            model.addAttribute("errorMessage", "參與人數超過活動可接受人數限制");
+		            model.addAttribute("actTitle", actVO.getActTitle());
+
+		            MemberVO loggedInMember = (MemberVO) session.getAttribute("loggedInMember");
+		            if (loggedInMember != null) {
+		                model.addAttribute("memName", loggedInMember.getMemName());
+		            }
+
+		            model.addAttribute("participantVO", participantVO); // 保持參團資訊
+		            return "front-end/participant/addParticipant";  // 返回表單頁面，並顯示錯誤信息
+		        }
+
+		        // 新增參與者並更新活動待審核人數
+		        participantSvc.addParticipant(participantVO);
+		        actSvc.updateActCheckCount(actVO.getActNo(), participantVO.getActJoinCount());
+		    }
 	        model.addAttribute("participantListData", participantSvc.getAll());
 	        model.addAttribute("success", "- (新增成功)");
 	        return "redirect:/participant/listMyAllParticipant";
@@ -138,6 +164,20 @@ public class ParticipantController {
 
 	    // 获取关联的 ActVO
 	    ActVO actVO = actSvc.getOneAct(participantVO.getActVO().getActNo());
+	    
+	    // 確保 actRateSum 和 evalSum 不為 null
+	    if (actVO.getActRateSum() == null) {
+	        actVO.setActRateSum(0);
+	    }
+
+	    // 更新 ActVO 的 actRateSum 和 evalSum
+	    if (actStar != null) {
+	        int newActRateSum = actVO.getActRateSum() + actStar;
+	        int newEvalSum = actVO.getEvalSum() + 1;
+	        actVO.setActRateSum(newActRateSum);
+	        actVO.setEvalSum(newEvalSum);
+	        actSvc.updateAct(actVO);
+	    }
 
 	    // 添加活动标题到模型
 	    model.addAttribute("participantVO", participantVO);
@@ -247,9 +287,36 @@ public class ParticipantController {
 	@PostMapping("updateStatus")
 	public String updateStatus(@RequestParam("actPartNo") Integer actPartNo, @RequestParam("actCommit") Integer actCommit, ModelMap model) {
 	    ParticipantVO participantVO = participantSvc.getOneParticipant(actPartNo);
+	    
+	    Integer previousStatus = participantVO.getActCommit();
+	    Integer joinCount = participantVO.getActJoinCount();
+	    
 	    participantVO.setActCommit(actCommit);
 	    participantSvc.updateParticipant(participantVO);
 
+	    // 取得對應的活動資料
+	    ActVO actVO = actSvc.getOneAct(participantVO.getActVO().getActNo());
+	    
+	    // 如果狀態從"待審核"變為"審核通過"
+	    if (previousStatus == 0 && actCommit == 1) {
+	        // 更新活動的已參與人數
+	        actVO.setActCurrentCount(actVO.getActCurrentCount() + joinCount);
+	        // 更新活動的待審核人數
+	        actVO.setActCheckCount(actVO.getActCheckCount() - joinCount);
+	        // 如果已參與人數等於已報名人數上限，將活動狀態設為1
+	        if (actVO.getActCurrentCount().equals(actVO.getActMaxCount())) {
+	            actVO.setActStatus(1);
+	        }
+	    }
+	    // 如果狀態從"待審核"變為"審核不通過"
+	    else if (previousStatus == 0 && actCommit == 2) {
+	        // 更新活動的待審核人數
+	        actVO.setActCheckCount(actVO.getActCheckCount() - joinCount);
+	    }
+
+	    // 更新活動資料
+	    actSvc.updateAct(actVO);
+	    
 	    List<ParticipantVO> list = participantSvc.getAll();
 	    model.addAttribute("participantListData", list);
 	    return "front-end/participant/participantCheck";
@@ -261,6 +328,16 @@ public class ParticipantController {
 	    model.addAttribute("participantListData", list);
 	    return "front-end/participant/participantCheck"; 
 	}
-
+	
+	@PostMapping("/checkIfSignedUp")
+	@ResponseBody
+	public Map<String, Object> checkIfSignedUp(@RequestParam("actNo") Integer actNo, @RequestParam("memNo") Integer memNo) {
+	    Map<String, Object> response = new HashMap<>();
+	    List<ParticipantVO> participants = participantSvc.getAll();
+	    boolean signedUp = participants.stream()
+	                                    .anyMatch(p -> p.getActVO().getActNo().equals(actNo) && p.getMemberVO().getMemNo().equals(memNo));
+	    response.put("signedUp", signedUp);
+	    return response;
+	}
 
 }

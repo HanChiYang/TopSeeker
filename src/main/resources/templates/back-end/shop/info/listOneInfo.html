@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>修改消息結果</title>
+<title>修改結果</title>
 
 <!-- Bootstrap CSS -->
 <link
@@ -23,88 +23,108 @@
 	rel="stylesheet">
 
 
-<!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<!-- Topseeker後台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/back_end.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
 
 
-<style type="text/css">
+<style>
 
-.content{
-width: 70%
-}
-
-
-.backbutton{
-margin-left: auto;
-margin-right: auto;
-
-}
+	.content{
+	width: 75%
+	}
+	
+	main.shopManagementContent {
+		padding: 30px 50px;
+	}
+	
+	img.mb-2 {
+    max-width: 400px;
+    height: auto; /* 確保比例不變 */
+    margin-left: auto;
+	margin-right: auto;
+	}
+	
+	.backbutton{
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 30px;
+	
+	}
 </style>
 </head>
 <body>
 
+
 	<!-- topseeker後台Navbar -->
 	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
 
-	<!-- 商城後台用Navbar + 左側邊欄 -->
+	<!-- 商城後台用Navbar -->
 	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
-
-
-<main class="shopManagementContent">
-	<div class="content">
-		<!-- 此div被select_page.html第158行insert用 -->
-		<div class="card">
-			<div class="card-header text-center">
-				<h3>修改結果 :</h3>
-			</div>
-			<div class="card-body">
-				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">消息修改時間:</div>
-					<div class="col-sm-8" th:text="${shopInfoVO.infoDate}"></div>
-				</div>
-				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">商品狀態:</div>
-					<div class="col-sm-8">
-						<span th:switch="${shopInfoVO.infoStatus}"> <span
-							th:case="'0'">下架</span> <span th:case="'1'">上架</span>
-						</span>
+	
+	<div class="shopContent">	
+		
+		<!-- 商城後台用左側邊欄 -->
+		<aside class="sidebar" th:insert="~{/back-end/shop/shop_back_end_sidebar.html}"></aside>
+	
+		<main class="shopManagementContent">
+			<div class="content">
+				<div class="card">
+					<div class="card-header text-center">
+						<h3>
+							<b>修改結果 :</b>
+						</h3>
 					</div>
-				</div>
+					<div class="card-body">
+						<div class="row mb-2">
+							<div class="col-sm-4 font-weight-bold">消息修改時間:</div>
+							<div class="col-sm-8" th:text="${shopInfoVO.infoDate}"></div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-sm-4 font-weight-bold">消息狀態:</div>
+							<div class="col-sm-8">
+								<span th:switch="${shopInfoVO.infoStatus}"> <span
+									th:case="'0'">下架</span> <span th:case="'1'">上架</span>
+								</span>
+							</div>
+						</div>
+            
+						<div class="row mb-2">
+							<div class="col-sm-4 font-weight-bold">消息編號:</div>
+							<div class="col-sm-8" th:text="${shopInfoVO.infoNo}"></div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-sm-4 font-weight-bold">標題:</div>
+							<div class="col-sm-8" th:text="${shopInfoVO.infoHead}"></div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-sm-4 font-weight-bold">內容:</div>
+							<pre class="col-sm-8" th:text="${shopInfoVO.infoContent}"></pre>
+						</div>
 
-				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">消息編號:</div>
-					<div class="col-sm-8" th:text="${shopInfoVO.infoNo}"></div>
-				</div>
-				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">標題:</div>
-					<div class="col-sm-8" th:text="${shopInfoVO.infoHead}"></div>
-				</div>
-				<div class="row mb-2">
-					<div class="col-sm-4 font-weight-bold">消息內容:</div>
-					<pre class="col-sm-8" th:text="${shopInfoVO.infoContent}"></pre>
-				</div>
-
-				<div class="mb-3">
-					<label for="infoPic" class="form-label">消息圖片:</label>
-					<div th:field="${shopInfoVO.infoNo}" id="infoPic" class="d-flex flex-row flex-wrap">
-							<img
-								th:src="@{/shop/DBGifReader4} + '?infoNo=' + *{shopInfoVO.infoNo}"
-								class="img-thumbnail mb-2" width="400" height="300">
+						<div class="mb-3">
+							<label for="infoPic" class="form-label">圖片:</label>
+							<div th:field="${shopInfoVO.infoNo}" id="infoPic"
+								class="d-flex flex-row flex-wrap">
+								<img
+									th:src="@{/shop/DBGifReader4} + '?infoNo=' + *{shopInfoVO.infoNo}"
+									class="img-thumbnail mb-2">
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="text-center">
-					<a th:href="@{/shop/shopManagement/listAllShopInfo}"
-						class="btn btn-success backbutton" role="button">繼續修改最新消息</a>
-				</div>
+					<div class="text-center">
+						<a th:href="@{/shop/shopManagement/listAllShopInfo}"
+							class="btn btn-success backbutton" role="button">繼續修改最新消息</a>
+					</div>
 
+				</div>
 			</div>
-		</div>
+		</main>
+	
 	</div>
-</main>
+	
 
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

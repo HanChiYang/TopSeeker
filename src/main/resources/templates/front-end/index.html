@@ -3,31 +3,135 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
 <title>首頁</title>
-
+<link rel="stylesheet" th:href="@{/css/index.css}">
 <link rel="stylesheet" th:href="@{/css/common.css}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<style>
+    .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+    .content-item {
+        opacity: 0; /* 初始状态下透明 */
+        transition: opacity 1s ease-in-out;
+    }
+</style>
 </head>
 <body>
+<nav th:insert="~{/front-end/navbar.html}" ></nav>
 
-<nav th:insert="~{/front-end/navbar.html}"></nav>
+<div class="video-background">
+    <video autoplay muted loop id="video1">
+        <source src="/images/mountainmedia.mp4" type="video/mp4">
+    </video>
+    <video autoplay muted loop id="video2" style="display: none;">
+        <source src="/images/mountainmedia.mp4" type="video/mp4">
+    </video>
+    <video autoplay muted loop id="video3" style="display: none;">
+        <source src="/images/mountainmedia.mp4" type="video/mp4">
+    </video>
+</div>
 
-<h1>這是首頁</h1>
-<p th:if="${session.loggedInMember != null}">
-    您好，
-    <span th:text="${session.loggedInMember.memName}"></span>
-    ！
-</p>
+<div class="container2 content-item">
+    <h1 class="animate__animated animate__backInLeft" style="margin-bottom:30px;">歡迎來到Topseeker</h1>
+    <h4 class="animate__animated animate__backInLeft">
+        <p th:if="${session.loggedInMember != null}">
+            您好，<span th:text="${session.loggedInMember.memName}"></span> ！
+        </p>
+    </h4>
+</div>
 
-<div th:insert="~{/front-end/notification/notification.html}"></div>
+<div class="container2 content-item">
+    <h1 class="animate__animated animate__backInLeft">關於我們</h1>
+    <pre class="animate__animated animate__backInLeft">
+國內的登山健行活動在近幾年漸漸愈受歡迎，然而新手初次接觸卻可能不知道從何下手。
+可以去哪座山或步道? 該準備什麼裝備? 去哪能找到同伴?
+為了解決以上問題，於是誕生了此網站的發想。
+本站是一個提供登山愛好者們揪團、套裝行程安排與登山用品購物的複合式平台，
+無論新手、老手都能在此找到適合你的行程、裝備、一起結伴的山友們。
+    </pre>
+</div>
 
+
+
+
+<div class="container2 content-item">
+    <h2 class="animate__animated animate__backInLeft">最新促銷</h2>
+    <div class="news-item" th:each="shopInfoVO : ${shopInfoListData}" th:data-info-no="${shopInfoVO.infoNo}">
+        <div class="info-date" th:text="'發布日期：' + ${#dates.format(shopInfoVO.infoDate, 'yyyy-MM-dd')}"></div>
+        <h2 th:text="${shopInfoVO.infoHead}"></h2>
+        <p th:text="${shopInfoVO.infoContent}"></p>
+    </div>
+</div>
+
+<div th:insert="~{/front-end/notification/notification.html}" class="content-item"></div>
+
+<div class="navigation-footer content-item">
+    <div class="flex-column-bbd">
+        <div class="divider"></div>
+        <span class="phone">電話:3345678</span>
+        <span class="contact-address">聯絡地址:320桃園市中壢區復興路46號8樓</span>
+    </div>
+
+    <div class="flex-column-e">
+        <span class="site-name">Topseeker</span>
+        <span class="site-name">聯絡我們</span>
+        <div class="social-icons">
+            <div class="buttons-icon">
+                <div class="icon">
+                    <a href="https://line.me/tw/" target="_blank">
+                        <div class="icon-11"></div>
+                    </a>
+                </div>
+            </div>
+            <div class="buttons-icon-12">
+                <div class="icon-13">
+                    <a href="https://www.facebook.com/PageDavidSeafood/?locale=zh_TW" target="_blank">
+                        <div class="icon-14"></div>
+                    </a>
+                </div>
+            </div>
+            <div class="buttons-icon-15">
+                <div class="icon-16">
+                    <a href="https://www.youtube.com/" target="_blank">
+                        <div class="icon-17"></div>
+                    </a>
+                </div>
+            </div>
+            <div class="buttons-icon-18">
+                <div class="icon-19">
+                    <a href="https://www.instagram.com/" target="_blank">
+                        <div class="icon-1a"></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 <script src="/js/common.js"></script>
-
+<script>
+    $(document).ready(function(){
+        $(".content-item").each(function(index){
+            $(this).delay(500 * index).animate({opacity: 1}, 500);
+        });
+    });
+</script>
+<script th:inline="javascript">
+    var baseUrl = /*[[@{/}]]*/'/';
+    function redirectTo(url) {
+        window.location.href = url;
+    }
+</script>
 </body>
 </html>

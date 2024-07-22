@@ -1,71 +1,273 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8">
-<title>討論區文章管理</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet" th:href="@{/css/navbar.css}" />
-<link rel="stylesheet" th:href="@{/css/common.css}">
-<link rel="stylesheet" th:href="@{/css/participant.css}">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <title>揪團參團</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/participant.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    
+    <style>
+        .article-details form {
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-<style>
-</style>
+        .article-details h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .article-details .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: nowrap;
+        }
+
+        .article-details h4, .article-details label {
+            flex: 0 0 auto;
+            margin-bottom: 0;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+
+        .article-details input[type="text"],
+        .article-details textarea,
+        .article-details select,
+        .article-details input[type="datetime"],
+        .article-details input[type="file"] {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+        .article-details textarea {
+            height: 200px;
+            vertical-align: middle;
+        }
+
+        .article-details input[type="file"] {
+            margin-left: 0;
+        }
+
+        .article-details button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .article-details button[type="submit"] {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .article-details button[type="button"] {
+            background-color: #dc3545;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .article-details .error {
+            color: red;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+
+        #imagePreview img {
+            width: 100px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-<nav th:insert="~{/front-end/navbar.html}"></nav>
+    <nav th:insert="~{/front-end/navbar.html}"></nav>
 
-<div class="container"><h2>揪團去玩</h2></div>
+    <div class="container"><h2>揪團去玩</h2></div>
 
-<div class="article-details">
-  <form class="add-article" th:action="@{/participant/insert}" method="post" th:object="${participantVO}" enctype="multipart/form-data">
-      <div>
-      <label>參團人數:</label>
-      <select th:field="*{actJoinCount}">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
-      <span th:if="${#fields.hasErrors('actJoinCount')}" th:errors="*{actJoinCount}" class="error" id="actJoinCount.errors"></span>
+    <div class="article-details">
+        <form class="add-article" th:action="@{/participant/insert}" method="post" th:object="${participantVO}" enctype="multipart/form-data" id="participantForm">
+            <div class="form-group">
+                <h4><label for="actJoinCount">參團人數:</label></h4>
+                <select id="actJoinCount" th:field="*{actJoinCount}">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <span th:if="${#fields.hasErrors('actJoinCount')}" th:errors="*{actJoinCount}" class="error" id="actJoinCount.errors"></span>
+            </div>
+
+            <div class="form-group">
+                <h4><label for="actTitle">活動名稱:</label></h4>
+                <input type="text" id="actTitle" th:value="${actTitle}" readonly />
+                <input type="hidden" th:field="*{actVO.actNo}" id="actNo"/>
+            </div>
+
+            <div class="form-group">
+                <h4><label for="memName">會員名稱:</label></h4>
+                <input type="text" id="memName" th:value="${memName}" readonly />
+                <input type="hidden" th:field="*{memberVO.memNo}" id="memNo"/>
+            </div>
+
+            <div>
+                <button type="button" id="submit">送出新增</button>
+            </div>
+        </form>
     </div>
 
-    <div>
-      <label>活動名稱:</label>
-      <input type="text" th:value="${actTitle}" readonly />
-      <input type="hidden" th:field="*{actVO.actNo}" />
+    <!-- 確認報名彈窗 -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeConfirmModal">&times;</span>
+            <p>你確定要報名這個活動嗎？</p>
+            <button id="confirmSubmit">確認</button>
+            <button id="cancelConfirm">取消</button>
+        </div>
     </div>
 
-    <div>
-      <label>會員名稱:</label>
-      <input type="text" th:value="${memName}" readonly />
-      <input type="hidden" th:field="*{memberVO.memNo}" />
+    <!-- 報名成功彈窗 -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeSuccessModal">&times;</span>
+            <p>你已成功報名該活動！</p>
+            <button id="closeSuccess">確認</button>
+        </div>
     </div>
 
-    <div>
-      <button type="submit" id="submit">送出新增</button>
+    <!-- 已報名彈窗 -->
+    <div id="alreadySignedUpModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeAlreadySignedUpModal">&times;</span>
+            <p>你已報名該活動！</p>
+            <button id="closeAlreadySignedUp">確認</button>
+        </div>
     </div>
-  </form>
-</div>
 
-<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-<script>
-$(document).ready(function() {
-    $('#example').DataTable();
-});
-</script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 
-<script type="text/javascript">
-function hideContent(d) {
-    document.getElementById(d).style.display = "none";
-}
-function cancelAdd() {
-    history.back();
-}
-</script>
+    <script>
+    $(document).ready(function() {
+        $('#example').DataTable();
 
+        var submitBtn = document.getElementById("submit");
+
+        submitBtn.onclick = function() {
+            var actNo = document.getElementById("actNo").value;
+            var memNo = document.getElementById("memNo").value;
+            $.ajax({
+                url: '/participant/checkIfSignedUp',
+                method: 'POST',
+                data: {
+                    actNo: actNo,
+                    memNo: memNo
+                },
+                success: function(response) {
+                    if (response.signedUp) {
+                        Swal.fire({
+                            title: '已報名',
+                            text: '你已報名該活動！',
+                            icon: 'info',
+                            confirmButtonText: '確認'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: '確認報名',
+                            text: '你確定要報名這個活動嗎？',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: '確認',
+                            cancelButtonText: '取消'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                var participantForm = document.getElementById("participantForm");
+
+                                $.ajax({
+                                    url: participantForm.action,
+                                    method: participantForm.method,
+                                    data: $(participantForm).serialize(),
+                                    success: function(response) {
+                                        Swal.fire({
+                                            title: '成功',
+                                            text: '你已成功報名該活動！',
+                                            icon: 'success',
+                                            confirmButtonText: '確認'
+                                        }).then(() => {
+                                            window.location.href = '/act/listAllAct'; // 跳轉到成功頁面
+                                        });
+                                    },
+                                    error: function() {
+                                        Swal.fire({
+                                            title: '錯誤',
+                                            text: '報名失敗，請稍後再試。',
+                                            icon: 'error',
+                                            confirmButtonText: '確認'
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                },
+                error: function() {
+                    Swal.fire({
+                        title: '錯誤',
+                        text: '發生錯誤，請稍後再試。',
+                        icon: 'error',
+                        confirmButtonText: '確認'
+                    });
+                }
+            });
+        }
+    });
+    </script>
 </body>
 </html>
