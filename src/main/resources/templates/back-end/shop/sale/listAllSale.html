@@ -5,7 +5,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<title>TopSeeker促銷優惠管理</title>
+<title>TopSeeker優惠活動管理</title>
 
 <!-- ●●js  for jquery datatables 用 -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" /> <!-- ●●css for jquery datatables 用 -->
@@ -28,7 +28,7 @@
 
 
 <!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<link rel="stylesheet" th:href="@{/css/common.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
@@ -36,12 +36,23 @@
 
 
 <style type="text/css">
-     main{ 
-     margin-top: 20px; 
-     margin-left: 250px; 
-     padding: 20px; 
-     }
- 	
+	main.shopManagementContent {
+		padding: 30px 50px;
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.msg {
+		width: 100%;
+		margin-bottom: 20px; /* Add margin to separate from table */
+	}
+	table.display {
+		padding-top: 20px;
+		width: 100%; /* Ensure table takes full width */
+	}
+	
+	table#saleList thead tr th{
+		text-align: center;
+	}
 
 </style>
 
@@ -54,59 +65,66 @@
 	<!-- 商城後台用Navbar + 左側邊欄 -->
 	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
 
-		<main>
+	<div class="shopContent">
+		<aside class="sidebar" th:insert="~{/back-end/shop/shop_back_end_sidebar.html}"></aside>
 		
-<!-- 		顯示刪除結果提示 -->
-		<div th:if="${errorMessage}" class="alert alert-danger" role="alert">
-	        <span th:text="${errorMessage}"></span>
-	    </div>
-	    
-	    <div th:if="${successMessage}" class="alert alert-success" role="alert">
-	        <span th:text="${successMessage}"></span>
-	    </div>
-	    
+		
+		<main class="shopManagementContent content" align="center">
+			<!-- 		顯示刪除結果提示 -->
+			<div th:if="${errorMessage}" class="msg alert alert-danger" role="alert">
+		    	 <span th:text="${errorMessage}"></span>
+			</div>
+			   
+			<div th:if="${successMessage}" class="msg alert alert-success" role="alert">
+		  		 <span th:text="${successMessage}"></span>
+			</div>
+			
+		    
 			<table id="saleList" class="display">
-				  <thead>
+			  <thead>
 					<tr style="background-color:rgb(158, 179, 132)">
-						<th>促銷方案編號</th>
-						<th>促銷方案名稱</th>
-						<th>促銷方案起始日期</th>
-						<th>促銷方案結束日期</th>
-						<th>促銷方案金額門檻</th>
-						<th>促銷方案折扣</th>
+						<th>優惠活動編號</th>
+						<th>優惠活動名稱</th>
+						<th>優惠活動起始日期</th>
+						<th>優惠活動結束日期</th>
+						<th>優惠活動金額門檻</th>
+						<th>優惠活動折扣</th>
 						<th>修改</th>
 						<th>刪除</th>
 					</tr>
-				  </thead>
+			  </thead>
 					
-				  <tbody>
-						<th:block th:each="saleVO : ${saleListData}">
-							<tr>
-								<td th:text="${saleVO.saleNo}"></td>
-								<td th:text="${saleVO.saleName}"></td>
-								<td th:text="${#dates.format(saleVO.saleStdate, 'yyyy-MM-dd hh:mm:ss')}"></td>
-								<td th:text="${#dates.format(saleVO.saleEddate, 'yyyy-MM-dd hh:mm:ss')}"></td>
-								<td th:text="${saleVO.saleAmount}"></td>
-								<td th:text="${saleVO.saleDiscount}"></td>
+			  <tbody>
+				<th:block th:each="saleVO : ${saleListData}">
+					<tr>
+						<td th:text="${saleVO.saleNo}"></td>
+						<td th:text="${saleVO.saleName}"></td>
+						<td th:text="${#dates.format(saleVO.saleStdate, 'yyyy-MM-dd hh:mm:ss')}"></td>
+						<td th:text="${#dates.format(saleVO.saleEddate, 'yyyy-MM-dd hh:mm:ss')}"></td>
+						<td th:text="${saleVO.saleAmount}"></td>
+						<td th:text="${saleVO.saleDiscount}"></td>
 								
-							<td>
-							  <form method="post" th:action="@{/shop/sale/getOne_For_Update}" style="margin-bottom: 0px;">
-							     <input type="submit" value="修改" class="btn btn-outline-success">
-							     <input type="hidden" name="saleNo" th:value="${saleVO.saleNo}"></form>
-							
+				 		<td>
+						   <form method="post" th:action="@{/shop/sale/getOne_For_Update}" style="margin-bottom: 0px;">
+						     <input type="submit" value="修改" class="btn btn-outline-success">
+						     <input type="hidden" name="saleNo" th:value="${saleVO.saleNo}"></form>
+								
+						</td>
+						<td>
+						   <form method="post" th:action="@{/shop/sale/delete}" style="margin-bottom: 0px;">
+						     <input type="submit" value="刪除" class="btn btn-outline-success">
+						     <input type="hidden" name="saleNo" th:value="${saleVO.saleNo}"></form>
+								
 							</td>
-							<td>
-							  <form method="post" th:action="@{/shop/sale/delete}" style="margin-bottom: 0px;">
-							     <input type="submit" value="刪除" class="btn btn-outline-success">
-							     <input type="hidden" name="saleNo" th:value="${saleVO.saleNo}"></form>
-							
-							</td>
-							</tr>
-						</th:block>
-				  </tbody>
+						</tr>
+					</th:block>
+				</tbody>
 			</table>
-			
-		</main>
+				
+		</main>			
+	
+	</div>
+		
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<!-- Bootstrap JavaScript -->

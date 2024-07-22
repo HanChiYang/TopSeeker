@@ -22,7 +22,7 @@
 
 
 <!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<link rel="stylesheet" th:href="@{/css/common.css}">
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_front_end.css}">
 
@@ -31,14 +31,26 @@ body{
 	background-color:white;
 }
 main{
-	width: 80%;
+	width: 60%;
 	position: relative;
-	left: 10%;
+	left: 0;
 
 }
 .error {
             color: red;
         }
+        
+div.form-group label{
+	font-size: 18px;
+	padding-top: 5px;
+}
+
+button.btn{
+	margin-top: 10px;
+	font-size: 20px;
+	position: relative;
+	left: 50%;
+}
 </style>
 </head>
 <body>
@@ -49,7 +61,7 @@ main{
 	<nav th:insert="~{/front-end/shop/shop_front_end_nav.html}"></nav>
 
     <main class="container">
-        <h2>意見回覆</h2>
+        <h2 align="center" style="position:relative;  top: 10px;">意見回覆</h2>
         <form method="POST" th:action="@{/shop/complaint/complaintSend}" th:object="${complaintVO}">
             <div class="form-group">
                 <label for="orderNo">訂單編號:</label>
@@ -70,7 +82,7 @@ main{
                 <textarea class="form-control" id="message" th:field="*{message}" rows="5" placeholder="請輸入您對此筆訂單的想法，字數限制為300字"></textarea>
                 <div th:if="${#fields.hasErrors('message')}" th:errors="*{message}" class="error" id="message.errors"></div>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">送出</button>
         </form>
     </main>
 

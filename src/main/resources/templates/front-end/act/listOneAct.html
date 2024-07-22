@@ -90,10 +90,15 @@
                     <div class="col-md-3 label fw-bold">團長:</div>
                     <div class="col-md-9 d-flex align-items-center">
                         <a th:href="@{/act/memActList(memNo=${actVO.memberVO.memNo})}" th:text="${actVO.memberVO.memAccount} + '(' + ${actVO.memberVO.memName} + ')'"></a>
+                        
+                        <div th:if="${session.loggedInMember != null}">
+
                         <form id="followForm" class="ms-3 mb-0">
                             <input type="button" th:value="追隨此會員" class="btn btn-primary" id="test">
-                            <input type="hidden" name="beFollowedMemNo" value="${actVO.memberVO.memNo}">
+                            <input type="hidden" name="beFollowedMemNo" th:value="${actVO.memberVO.memNo}">
                         </form>
+                    
+                        </div>
                     </div>
                 </div>
                 <div class="row mb-3">

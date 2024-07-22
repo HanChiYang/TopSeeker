@@ -67,6 +67,7 @@ public class ComplaintController {
 	        SimpleMailMessage message = new SimpleMailMessage();
 	        OrderVO orderVO = orderSvc.getOneOrder(complaintVO.getOrderNo());
 	        
+	        message.setFrom("cia102g2.topseeker@gmail.com");
 	        message.setTo("cia102g2.topseeker@gmail.com");
 	        message.setSubject("訂單編號: " + complaintVO.getOrderNo() + "提出訂單意見");
 	        message.setText("訂單編號: " + complaintVO.getOrderNo() + 
