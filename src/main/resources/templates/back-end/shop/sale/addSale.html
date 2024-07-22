@@ -25,8 +25,8 @@
 	rel="stylesheet">
 
 
-<!-- Topseeker前台導航列CSS -->
-<link rel="stylesheet" th:href="@{/css/common.css}">
+<!-- Topseeker後台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/back_end.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
@@ -51,15 +51,16 @@ a {
 
 .error{
 		color: red;
+		
 	}
 .alert{
-	width:80%;
+	width:100%;
 }
 
 
 /*====================新增表格=========================*/	
 
-	h3{
+	h2{
 		text-align: center;
 		width: 100%;
 	}
@@ -72,7 +73,7 @@ a {
 	button {
 		padding: 5px;
 		position: relative;
-		left: 200%;
+		left: 100%;
 		
 	}
 	
@@ -84,12 +85,6 @@ a {
 	form div {
 		display: table-row;
 	}
-	
-	label{
-		padding-left: 10%;
-	
-	}
-	
 	label, input{
 		display: table-cell;
 		margin: 5px;
@@ -97,6 +92,16 @@ a {
 		font-size: 18px;
 	}
 	
+	label.form-label{
+		padding-left: 10%;
+		font-size: 20px;
+	
+	}
+	
+	div.error{
+		position: relative;
+		top: -20px;
+	}
 
 /* 	datetimepicker */
   .xdsoft_datetimepicker .xdsoft_datepicker {
@@ -122,7 +127,7 @@ a {
 		
 			<main class="shopManagementContent" align="center"> 
 	
-				<h3>新增優惠活動</h3>
+				<h2>新增優惠活動</h2>
 				
 				<div th:if="${errorMessage}" class="msg alert alert-danger" role="alert">
 				       <span th:text="${errorMessage}"></span>

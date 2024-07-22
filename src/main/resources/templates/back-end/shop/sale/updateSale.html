@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>更新促銷方案</title>
+<title>更新優惠活動</title>
 
 <!-- ●●js  for jquery datatables 用 -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" /> <!-- ●●css for jquery datatables 用 -->
@@ -26,8 +26,8 @@
 	rel="stylesheet">
 
 
-<!-- Topseeker前台導航列CSS -->
-<link rel="stylesheet" th:href="@{/css/common.css}">
+<!-- Topseeker後台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/back_end.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
@@ -35,6 +35,8 @@
 <style type="text/css">
   	main.shopManagementContent {
 		padding: 50px 50px;
+		display: flex;
+		flex-wrap: wrap;
 	}
 
 	a {
@@ -44,8 +46,30 @@
 	
 	.error{
 		color: red;
+		text-align:center;
+		position: relative;
+		top: -20px;
+	}
+	.msg {
+		width: 100%;
+		text-align:center;
+	}
+	h2{
+		text-align: center;
+		width: 100%;
 	}
 /*====================新增表格=========================*/	
+	form {
+		display: table;
+		width: 100%;
+
+	
+	}
+	form div {
+		display: table-row;
+	}
+
+	
 	span{
 		padding-left: 10px;
 		font-size: 18px;
@@ -53,22 +77,20 @@
 	
 	button {
 		padding: 5px;
-	}
-	form {
-		display: table;
-	
-	}
-	form div {
-		display: table-row;
+		position: relative;
+		left: 50%;
 	}
 	label, input, span, select {
-		display: table-cell;
-		margin: 5px;
-		text-align: left;		
+		display: table-cell;		
+	}
+	label{
+		
+		font-size: 18px;
 	}
 	input{
 		width: 500px;
-		margin: 10px;
+		position:relative;
+		right: 10%;
 	}
 	
 	
@@ -96,38 +118,41 @@
 		<aside class="sidebar" th:insert="~{/back-end/shop/shop_back_end_sidebar.html}"></aside>
 		
 		<main class="shopManagementContent" align="center"> 
-			<div th:if="${errorMessage}" class="alert alert-danger" role="alert">
-			     <span th:text="${errorMessage}"></span>
+
+			<div th:if="${errorMessage}" class="alert alert-danger msg" role="alert">
+		     	<span th:text="${errorMessage}"></span>
 			</div>
+			
+			<h2>修正優惠活動</h2>    
+
 			<form method="post" th:action="@{update}" th:object="${saleVO}">
-			    
 				<div>
-					<label class="form-label">方案編號:</label>
+					<label class="form-label">活動編號:</label>
 					<input class="form-control" type="text" th:field="*{saleNo}" readOnly/><br/>
 				</div>
 				<div>
-					<label class="form-label">方案名稱:</label>
+					<label class="form-label">活動名稱:</label>
 					<input class="form-control" type="text" th:field="*{saleName}" onclick="hideContent('saleName.errors')" /><br/>
 					<div th:if="${#fields.hasErrors('saleName')}" th:errors="*{saleName}" class="error" id="saleName.errors"></div>
 				</div>
 				
 				<div>
-					<label class="form-label">方案開始日期:</label>
+					<label class="form-label">活動開始日期:</label>
 					<input class="form-control" type="text"  id="f_date1" th:field="*{saleStdate}" onclick="hideContent('saleStdate.errors')" /><br/>
 					<div th:if="${#fields.hasErrors('saleStdate')}" th:errors="*{saleStdate}" class="error" id="saleStdate.errors"></div>
 				</div>
 				<div>
-					<label class="form-label">方案結束日期:</label>
+					<label class="form-label">活動結束日期:</label>
 					<input class="form-control" type="text"  id="f_date2" th:field="*{saleEddate}" onclick="hideContent('saleEddate.errors')" /><br/>
 					<div th:if="${#fields.hasErrors('saleEddate')}" th:errors="*{saleEddate}" class="error" id="saleEddate.errors"></div>
 				</div>
 				<div>
-					<label class="form-label">方案金額門檻:</label>
+					<label class="form-label">活動金額門檻:</label>
 					<input class="form-control" type="text" th:field="*{saleAmount}" onclick="hideContent('saleAmount.errors')" /><br/>
 					<div th:if="${#fields.hasErrors('saleAmount')}" th:errors="*{saleAmount}" class="error" id="saleAmount.errors"></div>
 				</div>
 				<div>
-					<label class="form-label">方案金額折扣:</label>
+					<label class="form-label">活動金額折扣:</label>
 					<input class="form-control" type="text" th:field="*{saleDiscount}" onclick="hideContent('saleDiscount.errors')" /><br/>
 					<div th:if="${#fields.hasErrors('saleDiscount')}" th:errors="*{saleDiscount}" class="error" id="saleDiscount.errors"></div>
 				</div>

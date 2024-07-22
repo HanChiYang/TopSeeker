@@ -3,23 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>登入員工</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #F5F5DC; /* 浅卡其色背景 */
+        }
+        .navbar {
+            background-color: #FFFFFF; /* 白色背景 */
+            border-bottom: 1px solid #DDDDDD; /* 边框颜色稍微区分 */
+        }
+        .container {
+            max-width: 400px;
+            margin-top: 200px;
+            padding: 20px;
+            background-color: #FFF5EE; /* 更淡的奶茶色 */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #8F9779; /* 淡灰绿色 */
+        }
+        .btn-primary {
+            background-color: #D2B48C; /* 卡其色 */
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #C0A080; /* 深一点的卡其色 */
+        }
+        .form-control {
+            width: calc(100% - 20px);
+            margin: 0 auto;
+        }
+        .alert {
+            width: calc(100% - 20px);
+            margin: 0 auto;
+        }
+        label {
+            color: #8B4513; /* 棕色 */
+        }
+    </style>
 </head>
 <body>
+<nav th:insert="~{/front-end/navbar.html}"></nav>
     <div class="container">
-        <h2 class="mt-5 mb-3 text-center">Login</h2>
+        <h2 class="text-center">登入員工</h2>
         <form action="/employee/login" method="post">
             <div class="form-group">
-                <label for="empAccount">Username:</label>
+                <label for="empAccount">帳號:</label>
                 <input type="text" class="form-control" id="empAccount" name="empAccount" required>
             </div>
             <div class="form-group">
-                <label for="empPassword">Password:</label>
+                <label for="empPassword">密碼:</label>
                 <input type="password" class="form-control" id="empPassword" name="empPassword" required>
             </div>
-            <button type="submit" class="btn btn-primary btn-block">Login</button>
+            <button type="submit" class="btn btn-primary btn-block">登入</button>
             <div th:if="${loginError}" class="alert alert-danger mt-3">
                 <p th:text="${loginError}">Error message here</p>
             </div>

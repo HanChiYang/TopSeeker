@@ -2,16 +2,93 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<title>討論區文章管理</title>
+<title>討論區文章新增</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet" th:href="@{/css/navbar.css}" />
 <link rel="stylesheet" th:href="@{/css/common.css}">
 <link rel="stylesheet" th:href="@{/css/article.css}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
 <style>
+/* Styles for the form */
+.article-details form {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.article-details h2 {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.article-details .form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: nowrap; /* 防止换行 */
+}
+
+.article-details h4 {
+    flex: 0 0 auto; /* 防止缩小 */
+    margin-bottom: 0;
+    margin-right: 10px;
+    white-space: nowrap; /* 防止换行 */
+}
+
+.article-details input[type="text"],
+.article-details textarea,
+.article-details select,
+.article-details input[type="datetime"],
+.article-details input[type="file"] {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.article-details textarea {
+    height: 200px; /* Height for textarea */
+    vertical-align: middle; /* Vertical align for textarea */
+}
+
+.article-details input[type="file"] {
+    margin-left: 0;
+}
+
+.article-details button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.article-details button[type="submit"] {
+    background-color: #28a745;
+    color: white;
+}
+
+.article-details button[type="button"] {
+    background-color: #dc3545;
+    color: white;
+    margin-left: 10px;
+}
+
+.article-details .error {
+    color: red;
+    font-size: 0.9em;
+    margin-left: 10px;
+}
+
+#imagePreview img {
+    width: 100px;
+    height: auto;
+    margin-right: 10px;
+}
 </style>
 </head>
 <body>
@@ -19,33 +96,33 @@
 
 <div class="container"><h2>登山情報</h2></div>
 <div class="article-details">    
-    <form class="add-article" th:action="@{insert}" method="post" th:object="${articleVO}" enctype="multipart/form-data">
+    <form class="add-article" th:action="@{insert}" method="post" th:object="${articleVO}" enctype="multipart/form-data" id="articleForm">
         <h2>登山情報新增</h2>
-        <div>
-                <label for="artTitle">文章標題:</label>
-                <input type="text" id="artTitle" name="artTitle" th:field="*{artTitle}" required />
-                <span th:if="${#fields.hasErrors('artTitle')}" th:errors="*{artTitle}" class="error"></span>
-            </div>
-            <div class="artContent">
-                <label for="artContent">文章內容:</label>
-                <textarea id="artContent" name="artContent" th:field="*{artContent}" required></textarea>
-                <span th:if="${#fields.hasErrors('artContent')}" th:errors="*{artContent}" class="error"></span>
-            </div>
-        <div>
-            <label for="artStatus">文章狀態:</label>
+        <div class="form-group">
+            <h4><label for="artTitle">文章標題:</label></h4>
+            <input type="text" id="artTitle" name="artTitle" th:field="*{artTitle}" required />
+            <span th:if="${#fields.hasErrors('artTitle')}" th:errors="*{artTitle}" class="error"></span>
+        </div>
+        <div class="form-group">
+            <h4><label for="artContent">文章內容:</label></h4>
+            <textarea id="artContent" name="artContent" th:field="*{artContent}" required></textarea>
+            <span th:if="${#fields.hasErrors('artContent')}" th:errors="*{artContent}" class="error"></span>
+        </div>
+        <div class="form-group">
+            <h4><label for="artStatus">文章狀態:</label></h4>
             <select id="artStatus" name="artStatus" th:field="*{artStatus}">
                 <option value="0" th:text="'隱藏'">隱藏</option>
                 <option value="1" th:text="'公開'">公開</option>
             </select>
             <span th:if="${#fields.hasErrors('artStatus')}" th:errors="*{artStatus}" class="error"></span>
         </div>
-        <div>
-            <label for="artPublishTime">發布時間:</label>
+        <div class="form-group">
+            <h4><label for="artPublishTime">發布時間:</label></h4>
             <input type="datetime" id="artPublishTime" name="artPublishTime" th:field="*{artPublishTime}" onclick="hideContent('artPublishTime.errors');" />
             <span th:if="${#fields.hasErrors('artPublishTime')}" th:errors="*{artPublishTime}" class="error"></span>
         </div>
-        <div>
-            <label for="artPics">文章圖片:</label>
+        <div class="form-group">
+            <h4><label for="artPics">文章圖片:</label></h4>
             <input type="file" id="artPics" name="artPics" multiple onchange="previewImages(event)" />
             <span th:if="${#fields.hasErrors('artPics')}" th:errors="*{artPics}" class="error"></span>
             <div id="imagePreview"></div>
@@ -58,6 +135,7 @@
 </div>
 
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 <script>
 $(document).ready(function() {
     $('#example').DataTable();
@@ -110,8 +188,24 @@ function validateForm(event) {
         event.preventDefault(); // 阻止表單提交
     }
 }
-document.querySelector('form.add-article').addEventListener('submit', validateForm);
 
+document.querySelector('form.add-article').addEventListener('submit', function(event) {
+    event.preventDefault();
+    validateForm(event);
+    if (event.defaultPrevented) {
+        return;
+    }
+    // Perform AJAX submission if needed or simulate submission success
+    Swal.fire({
+        icon: 'success',
+        title: '送出成功',
+        text: '您的文章已成功新增!',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('articleForm').submit(); // Use actual form submission after SweetAlert
+        }
+    });
+});
 </script>
 
 </body>

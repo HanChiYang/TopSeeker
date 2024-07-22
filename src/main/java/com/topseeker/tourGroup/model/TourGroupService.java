@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,5 +52,22 @@ public class TourGroupService {
 	public List<TourGroupVO> getAll(Map<String, String[]> map) {
 		return HibernateUtil_CompositeQuery_TourGroup3.getAllC(map,sessionFactory.openSession());
 	}
-
+	
+	
+	
+	public void updateGroupBal(Integer groupNo, Integer orderNums) {
+        Optional<TourGroupVO> optional = repository.findById(groupNo);
+        if (optional.isPresent()) {
+            TourGroupVO tourGroupVO = optional.get();
+            int newBal = tourGroupVO.getGroupBal() - orderNums;
+            if (newBal < 1) {
+                throw new IllegalArgumentException("更新后的名額數不能小於1");
+            }
+            tourGroupVO.setGroupBal(newBal);
+            repository.save(tourGroupVO);
+        } else {
+            throw new EntityNotFoundException("行程未找到");
+        }
+    }
 }
+
