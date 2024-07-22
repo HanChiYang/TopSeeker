@@ -17,7 +17,6 @@ import com.topseeker.notification.model.NotificationVO;
 
 
 @Controller
-@Validated
 @RequestMapping("/notification")
 public class NotificationController {
 	
