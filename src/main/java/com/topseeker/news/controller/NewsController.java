@@ -106,7 +106,7 @@ public class NewsController {
 		/*************************** 3.新增完成,準備轉交(Send the Success view) **************/
 		List<NewsVO> list = newsSvc.getAll();
 		model.addAttribute("newsListData", list);
-		return "redirect:/news/newsBackEnd?success=true";
+		return "redirect:/news/newsBackEnd";
 	}
 	
 
@@ -117,17 +117,13 @@ public class NewsController {
 	public String getOne_For_Update(@RequestParam("newsNo") String newsNo, ModelMap model) {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		/*************************** 2.開始查詢資料 *****************************************/
-		// EmpService empSvc = new EmpService();
 		NewsVO newsVO = newsSvc.getOneNews(Integer.valueOf(newsNo));
 
 		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("newsVO", newsVO);
-		return "front-end/news/update_news_input"; // 查詢完成後轉交update_emp_input.html
+		return "back-end/news/update_news_input";
 	}
 
-	/*
-	 * This method will be called on update_emp_input.html form submission, handling POST request It also validates the user input
-	 */
 	@PostMapping("update")
 	public String update(@Valid NewsVO newsVO, BindingResult result, ModelMap model,
 			@RequestParam("picSet") MultipartFile[] parts) throws IOException {
@@ -153,14 +149,13 @@ public class NewsController {
 		    newsVO.setNewsPic(picSet); // 設置商品的圖片集合
 		}
 		/*************************** 2.開始修改資料 *****************************************/
-		// EmpService empSvc = new EmpService();
 		newsSvc.updateNews(newsVO);
 
 		/*************************** 3.修改完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("success", "- (修改成功)");
 		newsVO = newsSvc.getOneNews(Integer.valueOf(newsVO.getNewsNo()));
 		model.addAttribute("newsVO", newsVO);
-		return "back-end/news/newsBackEnd"; // 修改成功後轉交listOneEmp.html
+		return "redirect:/news/newsBackEnd";// 修改成功後重定向到新聞列表頁面
 	}
 
 	/*

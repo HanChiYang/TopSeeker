@@ -11,45 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" th:href="@{/css/back_end.css}">
 
-<!-- ●● jquery datatables 設定 -->
-<script>
-	$(document).ready(function() {
-		$('#example').DataTable({
-			"lengthMenu": [ 10, 20, 50, 100],
-			"searching": true,  //搜尋功能, 預設是開啟
-		    "paging": true,     //分頁功能, 預設是開啟
-		    "ordering": true,   //排序功能, 預設是開啟
-		    "language": {
-		        "processing": "處理中...",
-		        "loadingRecords": "載入中...",
-		        "lengthMenu": "顯示 _MENU_ 筆結果",
-		        "zeroRecords": "沒有符合的結果",
-		        "info": "顯示第 _START_ 至 _END_ 筆結果，共<font color=red> _TOTAL_ </font>筆",
-		        "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
-		        "infoFiltered": "(從 _MAX_ 筆結果中過濾)",
-		        "infoPostFix": "",
-		        "search": "搜尋:",
-		        "paginate": {
-		            "first": "第一頁",
-		            "previous": "上一頁",
-		            "next": "下一頁",
-		            "last": "最後一頁"
-		        },
-		        "aria": {
-		            "sortAscending":  ": 升冪排列",
-		            "sortDescending": ": 降冪排列"
-		        }
-		    }
-		});
-		
-		// 顯示成功訊息
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('success') && urlParams.get('success') === 'true') {
-            var successModal = new bootstrap.Modal(document.getElementById('successModal'));
-            successModal.show();
-        }
-	});
-</script>
+
 <style>
 body{
 	margin: 0 0 2rem;
@@ -81,17 +43,6 @@ body{
 }
 .mb-3 {
     margin-bottom: 0rem !important;
-}
-/* 彈窗美化 */
-.modal-header {
-    background-color: #28a745;
-    color: white;
-}
-.modal-body {
-    font-size: 1.2rem;
-}
-.modal-footer .btn-secondary {
-    background-color: #6c757d;
 }
 </style>
 </head>
@@ -146,11 +97,11 @@ body{
                                 </form>
                             </td>
                             <td>
-    <form method="post" th:action="@{/news/delete}" style="margin-bottom: 0px;" onsubmit="return confirmDelete()">
-        <input type="submit" value="刪除" class="btn btn-danger">
-        <input type="hidden" name="newsNo" th:value="${newsVO.newsNo}">
-    </form>
-</td>
+                                <form method="post" th:action="@{/news/delete}" style="margin-bottom: 0px;">
+                                    <input type="submit" value="刪除" class="btn btn-danger">
+                                    <input type="hidden" name="newsNo" th:value="${newsVO.newsNo}">
+                                </form>
+                            </td>
                         </tr>
                     </th:block>
                 </tbody>
@@ -158,25 +109,46 @@ body{
         </div>
     </div>
 </div>
+<!-- ●● jquery datatables 設定 -->
+<script>
+	$(document).ready(function() {
+		$('#example').DataTable({
+			"lengthMenu": [ 10, 20, 50, 100],
+			"searching": true,  //搜尋功能, 預設是開啟
+		    "paging": true,     //分頁功能, 預設是開啟
+		    "ordering": true,   //排序功能, 預設是開啟
+		    "language": {
+		        "processing": "處理中...",
+		        "loadingRecords": "載入中...",
+		        "lengthMenu": "顯示 _MENU_ 筆結果",
+		        "zeroRecords": "沒有符合的結果",
+		        "info": "顯示第 _START_ 至 _END_ 筆結果，共<font color=red> _TOTAL_ </font>筆",
+		        "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
+		        "infoFiltered": "(從 _MAX_ 筆結果中過濾)",
+		        "infoPostFix": "",
+		        "search": "搜尋:",
+		        "paginate": {
+		            "first": "第一頁",
+		            "previous": "上一頁",
+		            "next": "下一頁",
+		            "last": "最後一頁"
+		        },
+		        "aria": {
+		            "sortAscending":  ": 升冪排列",
+		            "sortDescending": ": 降冪排列"
+		        }
+		    }
+		});
+		
+		// 顯示成功訊息
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success') && urlParams.get('success') === 'true') {
+            var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+        }
+	});
+</script>
 
-<!-- Bootstrap彈窗 -->
-<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="successModalLabel">提示</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body text-center">
-        <i class="bi bi-check-circle-fill text-success" style="font-size: 2rem;"></i>
-        <p class="mt-3 success-message">新聞新增成功!</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <script>
 function toggleContent(element) {
@@ -191,15 +163,6 @@ function toggleContent(element) {
         shortContent.style.display = 'inline';
         element.textContent = '顯示更多';
     }
-}
-//顯示成功訊息
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.has('success') && urlParams.get('success') === 'true') {
-    var successModal = new bootstrap.Modal(document.getElementById('successModal'));
-    successModal.show();
-}
-function confirmDelete() {
-    return confirm('您確定要刪除這則新聞嗎？這個動作無法恢復。');
 }
 </script>
 
