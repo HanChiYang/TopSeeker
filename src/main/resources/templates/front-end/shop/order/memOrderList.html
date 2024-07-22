@@ -135,7 +135,9 @@ button{
 					<tr>
 						<td style="width: 20vw" th:text="${orderVO.orderNo}"></td>
 						<td style="width: 10vw" th:text="${#dates.format(orderVO.orderDate, 'yyyy-MM-dd')}"></td>
-						<td style="width: 50vw" th:text="${orderVO.saleVO.saleName}"></td>
+						<td style="width: 50vw" th:if="${orderVO.saleVO != null and orderVO.saleVO.saleName != null}"
+                   			 th:text="${orderVO.saleVO.saleName}"></td>
+                		<td style="width: 50vw" th:unless="${orderVO.saleVO != null and orderVO.saleVO.saleName != null}">不適用</td>
 						<td style="width: 20vw" th:text="${orderVO.orderBill}"></td>
 						<td style="width: 10vw" th:text="${orderVO.orderStatus}" class="orderStatus"></td>
 						<td style="width: 10vw" th:text="${orderVO.paymentStatus}" class="paymentStatus"></td>
