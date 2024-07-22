@@ -5,7 +5,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<title>TopSeeker促銷優惠管理</title>
+<title>TopSeeker優惠活動管理</title>
 
 <!-- ●●js  for jquery datatables 用 -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" /> <!-- ●●css for jquery datatables 用 -->
@@ -49,7 +49,10 @@
 		padding-top: 20px;
 		width: 100%; /* Ensure table takes full width */
 	}
-
+	
+	table#saleList thead tr th{
+		text-align: center;
+	}
 
 </style>
 
@@ -80,12 +83,12 @@
 			<table id="saleList" class="display">
 			  <thead>
 					<tr style="background-color:rgb(158, 179, 132)">
-						<th>促銷方案編號</th>
-						<th>促銷方案名稱</th>
-						<th>促銷方案起始日期</th>
-						<th>促銷方案結束日期</th>
-						<th>促銷方案金額門檻</th>
-						<th>促銷方案折扣</th>
+						<th>優惠活動編號</th>
+						<th>優惠活動名稱</th>
+						<th>優惠活動起始日期</th>
+						<th>優惠活動結束日期</th>
+						<th>優惠活動金額門檻</th>
+						<th>優惠活動折扣</th>
 						<th>修改</th>
 						<th>刪除</th>
 					</tr>
