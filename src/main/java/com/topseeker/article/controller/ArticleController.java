@@ -201,7 +201,7 @@ public class ArticleController {
         List<ArticleVO> list = articleSvc.getAll();
         model.addAttribute("articleListData", list);
         model.addAttribute("success", "- (刪除成功)");
-        return "redirect:/article/listMyArticle";
+        return "redirect:/article/listAllArticle";
     }
 
 

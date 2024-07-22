@@ -1,5 +1,5 @@
 
-<div>
+<div class=shopKanban>
 	<img id="longlogo" src="/images/Yushan_long_logo.png">
 	<!-- 商城的導航列 -->
 	<nav id="shopNavbar" class="navbar navbar-expand-lg">
@@ -15,21 +15,21 @@
 			</div>
 			<div class="collapse navbar-collapse" id="shopViceNavbar">
 				<ul class="navbar-nav mb-2 mb-lg-0">
-					<li class="nav-item nav-item-spacing"><a
-						class="nav-link shoplink" th:href="@{/shop/homepage}">首頁</a></li>
-					<li class="nav-item nav-item-spacing"><a
-						class="nav-link shoplink" th:href="@{/shop/shopInfo}">最新優惠</a></li>
-					<li class="nav-item nav-item-spacing"><a
-						class="nav-link shoplink"
+					<li class="shop-item nav-item-spacing"><a
+						class="shoplink" th:href="@{/shop/homepage}">首頁</a></li>
+					<li class="shop-item nav-item-spacing"><a
+						class="shoplink" th:href="@{/shop/shopInfo}">最新優惠</a></li>
+					<li class="shop-item nav-item-spacing"><a
+						class="shoplink"
 						th:href="@{/shop/category/bag(prodTypeNo=1)}">包袋</a></li>
-					<li class="nav-item nav-item-spacing"><a
-						class="nav-link shoplink"
+					<li class="shop-item nav-item-spacing"><a
+						class="shoplink"
 						th:href="@{/shop/category/shoes(prodTypeNo=2)}">鞋類</a></li>
-					<li class="nav-item nav-item-spacing"><a
-						class="nav-link shoplink"
+					<li class="shop-item nav-item-spacing"><a
+						class="shoplink"
 						th:href="@{/shop/category/clothes(prodTypeNo=4)}">服飾</a></li>
-					<li class="nav-item nav-item-spacing"><a
-						class="nav-link shoplink"
+					<li class="shop-item nav-item-spacing"><a
+						class="shoplink"
 						th:href="@{/shop/category/accessory(prodTypeNo=3)}">裝備配件</a></li>
 				</ul>
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -44,11 +44,11 @@
 					</li>
 				</ul>
 				<ul class="navbar-nav ml-auto mb-2 mb-lg-0">
-					<li class="nav-item"><a class="nav-link shoplink wishlist"
-						th:href="@{/shop/wishlist}"><i class="fa-solid fa-heart"></i>
+					<li class="nav-item"><a class=" wishlist"
+						th:href="@{/protected/shop/wishlist}"><i class="fa-solid fa-heart"></i>
 							我的收藏</a></li>
-					<li class="nav-item"><a class="nav-link shoplink wishlist"
-						th:href="@{/cart/cart}"> <i class="fas fa-shopping-cart"></i>
+					<li class="nav-item"><a class=" wishlist"
+						th:href="@{/protected/cart/cart}"> <i class="fas fa-shopping-cart"></i>
 							購物車
 					</a></li>
 				</ul>

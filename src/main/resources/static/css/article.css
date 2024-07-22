@@ -10,22 +10,43 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
+       background-image: url('/images/mypic1.jpg'); /* 设置背景图片 */
+    background-size: cover; /* 背景图片大小 */
+    background-position: center; /* 背景图片位置 */
+    background-repeat: no-repeat; /* 防止背景图片重复 */
 }
 
 img {
     max-width: 100%;
 }
 
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.video-background video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+}
+
 div.container {
     margin-top: 100px;
     max-width: 90%;
     padding: 20px;
-    background-image: url('/images/broderuse2.jpg'); /* 设置背景图片 */
-    background-size: cover; /* 背景图片大小 */
-    background-position: center; /* 背景图片位置 */
-    background-repeat: no-repeat; /* 防止背景图片重复 */
+ 
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.8); /* 设置白色背景，透明度为0.8 */
     margin-bottom: 20px;
     font-size: 20px;
     font-weight: bold;
@@ -36,12 +57,9 @@ div.article-details {
     max-width: 90%;
     margin: 0 auto;
     padding: 20px;
-    background-image: url('/images/broderuse2.jpg'); /* 设置背景图片 */
-    background-size: cover; /* 背景图片大小 */
-    background-position: bottom; /* 背景图片位置 */
-    background-repeat: no-repeat; /* 防止背景图片重复 */
+  
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.8); /* 设置白色背景，透明度为0.8 */
     margin-bottom: 20px;
 }
 
@@ -58,7 +76,7 @@ h1::before, h2::before, h3::before, h4::before, h5::before, h6::before {
     transform: translateY(-50%);
     width: 35px; /* 根据需要调整宽度 */
     height: 35px; /* 根据需要调整高度 */
-    background-image: url('/images/mountains.png'); /* 图标的路径 */
+    background-image: url('/images/cartoontree.png'); /* 图标的路径 */
     background-size: cover;
     background-repeat: no-repeat;
 }

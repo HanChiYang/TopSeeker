@@ -25,13 +25,23 @@
 
 
 <!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<link rel="stylesheet" th:href="@{/css/common.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
 
 
-<style type="text/css">
+<style>
+
+	main.shopManagementContent {
+		padding: 30px 50px;
+	}
+
+	button {
+	
+	margin-left: 280px;
+	margin-top: 40px;
+	}
 
 
 </style>
@@ -39,26 +49,28 @@
 
 <body>
 
+
 	<!-- topseeker後台Navbar -->
 	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
 
-	<!-- 商城後台用Navbar + 左側邊欄 -->
+	<!-- 商城後台用Navbar -->
 	<nav class="shopMainNavbar" th:insert="~{/back-end/shop/shop_back_end_nav.html}"></nav>
-
-
-	<main class="shopManagementContent">
+	
+	<div class="shopContent">	
+		
+		<!-- 商城後台用左側邊欄 -->
+		<aside class="sidebar" th:insert="~{/back-end/shop/shop_back_end_sidebar.html}"></aside>
+	
+		<main class="shopManagementContent">
 		<div class="content">
-			<h3><b>歡迎使用商品管理系統:</b></h3>
-			<h3>您可以使用下方商品搜尋功能，或依左側快速選單選擇功能</h3>
+			<h3><b>商品複合查詢</b></h3>
 			<br>
-			<h4>
-				<span>商品查詢(複合選項):</span>
-			</h4>
+
 			<!-- 錯誤表列 -->
 			<div class="errorblock" th:utext="${errorMessage}">${errorMessage}</div>
-			<br>
+			
 
-			<div>
+			<div class="shopManagementInput">
 				<form method="post" th:action="@{/shop/listProd_ByCompositeQuery}">
 
 					<div class="mb-3">
@@ -74,13 +86,13 @@
 
 					<div class="mb-3">
 						<label for="prodName" class="form-label">商品名稱:</label> <input
-							type="text" class="form-control" id="prodName"
+							type="text" class="form-control" id="prodName" name="prodName"
 							placeholder="輸入商品名稱">
 					</div>
 
 					<div class="mb-3">
 						<label for="prodInfo" class="form-label">商品介紹:</label> <input
-							type="text" class="form-control" id="prodInfo"
+							type="text" class="form-control" id="prodInfo" name="prodInfo"
 							placeholder="輸入商品描述">
 					</div>
 
@@ -97,11 +109,12 @@
 					<button type="submit" class="btn btn-primary">開始查詢</button>
 
 				</form>
-
-
 			</div>
 		</div>
-	</main>
+		</main>
+	
+	</div>
+
 
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -1,31 +1,22 @@
 /* 商城的導航列 */
 
-nav.shopMainNavbar{
-	height:175px;
-}
-#shopNavbar {
-	background-color: rgba(158, 179, 132, 0.8);
-	margin-top: 0;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	position: absolute; /* 絕對定位 */
-	width: 100%;
-	z-index: 800; /* 確保在圖片之上 */
-	top: 185px;
+
+.shopKanban {
+    position: relative;
 }
 
-/* #shopNavbar { */
-/* 	background-color: rgba(158, 179, 132, 0.8); */
-/* 	margin-top: 0; */
-/* 	display: flex; */
-/* 	flex-direction: column; */
-/* 	align-items: center; */
-/* 	position: absolute; 絕對定位 */
-/* 	width: 100%; */
-/* 	z-index: 10; 確保在圖片之上 */
-/* 	top: 180px; */
-/* } */
+
+#shopNavbar {
+    background-color: rgba(158, 179, 132, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    z-index: 800;
+    bottom: 0; /* 確保與圖片的下緣對齊 */
+}
+
 
 .navbar-brand {
 	color: #404040;
@@ -37,23 +28,12 @@ nav.shopMainNavbar{
 	width: 100%;
 	margin-left: 20px;}
 	
-	
-
-/* .search-bar { */
-/* 	display: inline-block; */
-/* 	margin-left: 20px; */
-/* } */
-
-/* .search-bar input[type="text"] { */
-/* 	padding: 5px; */
-/* 	font-size: 16px; */
-/* } */
 
 
 .search-bar {
     display: flex;
     align-items: center;
-    margin-left: 30px;
+    margin-left: 40px;
 }
 
 .search-bar input[type="text"] {
@@ -83,33 +63,63 @@ nav.shopMainNavbar{
 }
 
 
-
 .shoplink {
 	color: #FFFFFF;
+	padding: 5px 5px;
+	
+}
+
+.shoplink:hover {
+	color: #435334;
+	padding: 5px 5px;
 }
 
 .wishlist {
 	color: #404040;
-	font-size: 18px
+	font-size: 18px;
+	font-weight: 500;
+	padding: 0 10px;
 }
 
-.nav-item{
+.wishlist:hover {
+	color: white;
+/* 	font-size: 18px; */
+/* 	font-weight: 500; */
+/* 	padding: 0 5px; */
+}
+
+.shop-item{
 	font-size: 20px
 	
 }
 
 .nav-item-spacing {
- 	margin: 0 5px; /*左右間距，可以根據需求調整 */
+ 	margin: 0 8px; /*左右間距，可以根據需求調整 */
 }
 
-img#longlogo {
+nav ul li a {
+    text-decoration: none;
+    font-weight: 550;
+}
+
+#longlogo {
 	margin-top: 75px;
-	height: 175px;
-	width: 100%;
-	object-fit: cover; /* 保持比例不變形 */
-	border-top: solid 1px lightgray;
-	border-bottom: solid 2px lightgray;
-	position: relative; /* 保持相對定位 */
-	z-index: 100;
-
+    height: 175px;
+    width: 100%;
+    object-fit: cover;
+    border-top: solid 1px lightgray;
+    border-bottom: solid 2px lightgray;
+    z-index: 100;
 }
+
+/* img#longlogo { */
+/* 	margin-top: 75px; */
+/* 	height: 175px; */
+/* 	width: 100%; */
+/* 	object-fit: cover; 保持比例不變形 */
+/* 	border-top: solid 1px lightgray; */
+/* 	border-bottom: solid 2px lightgray; */
+/* 	position: relative; 保持相對定位 */
+/* 	z-index: 100; */
+/* } */
+

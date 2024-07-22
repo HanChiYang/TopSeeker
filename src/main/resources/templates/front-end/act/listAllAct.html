@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TopSeeker-活動列表</title>
-    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" />    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/common.css}">
-	
     <style>
         * {
             margin: 0;
@@ -23,18 +24,27 @@
             display: flex;
             flex-direction: column;
             margin: 80px 0;
-        }		
+        }
         .main-content {
             flex-grow: 1;
             width: 100%;
             max-width: 1200px;
             margin: 2rem auto;
             padding: 0 1rem;
-        }		
+        }
         .card-title {
             font-size: 1.25rem;
             margin-bottom: 1rem;
-        }		
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .place-column {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
         footer {
             background: #333;
             color: #fff;
@@ -42,24 +52,20 @@
             padding: 1rem 0;
             margin-top: 2rem;
             width: 100%;
-        }	
+        }
         .list-group-item {
             margin-bottom: 1rem;
         }
-		
         .modify-btn, .delete-btn {
             margin-right: 0.5rem;
         }
-		 
         .card {
             width: 100%;
             transition: transform 0.2s ease-in-out;
         }
-		
         .card:hover {
             transform: scale(1.05);
         }
-		
         .content {
             flex-grow: 1;
             background: #fff;
@@ -67,115 +73,156 @@
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-		
         .sticky-card {
             position: -webkit-sticky;
             position: sticky;
             top: 100px; /* 根據您的需要調整此值 */
         }
         #filterButton {
-			display: block;
-			margin: 0 auto;
-		}
+            display: block;
+            margin: 0 auto;
+        }
+        .status-label {
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+        .status-label.yimanyu {
+            background-color: #ffc107; /* 黃色 */
+            color: #212529;
+        }
+        .status-label.jiutuan {
+            background-color: #28a745; /* 綠色 */
+            color: #ffffff;
+        }
+        .status-label.yiwancheng {
+            background-color: #6c757d; /* 灰色 */
+            color: #ffffff;
+        }
+        .status-label.yiquxiao {
+            background-color: #dc3545; /* 紅色 */
+            color: #ffffff;
+        }
+        .card-clickable {
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+        .card-clickable:hover {
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-<script src="https://kit.fontawesome.com/de9b92a469.js" crossorigin="anonymous"></script>
-
-<header>
-    <nav th:insert="~{/front-end/navbar.html}"></nav>
-</header>
-<div class="container-fluid main-content">
-    <div class="row">
-        <div class="col-md-3">
-            <div class="card mb-3 sticky-card">
-                <div class="card-body">
-                    <h3 class="card-title bi bi-binoculars-fill">探索活動</h3>
-                    <form method="post" id="searchForm" th:action="@{/act/ajaxSearch}">
-                        <div class="form-group mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" id="all" name="actStatus" value="" checked>
-                                <label class="form-check-label" for="all">全部</label>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/de9b92a469.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <header>
+        <nav th:insert="~{/front-end/navbar.html}"></nav>
+    </header>
+    <div class="container-fluid main-content">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card mb-3 sticky-card">
+                    <div class="card-body">
+                        <h3 class="card-title bi bi-binoculars-fill">探索活動</h3>
+                        <form method="post" id="searchForm" th:action="@{/act/ajaxSearch}">
+                            <div class="form-group mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="all" name="actStatus" value="" checked>
+                                    <label class="form-check-label" for="all">全部</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="grouping" name="actStatus" value="0">
+                                    <label class="form-check-label" for="grouping">揪團中</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="formed" name="actStatus" value="1">
+                                    <label class="form-check-label" for="formed">已額滿</label>
+                                </div>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" id="grouping" name="actStatus" value="0">
-                                <label class="form-check-label" for="grouping">揪團中</label>
+                            <div class="form-group mb-3 bi bi-card-heading">
+                                <label>活動標題:</label>
+                                <input type="text" name="actTitle" class="form-control">
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" id="formed" name="actStatus" value="1">
-                                <label class="form-check-label" for="formed">已成團</label>
+                            <div class="form-group mb-3 bi bi-pin-map">
+                                <label>活動地點:</label>
+                                <input type="text" name="actPlace" class="form-control">
                             </div>
-                        </div>
-                        <div class="form-group mb-3 bi bi-card-heading">
-                            <label>活動標題:</label>
-                            <input type="text" name="actTitle" class="form-control">
-                        </div>
-                        <div class="form-group mb-3 bi bi-pin-map">
-                            <label>活動地點:</label>
-                            <input type="text" name="actPlace" class="form-control">
-                        </div>
-                        <div class="form-group mb-3 bi bi-calendar-range">
-                            <label>活動起始日區間:</label>
-                            <input name="actStart" type="date" class="form-control">
-                        </div>
-                        <div class="form-group mb-3">
-                            <input name="actEnd" type="date" class="form-control">
-                        </div>
-                        <button type="submit" id="filterButton" class="btn btn-primary bi bi-funnel">篩選</button>
-                    </form> 	  
+                            <div class="form-group mb-3 bi bi-calendar-range">
+                                <label>活動開始日範圍:</label>
+                                <input name="actStart" type="date" class="form-control">
+                            </div>
+                            <div class="form-group mb-3">
+                                <input name="actEnd" type="date" class="form-control">
+                            </div>
+                            <button type="submit" id="filterButton" class="btn btn-primary bi bi-funnel">篩選</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="content">
+                    <ul id="resultsBlock" class="list-group">
+                        <!-- 活動項目將動態生成 -->
+                    </ul>
                 </div>
             </div>
         </div>
-        <div class="col-md-9">
-            <div class="content">                  
-                <ul id="resultsBlock" class="list-group">
-                    <!-- 活動項目將動態生成 -->
-                </ul>
-            </div>                         
-        </div>
     </div>
-</div> 
-
-<script> 
-    $(document).ready(function() {
-        // 初次載入時自動發送AJAX請求以獲取列表
-        $.ajax({
-            url: '/act/ajaxSearchAll', // 更換成您用來獲取列表的URL
-            method: 'GET', // 使用GET方法獲取列表
-            success: function(response) {
-                $('#resultsBlock').html(response);
-            },
-            error: function(error) {
-                console.error("Error fetching data:", error);
-            }
-        });
-        // 提交表單並處理 AJAX 響應
-        $('#searchForm').on('submit', function(event) {
-            event.preventDefault();
-              
-            var formData = $(this).serialize(); // 序列化表单数据
-              
+    <script> 
+        $(document).ready(function() {
+            // 初次載入時自動發送AJAX請求以獲取列表
             $.ajax({
-                url: '/act/ajaxSearch',
-                method: 'POST',
-                data: formData,
+                url: '/act/ajaxSearchAll', // 更換成您用來獲取列表的URL
+                method: 'GET', // 使用GET方法獲取列表
                 success: function(response) {
                     $('#resultsBlock').html(response);
+                    bindCardClickEvent(); // 綁定事件
                 },
                 error: function(error) {
                     console.error("Error fetching data:", error);
                 }
             });
+
+            // 提交表單並處理 AJAX 響應
+            $('#searchForm').on('submit', function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize(); // 序列化表單數據
+                $.ajax({
+                    url: '/act/ajaxSearch',
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        $('#resultsBlock').html(response);
+                        bindCardClickEvent(); // 綁定事件
+                    },
+                    error: function(error) {
+                        console.error("Error fetching data:", error);
+                    }
+                });
+            });
+			//卡片綁定點擊事件
+            function bindCardClickEvent() {
+            	// 解除之前綁定的點擊事件處理器，防止重複綁定
+                $('.card-clickable').off('click').on('click', function() {
+                	// 獲取卡片的 actNo 屬性值
+                    var actNo = $(this).data('actno');
+                 	// 獲取緊接在卡片後面的隱藏表單元素
+                    var form = $(this).next('.card-form');
+                 	// 提交隱藏的表單
+                    form.submit();
+                });
+            }
+			//卡片在初始加載時就綁定好點擊事件
+            bindCardClickEvent(); 
         });
-    });
-</script>
-
-<footer>
-    <p>&copy; 2024 登山網站. 版權所有.</p>
-</footer>
-
+    </script>
+    <footer>
+        <p>&copy; 2024 登山網站. 版權所有.</p>
+    </footer>
 </body>
 </html>

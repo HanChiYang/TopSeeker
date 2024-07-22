@@ -15,17 +15,17 @@
    }
    
    table{
-   	font-size: 20px;	
+   	font-size: 18px;
+   	width: 80%	
  
    }
    
    th{
    	background-color: rgb(158, 179, 132);
-   
    }
    
    td{
-   	 background-color: rgb(206, 222, 189);
+   	 text-align:center;
    
    }
    
@@ -45,12 +45,15 @@
 	  <div class="top">
 	    <h2>訂單完成</h2>
 	    <p class="countdown">10 秒後重導回首頁...</p>
-	    <p>訂單編號: <span th:text="${orderVO.orderNo}"></span></p>
-	    <p>訂單日期: <span th:text="${#dates.format(orderVO.orderDate, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
-	    <p>訂單金額: <span th:text="${orderVO.orderAmount}"></span></p>
-	    <p>運費: <span th:text="${orderVO.orderShipment}"></span></p>
-	    <p>折扣金額: <span th:text="${orderVO.orderDiscount}"></span></p>
-	    <p>實付金額: <span th:text="${orderVO.orderBill}"></span></p>
+	   
+	    	<span>訂單編號: </span><span th:text="${orderVO.orderNo}"></span><br>
+	    	<span>訂單日期: </span><span th:text="${#dates.format(orderVO.orderDate, 'yyyy-MM-dd HH:mm:ss')}"></span><br>
+	    	<span>訂單金額: </span><span th:text="${orderVO.orderAmount}"></span><br>
+	    	<span>運費: </span><span th:text="${orderVO.orderShipment}"></span><br>
+	    	<span>折扣金額: </span><span th:text="${orderVO.orderDiscount}"></span><br>
+	    	<span>實付金額: </span><span th:text="${orderVO.orderBill}"></span><br>
+	    
+	    
 	  </div>
 	
 	  <table id="orderDetailsTable" class="display">
@@ -73,7 +76,7 @@
 	</table>
 	
 	<a th:href="@{/shop/homepage}">返回商城首頁</a>
-
+	</div>
 <script>
   // 初始化表格
   $(document).ready(function () {

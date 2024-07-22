@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.topseeker.artreport.model.ArtReportService;
@@ -224,6 +226,15 @@ public class ArtReportController {
 	}
 	
 
-
+	@PostMapping("/checkIfReported")
+	@ResponseBody
+	public Map<String, Object> checkIfReported(@RequestParam("artNo") Integer artNo, @RequestParam("memNo") Integer memNo) {
+	    Map<String, Object> response = new HashMap<>();
+	    List<ArtReportVO> reports = artreportSvc.getAll();
+	    boolean reported = reports.stream()
+	            .anyMatch(r -> r.getArticleVO().getArtNo().equals(artNo) && r.getMemberVO().getMemNo().equals(memNo));
+	    response.put("reported", reported);
+	    return response;
+	}
 
 }
