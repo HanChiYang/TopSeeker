@@ -3,322 +3,277 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TopSeeker 商品詳情頁</title>
+<title>TopSeeker 商品詳情</title>
 
 <!-- Bootstrap CSS -->
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-	crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
 <!-- icon用 -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <!-- 從 Google Fonts 引入 "Playfair Display" 字體 -->
-<link
-	href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap"
-	rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- 圖片輪播功能CSS -->
+<link rel="stylesheet" th:href="@{/owlcarousel/owl.carousel.min.css}">
+<link rel="stylesheet" th:href="@{/owlcarousel/owl.theme.default.min.css}">
 
 <!-- Topseeker前台導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/common.css}">
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_front_end.css}">
 
-
 <style>
-.container {
-	display: flex;
-	padding: 20px;
-	margin-left: 20px;
-}
-
-.sidebar {
-	width: 300px;
-	border-right: 1px solid #d3d3d3;
-	padding: 20px;
-}
-
-.sidebar h2 {
-	font-family: 'Playfair Display';
-	font-size: 24px;
-	margin-bottom: 20px;
-}
-
-.sidebar label {
-	font-family: 'Playfair Display';
-	font-size: 18px;
-	display: block;
-	margin-bottom: 10px;
-}
-
-.sidebar input[type="checkbox"] {
-	margin-right: 10px;
-}
-
-.sidebar .filter-group {
-	margin-bottom: 20px;
-}
-
-.sidebar .filter-group label {
-	display: block;
-	margin-bottom: 5px;
-}
-
-.sidebar .filter-group input[type="checkbox"] {
-	margin-right: 5px;
+.product {
+    width: 100%;
+    margin: 0 auto;
+    max-width: 1000px;
+    padding: 20px;
 }
 
 .product-detail {
-	flex-grow: 1;
-	padding: 20px;
-	display: flex;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-left: 0;
 }
 
-.product-detail img {
-	width: 300px;
-	height: auto;
-	max-width: 400px;
-	object-fit: cover;
-	margin-bottom: 20px;
+.showPics {
+    max-width: 45%;
+}
+
+.owl-carousel {
+    display: flex;
+    justify-content: center; /* 使圖片在水平居中 */
+}
+
+.owl-carousel .item {
+    display: flex;
+    justify-content: center; /* 使圖片在項目內水平居中 */
+    align-items: center; /* 使圖片在項目內垂直居中 */
+    width: 100%;
+    height: auto;
+}
+
+.owl-carousel .item img {
+    width: 70%; /* 設置圖片的寬度，調整這個值來控制大小 */
+    height: auto; /* 保持圖片的比例 */
+    display: block;
+    margin: auto; /* 確保圖片在父容器中水平居中 */
 }
 
 .product-info {
-	font-family: 'Playfair Display';
-	border: 1px solid #d3d3d3;
-	padding: 20px;
-	flex-grow: 1;
+    padding: 20px 50px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 確保內容在垂直方向上均勻分布 */
 }
 
 .product-info h1 {
-	font-size: 36px;
-	margin-bottom: 20px;
+    font-size: 28px;
+    margin-bottom: 20px;
 }
 
 .product-info p {
-	font-size: 24px;
-	color: #555;
-	margin-bottom: 20px;
+    font-size: 24px;
+    color: #555;
+    margin-bottom: 20px;
 }
 
 .product-actions {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	margin-bottom: 20px;
-}
-
-.action-buttons i {
-	color: #90c320;
-	text-decoration: none;
-	font-size: 20px;
-}
-
-.product-actions input[type="number"] {
-	width: 80px;
-	padding: 5px;
-	font-size: 18px;
-	text-align: center;
-	border: 1px solid #d3d3d3;
-	border-radius: 5px;
+    display: flex;
+    align-items: center; /* 將子元素在垂直方向上置中 */
+    gap: 10px; /* 增加按鈕與輸入框之間的間距 */
+    margin-top: auto; /* 將按鈕組推到區塊底部 */
 }
 
 .product-actions .btn {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 10px;
-	font-size: 20px;
-	color: #fff;
-	background-color: #90c320;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	transition: background-color 0.3s;
+    background-color: #90c320;
+    color: white;
 }
 
 .product-actions .btn:hover {
-	background-color: #78a710;
-}
-.wishandcart .btn{
-/*  padding: 10px; */
- margin: 20px 50px 20px 0px;
+    background-color: #78a710;
 }
 
-.action-buttons {
-	display: flex;
-	gap: 10px;
-	margin-top: 10px;
+.product-actions input[type="number"] {
+    width: 90px;
+    text-align: center;
+    padding: 5px;
+    font-size: 20px;
+    height: 40px; /* 確保與按鈕高度一致 */
 }
 
-.action-buttons .btn {
-	flex-grow: 1;
-	text-align: center;
+.wishandcart {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.wishandcart .btn {
+    background-color: #90c320;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-right: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.wishandcart .btn:hover {
+    background-color: #78a710;
 }
 
 .product-description {
-	font-family: 'Playfair Display';
-	font-size: 18px;
-	color: #333;
-	border: 1px solid #d3d3d3;
-	padding: 20px;
-	margin-top: 20px;
+    font-size: 18px;
+    color: #333;
+    border: 1px solid #d3d3d3;
+    padding: 30px;
+    min-height: 400px; /* 設置最小高度 */
 }
 
-/* ----@@購物車因為用a標籤稍微調整其CSS */
 .btn a {
-	text-decoration: none;
-	color: black;
+    text-decoration: none;
+    color: black;
 }
 
 .btn a:visited {
-	color: black;
+    color: black;
 }
-
 </style>
 </head>
 
 <body>
 
-	<!-- topseeker前台Navbar -->
-	<nav th:insert="~{/front-end/navbar.html}"></nav>
+<!-- topseeker前台Navbar -->
+<nav th:insert="~{/front-end/navbar.html}"></nav>
 
-	<!-- 商城用Navbar -->
-	<nav th:insert="~{/front-end/shop/shop_front_end_nav.html}"></nav>
+<!-- 商城用Navbar -->
+<nav th:insert="~{/front-end/shop/shop_front_end_nav.html}"></nav>
 
-
-
-	<main>
-		<div class="container">
-			<div class="sidebar">
-				<h2>商品篩選器</h2>
-				<div class="filter-group">
-					<label>類別</label> <label><input type="checkbox"> 類別
-						1</label> <label><input type="checkbox"> 類別 2</label> <label><input
-						type="checkbox"> 類別 3</label>
+<main class="product">
+    <div class="product-detail">
+        <div class="showPics">
+            <div class="owl-carousel owl-theme">
+               	<div th:each="pic, iterStat : ${shopProductVO.shopProductPics}" class="item" th:id="'pic-' + ${iterStat.index}">
+					<img th:src="@{/shop/DBGifReader3} + '?prodPicNo=' + ${pic.prodPicNo}">
 				</div>
-				<div class="filter-group">
-					<label>價格範圍</label> <label><input type="checkbox">
-						0 - 1000</label> <label><input type="checkbox"> 1001 -
-						2000</label> <label><input type="checkbox"> 2001 - 3000</label>
-				</div>
-				<div class="filter-group">
-					<label>品牌</label> <label><input type="checkbox"> 品牌
-						1</label> <label><input type="checkbox"> 品牌 2</label> <label><input
-						type="checkbox"> 品牌 3</label>
+            </div>
 
-				</div>
-			</div>
+        </div>
+        <div class="product-info">
+            <h1 th:text="${shopProductVO.prodName}">商品名稱</h1>
+            <p th:text="'$' + ${shopProductVO.prodPrice}">商品金額</p>
+            <div class="product-actions">
+                <button class="btn" onclick="decrementQuantity()">-</button>
+                <input type="number" id="quantity" name="prodQty" value="1" min="1">
+                <button class="btn" onclick="incrementQuantity()">+</button>
+            </div>
+        </div>
+    </div>
 
-			<div class="product-detail">
-				<div>
-					<div>
-						<img
-							th:src="@{/shop/DBGifReader} + '?prodNo=' + ${shopProductVO.prodNo}"
-							alt="商品圖片">
+    <div class="wishandcart">
+        <button class="btn wishlist-btn" th:data-id="${shopProductVO.prodNo}" onclick="toggleWishlist(this)">
+            <i class="fa-regular fa-heart"></i> 加入收藏
+        </button>
+        <button class="btn" th:data-id="${shopProductVO.prodNo}" onclick="addToCart2(this)">
+            <i class="fa-solid fa-cart-plus"></i> 加入購物車
+        </button>
+    </div>
 
-						<div class="product-info">
-							<h1 th:text="${shopProductVO.prodName}">商品名稱</h1>
-							<p th:text="'$' + ${shopProductVO.prodPrice}">商品金額</p>
-							<div class="product-actions">
-								<button class="btn" onclick="decrementQuantity()">-</button>
-								<!-- -------------------@@改 購買商品數量------------------------------------------------------------------- -->
-								<input type="number" id="quantity" name="prodQty" value="1"
-									min="1">
-								<!-- --------------------	------@@------------------------------------------------------ -->
-								<button class="btn" onclick="incrementQuantity()">+</button>
-							</div>
+    <div class="product-description">
+        <h2>商品資訊</h2>
+        <p th:text="${shopProductVO.prodInfo}">這裡顯示商品的詳細資訊。</p>
+    </div>
+</main>
 
-						</div>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- 引入 DataTables -->
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<!-- 圖片輪播用JS -->
+<script th:src="@{/owlcarousel/owl.carousel.min.js}"></script>
+<!-- topseeker前台Navbar共用JavaScript -->
+<script src="/js/common.js"></script>
+<!-- topseeker商城用JavaScript -->
+<script src="/js/shop_front_end.js"></script>
 
+<script>
+function decrementQuantity() {
+    var quantityInput = document.getElementById("quantity");
+    var currentValue = parseInt(quantityInput.value);
+    if (currentValue > 1) {
+        quantityInput.value = currentValue - 1;
+    }
+}
 
-						<div class="product-actions wishandcart">
-							<button class="btn wishlist-btn"
-								th:data-id="${shopProductVO.prodNo}"
-								onclick="toggleWishlist(this)">
-								<i class="fa-regular fa-heart"></i> 加入收藏
-							</button>
-							<!-- ------------------------@@加入購物車ajax -->
-							<button class="btn" th:data-id="${shopProductVO.prodNo}"
-								onclick="addToCart2(this)">
-								<i class="fa-solid fa-cart-plus"></i> 加入購物車
-							</button>
-							<!-- ----------------------------@@---- -->
-						</div>
+function incrementQuantity() {
+    var quantityInput = document.getElementById("quantity");
+    var currentValue = parseInt(quantityInput.value);
+    quantityInput.value = currentValue + 1;
+}
 
-						<div class="product-description">
-							<h2>商品資訊</h2>
-							<p th:text="${shopProductVO.prodInfo}">這裡顯示商品的詳細資訊。</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</main>
+function addToCart2(button) {
+    var prodNo = $(button).data("id");
+    var prodQty = parseInt(document.getElementById("quantity").value);
+    $.ajax({
+        type : "POST",
+        url : "/protected/cart/saveOrUpdateCart",
+        data : JSON.stringify({
+            prodNo : prodNo,
+            prodQty : prodQty
+        }),
+        contentType : "application/json",
+        success : function(response) {
+            if (response.success) {
+                alert(response.message);
+            } else {
+                alert("請先登入會員");
+            }
+        },
+        error : function(xhr) {
+            if (xhr.status === 401) {
+                window.location.href = "/member/loginMem";
+            } else {
+                alert("發生錯誤，請稍後再試。");
+            }
+        }
+    });
+}
 
-	<!-- jQuery -->
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<!-- Bootstrap JavaScript -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-	<!-- 引入 DataTables -->
-	<script
-		src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-
-	<!-- topseeker前台Navbar共用JavaScript -->
-	<script src="/js/common.js"></script>
-
-	<!-- topseeker商城用JavaScript -->
-	<script src="/js/shop_front_end.js"></script>
-
-	<script>
-		//加入購物車+-數字按鈕
-		function decrementQuantity() {
-			var quantityInput = document.getElementById("quantity");
-			var currentValue = parseInt(quantityInput.value);
-			if (currentValue > 1) {
-				quantityInput.value = currentValue - 1;
-			}
-		}
-
-		function incrementQuantity() {
-			var quantityInput = document.getElementById("quantity");
-			var currentValue = parseInt(quantityInput.value);
-			quantityInput.value = currentValue + 1;
-		}
-
-		//--------------------@@新增至購物車Ajax-----------
-		function addToCart2(button) {
-			var prodNo = $(button).data("id");
-			var prodQty = parseInt(document.getElementById("quantity").value);
-			console.log("!!!!!")
-			$.ajax({
-				type : "POST",
-				url : "/protected/cart/saveOrUpdateCart",
-				data : JSON.stringify({
-					prodNo : prodNo,
-					prodQty : prodQty
-				}),
-				contentType : "application/json",
-				success : function(response) {
-					if (response.success) {
-						alert(response.message);
-					} else {
-						alert("請先登入會員");
-					}
-				},
-				error : function(xhr) {
-					if (xhr.status === 401) {
-						window.location.href = "/member/loginMem";
-					} else {
-						alert("發生錯誤，請稍後再試。");
-					}
-				}
-			});
-		}
-		//----------------@@-------------------------------
-
-	</script>
+var owl = $('.owl-carousel');
+owl.owlCarousel({
+    loop:false,
+    nav:true,
+    margin:10,
+    responsive:{
+        0:{
+            items:1
+        },
+        600:{
+            items:1
+        },            
+        960:{
+            items:1
+        },
+        1200:{
+            items:1
+        }
+    }
+});
+owl.on('mousewheel', '.owl-stage', function (e) {
+    if (e.deltaY>0) {
+        owl.trigger('next.owl');
+    } else {
+        owl.trigger('prev.owl');
+    }
+    e.preventDefault();
+});
+</script>
 </body>
 </html>

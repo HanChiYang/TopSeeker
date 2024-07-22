@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>修改商品結果</title>
+<title>商品修改結果</title>
 
 <!-- Bootstrap CSS -->
 <link
@@ -24,7 +24,7 @@
 
 
 <!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<link rel="stylesheet" th:href="@{/css/common.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
@@ -67,7 +67,7 @@
 					</div>
 					<div class="card-body">
 						<div class="row mb-2">
-							<div class="col-sm-4 font-weight-bold">商品建立時間:</div>
+							<div class="col-sm-4 font-weight-bold">商品修改時間:</div>
 							<div class="col-sm-8" th:text="${shopProductVO.prodDate}"></div>
 						</div>
 						<div class="row mb-2">
@@ -87,27 +87,24 @@
 								</span>
 							</div>
 						</div>
-						<div class="row mb-2">
-							<div class="col-sm-4 font-weight-bold">商品編號:</div>
-							<div class="col-sm-8" th:text="${shopProductVO.prodNo}"></div>
-						</div>
+<!-- 						<div class="row mb-2"> -->
+<!-- 							<div class="col-sm-4 font-weight-bold">商品編號:</div> -->
+<!-- 							<div class="col-sm-8" th:text="${shopProductVO.prodNo}"></div> -->
+<!-- 						</div> -->
 						<div class="row mb-2">
 							<div class="col-sm-4 font-weight-bold">商品名稱:</div>
 							<div class="col-sm-8" th:text="${shopProductVO.prodName}"></div>
 						</div>
 						<div class="row mb-2">
-							<div class="col-sm-4 font-weight-bold">商品定價:</div>
+							<div class="col-sm-4 font-weight-bold">定價:</div>
 							<div class="col-sm-8" th:text="'$' + ${shopProductVO.prodPrice}"></div>
 						</div>
 		
 						<div class="mb-3">
-							<label for="ProdPic" class="form-label">商品圖片:</label>
+							<label for="ProdPic" class="form-label">圖片:</label>
 							<div id="ProdPic" class="d-flex flex-row flex-wrap">
 								<div th:each="pic, iterStat : ${shopProductVO.shopProductPics}"
 									class="p-2">
-									<!--測試印出產品圖片編號 -->
-									<!-- 							<input type="text" th:value="${pic.prodPicNo}" -->
-									<!-- 								class="form-control mb-2" readonly>  -->
 									<img
 										th:src="@{/shop/DBGifReader3} + '?prodPicNo=' + ${pic.prodPicNo}"
 										class="img-thumbnail mb-2" width="150" height="150">
