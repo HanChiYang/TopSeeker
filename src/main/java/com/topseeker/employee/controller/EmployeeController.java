@@ -249,6 +249,20 @@ public class EmployeeController {
         return "back-end/employee/login";  // 返回 login.html 模板
     }
 	
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+	    session.invalidate();
+	    return "redirect:/employee/login"; // 重定向到登錄頁面
+	}
+
+	
+	@GetMapping("/back_end_index")
+	public String back_end_index(HttpSession session) {
+	    
+	    return "back-end/back_end_index"; // 重定向到登錄頁面
+	}
+
+	
 	@PostMapping("/login")
 	public String login(
 	        @RequestParam("empAccount") String empAccount,

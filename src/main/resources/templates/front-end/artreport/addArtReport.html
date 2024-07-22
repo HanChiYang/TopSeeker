@@ -1,141 +1,177 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8">
-<title>檢舉文章</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet" th:href="@{/css/common.css}">
-<link rel="stylesheet" th:href="@{/css/article.css}">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <title>檢舉文章</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/article.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 
-<style>
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        padding-top: 100px;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgb(0,0,0);
-        background-color: rgba(0,0,0,0.4);
-    }
+    <style>
+        .article-details form {
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-    .modal-content {
-        background-color: #fefefe;
-        margin: auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-    }
+        .article-details h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
+        .article-details .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: nowrap;
+        }
 
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-</style>
+        .article-details h4, .article-details label {
+            flex: 0 0 auto;
+            margin-bottom: 0;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+
+        .article-details input[type="text"],
+        .article-details textarea,
+        .article-details select,
+        .article-details input[type="datetime"],
+        .article-details input[type="file"] {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+        .article-details textarea {
+            height: 200px;
+            vertical-align: middle;
+        }
+
+        .article-details input[type="file"] {
+            margin-left: 0;
+        }
+
+        .article-details button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .article-details button[type="submit"] {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .article-details button[type="button"] {
+            background-color: #dc3545;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .article-details .error {
+            color: red;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+
+        #imagePreview img {
+            width: 100px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 <nav th:insert="~{/front-end/navbar.html}"></nav>
 
-<div class="container">登山情報</div>
+<div class="container"><h2>檢舉文章</h2></div>
 
 <div class="article-details">
     <form th:action="@{insert}" method="post" th:object="${artreportVO}" enctype="multipart/form-data" id="reportForm">
-        <div>
-            <label>文章標題:</label>
-            <input type="text" th:value="${articleTitle}" readonly /><br/>
+        <div class="form-group">
+            <h4><label for="articleTitle">文章標題:</label></h4>
+            <input type="text" id="articleTitle" th:value="${articleTitle}" readonly />
             <input type="hidden" th:field="*{articleVO.artNo}" id="artNo"/>
             <span th:if="${#fields.hasErrors('articleVO.artNo')}" th:errors="*{articleVO.artNo}" class="error" id="articleVO.artNo.errors"></span>
         </div>
-        
-        <div>
-            <label>會員帳號:</label>
-            <input type="text" th:value="${memberAccount}" readonly /><br/>
+
+        <div class="form-group">
+            <h4><label for="memberAccount">會員帳號:</label></h4>
+            <input type="text" id="memberAccount" th:value="${memberAccount}" readonly />
             <input type="hidden" th:field="*{memberVO.memNo}" id="memNo"/>
         </div>
 
-        <div>
-            <label>檢舉內容:</label>
-            <input type="text" th:field="*{artReportContent}" onclick="hideContent('artReportContent.errors');" /><br/>
+        <div class="form-group">
+            <h4><label for="artReportContent">檢舉內容:</label></h4>
+            <textarea id="artReportContent" th:field="*{artReportContent}" onclick="hideContent('artReportContent.errors');"></textarea>
             <span th:if="${#fields.hasErrors('artReportContent')}" th:errors="*{artReportContent}" class="error" id="artReportContent.errors"></span>
         </div>
 
-        <div>
-            <label>檢舉時間:</label>
-            <input type="datetime" th:field="*{artReportDate}" onclick="hideContent('artReportDate.errors');" /><br/>
+        <div class="form-group">
+            <h4><label for="artReportDate">檢舉時間:</label></h4>
+            <input type="datetime" id="artReportDate" th:field="*{artReportDate}" onclick="hideContent('artReportDate.errors');" />
             <span th:if="${#fields.hasErrors('artReportDate')}" th:errors="*{artReportDate}" class="error" id="artReportDate.errors"></span>
         </div>
 
         <div>
-            <div></div>
-            <div><button type="button" id="submit">送出新增</button></div>
-            <div></div>
+            <button type="button" id="submit">送出新增</button>
         </div>
     </form>
 </div>
 
-<!-- 確認報名彈窗 -->
-<div id="confirmModal" class="modal">
-    <div class="modal-content">
-        <span class="close" id="closeConfirmModal">&times;</span>
-        <p>你確定要新增檢舉嗎？</p>
-        <button id="confirmSubmit">確認</button>
-        <button id="cancelConfirm">取消</button>
-    </div>
-</div>
-
-<!-- 報名成功彈窗 -->
-<div id="successModal" class="modal">
-    <div class="modal-content">
-        <span class="close" id="closeSuccessModal">&times;</span>
-        <p>你已成功送出檢舉！</p>
-        <button id="closeSuccess">確認</button>
-    </div>
-</div>
-
-<!-- 已檢舉彈窗 -->
-<div id="alreadyReportedModal" class="modal">
-    <div class="modal-content">
-        <span class="close" id="closeAlreadyReportedModal">&times;</span>
-        <p>你已經檢舉過這篇文章！</p>
-        <button id="closeAlreadyReported">確認</button>
-    </div>
-</div>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 
 <script>
 $(document).ready(function() {
     $('#example').DataTable();
 
-    var confirmModal = document.getElementById("confirmModal");
-    var successModal = document.getElementById("successModal");
-    var alreadyReportedModal = document.getElementById("alreadyReportedModal");
-
-    var closeConfirmModal = document.getElementById("closeConfirmModal");
-    var closeSuccessModal = document.getElementById("closeSuccessModal");
-    var closeSuccess = document.getElementById("closeSuccess");
-    var closeAlreadyReportedModal = document.getElementById("closeAlreadyReportedModal");
-    var closeAlreadyReported = document.getElementById("closeAlreadyReported");
-
     var submitBtn = document.getElementById("submit");
-    var confirmSubmitBtn = document.getElementById("confirmSubmit");
-    var cancelConfirmBtn = document.getElementById("cancelConfirm");
 
     submitBtn.onclick = function() {
         var artNo = document.getElementById("artNo").value;
@@ -150,45 +186,39 @@ $(document).ready(function() {
             },
             success: function(response) {
                 if (response.reported) {
-                    alreadyReportedModal.style.display = "block";
+                    Swal.fire({
+                        title: '已檢舉過',
+                        text: '你已經檢舉過這篇文章！',
+                        icon: 'info',
+                        confirmButtonText: '確認'
+                    });
                 } else {
-                    confirmModal.style.display = "block";
+                    Swal.fire({
+                        title: '確認檢舉',
+                        text: '你確定要新增檢舉嗎？',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: '確認',
+                        cancelButtonText: '取消'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            submitReport();
+                        }
+                    });
                 }
             },
             error: function() {
-                alert("檢查檢舉狀態失敗，請稍後再試。");
+                Swal.fire({
+                    title: '錯誤',
+                    text: '檢查檢舉狀態失敗，請稍後再試。',
+                    icon: 'error',
+                    confirmButtonText: '確認'
+                });
             }
         });
     }
 
-    closeConfirmModal.onclick = function() {
-        confirmModal.style.display = "none";
-    }
-
-    closeSuccessModal.onclick = function() {
-        successModal.style.display = "none";
-        window.location.href = '/article/listAllArticle'; // 跳轉到成功頁面
-    }
-
-    closeSuccess.onclick = function() {
-        successModal.style.display = "none";
-        window.location.href = '/article/listAllArticle'; // 跳轉到成功頁面
-    }
-
-    closeAlreadyReportedModal.onclick = function() {
-        alreadyReportedModal.style.display = "none";
-    }
-
-    closeAlreadyReported.onclick = function() {
-        alreadyReportedModal.style.display = "none";
-    }
-
-    cancelConfirmBtn.onclick = function() {
-        confirmModal.style.display = "none";
-    }
-
-    confirmSubmitBtn.onclick = function() {
-        confirmModal.style.display = "none";
+    function submitReport() {
         var reportForm = document.getElementById("reportForm");
 
         $.ajax({
@@ -196,24 +226,28 @@ $(document).ready(function() {
             method: reportForm.method,
             data: $(reportForm).serialize(),
             success: function(response) {
-                successModal.style.display = "block";
+                Swal.fire({
+                    title: '成功',
+                    text: '你已成功送出檢舉！',
+                    icon: 'success',
+                    confirmButtonText: '確認'
+                }).then(() => {
+                    window.location.href = '/article/listAllArticle'; // 跳轉到成功頁面
+                });
             },
             error: function() {
-                alert("新增檢舉失敗，請稍後再試。");
+                Swal.fire({
+                    title: '錯誤',
+                    text: '新增檢舉失敗，請稍後再試。',
+                    icon: 'error',
+                    confirmButtonText: '確認'
+                });
             }
         });
     }
 
-    // 在用户点击模态框外部时关闭模态框
-    window.onclick = function(event) {
-        if (event.target == confirmModal) {
-            confirmModal.style.display = "none";
-        } else if (event.target == successModal) {
-            successModal.style.display = "none";
-            window.location.href = '/article/listAllArticle'; // 跳轉到成功頁面
-        } else if (event.target == alreadyReportedModal) {
-            alreadyReportedModal.style.display = "none";
-        }
+    function hideContent(d) {
+        document.getElementById(d).style.display = "none";
     }
 });
 </script>
