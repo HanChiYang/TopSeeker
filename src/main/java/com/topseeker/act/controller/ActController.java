@@ -84,7 +84,6 @@ public class ActController {
 	public String insert(
 			/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 			
-//			@Validated(MemGroup.class)
 			@Validated(MemGroup.class)ActVO actVO, BindingResult result, ModelMap model,
 			@RequestParam("picSet") MultipartFile[] parts, HttpSession session) throws IOException {
 		
@@ -128,10 +127,8 @@ public class ActController {
 
 		actSvc.addAct(actVO);
 		/*************************** 3.新增完成,準備轉交(Send the Success view) **************/
-//		List<ActVO> list = actSvc.getAll();
-//		model.addAttribute("actListData", list);
 		model.addAttribute("successMessage", "活動新增成功!");
-		return "redirect:/act/memMyAct?success=true";  // 新增成功後重導至@GetMapping("/emp/listAllEmp")
+		return "redirect:/act/memMyAct?success=true";
 	}
 
 	/*

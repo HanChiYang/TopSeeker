@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -71,7 +72,8 @@ public class NewsController {
 	 */
 	@PostMapping("insert")
 	public String insert(@Valid NewsVO newsVO, BindingResult result, ModelMap model,
-			@RequestParam("picSet") MultipartFile[] parts) throws IOException {
+			@RequestParam("picSet") MultipartFile[] parts
+			) throws IOException {
 		
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
@@ -96,7 +98,6 @@ public class NewsController {
 			
 		}
 		if (result.hasErrors()) {
-//			System.out.println(result);
 			return "back-end/news/addNews";
 		}
 		/*************************** 2.開始新增資料 *****************************************/
@@ -105,9 +106,9 @@ public class NewsController {
 		/*************************** 3.新增完成,準備轉交(Send the Success view) **************/
 		List<NewsVO> list = newsSvc.getAll();
 		model.addAttribute("newsListData", list);
-		model.addAttribute("success", "- (新增成功)");
-		return "redirect:/news/newsBackEnd"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
+		return "redirect:/news/newsBackEnd?success=true";
 	}
+	
 
 	/*
 	 * This method will be called on listAllEmp.html form submission, handling POST request

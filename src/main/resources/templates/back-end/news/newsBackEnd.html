@@ -5,13 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>TopSeeker-新聞後台管理</title>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
-<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
-
-
 <link rel="stylesheet" th:href="@{/css/back_end.css}">
 
 <!-- ●● jquery datatables 設定 -->
@@ -44,9 +41,19 @@
 		        }
 		    }
 		});
+		
+		// 顯示成功訊息
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success') && urlParams.get('success') === 'true') {
+            var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+        }
 	});
 </script>
 <style>
+body{
+	margin: 0 0 2rem;
+}
 .news-content {
     display: inline;
 }
@@ -64,21 +71,41 @@
     margin-top: 1rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
+.card-header {
+    background-color: #9EB384;
+    border-color: #9EB384;
+    color: #435334;
+}
+.card-body {
+    background-color: #EEEDEB;
+}
 .mb-3 {
     margin-bottom: 0rem !important;
+}
+/* 彈窗美化 */
+.modal-header {
+    background-color: #28a745;
+    color: white;
+}
+.modal-body {
+    font-size: 1.2rem;
+}
+.modal-footer .btn-secondary {
+    background-color: #6c757d;
 }
 </style>
 </head>
 <body>
-
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
 <script src="https://kit.fontawesome.com/de9b92a469.js" crossorigin="anonymous"></script>
 <nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
 
 <div class="container">
     <div class="card">
         <div class="card-header text-center">
-            <h2>新聞後台管理</h2>
+            <h2>新聞管理</h2>
         </div>
         <div class="card-body">
             <div class="d-flex justify-content-center mb-3">
@@ -119,17 +146,36 @@
                                 </form>
                             </td>
                             <td>
-                                <form method="post" th:action="@{/news/delete}" style="margin-bottom: 0px;">
-                                    <input type="submit" value="刪除" class="btn btn-danger">
-                                    <input type="hidden" name="newsNo" th:value="${newsVO.newsNo}">
-                                </form>
-                            </td>
+    <form method="post" th:action="@{/news/delete}" style="margin-bottom: 0px;" onsubmit="return confirmDelete()">
+        <input type="submit" value="刪除" class="btn btn-danger">
+        <input type="hidden" name="newsNo" th:value="${newsVO.newsNo}">
+    </form>
+</td>
                         </tr>
                     </th:block>
                 </tbody>
             </table>
         </div>
     </div>
+</div>
+
+<!-- Bootstrap彈窗 -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">提示</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <i class="bi bi-check-circle-fill text-success" style="font-size: 2rem;"></i>
+        <p class="mt-3 success-message">新聞新增成功!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -146,7 +192,17 @@ function toggleContent(element) {
         element.textContent = '顯示更多';
     }
 }
+//顯示成功訊息
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.has('success') && urlParams.get('success') === 'true') {
+    var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+    successModal.show();
+}
+function confirmDelete() {
+    return confirm('您確定要刪除這則新聞嗎？這個動作無法恢復。');
+}
 </script>
+
 
 </body>
 </html>
