@@ -369,12 +369,11 @@ public class ActController {
 	//進入活動列表頁面先自動載入全部活動
 	@GetMapping("ajaxSearchAll")
     public String getAllAct(HttpServletRequest req,Model model) {
-//        List<ActVO> actList = actSvc.getAll();
 		Map<String, String[]> map = req.getParameterMap();
         Map<String, String[]> queryParams = new HashMap<>(map);
         Session session = sessionFactory.openSession();
         List<ActVO> list = HibernateUtil_CompositeQuery_Act.getAllC(queryParams, session);
-     // 按報名截止日升序排列
+        // 按報名截止日升序排列
         list.sort((a, b) -> a.getActEnrollEnd().compareTo(b.getActEnrollEnd()));
         model.addAttribute("actListData", list);
         return "front-end/act/listAllActFragment :: resultsList";
