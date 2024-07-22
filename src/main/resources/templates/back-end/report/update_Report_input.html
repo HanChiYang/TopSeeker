@@ -1,85 +1,217 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8">
-<title>檢舉文章</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet" th:href="@{/css/navbar.css}" />
-<link rel="stylesheet" th:href="@{/css/common.css}">
-<link rel="stylesheet" th:href="@{/css/back_participant.css}">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<style>
-</style>
+    <meta charset="utf-8">
+    <title>檢舉文章</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}" />
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/back_participant.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        .article-details form {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-details h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .article-details .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: nowrap;
+        }
+
+        .article-details h4, .article-details label {
+            flex: 0 0 auto;
+            margin-bottom: 0;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+
+        .article-details input[type="text"],
+        .article-details textarea,
+        .article-details select,
+        .article-details input[type="datetime"],
+        .article-details input[type="file"] {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+        .article-details textarea {
+            height: 200px;
+            vertical-align: middle;
+        }
+
+        .article-details input[type="file"] {
+            margin-left: 0;
+        }
+
+        .article-details button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .article-details button[type="submit"] {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .article-details button[type="button"] {
+            background-color: #dc3545;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .article-details .error {
+            color: red;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+
+        #imagePreview img {
+            width: 100px;
+            height: auto;
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
-<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
+    <nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
+    <div class="container"><h2>揪團檢舉處理</h2></div>
 
-<div class="container">
-    <h2>揪團檢舉處理</h2>
-    <form th:action="@{/report/update}" th:object="${reportVO}" method="post">
-        <div>
-            <label>檢舉活動編號:</label>
-            <input type="text" th:field="*{actRpNo}" readonly />
-        </div>
-        <div style="display:none;">
-            <label>活動編號:</label>
-            <input type="text" th:field="*{actVO.actNo}" readonly />
-        </div>
-        <div>
-            <label>活動標題:</label>
-            <input type="text" th:value="${reportVO.actVO.actTitle}" readonly />
-        </div>
-       <div>
-            <label>會員帳號:</label>
-            <input type="text" th:value="${reportVO.memberVO.memAccount}" readonly />
-            <input type="hidden" th:field="*{memberVO.memNo}" />
-        </div>
-        <div>
-            <label>檢舉事由:</label>
-            <div th:switch="${reportVO.actReport}">
-                <div th:case="0">活動內容與標題不符</div>
-                <div th:case="1">活動內容違反善良風俗</div>
-                <div th:case="2">騷擾行為</div>
-                <div th:case="3">非主辦人出席宣傳之營利廣告</div>
-                <div th:case="4">活動包含詐騙內容</div>
-                <div th:case="5">其他</div>
-                <div th:case="*">未知</div>
+    <div class="article-details">
+        <form th:action="@{/report/update}" th:object="${reportVO}" method="post" id="reportForm">
+            <div class="form-group">
+                <h4><label for="actRpNo">檢舉活動編號:</label></h4>
+                <input type="text" id="actRpNo" th:field="*{actRpNo}" readonly />
             </div>
-            <input type="hidden" th:field="*{actReport}" />
-        </div>
-        <div>
-            <label>檢舉內容:</label>
-            <input type="text" th:field="*{actReportText}" />
-        </div>
-     <div>
-    <label>員工名稱:</label>
-    <input type="text" th:value="${reportVO.employeeVO.empName}" readonly />
-    <input type="hidden" th:field="*{employeeVO.empNo}" />
-</div>
-        <div>
-            <label>處理狀態:</label>
-            <select th:field="*{handleCheck}">
-                <option value="0">未處理</option>
-                <option value="1">通過</option>
-                <option value="2">不通過</option>
-            </select>
-        </div>
-        <div>
-            <label>處理註記:</label>
-            <input type="text" th:field="*{handleReply}" />
-        </div>
-        <div>
+
+            <div class="form-group" style="display:none;">
+                <h4><label for="actNo">活動編號:</label></h4>
+                <input type="text" id="actNo" th:field="*{actVO.actNo}" readonly />
+            </div>
+
+            <div class="form-group">
+                <h4><label for="actTitle">活動標題:</label></h4>
+                <input type="text" id="actTitle" th:value="${reportVO.actVO.actTitle}" readonly />
+            </div>
+
+            <div class="form-group">
+                <h4><label for="memAccount">會員帳號:</label></h4>
+                <input type="text" id="memAccount" th:value="${reportVO.memberVO.memAccount}" readonly />
+                <input type="hidden" th:field="*{memberVO.memNo}" />
+            </div>
+
+            <div class="form-group">
+                <h4><label for="actReport">檢舉事由:</label></h4>
+                <div th:switch="${reportVO.actReport}">
+                    <div th:case="0">活動內容與標題不符</div>
+                    <div th:case="1">活動內容違反善良風俗</div>
+                    <div th:case="2">騷擾行為</div>
+                    <div th:case="3">非主辦人出席宣傳之營利廣告</div>
+                    <div th:case="4">活動包含詐騙內容</div>
+                    <div th:case="5">其他</div>
+                    <div th:case="*">未知</div>
+                </div>
+                <input type="hidden" th:field="*{actReport}" />
+            </div>
+
+            <div class="form-group">
+                <h4><label for="actReportText">檢舉內容:</label></h4>
+                <input type="text" id="actReportText" th:field="*{actReportText}" />
+            </div>
+
+            <div class="form-group">
+                <h4><label for="empName">員工名稱:</label></h4>
+                <input type="text" id="empName" th:value="${reportVO.employeeVO.empName}" readonly />
+                <input type="hidden" th:field="*{employeeVO.empNo}" />
+            </div>
+
+            <div class="form-group">
+                <h4><label for="handleCheck">處理狀態:</label></h4>
+                <select id="handleCheck" th:field="*{handleCheck}">
+                    <option value="0">未處理</option>
+                    <option value="1">通過</option>
+                    <option value="2">不通過</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <h4><label for="handleReply">處理註記:</label></h4>
+                <input type="text" id="handleReply" th:field="*{handleReply}" />
+            </div>
+
             <button type="submit">送出修改</button>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-<script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 
-</script>
+    <script>
+    $(document).ready(function() {
+        $('#example').DataTable();
+    });
+
+    function hideContent(d) {
+        document.getElementById(d).style.display = "none";
+    }
+
+    document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        Swal.fire({
+            title: '確認修改',
+            text: '你確定要送出修改嗎？',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '確認',
+            cancelButtonText: '取消'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var form = event.target;
+                $.ajax({
+                    url: form.action,
+                    method: form.method,
+                    data: $(form).serialize(),
+                    success: function(response) {
+                        Swal.fire({
+                            title: '成功',
+                            text: '檢舉狀態已更新！',
+                            icon: 'success',
+                            confirmButtonText: '確認'
+                        }).then(() => {
+                            window.location.href = '/report/listAllReport'; // 跳轉到列表頁面
+                        });
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: '錯誤',
+                            text: '修改失敗，請稍後再試。',
+                            icon: 'error',
+                            confirmButtonText: '確認'
+                        });
+                    }
+                });
+            }
+        });
+    });
+    </script>
 </body>
 </html>
