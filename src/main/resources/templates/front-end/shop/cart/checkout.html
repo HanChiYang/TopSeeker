@@ -24,9 +24,9 @@
 
 
 <!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<link rel="stylesheet" th:href="@{/css/common.css}">
 <!-- 商城導航列CSS -->
-<link rel="stylesheet" th:href="@{/css/shop_front_end_test.css}">
+<link rel="stylesheet" th:href="@{/css/shop_front_end.css}">
 
 
 <style>
@@ -40,6 +40,21 @@ main{
 	padding-top: 20px;
 }
 
+/* NAV修正用 */
+.navbar-nav .nav-item .nav-link {
+    border: 0px solid transparent;
+    border-radius: 0px;
+    margin: 0px;
+    }
+    
+.navbar-nav .nav-item .nav-link {
+    border: 0px solid transparent;
+    border-radius: 0px;
+    padding: 0px;
+    margin: 0px;
+}
+
+/* 結帳本體 */
 form{
 	display: flex;
   	flex-wrap:nowrap;
@@ -121,13 +136,16 @@ div.count{
 
 div.col2.bd div.mem{
 	padding: 10px;
-	
+	font-size: 18px;
 }
 
 .col3{	
 	text-align: center;
 	font-size: 18px;
 	padding: 5px;
+}
+.col3.pick{
+	font-size: 20px;
 }
 
 .col4{
@@ -141,6 +159,8 @@ div.col2.bd div.mem{
 	font-size: 16px;
 	
 }
+
+
 a {
 	text-decoration: none;
 }
@@ -153,7 +173,7 @@ div.summary{
 	width: 100%;
 	position: relative;
 	left: 5%;
-	border: 2px solid  #F7DCB9;
+	border: 2px solid rgb(158, 179, 132);
 	border-radius: 10px;
 	justify-content:space-evenly;
 	display: flex;
@@ -319,7 +339,7 @@ input#confirmPayment:hover{
 			        <div class="col pick">
 			        	<div class="col2 hd">收件方式</div>
 			        	<div class="col2 bd">
-			        		<div class="col3">
+			        		<div class="col3 pick">
 			                	<input type="radio" name="deliveryMethod" value="0" checked> 宅配
 			                	<input type="radio" name="deliveryMethod" value="1"> 超商取貨
 			            	</div>
@@ -402,7 +422,7 @@ input#confirmPayment:hover{
 									</ul>			
 								</div>
 								<!-- 貨到付款 -->
-								<div class="col4" id="cashOnDelivery" style="display: none;">貨到付款</div>
+								<div class="col4" id="cashOnDelivery" style="display: none;"></div>
 							</div>
 					 	</div>
 					</div>

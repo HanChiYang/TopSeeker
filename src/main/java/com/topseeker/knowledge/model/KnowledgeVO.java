@@ -36,7 +36,7 @@ public class KnowledgeVO implements java.io.Serializable{
 	private byte[] knowPic;
 	
 	@NotNull(message="發布日期: 請勿空白")
-	@Column(name ="know_publish_date", updatable = false)
+	@Column(name ="know_publish_date")
 	private Date knowPublishDate;
 	
 	@Column(name ="know_status")
