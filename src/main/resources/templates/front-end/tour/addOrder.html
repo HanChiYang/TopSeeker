@@ -5,135 +5,268 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>行程開團資料 - listOneTourGroup.html</title>
 
+<link rel="stylesheet" th:href="@{/css/common.css}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <head th:insert="~{/back-end/tourGroup/included-fragment}"></head>
 <style type="text/css">
-    .form-group {
-        display: flex;
-        align-items: center;
+    body {
+        margin: 2rem 2rem 2rem 2rem;
+            background-color: #F5F3E5; /* 淡奶茶色背景 */
     }
     .form-group label {
-        width: 150px;
         font-weight: bold;
     }
+    .hidden {
+        display: none;
+    }
+    .box {
+        border: 1px solid #D4A76B; /* 奶茶色 */
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        background-color: #FFF8F0; /* 淺奶茶色背景 */
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+        max-width: 100%;
+    }
+    
+    .form-control {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .form-group label {
+        display: inline-block;
+        width: auto; /* 使標籤能夠擴展到容器的寬度 */
+        margin-bottom: .5rem;
+    }
+    
+    .box div {
+        margin-bottom: .5rem;
+        line-height: 1.5;
+    }
+    
+    #bankTransferDetails {
+        white-space: nowrap; /* 使內容不會自動換行 */
+    }
+
+    .btn-primary {
+        background-color: #D4A76B; /* 奶茶色 */
+        border-color: #D4A76B; /* 奶茶色 */
+    }
+    
+    .btn-primary:hover {
+        background-color: #B89F6A; /* 深一點的奶茶色 */
+        border-color: #B89F6A; /* 深一點的奶茶色 */
+    }
 </style>
+
+
+<script>
+    function togglePaymentDetails() {
+        const paymentMethod = document.getElementById("orderPay").value;
+        const creditCardDetails = document.getElementById("creditCardDetails");
+        const bankTransferDetails = document.getElementById("bankTransferDetails");
+
+        if (paymentMethod === '1') { // 信用卡
+            creditCardDetails.classList.remove('hidden');
+            bankTransferDetails.classList.add('hidden');
+        } else if (paymentMethod === '2') { // 轉帳
+            creditCardDetails.classList.add('hidden');
+            bankTransferDetails.classList.remove('hidden');
+        } else {
+            creditCardDetails.classList.add('hidden');
+            bankTransferDetails.classList.add('hidden');
+        }
+    }
+
+    function validateCreditCard() {
+        const cardNumber = document.getElementById("creditCardNumber").value;
+        const expiryDate = document.getElementById("creditCardExpiry").value;
+        const cvc = document.getElementById("creditCardCVC").value;
+
+        const cardNumberRegex = /^\d{16}$/;
+        const expiryDateRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+        const cvcRegex = /^\d{3}$/;
+
+        return cardNumberRegex.test(cardNumber) && expiryDateRegex.test(expiryDate) && cvcRegex.test(cvc);
+    }
+
+    function validateForm(event) {
+        let orderNumsInput = parseInt(document.getElementById('orderNums').value);
+        let groupBalShow = parseInt(document.getElementById('groupBal').nextElementSibling.innerText);
+
+        console.log("orderNum:" + orderNumsInput);
+        console.log("groupBal:" + groupBalShow);
+        
+        if (orderNumsInput > groupBalShow) {
+            event.preventDefault();
+            alert("名額不足");
+            return; // 阻止表单提交
+        }
+
+        const paymentMethod = document.getElementById("orderPay").value;
+        if (paymentMethod === '1') { // 信用卡
+            if (!validateCreditCard()) {
+                event.preventDefault();
+                alert("請輸入正確的信用卡資訊");
+            } else {
+                alert("付款成功");
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const orderNumsInput = document.getElementById('orderNums');
+        const displayOrderPriceInput = document.getElementById('orderPrice');
+        const groupPriceValue = parseFloat(document.getElementById('groupPriceValue').innerText);
+        const groupBal = parseInt(document.getElementById('groupBal').innerText, 10) || 0;
+        const feedback = document.getElementById('feedback');
+
+        orderNumsInput.addEventListener('input', () => {
+            const orderNums = parseInt(orderNumsInput.value) || 0;
+            const totalPrice = orderNums * groupPriceValue;
+            displayOrderPriceInput.value = totalPrice;
+            document.getElementById('displayOrderPrice').innerText = totalPrice;
+
+            if (orderNums > groupBal) {
+                feedback.classList.add('show-feedback');
+            } else {
+                feedback.classList.remove('show-feedback');
+            }
+        });
+    });
+    
+</script>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
-    <div align="center">
-        <h2>行程訂單資料 - listOneTourGroup.html</h2>
-        <h3><a class="navbar-brand" th:href="@{/tourGroup/select_page}"><img th:src="@{/images/back1.gif}">回查詢頁<label th:text="${success}"></label></a></h3>
+<header>
+    <nav th:insert="~{/front-end/navbar.html}"></nav>
+</header>
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h3><span>你的訂單 :</span></h3>
+                <div class="form-group">
+                    <label for="groupNo">行程開團編號:</label>
+                    <div th:text="${tourGroupVO.groupNo}"></div>
+                </div>
+                <div class="form-group">
+                    <label for="tourNo">行程編號:</label>
+                    <div th:text="${tourGroupVO.tourVO.tourNo} + '-[' + ${tourGroupVO.tourVO.tourName} + ']'"></div>
+                </div>
+                <div class="form-group">
+                    <label for="groupPrice">行程開團價格:</label>
+                    <div id="groupPriceValue" th:text="${tourGroupVO.groupPrice}"></div>
+                </div>
+                <div class="form-group">
+                    <label for="groupBegin">行程開始日期:</label>
+                    <div th:text="${tourGroupVO.groupBegin}"></div>
+                </div>
+                <div class="form-group">
+                    <label for="groupEnd">行程結束日期:</label>
+                    <div th:text="${tourGroupVO.groupEnd}"></div>
+                </div>
+                
+                
+                <div class="form-group">
+                    <label for="groupDeadline">報名截止日期:</label>
+                    <div th:text="${tourGroupVO.groupDeadline}"></div>
+                </div>
+               
+               
+                <div class="form-group">
+                    <label for="groupBal" id = "groupBal">行程剩餘名額:</label>
+                    <div th:text="${tourGroupVO.groupBal}"></div>
+                </div>
+            </div>
+
+
+
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="tourImage">圖片:</label>
+                    <div><img th:src="@{/tour/DBGifReader} + '?tourNo=' + ${tourGroupVO.tourVO.tourNo}" width="100px"></div>
+                </div>
+
+                <form th:action="@{/protected/tourOrder/insert}" method="post">
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" id="groupNo" name="groupNo" th:value="${tourGroupVO.groupNo}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="orderNums">人數:</label>
+                        <input type="number" class="form-control" id="orderNums" name="orderNums" required>
+                        <div class="invalid-feedback">請輸入人數。</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>顯示總金額:</label>
+                        <input type="number" class="form-control" id="orderPrice" name="orderPrice" readonly>
+                        <span id="displayOrderPrice"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="orderPay">付款方式:</label>
+                        <select id="orderPay" class="form-control" name="orderPay" onchange="togglePaymentDetails()" required>
+                            <option value="">選擇付款方式</option>
+                            <option value="1">信用卡</option>
+                            <option value="2">轉帳</option>
+                        </select>
+                        <div class="invalid-feedback">請選擇付款方式。</div>
+                    </div>
+
+                    <div id="creditCardDetails" class="box hidden">
+                        <div class="form-group">
+                            <label for="creditCardNumber">信用卡號:</label>
+                            <input type="text" class="form-control" id="creditCardNumber" name="creditCardNumber" maxlength="16"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="creditCardExpiry">有效日期:</label>
+                            <input type="text" class="form-control" id="creditCardExpiry" name="creditCardExpiry" maxlength="5"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="creditCardCVC">安全碼:</label>
+                            <input type="text" class="form-control" id="creditCardCVC" name="creditCardCVC" maxlength="3"/>
+                        </div>
+                    </div>
+
+                    <div id="bankTransferDetails" class="box hidden" style="white-space: pre-line;">
+                        <h3><b>請轉帳至topseeker銀行帳戶</b></h3>
+                        <div>
+                            <label>銀行名稱:</label>
+                            <span>topseeker銀行</span>
+                        </div>
+                        <div>
+                            <label>銀行代碼:</label>
+                            <span>808</span>
+                        </div>
+                        <div>
+                            <label>帳戶名稱:</label>
+                            <span>topseeker</span>
+                        </div>
+                        <div>
+                            <label>帳戶號碼:</label>
+                            <span>2345 6789 0123 4567</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" onclick="validateForm(event)">提交訂單</button>
+                </form>
+            </div>
+        </div>
     </div>
-</nav>
+</main>
 
-<h3><span>查詢結果 :</span></h3>
-<div class="form-group">
-    <label for="groupNo">行程開團編號:</label>
-    <div th:text="${tourGroupVO.groupNo}"></div>
-</div>
-
-
-<div class="form-group">
-    <label for="tourNo">行程編號:</label>
-    <div th:text="${tourGroupVO.tourVO.tourNo} + '-[' + ${tourGroupVO.tourVO.tourName} + ']'"></div>
-</div>
-<div class="form-group">
-    <label for="groupPrice">行程開團價格:</label>
-    <div th:text="${tourGroupVO.groupPrice}"></div>
-</div>
-<div class="form-group">
-    <label for="groupBegin">行程開始日期:</label>
-    <div th:text="${tourGroupVO.groupBegin}"></div>
-</div>
-<div class="form-group">
-    <label for="groupEnd">行程結束日期:</label>
-    <div th:text="${tourGroupVO.groupEnd}"></div>
-</div>
-
-
-
-<div class="form-group">
-    <label for="groupDeadline">報名截止日期:</label>
-    <div th:text="${tourGroupVO.groupDeadline}"></div>
-</div>
-<div class="form-group">
-    <label for="groupBal">行程剩餘名額:</label>
-    <div th:text="${tourGroupVO.groupBal}"></div>
-</div>
-<div class="form-group">
-    <label for="groupMin">行程成行人數:</label>
-    <div th:text="${tourGroupVO.groupMin}"></div>
-</div>
-<div class="form-group">
-    <label for="groupMax">行程最大人數:</label>
-    <div th:text="${tourGroupVO.groupMax}"></div>
-</div>
-<div class="form-group">
-    <label for="tourImage">圖片:</label>
-    <div><img th:src="@{/tour/DBGifReader} + '?tourNo=' + ${tourGroupVO.tourVO.tourNo}" width="100px"></div>
-</div>
-
-
-
-
-  <div class="form-group">
-            <label for="orderNums">人數:</label>
-            <input type="number" class="form-control" id="orderNums" name=orderNums required>
-            <div class="invalid-feedback">請輸入人數。</div>
-        </div>
-
-        <div class="form-group">
-            <label>顯示總金額:</label>
-            <span id="displayOrderPrice"></span>
-        </div>
-
-        <div class="form-group">
-            <label for="orderPay">付款方式:</label>
-            <select id="orderPay" class="form-control" name="orderPay" onchange="togglePaymentDetails()" required>
-                <option value="">選擇付款方式</option>
-                <option value="1">信用卡</option>
-                <option value="2">轉帳</option>
-            </select>
-            <div class="invalid-feedback">請選擇付款方式。</div>
-        </div>
-
-        <div id="creditCardDetails" class="box hidden">
-            <div class="form-group">
-                <label for="creditCardNumber">信用卡號:</label>
-                <input type="text" class="form-control" id="creditCardNumber" name="creditCardNumber" maxlength="16"/>
-            </div>
-            <div class="form-group">
-                <label for="creditCardExpiry">有效日期:</label>
-                <input type="text" class="form-control" id="creditCardExpiry" name="creditCardExpiry" maxlength="5"/>
-            </div>
-            <div class="form-group">
-                <label for="creditCardCVC">安全碼:</label>
-                <input type="text" class="form-control" id="creditCardCVC" name="creditCardCVC" maxlength="3"/>
-            </div>
-        </div>
-
-        <div id="bankTransferDetails" class="box hidden" style="white-space: pre-line;">
-            <h3><b>請轉帳至topseeker銀行帳戶</b></h3>
-            <div>
-                <label>銀行名稱:</label>
-                <span>topseeker銀行</span>
-            </div>
-            <div>
-                <label>銀行代碼:</label>
-                <span>808</span>
-            </div>
-            <div>
-                <label>帳戶名稱:</label>
-                <span>topseeker公司</span>
-            </div>
-            <div>
-                <label>帳戶號碼:</label>
-                <span>09868888888888</span>
-            </div>
-        </div>
-        
-        
-        
-        
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9B+Zl2a7U7/2mW39VSX2P2m8Lk5ZT+n3uAa2XJxJW5k4hFVXGxC" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMf/j8f7Izf8I+M8U9xI7NlyI/4E4V9gE5d8F7oXm0L4PejGfZ" crossorigin="anonymous"></script>
 </body>
 </html>
