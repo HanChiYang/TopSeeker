@@ -99,6 +99,7 @@ public class KnowledgeController {
 		// 使用者未選擇要上傳的圖片時
 		if (parts[0].isEmpty()) { 
 			model.addAttribute("errorMessage", "新手知識圖片: 請上傳圖片");
+			knowledgeVO.setKnowPic(null);
 		} else {
 			for (MultipartFile multipartFile : parts) {
 				byte[] buf = multipartFile.getBytes();
@@ -106,7 +107,7 @@ public class KnowledgeController {
 			}
 		}
 		
-		if (result.hasErrors() || parts[0].isEmpty()) {
+		if (result.hasErrors()) {
 			return "back-end/knowledge/addKnow";
 		}
 
