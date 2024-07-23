@@ -121,9 +121,9 @@
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <header>
-        <nav th:insert="~{/front-end/navbar.html}"></nav>
-    </header>
+    <script src="/js/common.js"></script>
+    <nav th:insert="~{/front-end/navbar2.html}"></nav>
+    <div th:insert="~{/front-end/notification/notification.html}"></div>
     <div class="container-fluid main-content">
         <div class="row">
             <div class="col-md-3">
@@ -174,6 +174,8 @@
             </div>
         </div>
     </div>
+    
+    
     <script> 
         $(document).ready(function() {
             // 初次載入時自動發送AJAX請求以獲取列表
@@ -222,6 +224,7 @@
             bindCardClickEvent(); 
         });
     </script>
+    
     <footer>
         <p>&copy; 2024 登山網站. 版權所有.</p>
     </footer>

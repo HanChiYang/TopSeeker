@@ -25,8 +25,8 @@
 	rel="stylesheet">
 
 
-<!-- Topseeker前台導航列CSS -->
-<link rel="stylesheet" th:href="@{/css/common.css}">
+<!-- Topseeker後台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/back_end.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
@@ -155,7 +155,7 @@ a {
 					</div>
 					<div class="mb-3">
 						<label class="form-label">活動金額門檻:</label>
-						<input class="form-control" type="text" th:field="*{saleAmount}" onclick="hideContent('saleAmount.errors')" /><br/>
+						<input class="form-control" type="number" th:field="*{saleAmount}" onclick="hideContent('saleAmount.errors')" /><br/>
 						<div th:if="${#fields.hasErrors('saleAmount')}" th:errors="*{saleAmount}" class="error" id="saleAmount.errors"></div>
 					</div>
 					<div class="mb-3">

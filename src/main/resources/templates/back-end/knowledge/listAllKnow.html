@@ -23,8 +23,8 @@
 	rel="stylesheet">
 
 
-<!-- Topseeker前台導航列CSS -->
-<!-- <link rel="stylesheet" th:href="@{/css/common.css}"> -->
+<!-- Topseeker後台導航列CSS -->
+<link rel="stylesheet" th:href="@{/css/back_end.css}">
 
 <!-- 商城導航列CSS -->
 <link rel="stylesheet" th:href="@{/css/shop_back_end.css}">
@@ -41,11 +41,35 @@
 
 <style type="text/css">
 
-main.knowManagementContent{
-width: 70%;
-padding: 20px 40px;
-margin: 0 auto;
+.knowContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 50px;
+}
 
+
+.knowTitle h3 {
+  border: 2px solid darkgray;
+  padding: 10px 20px;
+  margin: 0;
+  background-color: #FAF1E4;
+  justify-content: center;
+  border-radius: 20px;
+}
+
+.addKnow {
+  padding: 10px;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.knowManagementContent {
+	 border: 1px solid lightgray;
+	 padding: 10px;
+	 margin: 0;
+	 justify-content: center;
 }
 
 
@@ -56,89 +80,101 @@ margin: 0 auto;
 
 	<!-- topseeker後台Navbar -->
 	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
-
-	<main class="knowManagementContent">
-	<div class="listAllKnowDisplay">
-		<table id="example" class="display">
-			<thead>
-				<tr style="background-color: #d9ead3">
-					<th>知識編號</th>
-					<th>發布日期</th>
-					<th>圖片</th>
-					<th>標題</th>
-					<th>內容</th>
-					<th width="150px">知識狀態</th>
-					<th>修改</th>
-					<!-- 					<th>刪除</th> -->
-				</tr>
-			</thead>
-			<tbody>
-				<th:block th:each="knowledgeVO : ${knowListData}"> 
-					<tr>
-						<td th:text="${knowledgeVO.knowNo}"></td>
-						<td th:text="${knowledgeVO.knowPublishDate}"></td>
-						<td><img
-							th:src="@{/knowledge/DBGifReader} + '?knowNo=' + ${knowledgeVO.knowNo} "
-							width="50px"></td>
-							
-						<td th:text="${knowledgeVO.knowTitle}"></td>
-						
-						<td
-							th:text="${#strings.abbreviate(knowledgeVO.knowContent, 100)}"></td>
-
-						<td width="100px">
-							<!-- 賦一個隱藏的值給DataTable排序用 -->
-							<span style="display:none" th:text="${knowledgeVO.knowStatus}"></span>
-
-							<div class="btn-group" role="group"
-								aria-label="Basic radio toggle button group">
-								<!-- 上架中按鈕 -->
-								<input type="radio" class="btn-check"
-									th:name="'knowStatus-' + ${knowledgeVO.knowNo}"
-									th:id="'success-outlined-' + ${knowledgeVO.knowNo}"
-									autocomplete="off"
-									th:checked="${knowledgeVO.knowStatus == 1}"> <label
-									class="btn btn-outline-success"
-									th:for="'success-outlined-' + ${knowledgeVO.knowNo}"
-									th:onclick="'updateknowStatus(' + ${knowledgeVO.knowNo} + ', 1)'" th:value="${knowledgeVO.knowStatus}">上架中</label>
-
-								<!-- 下架按鈕 -->
-								<input type="radio" class="btn-check"
-									th:name="'knowStatus-' + ${knowledgeVO.knowNo}"
-									th:id="'secondary-outlined-' + ${knowledgeVO.knowNo}"
-									autocomplete="off"
-									th:checked="${knowledgeVO.knowStatus == 0}"> <label
-									class="btn btn-outline-secondary"
-									th:for="'secondary-outlined-' + ${knowledgeVO.knowNo}"
-									th:onclick="'updateknowStatus(' + ${knowledgeVO.knowNo} + ', 0)'" th:value="${knowledgeVO.knowStatus}">下架</label>
-							</div>
-
-
-<!-- 						</td> -->
-						<td width="100px">
-							<form method="post"
-								th:action="@{getOneKnow_For_Update}"
-								style="margin-bottom: 0;">
-								<button type="submit" class="btn btn-warning text-white">
-									<i class="fas fa-edit"></i> 修改
-								</button>
-								<input type="hidden" name="knowNo"
-									th:value="${knowledgeVO.knowNo}">
-							</form>
-						</td>
-						<!-- 						<td> -->
-						<!-- 							<form method="post" th:action="@{/knowledge/delete}" -->
-						<!-- 								style="margin-bottom: 0px;"> -->
-						<!-- 								<input type="submit" value="刪除"> <input type="hidden" -->
-						<!-- 									name="knowNo" th:value="${knowledgeVO.knowNo}"> -->
-						<!-- 							</form> -->
-						<!-- 						</td> -->
+	
+	<div class="knowContent">
+	
+		<div class="knowTitle">
+		<h3><i class="fa-regular fa-lightbulb"></i><b> 新手知識管理</b></h3>
+		</div>	
+	
+		<div class="addKnow">
+			<form th:action="@{/knowledge/addKnow}" method="get">
+	            <button type="submit" class="btn btn-primary">新增新手知識</button>
+	        </form>
+		</div>
+		
+	
+		<main class="knowManagementContent">
+			<table id="example" class="display">
+				<thead>
+					<tr style="background-color: #FAF1E4">
+						<th>編號</th>
+						<th>發布日期</th>
+						<th>圖片</th>
+						<th>標題</th>
+						<th>內容</th>
+						<th width="150px">知識狀態</th>
+						<th>修改</th>
+						<!-- 					<th>刪除</th> -->
 					</tr>
-				</th:block>
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					<th:block th:each="knowledgeVO : ${knowListData}"> 
+						<tr>
+							<td th:text="${knowledgeVO.knowNo}"></td>
+							<td th:text="${knowledgeVO.knowPublishDate}"></td>
+							<td><img
+								th:src="@{/knowledge/DBGifReader} + '?knowNo=' + ${knowledgeVO.knowNo} "
+								width="50px"></td>
+								
+							<td th:text="${knowledgeVO.knowTitle}"></td>
+							
+							<td
+								th:text="${#strings.abbreviate(knowledgeVO.knowContent, 100)}"></td>
+	
+							<td width="100px">
+								<!-- 賦一個隱藏的值給DataTable排序用 -->
+								<span style="display:none" th:text="${knowledgeVO.knowStatus}"></span>
+	
+								<div class="btn-group" role="group"
+									aria-label="Basic radio toggle button group">
+									<!-- 上架中按鈕 -->
+									<input type="radio" class="btn-check"
+										th:name="'knowStatus-' + ${knowledgeVO.knowNo}"
+										th:id="'success-outlined-' + ${knowledgeVO.knowNo}"
+										autocomplete="off"
+										th:checked="${knowledgeVO.knowStatus == 1}"> <label
+										class="btn btn-outline-success"
+										th:for="'success-outlined-' + ${knowledgeVO.knowNo}"
+										th:onclick="'updateknowStatus(' + ${knowledgeVO.knowNo} + ', 1)'" th:value="${knowledgeVO.knowStatus}">上架中</label>
+	
+									<!-- 下架按鈕 -->
+									<input type="radio" class="btn-check"
+										th:name="'knowStatus-' + ${knowledgeVO.knowNo}"
+										th:id="'secondary-outlined-' + ${knowledgeVO.knowNo}"
+										autocomplete="off"
+										th:checked="${knowledgeVO.knowStatus == 0}"> <label
+										class="btn btn-outline-secondary"
+										th:for="'secondary-outlined-' + ${knowledgeVO.knowNo}"
+										th:onclick="'updateknowStatus(' + ${knowledgeVO.knowNo} + ', 0)'" th:value="${knowledgeVO.knowStatus}">下架</label>
+								</div>
+	
+	
+	<!-- 						</td> -->
+							<td width="100px">
+								<form method="post"
+									th:action="@{getOneKnow_For_Update}"
+									style="margin-bottom: 0;">
+									<button type="submit" class="btn btn-warning text-white">
+										<i class="fas fa-edit"></i> 修改
+									</button>
+									<input type="hidden" name="knowNo"
+										th:value="${knowledgeVO.knowNo}">
+								</form>
+							</td>
+							<!-- 						<td> -->
+							<!-- 							<form method="post" th:action="@{/knowledge/delete}" -->
+							<!-- 								style="margin-bottom: 0px;"> -->
+							<!-- 								<input type="submit" value="刪除"> <input type="hidden" -->
+							<!-- 									name="knowNo" th:value="${knowledgeVO.knowNo}"> -->
+							<!-- 							</form> -->
+							<!-- 						</td> -->
+						</tr>
+					</th:block>
+				</tbody>
+			</table>
+		</main>
 	</div>
-	</main>
 
 
 	<!-- ●● jquery datatables 設定 -->

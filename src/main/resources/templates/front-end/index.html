@@ -10,109 +10,405 @@
 <link rel="stylesheet" th:href="@{/css/common.css}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
- <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-  />
 <style>
-        .navbar {
-		    position: fixed;
-		    top: 0;
-		    width: 100%;
-		    z-index: 1000;
-		}
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+         padding-bottom: 0; 
+    }
+    .member-area {
+        margin-left: auto;
+        color: green;
+    }
+
+    .video-container {
+        width: 100%;
+        height: calc(100vh - 56px);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .video-container video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .section-title {
+        text-align: left;
+        margin-top: 40px;
+        margin-left: 15px;
+    }
+
+    .overlay-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding: 20px;
+        font-size: 24px;
+        border-radius: 5px;
+        text-align: center;
+        z-index: 1;
+    }
+
+    .topseeker, .adv {
+        text-align: center;
+    }
+
+    .group-section,
+    .tour-section,
+    .shop-section,
+    .discussion-section {
+        margin-top: 40px;
+    }
+
+    .item-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .item-container .item {
+        width: 32%;
+        height: 50vh;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .group-section img,
+    .discussion-section img {
+        width: 100%;
+        height: 50vh;
+        object-fit: cover;
+    }
+    
+    .regions {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+    .regions span {
+        margin-right: 20px;
+        font-size: 30px;
+        font-weight: bold;
+    }
+    .regions button {
+        margin: 0 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #90979f;
+        color: white;
+        border: none;
+    }
+    .regions button:hover {
+        background-color: #4499e9;
+        color: white;
+    }
+    .tours, .tours-regions {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        padding: 20px;
+    }
+    .tour {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin: 10px;
+        width: 30%;
+    }
+    .tour img {
+        width: 100%;
+        height: auto;
+    }
+    
+    .card img {
+        width: 1000px;
+        height: 200px;
+    }
+    
+    .content {
+        padding: 20px;
+    }
+    
+    .h5 {
+        font-size: 40px;
+        text-align: center;
+    }
+    .c5 {
+        font-size: 20px;
+        text-align: center;
+    }
+    .footer {
+    background-color: black;
+    color: white;
+    height: 50px;
+    display: flex;
+    justify-content: center; /* 水平置中 */
+/*     align-items: center;  */
+/*     line-height: 50px; */
+    width: 100%;
+	}
+     hr {
+            width: 50%;
+            height: 5px;
+            background-color: rgba(0, 0, 0, 1);
+            border: none;
+            margin: 30px auto;
+        }
+     .all img{
+     	width: 280px;
+     	height: 200px;
+     }
+     nav{
+/*      font-weight: bold;   */
+    font-size: 20px; /* 設定字體大小 */
+     }
+
 </style>
 </head>
+
 <body>
 
-    <div class="video-background">
-        <video autoplay muted loop id="video1">
-            <source src="/images/mountainmedia.mp4" type="video/mp4">
-        </video>
-        <video autoplay muted loop id="video2" style="display: none;">
-            <source src="/images/mountainmedia.mp4" type="video/mp4">
-        </video>
-        <video autoplay muted loop id="video3" style="display: none;">
-            <source src="/images/mountainmedia.mp4" type="video/mp4">
-        </video>
-    </div>
+   
     
-    <div class="container2">
-    <h1 class="animate__animated animate__backInLeft">關於我們</h1>
-    <pre class="animate__animated animate__backInLeft" >
-國內的登山健行活動在近幾年漸漸愈受歡迎，然而新手初次接觸卻可能不知道從何下手。
-可以去哪座山或步道? 該準備什麼裝備? 去哪能找到同伴?
-為了解決以上問題，於是誕生了此網站的發想。
-本站是一個提供登山愛好者們揪團、套裝行程安排與登山用品購物的複合式平台，
-無論新手、老手都能在此找到適合你的行程、裝備、一起結伴的山友們。
-    </pre></div>
+    
 
 <nav th:insert="~{/front-end/navbar.html}"></nav>
 
-<div class="container2">
-<h1 class="animate__animated animate__backInLeft" style="margin-bottom:30px;">歡迎來到Topseeker</h1>
-
-<h4 class="animate__animated animate__backInLeft">
-<p  th:if="${session.loggedInMember != null}">
-    您好，<span  th:text="${session.loggedInMember.memName}"></span> ！
-   
-</p></h4>
-</div>
-<div th:insert="~{/front-end/notification/notification.html}"></div>
-<div class="navigation-footer">
-			<div class="flex-column-bbd">
-				<div class="divider"></div>
-				<span class="phone">電話:3345678</span><span class="contact-address">聯絡地址:320桃園市中壢區復興路46號8樓</span>
-			</div>
+<div class="video-container">
+    <video id="videoPlayer" autoplay muted loop>
+        <source src="/images1/vedio3.mp4#t=25" type="video/mp4">
+    </video>
+    <div class="overlay-text">
+        <div>無趣的不是這個世界，而是我們沒有堅持有趣的活法</div>
+        <div class="topseeker">TopSeeker</div>
+        <div class="adv">讓我們一起踏上探索之旅，開創難忘回憶！</div>
+    </div>
+</div><br>
 
 
-			<div class="flex-column-e">
-				<span class="site-name">Site name</span>
-				<div class="social-icons">
-					<div class="buttons-icon">
-						<div class="icon">
-							<a href="https://line.me/tw/" target="_blank">
-						
-							<div class="icon-11"></div></a>
-						</div>
-					</div>
-					<div class="buttons-icon-12">
-				
-						<div class="icon-13">
-						<a href="https://www.facebook.com/PageDavidSeafood/?locale=zh_TW" target="_blank">
-							<div class="icon-14"></div></a>
-						</div></a>
-					</div>
-					<div class="buttons-icon-15">
-						<div class="icon-16">
-							<a href="https://www.youtube.com/" target="_blank">
-							<div class="icon-17"></div></a>
-						</div>
-					</div>
-					<div class="buttons-icon-18">
-						<div class="icon-19">
-							<a href="https://www.instagram.com/" target="_blank">						
-							<div class="icon-1a"></div></a>
-						</div>
-					</div>
 
 
-				</div>
-			</div>
 
 
+
+	<div class="all">
+    
+    <!-- 揪團行程 -->
+    <div class="container">
+        <h2>揪團行程</h2>
+        <div class="tours">
+         <th:block th:each="actVO : ${actListData}">
+        <th:block th:if="${actVO.actNo ==1 || actVO.actNo == 2 || actVO.actNo == 3}">
+            <div class="tour">
+                    <img th:src="@{/actpicture/DBGifReader2(actNo=${actVO.actNo})}" alt="行程1">
+				<h5 class="card-title" th:text="${actVO.actTitle}">活動標題</h5>                
+				<p class="card-text">活動地點: <span th:text="${actVO.actPlace}"></span></p>
+                <form method="post" th:action="@{/act/details}" id="detailForm" class="text-center">
+                                    <input type="hidden" name="actNo" th:value="${actVO.actNo}" />
+                                    <button type="submit" class="btn btn-primary" style="width: 100%;">詳情</button>
+                                </form>
+            </div>
+        </div>
+    </div>
+    
+    
+    <!-- 熱門行程 -->
+    <div class="container">
+        <h2>旅遊行程</h2>
+        <div class="tours">
+            <div class="tour">
+                <a th:href="@{/tour/getTourNo_For_Display(tourNo=1)}">
+                    <img th:src="@{/tourPic/DBGifReader} + '?picNo=1'" alt="行程1">
+                </a>
+                <h3>熱門行程 1</h3>
+                <p>行程內容簡介...</p>
+            </div>
+            <div class="tour">
+                <a th:href="@{/tour/getTourNo_For_Display(tourNo=2)}">
+                    <img th:src="@{/tourPic/DBGifReader} + '?picNo=2'" alt="行程2">
+                </a>
+                <h3>熱門行程 2</h3>
+                <p>行程內容簡介...</p>
+            </div>
+            <div class="tour">
+                <a th:href="@{/tour/getTourNo_For_Display(tourNo=3)}">
+                    <img th:src="@{/tourPic/DBGifReader} + '?picNo=3'" alt="行程3">
+                </a>
+                <h3>熱門行程 3</h3>
+                <p>行程內容簡介...</p>
+            </div>
+        </div>
+    </div>
+    
+
+    
+    <!-- 戶外用品 -->
+     <div class="container">
+        <h2>戶外用品</h2>
+        <div class="product-grid">
+			
+			   <!-- 商品卡片範例 -->
+			   <th:block th:each="shopProductVO : ${shopListData}" class="product-card"
+			    th:data-prod-no="${shopProductVO.prodNo}">
+				<th:block th:if="${actVO.actNo ==1 || actVO.actNo == 2 || actVO.actNo == 3}">
+			
+			
+<!-- 			    <a -->
+<!-- 			     th:href="@{/shop/listOneProdDetail(prodNo=${shopProductVO.prodNo})}"> -->
+<!-- 			     <img -->
+<!-- 			     th:src="@{/shop/DBGifReader} + '?prodNo=' + ${shopProductVO.prodNo}" -->
+<!-- 			     alt="商品圖片"> -->
+			
+			
+<!-- 			    </a> -->
+			
+			    <div class="product-info">
+			     <!-- 商品名稱連結 -->
+			     <h3>
+			      <a
+			       th:href="@{/shop/listOneProdDetail(prodNo=${shopProductVO.prodNo})}"
+			       th:text="${shopProductVO.prodName}">商品名稱</a>
+			     </h3>
+			     <p th:text="'$' + ${shopProductVO.prodPrice}">商品金額</p>
+			    </div>
+			
+<!-- 			    <div class="product-actions"> -->
+			
+<!-- 			     <a href="javascript:void(0);" th:data-id="${shopProductVO.prodNo}" -->
+<!-- 			      onclick="toggleWishlist(this)" class="wishlist-btn"><i -->
+<!-- 			      class="fa-regular fa-heart"></i></a> -->
+<!-- 			     購物車Ajax -->
+<!-- 			     <a href="javascript:void(0);" th:data-id="${shopProductVO.prodNo}" -->
+<!-- 			      onclick="addToCart(this)"><i class="fa-solid fa-cart-plus"></i></a> -->
+<!-- 			    </div> -->
+			  </div>
 		</div>
+	
 
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-<script src="/js/common.js"></script>
-<script th:inline="javascript">
-		var baseUrl = /*[[@{/}]]*/'/';
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oB6zNkrNkT2GxN3E7AB8jtUUKz6fy4yGpe5OABhDWT1y1xYok2mUOpdNT6y2Rxm" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-Si6D5lN40By3jl5g0r4J0ljC2SOlV7I/t7W8f3r3Fz6CwKi1z6qC5n8p5YxRaqCo" crossorigin="anonymous"></script>
+
+<div style="text-align: center;">
+        <hr >
+    </div>
+
+
+
+
+<h5 class="h5">About Us</h5>
+    <div class="c5">
+        <div class="d5">TopSeeker 踏徙客是一個專為登山以及旅遊愛好者打造的全方位平台</div>
+        <div>在這裡，你可以結識志同道合的夥伴，一同探索大自然的美好</div>
+        無論你追求的是休閒漫步、挑戰極限，還是欣賞美景
+        <div>TopSeeker 都能滿足你的需求，帶給你無與倫比的戶外體驗</div>
+        讓我們一起踏上冒險之旅，開創難忘回憶！
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    
+
+    
+
+
+<footer class="footer text-center py-3">
+    <p>copyright &copy; 2024 TopSeeker</p>
+</footer>
+
+
+
+
+<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<!-- Bootstrap JavaScript -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- 引入 DataTables -->
+	<script
+		src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+
+	<!-- topseeker商城用JavaScript -->
+	<script src="/js/shop_front_end.js"></script>
+
+	<script>
+	
+    $(document).ready(function() {
+        // 監聽 Enter 鍵事件
+        $('#searchInput').keypress(function(e) {
+            if (e.which == 13) { // 13 是 Enter 鍵的鍵碼
+                $('#searchForm').submit();
+                return false; // 防止表單的默認行為
+            }
+        });
+    });
+    
+    
+    
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        var videoPlayer = document.getElementById('videoPlayer');
+        videoPlayer.playbackRate = 1.0;
+
+        var isMuted = true; // 初始狀態為靜音
+
+        // 點擊影片時切換靜音狀態
+        videoPlayer.addEventListener('click', function () {
+            isMuted = !isMuted; // 切換靜音狀態
+            videoPlayer.muted = isMuted; // 設置靜音狀態
+
+            // 根據靜音狀態切換圖示
+            if (isMuted) {
+                // 靜音時顯示音量關閉圖示
+                document.getElementById('volumeIcon').classList.remove('fa-volume-up');
+                document.getElementById('volumeIcon').classList.add('fa-volume-mute');
+            } else {
+                // 非靜音時顯示音量開啟圖示
+                document.getElementById('volumeIcon').classList.remove('fa-volume-mute');
+                document.getElementById('volumeIcon').classList.add('fa-volume-up');
+            }
+        });
+
+        // ==========================
+        var video = document.getElementById('videoPlayer');
+        // 監聽影片時間更新事件
+        // 設定影片的起始和結束時間
+        var startTime = 81;  // 起始時間（秒）
+        var stopTime = 149;   // 結束時間（秒）
+        // 當影片準備好播放時，設置起始時間
+        video.addEventListener('loadedmetadata', function() {
+            video.currentTime = startTime;
+        });
+        // 監聽影片時間更新事件
+        video.addEventListener('timeupdate', function() {
+            // 如果影片的當前時間大於等於停止時間，則將當前時間設回起始時間
+            if (video.currentTime >= stopTime) {
+                video.currentTime = startTime;
+            }
+        });
+        // 監聽影片播放結束事件，以確保影片在結束時間後重新播放
+        video.addEventListener('ended', function() {
+            video.currentTime = startTime;
+            video.play();
+        });
+    });
+		
+	
+
 
 		function redirectTo(url) {
 			window.location.href = url;

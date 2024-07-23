@@ -83,10 +83,17 @@ public class ShopProdController {
 
 		return "front-end/shop/homepage";
 	}
+	
+	// 商城首頁 prodTest.html
+	@GetMapping("/prodtest")
+	public String showShopTest(ModelMap model) {
+
+
+		return "front-end/shop/homepage";
+	}
 
 	// 商城商品分類頁面 listProdByType.html
 	@GetMapping("/category/{categoryName}")
-//    public String showShopProductByType(@PathVariable("prodTypeNo") int prodTypeNo, ModelMap model) {
 	public String showShopProductByType(@PathVariable String categoryName, @RequestParam int prodTypeNo,
 			ModelMap model) {
 
@@ -247,6 +254,8 @@ public class ShopProdController {
 		return response;
 	}
 
+	
+	
 	// ============後端管理頁面============
 
 	// 後台首頁 management_index.html
@@ -302,20 +311,12 @@ public class ShopProdController {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
-//		result = removeFieldError(shopProductVO, result, "prodPic");
+		result = removeFieldError(shopProductVO, result, "picSet");
 
-		// 使用者未選擇要上傳的圖片時
-		if (parts[0].isEmpty()) { 
-//			model.addAttribute("errorMessage", "商品圖片: 請上傳圖片");
-
-			shopProductSvc.addShopProduct(shopProductVO);
-
-			List<ShopProductVO> list = shopProductSvc.getAll();
-			model.addAttribute("shopListData", list);
-			model.addAttribute("success", "新增成功");
-			return "redirect:/shop/shopManagement/listAllProd";
-
-		} else {
+		// 使用者有選擇要上傳的圖片時
+		if (!(parts[0].isEmpty())) { 
+			
+			
 			List<ShopProductPicVO> picSet = new ArrayList<>();
 
 			for (MultipartFile multipartFile : parts) {
@@ -326,18 +327,20 @@ public class ShopProdController {
 				shopProductPicVO.setShopProductVO(shopProductVO); // 設置關聯到商品
 
 				picSet.add(shopProductPicVO); // 添加到集合中
-//		    }
 				shopProductVO.setShopProductPics(picSet); // 設置商品的圖片集合
+		
 			}
-//		if (result.hasErrors() || parts[0].isEmpty()) {
-//			return "back-end/shop/addProd";
-//		}
+			
+		}
+		
+		//圖片以外的欄位有錯誤訊息的話
+		if (result.hasErrors()) {
 
-//		if (result.hasErrors()) {
-//	        // 如果有驗證錯誤，處理錯誤
-//	        model.addAttribute("errorMessage", "資料未填寫完整，請重新檢查");
-//	        return "back-end/shop/addProd"; // 返回錯誤頁面或者其他處理方式
-//	    }
+			return "back-end/shop/addProd";
+
+		}
+
+
 			/*************************** 2.開始新增資料 *****************************************/
 			shopProductSvc.addShopProduct(shopProductVO);
 
@@ -345,10 +348,10 @@ public class ShopProdController {
 			List<ShopProductVO> list = shopProductSvc.getAll();
 			model.addAttribute("shopListData", list);
 			model.addAttribute("success", "新增成功");
-			return "redirect:/shop/shopManagement/listAllProd"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/shop/listShopProduct")
+			return "redirect:/shop/shopManagement/listAllProd";
 
 		}
-	}
+
 
 	// 單項商品修改
 	@PostMapping("/shopManagement/getOne_For_Update")
@@ -372,13 +375,12 @@ public class ShopProdController {
 		// 設定修改時間
 		Timestamp prodDate = new Timestamp(System.currentTimeMillis());
 		shopProductVO.setProdDate(prodDate);
-
-		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
-		result = removeFieldError(shopProductVO, result, "prodPic");
-
-		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
-			model.addAttribute("errorMessage", "商品圖片: 請上傳圖片");
-		} else {
+		
+		
+		// 使用者有選擇要上傳的圖片時
+		if (!(parts[0].isEmpty())) { 
+			
+			
 			List<ShopProductPicVO> picSet = new ArrayList<>();
 
 			for (MultipartFile multipartFile : parts) {
@@ -389,8 +391,17 @@ public class ShopProdController {
 				shopProductPicVO.setShopProductVO(shopProductVO); // 設置關聯到商品
 
 				picSet.add(shopProductPicVO); // 添加到集合中
+				shopProductVO.setShopProductPics(picSet); // 設置商品的圖片集合
+		
 			}
-			shopProductVO.setShopProductPics(picSet); // 設置商品的圖片集合
+			
+		}
+		
+		//圖片以外的欄位有錯誤訊息的話
+		if (result.hasErrors()) {
+
+			return "back-end/shop/update_prod_input";
+
 		}
 
 		/*************************** 2.開始修改資料 *****************************************/

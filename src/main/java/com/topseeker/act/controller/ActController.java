@@ -186,6 +186,14 @@ public class ActController {
 				    actVO.setActPictures(picSet); // 設置活動圖片集合
 				}
 		/*************************** 2.開始修改資料 *****************************************/
+		// 獲取原本的活動資料
+	    ActVO originalActVO = actSvc.getOneAct(actVO.getActNo());
+
+	    if (originalActVO != null) {
+	        // 保留原本的已參與和待審核人數
+	        actVO.setActCurrentCount(originalActVO.getActCurrentCount());
+	        actVO.setActCheckCount(originalActVO.getActCheckCount());
+	    }		
 		actSvc.updateAct(actVO);
 		// 獲取所有參與該活動的會員
 	    List<ParticipantVO> participants = participantSvc.findParticipantsByActNo(actVO.getActNo());

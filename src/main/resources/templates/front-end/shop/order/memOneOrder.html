@@ -134,7 +134,7 @@ body{
 		<div class="content"> 
 			<div class="left">
 				<span>訂單編號	:</span><span th:text="${orderVO.orderNo}"></span><br/>
-				<span>促銷活動名稱	:</span><span th:text="${orderVO.saleVO.saleName}"></span><br/>
+
 				<span>訂單日期	:</span><span th:text="${#dates.format(orderVO.orderDate, 'yyyy-MM-dd')}"></span><br/>
 				<span>訂單實付金額	:</span><span th:text="${orderVO.orderBill + '元'}"></span><br/>
 				<span>收件人姓名	:</span><span th:text="${orderVO.orderName}"></span><br/>

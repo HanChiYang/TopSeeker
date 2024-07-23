@@ -9,7 +9,6 @@
     position: relative;
 }
 
-
 #shopNavbar {
     background-color: rgba(67, 83, 52, 0.8);
     display: flex;
@@ -76,8 +75,6 @@ nav ul li a {
     z-index: 100;
 }
 
-
-
 body, html {
     height: 100%;
     margin: 0;
@@ -89,7 +86,7 @@ body, html {
 /* 	background-color: #f8f9fa; */
 /* } */
 
-.shopContent {
+.shopContent, .knowContent{
     display: flex;
     align-items: stretch;
     min-height: 100vh;

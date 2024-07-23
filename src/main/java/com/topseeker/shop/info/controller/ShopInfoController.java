@@ -40,34 +40,13 @@ public class ShopInfoController {
 	// 商城最新消息頁面 shopInfo.html
 	@GetMapping("/shopInfo")
 	public String showShopInfo(ModelMap model) {
-		List<ShopInfoVO> shopInfoListData = shopInfoSvc.getAllReleasedInfo();
+		List<ShopInfoVO> shopInfoListData = shopInfoSvc.getAll();
 
 		model.addAttribute("shopInfoListData", shopInfoListData);
 
 		return "front-end/shop/info/shopInfo";
 	}
 
-//	// 商城商品分類頁面 listProdByType.html
-//	@GetMapping("/category/{categoryName}")
-////    public String showShopProductByType(@PathVariable("prodTypeNo") int prodTypeNo, ModelMap model) {
-//	public String showShopProductByType(@PathVariable String categoryName, @RequestParam int prodTypeNo,
-//			ModelMap model) {
-//
-//		List<ShopProductVO> shopProdTypeListData = shopProductSvc.findByProdTypeNo(prodTypeNo);
-//		model.addAttribute("shopProdTypeListData", shopProdTypeListData);
-//
-//		ShopProductTypeVO productType = shopProductTypeSvc.getOneShopProductType(prodTypeNo);
-//		model.addAttribute("productType", productType);
-//
-//		return "front-end/shop/listProdByType";
-//	}
-
-
-
-	// ============Ajax新增刪除功能============
-
-
-	
 
 	// ============後端管理頁面============
 
@@ -122,15 +101,15 @@ public class ShopInfoController {
 	// 最新消息新增(含圖片)
 	@PostMapping("/shopManagement/insertInfo")
 	public String insert(@Valid ShopInfoVO shopInfoVO, BindingResult result, ModelMap model,
-			@RequestParam("infoPic") MultipartFile[] parts) throws IOException {
+			@RequestParam("infoPics") MultipartFile[] parts) throws IOException {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		// 去除BindingResult中upFiles欄位的FieldError紀錄
-		result = removeFieldError(shopInfoVO, result, "infoPic");
+
 
 		// 使用者未選擇要上傳的圖片時
 		if (parts[0].isEmpty()) { 
 			model.addAttribute("errorMessage", "最新消息圖片: 請上傳圖片");
+			shopInfoVO.setInfoPic(null);
 		} else {
 			for (MultipartFile multipartFile : parts) {
 				byte[] buf = multipartFile.getBytes();
@@ -138,7 +117,10 @@ public class ShopInfoController {
 			}
 		}
 		
-		if (result.hasErrors() || parts[0].isEmpty()) {
+		// 去除BindingResult中upFiles欄位的FieldError紀錄
+		result = removeFieldError(shopInfoVO, result, "infoPics");
+		
+		if (result.hasErrors()) {
 			return "back-end/shop/info/addInfo";
 		}
 
@@ -149,7 +131,7 @@ public class ShopInfoController {
 			List<ShopInfoVO> list = shopInfoSvc.getAll();
 			model.addAttribute("shopInfoListData", list);
 			model.addAttribute("success", "新增成功");
-		    System.out.println("有走到最後喔!");
+
 			return "redirect:/shop/shopManagement/listAllShopInfo";
 	}
 	
@@ -170,22 +152,21 @@ public class ShopInfoController {
 	// 修改最新消息
 	@PostMapping("/shopManagement/updateInfo")
 	public String update(@Valid ShopInfoVO shopInfoVO, BindingResult result, ModelMap model,
-			@RequestParam("infoPic") MultipartFile[] parts) throws IOException {
-		System.out.println("no = " + shopInfoVO.getInfoNo());
+			@RequestParam("infoPics") MultipartFile[] parts) throws IOException {
+
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 	    // 設定修改當下的日期
 	    java.sql.Date infoDate = new java.sql.Date(System.currentTimeMillis());
 	    shopInfoVO.setInfoDate(infoDate);
-System.out.println("日期有跟著修改:"+ shopInfoVO.getInfoDate());
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		// 去除BindingResult中upFiles欄位的FieldError紀錄
-		result = removeFieldError(shopInfoVO, result, "infoPic");
+		result = removeFieldError(shopInfoVO, result, "infoPics");
 
 		// 使用者未選擇要上傳的新圖片時
 		if (parts[0].isEmpty()) { 
-			byte[] infoPic = shopInfoSvc.getOneShopInfo(shopInfoVO.getInfoNo()).getInfoPic();
-			shopInfoVO.setInfoPic(infoPic);
+			byte[] infoPics = shopInfoSvc.getOneShopInfo(shopInfoVO.getInfoNo()).getInfoPic();
+			shopInfoVO.setInfoPic(infoPics);
 		} else {
 			for (MultipartFile multipartFile : parts) {
 				byte[] buf = multipartFile.getBytes();
@@ -197,9 +178,8 @@ System.out.println("日期有跟著修改:"+ shopInfoVO.getInfoDate());
 		}
 		/*************************** 2.開始修改資料 *****************************************/
 		
-System.out.println("更新前的日期: " + shopInfoSvc.getOneShopInfo(shopInfoVO.getInfoNo()).getInfoDate());
 		shopInfoSvc.updateShopInfo(shopInfoVO);
-System.out.println("更新後的日期: " + shopInfoSvc.getOneShopInfo(shopInfoVO.getInfoNo()).getInfoDate());
+
 		/*************************** 3.修改完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("success", "修改成功");
 		shopInfoVO = shopInfoSvc.getOneShopInfo(Integer.valueOf(shopInfoVO.getInfoNo()));
