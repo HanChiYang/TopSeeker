@@ -87,11 +87,11 @@
 		<th>行程天數</th>
 		<th>行程人數</th>
 		<th>行程星數</th>
-		<th>行程狀態</th>
+<!-- 		<th>行程狀態</th> -->
 		<th>圖片</th>
 		<th>行程地區</th>
 		<th>修改</th>
-<!-- 		<th>刪除</th> -->
+		<th>刪除</th>
 	</tr>
   </thead>
 	
@@ -106,7 +106,7 @@
 				<td th:text="${tourVO.tourDays}"></td>
 				<td th:text="${tourVO.tourGuys}"></td>
 				<td th:text="${tourVO.tourStar}"></td>
-				<td th:text="${tourVO.tourStatus}"></td>
+<!-- 				<td th:text="${tourVO.tourStatus}"></td> -->
 				<td><img th:src="@{/tour/DBGifReader} + '?tourNo=' + ${tourVO.tourNo}" width="100px"></td>
 				<td th:text="${tourVO.tourAreaVO.areaNo} + '-[' + ${tourVO.tourAreaVO.areaName} + ']'"></td>
 			<td>
@@ -115,12 +115,12 @@
 			     <input type="hidden" name="tourNo" th:value="${tourVO.tourNo}"></form>
 			
 			</td>
-<!-- 			<td> -->
+			<td>
 <!-- 			  <form method="post" th:action="@{/tour/delete}" style="margin-bottom: 0px;"> -->
 <!-- 			     <input type="submit" value="刪除"> -->
 <!-- 			     <input type="hidden" name="tourNo" th:value="${tourVO.tourNo}"></form> -->
 			
-<!-- 			</td> -->
+			</td>
 			</tr>
 		</th:block>
   </tbody>

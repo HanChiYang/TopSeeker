@@ -50,11 +50,11 @@ public class TourOrderVO implements Serializable {
     @Column(name = "order_comment")
     private String orderComment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "mem_No", referencedColumnName = "mem_No")
 	private MemberVO memberVO;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "group_No", referencedColumnName = "group_No")
 	private TourGroupVO tourGroupVO;
 

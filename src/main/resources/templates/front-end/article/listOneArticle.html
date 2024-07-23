@@ -106,8 +106,8 @@ textarea {
         </div>
         <div>
             <!-- 留言表單 -->
-            <form class="comment-form" th:action="@{/article/artcomment/addComment}" method="get" th:object="${artcommentVO}">
-                <textarea name="commentContent" th:field="*{commentContent}" rows="4" placeholder="輸入你的留言..."></textarea>
+            <form class="comment-form" th:action="@{/article/artcomment/addComment}" method="get" th:object="${artcommentVO}" id="commentForm">
+                <textarea name="commentContent" th:field="*{commentContent}" rows="4" placeholder="輸入你的留言..." required></textarea>
                 <input type="hidden" name="artNo" th:value="${articleVO.artNo}" />
                 <button type="submit">送出留言</button>
             </form>
@@ -120,7 +120,20 @@ textarea {
 <script src="/js/article.js"></script>
 
 <script>
- 
+document.querySelector('form.comment-form').addEventListener('submit', function(event) {
+    const commentContent = document.querySelector('textarea[name="commentContent"]').value.trim();
+    if (commentContent === "") {
+        event.preventDefault();
+        Swal.fire({
+            icon: 'error',
+            title: '錯誤',
+            text: '留言不能為空白!',
+        });
+    }
+});
 </script>
+
+<!-- SweetAlert2 library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>

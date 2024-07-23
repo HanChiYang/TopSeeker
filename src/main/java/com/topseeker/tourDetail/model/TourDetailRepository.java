@@ -24,10 +24,10 @@ public interface TourDetailRepository extends JpaRepository<TourDetailVO, Intege
 	void deleteByDetailNo(int detailNo);
 //
 ////	//● (自訂)條件查詢
-//	@Query(value ="SELECT tourNo from TourDetailVO Group By tourNo=?1", nativeQuery = true)
+//	@Query(value ="SELECT tourNo from TourDetailVO Group By tour_o=?1", nativeQuery = true)
 //	List<TourDetailVO> selectTourNo(Map map);
 
-	@Query(value = "from TourDetailVO where tourNo=?1   order by tourNo")
+	@Query(value = "select * from tour_detail where tour_no=?1   order by detail_day", nativeQuery = true)
 	List<TourDetailVO> findByOthers(int tourNo  );
 	
 	TourDetailVO findByTourVOAndDetailDay(TourVO tourVO, Integer detailDay);

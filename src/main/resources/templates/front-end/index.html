@@ -172,6 +172,9 @@
 /*      font-weight: bold;   */
     font-size: 20px; /* 設定字體大小 */
      }
+     body > div.all > div:nth-child(3) > div > div:nth-child(1) > p {
+     margin-bottom: 40px;
+     }
 
 </style>
 </head>
@@ -195,17 +198,11 @@
     </div>
 </div><br>
 
-
-
-
-
-
-
 	<div class="all">
     
     <!-- 揪團行程 -->
     <div class="container">
-        <h2>揪團行程</h2>
+        <h2>揪團活動</h2>
         <div class="tours">
          <th:block th:each="actVO : ${actListData}">
         <th:block th:if="${actVO.actNo ==1 || actVO.actNo == 2 || actVO.actNo == 3}">
@@ -214,9 +211,9 @@
 				<h5 class="card-title" th:text="${actVO.actTitle}">活動標題</h5>                
 				<p class="card-text">活動地點: <span th:text="${actVO.actPlace}"></span></p>
                 <form method="post" th:action="@{/act/details}" id="detailForm" class="text-center">
-                                    <input type="hidden" name="actNo" th:value="${actVO.actNo}" />
-                                    <button type="submit" class="btn btn-primary" style="width: 100%;">詳情</button>
-                                </form>
+                  <input type="hidden" name="actNo" th:value="${actVO.actNo}" />
+                  <button type="submit" class="btn btn-primary" style="width: 100%;">詳情</button>
+                </form>
             </div>
         </div>
     </div>
@@ -249,56 +246,28 @@
             </div>
         </div>
     </div>
-    
 
-    
-    <!-- 戶外用品 -->
-     <div class="container">
-        <h2>戶外用品</h2>
-        <div class="product-grid">
-			
-			   <!-- 商品卡片範例 -->
-			   <th:block th:each="shopProductVO : ${shopListData}" class="product-card"
-			    th:data-prod-no="${shopProductVO.prodNo}">
-				<th:block th:if="${actVO.actNo ==1 || actVO.actNo == 2 || actVO.actNo == 3}">
-			
-			
-<!-- 			    <a -->
-<!-- 			     th:href="@{/shop/listOneProdDetail(prodNo=${shopProductVO.prodNo})}"> -->
-<!-- 			     <img -->
-<!-- 			     th:src="@{/shop/DBGifReader} + '?prodNo=' + ${shopProductVO.prodNo}" -->
-<!-- 			     alt="商品圖片"> -->
-			
-			
-<!-- 			    </a> -->
-			
-			    <div class="product-info">
-			     <!-- 商品名稱連結 -->
-			     <h3>
-			      <a
-			       th:href="@{/shop/listOneProdDetail(prodNo=${shopProductVO.prodNo})}"
-			       th:text="${shopProductVO.prodName}">商品名稱</a>
-			     </h3>
-			     <p th:text="'$' + ${shopProductVO.prodPrice}">商品金額</p>
-			    </div>
-			
-<!-- 			    <div class="product-actions"> -->
-			
-<!-- 			     <a href="javascript:void(0);" th:data-id="${shopProductVO.prodNo}" -->
-<!-- 			      onclick="toggleWishlist(this)" class="wishlist-btn"><i -->
-<!-- 			      class="fa-regular fa-heart"></i></a> -->
-<!-- 			     購物車Ajax -->
-<!-- 			     <a href="javascript:void(0);" th:data-id="${shopProductVO.prodNo}" -->
-<!-- 			      onclick="addToCart(this)"><i class="fa-solid fa-cart-plus"></i></a> -->
-<!-- 			    </div> -->
-			  </div>
-		</div>
 	
+    <div class="container">
+        <h2>戶外用品</h2>
+        <div class="tours">
+         <th:block th:each="prodVO : ${shopListData}">
+        <th:block th:if="${prodVO.prodNo ==1 || prodVO.prodNo == 2 || prodVO.prodNo == 3}">
+            <div class="tour">
+                    <img th:src="@{/shop/DBGifReader(prodNo=${prodVO.prodNo})}">
+				<h5 class="card-title" th:text="${prodVO.prodName}"></h5>                
+				<p class="card-text">$<span th:text="${prodVO.prodPrice}"></span></p>
+                <form method="get" th:action="@{/shop/listOneProdDetail}" id="detailForm" class="text-center">
+                  <input type="hidden" name="prodNo" th:value="${prodVO.prodNo}" />
+                  <button type="submit" class="btn btn-primary" style="width: 100%;">詳情</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
 
 
 
-
-</div>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oB6zNkrNkT2GxN3E7AB8jtUUKz6fy4yGpe5OABhDWT1y1xYok2mUOpdNT6y2Rxm" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-Si6D5lN40By3jl5g0r4J0ljC2SOlV7I/t7W8f3r3Fz6CwKi1z6qC5n8p5YxRaqCo" crossorigin="anonymous"></script>
 

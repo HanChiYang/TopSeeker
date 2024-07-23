@@ -186,6 +186,21 @@ public class ShopInfoController {
 		model.addAttribute("shopInfoVO", shopInfoVO);
 		return "back-end/shop/info/listOneInfo";
 	}
+	
+	// 刪除最新消息
+	@PostMapping("/shopManagement/deleteInfo")
+	public String delete(@RequestParam("infoNo") String infoNo, ModelMap model) {
+		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
+
+		/*************************** 2.開始刪除資料 *****************************************/
+
+		shopInfoSvc.deleteShopInfoVO(Integer.valueOf(infoNo));
+		/*************************** 3.刪除完成,準備轉交(Send the Success view) **************/
+		List<ShopInfoVO> list = shopInfoSvc.getAll();
+		model.addAttribute("shopListData", list);
+		model.addAttribute("success", "刪除成功");
+		return "back-end/shop/info/listAllShopInfo"; // 刪除完成後轉交listAllProd.html
+	}
 
 	// ============圖片錯誤訊息刪除用===========
 	// 去除BindingResult中某個欄位的FieldError紀錄

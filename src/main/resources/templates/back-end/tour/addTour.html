@@ -81,6 +81,18 @@
 			</div>
 
 			<div>
+			<label>行程介紹:</label>
+			<input type="text" th:field="*{tourIntro}" onclick="hideContent('tourIntro.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('tourIntro')}" th:errors="*{tourIntro}" class="error" id="tourIntro.errors"></span>
+			</div>
+			
+			<div>
+			<label>行程價格:</label>
+			<input type="text" th:field="*{tourPrice}" onclick="hideContent('tourPrice.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('tourPrice')}" th:errors="*{tourPrice}" class="error" id="tourPrice.errors"></span>
+			</div>
+			
+			<div>
 			<label>行程星數:</label>
 			<input type="text" th:field="*{tourStar}" onclick="hideContent('tourStar.errors');" /><br/>
 			<span  th:if="${#fields.hasErrors('tourStar')}" th:errors="*{tourStar}" class="error" id="tourStar.errors"></span>

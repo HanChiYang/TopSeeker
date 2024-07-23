@@ -13,24 +13,75 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>訂單資料 - listOneOrder.html</title>
-
-<head th:insert="~{/back-end/tourOrder/included-fragment}"></head>
+<link rel="stylesheet" th:href="@{/css/back_end.css}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<head th:insert="~{/back-end/employee/included-fragment}"></head>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" />
 <style type="text/css">
-	
-    span {
-		display: inline-block;
-		width: 150px;
-		text-align: left;
-		font-weight: bold;
-	}
+   body {
+    background-color: #f0e6d6; /* 奶茶色背景 */
+    color: #5b3e31; /* 深棕色文字 */
+    font-family: Arial, sans-serif;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff; /* 确保导航栏背景为白色，以便与内容区分 */
+    z-index: 999; /* 确保在其他内容之上 */
+}
+
+nav {
+    padding: 10px;
+}
+
+.content {
+    margin-top: 80px; /* 给内容部分添加足够的上边距，以防被导航栏遮盖 */
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+h3 {
+    color: #5b3e31;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.order-info {
+    background-color: #fff;
+    border: 1px solid #d2b48c; /* 卡其色边框 */
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+}
+
+.order-info span {
+    display: flex;
+    justify-content: space-between; /* 标签和值在一行中分开 */
+    margin-bottom: 10px; /* 标签和值之间的垂直间距 */
+}
+
+.label {
+    color: #5b3e31;
+    width: 30%; /* 标签部分宽度 */
+}
+
+.value {
+    color: #3e2723; /* 更深的棕色以增强对比 */
+    width: 70%; /* 值部分宽度 */
+}
+
 </style>
 </head>
 <body>
-
-<nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
-		 <div align="center"> <h2>訂單資料 - listOneOrder.html</h2>
-		 <h3><a class="navbar-brand" th:href="@{/tourOrder/select_page}"><img th:src="@{/images/back1.gif}">回查詢頁<label th:text="${success}"></label></a></h3></div>
-</nav>
+<header>
+    <nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
+</header>
 
 	<div align="center" th:fragment="listOneOrder-div"> <!-- 此div被select_page.html第158行insert用 -->
 		<h3><span>查詢結果 :</span></h3>

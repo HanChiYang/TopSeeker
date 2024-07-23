@@ -150,22 +150,31 @@
     </div>
 
     <form method="post" th:action="@{getOne_For_Display}">
-        輸入行程編號:
-        <input type="text" name="tourNo" th:value="${param.tourNo}"> 
-        <input type="submit" value="送出"> (輸入如1)<br>
-        輸入第幾天:
-        <input type="text" name="detailDay" th:value="${param.detailDay}"> 
+        <div>
+            <label>輸入行程編號:</label>
+            <input type="text" name="tourNo" th:value="${param.tourNo}"> 
+        </div>
+        <div>
+            <label>行程的第幾天:</label>
+            <input type="text" name="detailDay" th:value="${param.detailDay}"> 
+        </div>
+        <div>
+            <input type="submit" value="送出">
+        </div>
     </form><br>
 
     <!-- 萬用複合查詢 -->
     <form method="post" th:action="@{listTourDetails_ByCompositeQuery}">
-        <font color=blue>複合查詢資料:</font><br>
-        選擇行程: 
-        <select name="tourNo">
-            <option value="">
-            <option th:each="tourDetailVO : ${tourDetailListData}" th:value="${tourDetailVO.tourVO.tourNo}" th:text="${tourDetailVO.tourVO.tourName}"/>
-        </select><br>
-        <input type="submit" value="送出">
+        <div>
+            <label>選擇不同行程:</label>
+            <select name="tourNo">
+                <option value="">
+                <option th:each="tourVO : ${tourListData}" th:value="${tourVO.tourNo}" th:text="${tourVO.tourName}"/>
+            </select>
+        </div>
+        <div>
+            <input type="submit" value="送出">
+        </div>
     </form>
 </div>
 
@@ -178,3 +187,4 @@
 
 </body>
 </html>
+	
