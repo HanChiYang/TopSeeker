@@ -201,6 +201,9 @@
                     <div class="form-group">
                         <input type="hidden" class="form-control" id="groupNo" name="groupNo" th:value="${tourGroupVO.groupNo}">
                     </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" id="departureDate" name="departureDate" th:value="${tourGroupVO.groupBegin}">
+                    </div>
 
                     <div class="form-group">
                         <label for="orderNums">人數:</label>
@@ -211,7 +214,6 @@
                     <div class="form-group">
                         <label>顯示總金額:</label>
                         <input type="number" class="form-control" id="orderPrice" name="orderPrice" readonly>
-                        <span id="displayOrderPrice"></span>
                     </div>
 
                     <div class="form-group">

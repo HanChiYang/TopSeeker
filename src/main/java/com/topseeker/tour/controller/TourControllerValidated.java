@@ -51,8 +51,8 @@ public class TourControllerValidated {
   
   TourGroupVO tourGroupVO = tourGroupSvc.getOneTourGroup(Integer.valueOf(groupNo));
 
-     model.addAttribute("tourGroupVO", tourGroupVO);
-  model.addAttribute("addOrder", "true"); // 旗標getOne_For_Display見select_page.html的第156行 -->
+     	model.addAttribute("tourGroupVO", tourGroupVO);
+     	model.addAttribute("addOrder", "true"); // 旗標getOne_For_Display見select_page.html的第156行 -->
         model.addAttribute("groupNo", groupNo);
         return "front-end/tour/addOrder"; // 返回 addOrder 頁面
     }

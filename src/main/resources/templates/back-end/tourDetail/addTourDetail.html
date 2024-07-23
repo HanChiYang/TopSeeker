@@ -64,7 +64,7 @@
 			
 			<div>
 			<label>第幾天:</label>
-			<input type="text" th:field="*{detailDay}" onclick="hideContent('detailDay.errors');" /><br/>
+			<input type="text" th:field="*{detailDay}" onclick="hideContent('detailDay.errors');"  required/><br/>
 			<span  th:if="${#fields.hasErrors('detailDay')}" th:errors="*{detailDay}" class="error" id="detailDay.errors"></span>
 			</div>
 			

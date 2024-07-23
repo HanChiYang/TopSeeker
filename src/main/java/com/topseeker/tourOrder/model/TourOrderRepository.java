@@ -32,8 +32,8 @@ public interface TourOrderRepository extends JpaRepository<TourOrderVO, Integer>
     List<TourOrderVO> findByMemberNoAndOrderDateAfter(Integer memNo, LocalDate startDate);
 	
 	@Modifying
-	@Query(value = "INSERT INTO tour_order (mem_no, group_no, order_nums, order_pay, order_status, order_date, order_price) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)", nativeQuery = true)
-    void insertByGOO(Integer memNo, Integer groupNo, Integer orderNums, Byte orderPay, Byte orderStatus ,Date orderDate, Integer orderPrice);
+	@Query(value = "INSERT INTO tour_order (mem_no, group_no, order_nums, order_pay, order_status, order_date, order_price, departure_date) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)", nativeQuery = true)
+    void insertByGOO(Integer memNo, Integer groupNo, Integer orderNums, Byte orderPay, Byte orderStatus ,Date orderDate, Integer orderPrice, Date departureDate);
 	
 	
 }

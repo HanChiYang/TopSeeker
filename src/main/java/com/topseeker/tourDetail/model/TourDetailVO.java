@@ -1,17 +1,18 @@
 package com.topseeker.tourDetail.model;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 import com.topseeker.tour.model.TourVO;
 
@@ -35,7 +36,10 @@ public class TourDetailVO implements Serializable {
     
 //    @Column(name = "tour_no")
 //    private Integer tourNo;
-
+    
+    @NotNull(message="{typeMismatch.tourGroupVO.groupEnd}")
+//    @NotEmpty(message="不可空白")
+//    @NotNull(message="不可空白")
     @Column(name = "detail_day")
     private Integer detailDay;
 
