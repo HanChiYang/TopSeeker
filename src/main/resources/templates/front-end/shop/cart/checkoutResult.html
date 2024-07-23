@@ -14,6 +14,17 @@
   	font-size: 20px;
    }
    
+     p.countdown{
+   	margin: 0px;
+   }
+   
+   video{
+   	 position: relative;
+   	 top: -30px;
+   	 vertical-align: top;
+   }
+  
+   
    table{
    	font-size: 18px;
    	width: 80%	
@@ -36,16 +47,24 @@
    	 justify-content: center;   
    	 padding-top: 20px;
    }
-   
+ 
   	
   </style>
 </head>
 <body>
+
+	
+
 	<div class="result">
 	  <div class="top">
 	    <h2>訂單完成</h2>
-	    <p class="countdown">10 秒後重導回首頁...</p>
-	   
+	    <p class="countdown">
+	    	<video autoplay muted disablePictureInPicture controlsList="nodownload" width="100px" height="100px">
+	    		<source src="/images/countdown.mp4" type="video/mp4">
+	    	</video>
+	    	
+	    	後重導回首頁...</p>
+	
 	    	<span>訂單編號: </span><span th:text="${orderVO.orderNo}"></span><br>
 	    	<span>訂單日期: </span><span th:text="${#dates.format(orderVO.orderDate, 'yyyy-MM-dd HH:mm:ss')}"></span><br>
 	    	<span>訂單金額: </span><span th:text="${orderVO.orderAmount}"></span><br>
@@ -55,7 +74,7 @@
 	    
 	    
 	  </div>
-	
+	    	
 	  <table id="orderDetailsTable" class="display">
 	    <thead>
 	        <tr>
@@ -98,7 +117,6 @@
 
 		const countdownInterval = setInterval(() => {
 			seconds--;
-			countdownElement.textContent = `${seconds} 秒後重導回首頁...`;
 
 			if (seconds <= 0) {
 				clearInterval(countdownInterval);

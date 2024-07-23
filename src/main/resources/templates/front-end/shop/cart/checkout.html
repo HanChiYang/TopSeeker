@@ -560,9 +560,6 @@ input#confirmPayment:hover{
 	<!-- Bootstrap JavaScript -->
 	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 		
-	<!-- topseeker前台Navbar共用JavaScript -->
-	<script src="/js/common.js"></script>
-	
 	<!-- topseeker商城用JavaScript -->
 	<script src="/js/shop_front_end.js"></script>
 	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -802,27 +799,44 @@ input#confirmPayment:hover{
 
 			//使用折扣計算折扣後總金額
 			function applyDiscounts(sales) {
-				if (!Array.isArray(sales) || sales.length === 0) {
-					console.log('沒有合適折扣');
-					return;
-				}
 				var totalAmount = calculateTotalAmount();
-				var bestDiscount = calculateBestDiscount(totalAmount, sales);
-				var saleNo = bestDiscount.no;
-								console.log(saleNo);
-				var saleName = bestDiscount.name;
-								console.log(saleName);
+				if (!Array.isArray(sales) || sales.length === 0) {
+					
+					var bestDiscount = 1;
+// 					var saleNo = bestDiscount.no;
+// 									console.log(saleNo);
+					var saleName = '沒有合適折扣';
+					var orderDiscount = totalAmount * bestDiscount;
+					
+					$("span.orderDiscount").text(orderDiscount.toFixed(0));
+					$("span.orderDiscount").val(orderDiscount.toFixed(0));
+					
+					calculateOrderBill();
+					
+// 					$('input#hiddensaleNo').val(saleNo);
+					$('input#hiddensaleName').val(saleName);
+					$('span#saleName').text(saleName);
+				}else{
+					
+					var bestDiscount = calculateBestDiscount(totalAmount, sales);
+					var saleNo = bestDiscount.no;
+									console.log(saleNo);
+					var saleName = bestDiscount.name;
+									console.log(saleName);
 
-				var orderDiscount = totalAmount * bestDiscount.discount;
+					var orderDiscount = totalAmount * bestDiscount.discount;
+					
+					$("span.orderDiscount").text(orderDiscount.toFixed(0));
+					$("span.orderDiscount").val(orderDiscount.toFixed(0));
+					
+					calculateOrderBill();
+					
+					$('input#hiddensaleNo').val(saleNo);
+					$('input#hiddensaleName').val(saleName);
+					$('span#saleName').text(saleName);
+					
+				}
 				
-				$("span.orderDiscount").text(orderDiscount.toFixed(0));
-				$("span.orderDiscount").val(orderDiscount.toFixed(0));
-				
-				calculateOrderBill();
-				
-				$('input#hiddensaleNo').val(saleNo);
-				$('input#hiddensaleName').val(saleName);
-				$('span#saleName').text(saleName);
 
 			}
 
