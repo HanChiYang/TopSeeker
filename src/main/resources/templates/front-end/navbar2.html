@@ -93,7 +93,7 @@
         
         <li th:if="${session.loggedInMember != null}" class="nav-item">
           <span th:if="${session.hasNewNotifications == true}">
-            <a>
+            <a class="nav-link bellIcon">
               <img id="alertIcon" class="bellIcon" th:src="@{/images/alert.svg}" width="25px" th:data-new-src="@{/images/noalert.svg}" alt="Alert Icon">
             </a>
           </span>
