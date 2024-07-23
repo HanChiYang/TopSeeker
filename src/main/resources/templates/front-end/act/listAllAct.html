@@ -111,6 +111,10 @@
         .card-clickable:hover {
             transform: scale(1.05);
         }
+        
+       nav.navbar {
+        padding:0;
+        }
     </style>
 </head>
 <body>
@@ -173,6 +177,7 @@
             </div>
         </div>
     </div>
+    
     <script> 
         $(document).ready(function() {
             // 初次載入時自動發送AJAX請求以獲取列表
@@ -220,7 +225,9 @@
 			//卡片在初始加載時就綁定好點擊事件
             bindCardClickEvent(); 
         });
+        
     </script>
+    
     <footer>
         <p>&copy; 2024 登山網站. 版權所有.</p>
     </footer>

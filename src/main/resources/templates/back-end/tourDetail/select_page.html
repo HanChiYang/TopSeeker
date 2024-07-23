@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -14,146 +5,176 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>行程詳情資料管理 - select_page.html</title>
 
-<head th:insert="~{/back-end/tourDetail/included-fragment}"></head> <!-- 使用included-fragment.html網頁的全部 -->
-<style type="text/css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" th:href="@{/css/back_end.css}">
 
-	button {
-		padding: 5px;
-	}
-	form {
-		display: table;
-	}
-	form div {
-		display: table-row;
-	}
-	label, input, span, select {
-		display: table-cell;
-		margin: 2px;
-		text-align: left;		
-	}
-	input[type=text], input[type=password], select, textarea {
-		width: 200px;
-		margin: 2px;
-	}
-	form div div {
-		display: table-cell;
-	}
-	.center {
-        margin-left: auto;
-        margin-right: auto;
+<style>
+    /* Sidebar */
+    .sidebar {
+        width: 30%;
+        padding: 20px;
+        border-radius: 15px;
+        background-color: #f8f9fa;
+        float: left;
+        margin-right: 20px;
+        min-height: 400px; /* 固定高度 */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    span {
-		display: inline-block;
-		width: 150px;
-		text-align: left;
-		font-weight: bold;
-	}
-	div.a {
+
+    /* Content */
+    .content {
+        width: 60%;
+        padding: 20px;
+        border-radius: 15px;
+        background-color: #f8f9fa;
+        float: left;
+        min-height: 620px; /* 與左邊同樣高度 */
+        display: flex;
+        justify-content: center; /* 水平居中對齊 */
+        align-items: center; /* 垂直居中對齊 */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Header Buttons */
+    .header-buttons a {
         display: inline-block;
-        width: 50%;
-        height: auto;
-        padding: 5px;
-        border: 0px solid blue;    
-        background-color: white; 
+        width: 48%;
+        margin-bottom: 10px;
+        padding: 10px;
+        text-align: center;
+        border-radius: 15px;
+        background-color: #e9ecef;
+        color: black;
+        text-decoration: none;
+        border: 1px solid #ccc; /* 圓弧框 */
     }
-    div.b {
-        position: absolute; 
-        bottom: 1%; 
-        right: 2%; 
-        width: 45%;
-        padding: 5px; 
-        border: 1px solid blue;
+
+    .header-buttons a:hover {
+        background-color: #e2e6ea;
+    }
+
+    /* Form Styles */
+    form div {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    input[type="text"], select {
+        width: 70%;
+        margin-right: 10px;
+        padding: 5px;
+    }
+
+    input[type="submit"] {
+        width: 25%;
+        padding: 5px;
+    }
+
+    /* ListOne Styles */
+    .content-inner {
+        text-align: left;
+        width: 100%;
+        padding: 20px;
+        border-radius: 15px;
+        background-color: #ffffff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* 垂直居中對齊 */
+        font-size: 22px;
+    }
+
+    .content-inner img {
+        max-width: 300px; /* 提高圖片大小 */
+        height: auto;
+        display: block;
+        margin-top: 20px;
+    }
+
+    .content-inner span {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-align: left;
+        font-size:25px;
+    }
+
+    .content-inner span + span {
+        font-weight: normal;
+    }
+    
+    /* No underline for links */
+    a {
+        text-decoration: none;
+    }
+
+    /* Adjustments for text spacing */
+    body > div.content > div > div {
+        font-size: 16px;
+        margin-bottom: 0; /* Remove bottom margin */
+    }
+
+    body > div.content {
+        font-size: 22px; /* Adjusted to fit the design */
+    }
+
+    body > div.content > div > div > h3 > span {
+        font-size: 20px;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .sidebar, .content {
+            width: 100%;
+            float: none;
+            margin-right: 0;
+        }
     }
 </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
-		 <div align="center"> <h2>行程詳情資料管理 - select_page.html</h2>
-		 <h3><a class="navbar-brand" th:href="@{/}"><img th:src="@{/images/back1.gif}">回index.html</a></h3></div>
-</nav>
+<!-- topseeker後台Navbar -->
+<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
 
-	<h4><span>資料查詢:</span></h4>
-	<!-- 錯誤表列 -->
-	<div class="errorblock" th:utext="${errorMessage}">${errorMessage}</div><br>
-	<div class="a">
-	  <ul>
-		<li><h5><a href='listAllTourDetail'>List</a> all TourDetails. <br><br></h5></li>
+<div class="sidebar">
+    <h4>行程詳情資料查詢:</h4>
+    <!-- 錯誤表列 -->
+    <div class="errorblock" th:utext="${errorMessage}">${errorMessage}</div><br>
 
-		<li>
-			<form method="post" th:action="@{getOne_For_Display}">
-				輸入行程編號:
-		        <input type="text" name="tourNo" th:value="${param.tourNo}" > 
-		        <input type="submit" value="送出"> (輸入如1)<br>
-		        輸入__第幾天:
-		        <input type="text" name="detailDay" th:value="${param.detailDay}" > 
-				 
-			</form><br>
-		</li>
-		
-<!-- 		選擇行程:  -->
-<!--   		<select th:field="*{tourVO.tourNo}"> -->
-<!-- 			<option value=""> -->
-<!-- 			<option th:each="tourVO : ${tourListData}" th:value="${tour.tourNo}" th:text="${tourVO.tourName}" /> -->
-<!-- 		</select><br> -->
-		
-		
-		
-<!-- 		======================== -->
-		
-		
-		
-		
-		
-<!--  萬用複合查詢-以下欄位-可隨意增減 -->
-  
-  <li>   
+    <div class="header-buttons">
+        <a href='/tourDetail/listAllTourDetail'>查詢全部資料</a>
+        <a href='/tourDetail/addTourDetail'>新增行程</a>
+    </div>
+
+    <form method="post" th:action="@{getOne_For_Display}">
+        輸入行程編號:
+        <input type="text" name="tourNo" th:value="${param.tourNo}"> 
+        <input type="submit" value="送出"> (輸入如1)<br>
+        輸入第幾天:
+        <input type="text" name="detailDay" th:value="${param.detailDay}"> 
+    </form><br>
+
+    <!-- 萬用複合查詢 -->
     <form method="post" th:action="@{listTourDetails_ByCompositeQuery}">
-        <font color=blue>萬用複合查詢:</font><br>
-
-		選擇行程: 
-  		<select name="tourNo">
-			<option value="">
-			<option th:each="tourDetailVO : ${tourDetailListData}" th:value="${tourDetailVO.tourVO.tourNo}" th:text="${tourDetailVO.tourVO.tourName}" />
-		</select>
-			
-<!-- 			選擇地區:  -->
-<!--   		<select th:field="*{tourAreaVO.areaNo}"> -->
-<!-- 			<option value=""> -->
-<!-- 			<option th:each="tourAreaVO : ${tourAreaListData}" th:value="${tourAreaVO.areaNo}" th:text="${tourAreaVO.areaName}" /> -->
-<!-- 		</select><br> -->
-
-
-
-
-
-		
-		
-           
-<!--         輸入行程詳情第幾天:  -->
-<!--         <input type="text" name="detailDay" value="1"><br> -->
-       
-<!--         輸入行程詳情內容:  -->
-<!--         <input type="text" name="detailCon" value="AAA"><br> -->
-    
-        
+        <font color=blue>複合查詢資料:</font><br>
+        選擇行程: 
+        <select name="tourNo">
+            <option value="">
+            <option th:each="tourDetailVO : ${tourDetailListData}" th:value="${tourDetailVO.tourVO.tourNo}" th:text="${tourDetailVO.tourVO.tourName}"/>
+        </select><br>
         <input type="submit" value="送出">
-     
-     </form>
-  </li>
-</ul>	
-	
-      <h4><span>行程詳情管理</span></h4>
-	  <ul>
-		  <li><h5><a href='addTourDetail'>Add</a> a new TourDetail.</h5></li>
-	  </ul>
-	</div>
-    
-    <!-- 旗標getOne_For_Display見EmpnoController.java的第74行 -->
-    <div class="b" th:if="${getOne_For_Display}">
-        <!--使用listOneEmp.html網頁的listOneEmp-div片段--> <!-- 見listOneEmp.html的第35行的th:fragment="listOneEmp-div" --> <!-- 使用th:replace也可 -->
+    </form>
+</div>
+
+<div class="content">
+    <!-- 查詢結果顯示 -->
+    <div class="content-inner" th:if="${getOne_For_Display}">
         <div th:insert="~{/back-end/tourDetail/listOneTourDetail :: listOneTourDetail-div}"></div>
     </div>
+</div>
 
 </body>
 </html>
