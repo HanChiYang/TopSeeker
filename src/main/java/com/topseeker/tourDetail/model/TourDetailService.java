@@ -57,9 +57,9 @@ public class TourDetailService {
 //        return repository.findAllByTourNoAndDetailDay(tourNo, detailDay);
 //    }
 
-//    public List<TourDetailVO> getOneTourDetailsByTourNo(Integer tourNo) {
-//        return repository.findByTourNo(tourNo);
-//    }
+    public List<TourDetailVO> findByOthers(Integer tourNo) {
+        return repository.findByOthers(tourNo);
+    }
     public List<TourDetailVO> getByTourNo(TourVO tourVO) {
         return repository.findAllByTourVO(tourVO);
     }

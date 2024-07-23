@@ -360,10 +360,8 @@ public class TourDetailController {
 //		return "back-end/tourDetail/listAllTourDetail";
 //	}
 	@PostMapping("listTourDetails_ByCompositeQuery")
-	public String listAllTourDetail(HttpServletRequest req, Model model) {
-		Map<String, String[]> map = req.getParameterMap();
-		List<TourVO> list = tourSvc.getAll(map);
-//		List<TourDetailVO> list = tourDetailSvc.getAll(map);
+	public String listAllTourDetail(HttpServletRequest req, Model model,@RequestParam("tourNo")Integer tourNo) {
+		List<TourDetailVO> list = tourDetailSvc.findByOthers(tourNo);
 		model.addAttribute("tourDetailListData", list); // for listAllTour.html 第85行用
 		return "back-end/tourDetail/listAllTourDetail";
 	}
