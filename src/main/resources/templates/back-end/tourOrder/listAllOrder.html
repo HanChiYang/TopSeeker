@@ -155,8 +155,8 @@
             <th>價錢</th>
             <th>付款方式</th>
             <th>訂單狀態</th>
-            <th>修改</th>
-            <th>刪除</th>
+            <th>操作</th>
+            
         </tr>
     </thead>
 
@@ -189,8 +189,7 @@
                     <input type="submit" value="修改">
                     <input type="hidden" name="orderNo" th:value="${tourOrderVO.orderNo}">
                 </form>
-            </td>
-            <td>
+            
                 <form method="post" th:action="@{/tourOrder/delete}" style="margin-bottom: 0px;">
                     <input type="submit" value="刪除">
                     <input type="hidden" name="orderNo" th:value="${tourOrderVO.orderNo}">
