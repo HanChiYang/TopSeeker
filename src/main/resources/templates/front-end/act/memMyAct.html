@@ -136,6 +136,9 @@
 <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="/js/common.js"></script>
+<nav th:insert="~{/front-end/navbar2.html}"></nav>
+<div th:insert="~{/front-end/notification/notification.html}"></div>
 
 <!-- jQuery DataTables 設定 -->
 <script th:inline="none">
@@ -248,9 +251,8 @@
     });
 </script>
 
-<header>
-    <nav th:insert="~{/front-end/navbar2.html}"></nav>
-</header>
+
+
 <div class="container">我的開團列表</div>
 <div class="container mt-5">
     
