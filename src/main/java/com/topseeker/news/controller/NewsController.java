@@ -106,7 +106,7 @@ public class NewsController {
 		/*************************** 3.新增完成,準備轉交(Send the Success view) **************/
 		List<NewsVO> list = newsSvc.getAll();
 		model.addAttribute("newsListData", list);
-		return "redirect:/news/newsBackEnd";
+		return "redirect:/news/newsBackEnd?success=insert";
 	}
 	
 
@@ -155,7 +155,7 @@ public class NewsController {
 		model.addAttribute("success", "- (修改成功)");
 		newsVO = newsSvc.getOneNews(Integer.valueOf(newsVO.getNewsNo()));
 		model.addAttribute("newsVO", newsVO);
-		return "redirect:/news/newsBackEnd";// 修改成功後重定向到新聞列表頁面
+		return "redirect:/news/newsBackEnd?success=update";// 修改成功後重定向到新聞列表頁面
 	}
 
 	/*
