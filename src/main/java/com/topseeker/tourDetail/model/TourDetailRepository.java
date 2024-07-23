@@ -34,9 +34,8 @@ public interface TourDetailRepository extends JpaRepository<TourDetailVO, Intege
 	TourDetailVO findByDetailNo(Integer detailNo);
 	List<TourDetailVO> findAllByTourVO(TourVO tourVO);
     List<TourDetailVO> findAllByTourVOAndDetailDay(TourVO tourVO, Integer detailDay);
-//    List<TourDetailVO> findAllByTourNoAndDetailDay(Integer tourNo, Integer detailDay);
 	  
     List<TourDetailVO> findByTourVO_TourNo(Integer tourNo);
-
+    boolean existsByTourVO_TourNoAndDetailDay(Integer tourNo, Integer detailDay);
 }
 

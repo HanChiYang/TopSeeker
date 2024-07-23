@@ -150,9 +150,6 @@ html, body {
     padding: 20px;
 }
 
- #compositeQuery{ 
- 
-} 
 
 
 </style>
@@ -185,8 +182,8 @@ html, body {
 
 <!-- 主要內容區域 -->
 <div class="main-content container">
-   <div id="orderDetail" class="content" th:if="${getOne_For_Display}">
-   <div th:insert="~{/back-end/tourOrder/listOneOrder :: listOneOrder-div}"></div>
+    <div id="orderDetail" class="content" th:if="${getOne_For_Display}">
+        <div th:insert="~{/back-end/tourOrder/listOneOrder :: listOneOrder-div}"></div>
     </div>
     <div id="singleOrder" class="content" style="display:none;">
         <div class="card">
