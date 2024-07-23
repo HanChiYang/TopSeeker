@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -30,7 +31,10 @@ import com.topseeker.actpicture.model.ActPictureService;
 import com.topseeker.actpicture.model.ActPictureVO;
 import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
+import com.topseeker.notification.model.NotificationService;
+import com.topseeker.notification.model.NotificationVO;
 import com.topseeker.participant.model.ParticipantVO;
+import com.topseeker.participant.model.ParticipantService;
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Act;
 
 
@@ -49,7 +53,14 @@ public class ActController {
 	MemberService memberSvc;
 	
 	@Autowired
+	private ParticipantService participantSvc;
+	
+	@Autowired
+	NotificationService notiSvc;
+	
+	@Autowired
     private SessionFactory sessionFactory;
+	
 
 	/*
 	 * This method will serve as addEmp.html handler.
@@ -73,7 +84,6 @@ public class ActController {
 	public String insert(
 			/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 			
-//			@Validated(MemGroup.class)
 			@Validated(MemGroup.class)ActVO actVO, BindingResult result, ModelMap model,
 			@RequestParam("picSet") MultipartFile[] parts, HttpSession session) throws IOException {
 		
@@ -117,10 +127,8 @@ public class ActController {
 
 		actSvc.addAct(actVO);
 		/*************************** 3.新增完成,準備轉交(Send the Success view) **************/
-//		List<ActVO> list = actSvc.getAll();
-//		model.addAttribute("actListData", list);
 		model.addAttribute("successMessage", "活動新增成功!");
-		return "redirect:/act/memMyAct?success=true";  // 新增成功後重導至@GetMapping("/emp/listAllEmp")
+		return "redirect:/act/memMyAct?success=true";
 	}
 
 	/*
@@ -178,8 +186,28 @@ public class ActController {
 				    actVO.setActPictures(picSet); // 設置活動圖片集合
 				}
 		/*************************** 2.開始修改資料 *****************************************/
-		// EmpService empSvc = new EmpService();
+		// 獲取原本的活動資料
+	    ActVO originalActVO = actSvc.getOneAct(actVO.getActNo());
+
+	    if (originalActVO != null) {
+	        // 保留原本的已參與和待審核人數
+	        actVO.setActCurrentCount(originalActVO.getActCurrentCount());
+	        actVO.setActCheckCount(originalActVO.getActCheckCount());
+	    }		
 		actSvc.updateAct(actVO);
+		// 獲取所有參與該活動的會員
+	    List<ParticipantVO> participants = participantSvc.findParticipantsByActNo(actVO.getActNo());
+	    if (participants != null && !participants.isEmpty()) {
+	        String notificationContent = "您報名的活動 \"" + actVO.getActTitle() + "\" 已被修改，請檢查最新活動資訊。";
+	        for (ParticipantVO participant : participants) {
+	            NotificationVO notification = new NotificationVO();
+	            notification.setMemNo(participant.getMemberVO().getMemNo());
+	            notification.setNotiContent(notificationContent);
+	            notification.setNotiTime(new Timestamp(System.currentTimeMillis()));
+	            notification.setNotiStatus((byte) 0);
+	            notiSvc.addNoti(notification);
+	        }
+	    }
 
 		/*************************** 3.修改完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("success", "- (修改成功)");
@@ -208,11 +236,30 @@ public class ActController {
 	 * This method will be called on listAllEmp.html form submission, handling POST request
 	 */
 	@PostMapping("delete")
-	public String delete(@RequestParam("actNo") String actNo, ModelMap model) {
+	public String delete(@Valid ActVO actVO, BindingResult result,@RequestParam("actNo") String actNo, ModelMap model) {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
+		// 從資料庫中檢索活動以獲取完整的 `actVO`
+	    ActVO actVO1 = actSvc.getOneAct(Integer.valueOf(actNo));
+	    if (actVO1 == null) {
+	        model.addAttribute("errorMessage", "活動不存在");
+	        return "redirect:/act/memMyAct";
+	    }
 		/*************************** 2.開始刪除資料 *****************************************/
 		// EmpService empSvc = new EmpService();
 		actSvc.deleteAct(Integer.valueOf(actNo));
+		// 獲取所有參與該活動的會員
+	    List<ParticipantVO> participants = participantSvc.findParticipantsByActNo(actVO1.getActNo());
+	    if (participants != null && !participants.isEmpty()) {
+	        String notificationContent = "您報名的活動 \"" + actVO1.getActTitle() + "\" 已被取消。";
+	        for (ParticipantVO participant : participants) {
+	            NotificationVO notification = new NotificationVO();
+	            notification.setMemNo(participant.getMemberVO().getMemNo());
+	            notification.setNotiContent(notificationContent);
+	            notification.setNotiTime(new Timestamp(System.currentTimeMillis()));
+	            notification.setNotiStatus((byte) 0);
+	            notiSvc.addNoti(notification);
+	        }
+	    }
 		/*************************** 3.刪除完成,準備轉交(Send the Success view) **************/
 		List<ActVO> list = actSvc.getAll();
 		model.addAttribute("actListData", list);

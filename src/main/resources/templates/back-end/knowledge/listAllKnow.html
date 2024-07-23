@@ -105,7 +105,7 @@
 						<th>內容</th>
 						<th width="150px">知識狀態</th>
 						<th>修改</th>
-						<!-- 					<th>刪除</th> -->
+						<th>刪除</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -162,13 +162,15 @@
 										th:value="${knowledgeVO.knowNo}">
 								</form>
 							</td>
-							<!-- 						<td> -->
-							<!-- 							<form method="post" th:action="@{/knowledge/delete}" -->
-							<!-- 								style="margin-bottom: 0px;"> -->
-							<!-- 								<input type="submit" value="刪除"> <input type="hidden" -->
-							<!-- 									name="knowNo" th:value="${knowledgeVO.knowNo}"> -->
-							<!-- 							</form> -->
-							<!-- 						</td> -->
+							<td width="100px">
+								<form method="post" th:action="@{/knowledge/deleteKnow}"
+									style="margin-bottom: 0px;">
+									<button type="submit" class="btn btn-danger text-white">
+									刪除
+									</button> <input type="hidden"
+										name="knowNo" th:value="${knowledgeVO.knowNo}">
+								</form>
+							</td>
 						</tr>
 					</th:block>
 				</tbody>

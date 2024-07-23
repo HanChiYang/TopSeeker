@@ -106,7 +106,7 @@ textarea {
         </div>
         <div>
             <!-- 留言表單 -->
-            <form class="comment-form" th:action="@{/article/artcomment/addComment}" method="post" th:object="${artcommentVO}" id="commentForm">
+            <form class="comment-form" th:action="@{/article/artcomment/addComment}" method="get" th:object="${artcommentVO}" id="commentForm">
                 <textarea name="commentContent" th:field="*{commentContent}" rows="4" placeholder="輸入你的留言..." required></textarea>
                 <input type="hidden" name="artNo" th:value="${articleVO.artNo}" />
                 <button type="submit">送出留言</button>

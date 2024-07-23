@@ -8,7 +8,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/de9b92a469.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" th:href="@{/css/back_end.css}">
-    
+    <style>
+   	h1 {
+	    margin-top: 2rem;
+	}
+	.card {
+	    background-color: #CEDEBD;
+	    border: none;
+	    border-radius: 0.5rem;
+	    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+	.card-header {
+	    background-color: #9EB384;
+	    color: #FAF1E4;
+	    font-weight: bold;
+	    font-size: 1.25rem;
+	    text-align: center;
+	}
+	.card-body {
+	    padding: 1.5rem;
+	}
+</style>
 </head>
 <body>
 <nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
@@ -16,16 +36,16 @@
 
 <div class="container mt-5">
     <div  th:if="${session.loggedInEmployee != null}">
-    	<h1><span  th:text="${session.loggedInEmployee.empAccount}+'('+${session.loggedInEmployee.empName}+')'"></span>
+    	<h1><span  th:text="${session.loggedInEmployee.empName}"></span>
     
-		您好，歡迎來到後台首頁</h1>
+		您好，歡迎來到後台首頁!</h1>
 	</div>	
     <div class="card mt-5">
         <div class="card-header">
             歡迎使用後台管理系統
         </div>
         <div class="card-body">
-            <p>在這裡你可以管理商城、套裝行程、揪團活動、會員、員工權限。</p>
+            <p>在這裡你可以管理商城、套裝行程、揪團活動、會員以及員工權限。</p>
         </div>
     </div>
 </div>
