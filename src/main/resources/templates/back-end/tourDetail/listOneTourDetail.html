@@ -14,6 +14,11 @@
     display: inline;
     margin-right: 5px; /* 調整間距 */
 	}
+	
+	img, svg {
+    vertical-align: middle;
+    width: 300px;
+}
 </style>
 </head>
 <body>
@@ -21,7 +26,7 @@
 <!-- topseeker後台Navbar -->
 	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
 
-
+	<br>
 	<div align="center" th:fragment="listOneTourDetail-div"> <!-- 此div被select_page.html第158行insert用 -->
 		<h3><span>查詢結果 :</span></h3>
 		<span>行程編號:</span><span th:text="${tourDetailVO.tourVO.tourNo} + '-[' + ${tourDetailVO.tourVO.tourName} + ']'"></span><br>

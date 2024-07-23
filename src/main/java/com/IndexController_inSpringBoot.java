@@ -30,6 +30,8 @@ import com.topseeker.report.model.ReportService;
 import com.topseeker.report.model.ReportVO;
 import com.topseeker.shop.info.model.ShopInfoService;
 import com.topseeker.shop.info.model.ShopInfoVO;
+import com.topseeker.shop.product.model.ShopProductService;
+import com.topseeker.shop.product.model.ShopProductVO;
 
 
 
@@ -75,15 +77,17 @@ public class IndexController_inSpringBoot {
 	@Autowired
 	ShopInfoService shopInfoSvc;
 	
-	
-	
+	@Autowired
+	ShopProductService shopProductSvc;
 	
 	
     @GetMapping("/")
     public String index(Model model) {
      
 	  List<ShopInfoVO> shopInfoListData = shopInfoSvc.getAllReleasedInfo();
+	  List<ShopProductVO> shopListData = shopProductSvc.getAllReleasedProd();
 	
+	  model.addAttribute("shopListData", shopListData);
 	  model.addAttribute("shopInfoListData", shopInfoListData);
   
         return "front-end/index";

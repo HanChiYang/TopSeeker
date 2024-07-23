@@ -37,9 +37,11 @@
 /*         font-size: 30px; /* 增大內容字體 */ */
 /*     } */
 	
-	body > div > div > span:nth-child(23) > img{
-		width:200px;
-	}
+	
+	img, svg {
+    vertical-align: middle;
+    width: 200px;
+}
 
 </style>
 </head>
@@ -48,7 +50,8 @@
 <!-- topseeker後台Navbar -->
 	<nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
 
-
+	<br>
+	
 	<div align="center" th:fragment="listOneTour-div"> <!-- 此div被select_page.html第158行insert用 -->
 		<h3><span>查詢結果 :</span></h3>
 		<div class="text">
@@ -59,7 +62,7 @@
 		<span>行程星數:</span><span th:text="${tourVO.tourStar}"></span><br>
 		<span>行程狀態:</span><span th:text="${tourVO.tourStatus}"></span><br>
 		<span>行程地區:</span><span th:text="${tourVO.tourAreaVO.areaNo} + '-[' + ${tourVO.tourAreaVO.areaName} + ']'"></span><br>
-		<span>圖片:</span><span><img th:src="@{/tour/DBGifReader} + '?tourNo=' + ${tourVO.tourNo}" ></span><br/>
+		<span>圖片:</span><span><img th:src="@{/tour/DBGifReader} + '?tourNo=' + ${tourVO.tourNo}" width="200px";></span><br/>
 		</div>
 	</div>
 
