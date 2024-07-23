@@ -365,7 +365,7 @@ public class TourDetailController {
 		List<TourVO> list = tourSvc.getAll(map);
 //		List<TourDetailVO> list = tourDetailSvc.getAll(map);
 		model.addAttribute("tourDetailListData", list); // for listAllTour.html 第85行用
-		return "back-end/tour/listAllTour";
+		return "back-end/tourDetail/listAllTourDetail";
 	}
 	
 
