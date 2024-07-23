@@ -34,6 +34,7 @@
 
 	<div align="center" th:fragment="listOneTourGroup-div"> <!-- 此div被select_page.html第158行insert用 -->
 		<h3><span>查詢結果 :</span></h3>
+		<div class="text">
 		<span>行程開團編號:</span><span th:text="${tourGroupVO.groupNo}"></span><br/>
 		<span>行程編號:</span><span th:text="${tourGroupVO.tourVO.tourNo} + '-[' + ${tourGroupVO.tourVO.tourName} + ']'"></span><br/>
 		<span>行程開團價格:</span><span th:text="${tourGroupVO.groupPrice}"></span><br/>
@@ -44,6 +45,7 @@
 		<span>行程成行人數:</span><span th:text="${tourGroupVO.groupMin}"></span><br/>
 		<span>行程最大人數:</span><span th:text="${tourGroupVO.groupMax}"></span><br/>
 		<span>圖片:</span><span><img th:src="@{/tour/DBGifReader} + '?tourNo=' + ${tourGroupVO.tourVO.tourNo}" width="100px"></span><br/>
+		</div>	
 	</div>
 
 
