@@ -232,7 +232,7 @@ a.nav-link:hover {
   box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* 陰影效果 */
 }
 
-.bellIcon {
+nav.bellIcon {
   transition: transform 0.3s ease;
 }
 
@@ -247,3 +247,4 @@ a.nav-link:hover {
 .nav-link {
    align-items: center;
   }
+  

@@ -43,6 +43,10 @@
         margin-left: auto;
         margin-right: auto;
     }
+    
+    body > div > div > span:nth-child(23) > img{
+		width:300px;
+	}
 </style>
 </head>
 <body>
@@ -66,6 +70,28 @@
 			<input type="text" th:field="*{tourName}" onclick="hideContent('tourName.errors');" /><br/>
 			<span  th:if="${#fields.hasErrors('tourName')}" th:errors="*{tourName}" class="error" id="tourName.errors"></span>
 			</div>
+			
+			
+			
+			
+			<div>
+			<label>行程介紹:</label>
+			<input type="text" th:field="*{tourIntro}" onclick="hideContent('tourIntro.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('tourIntro')}" th:errors="*{tourIntro}" class="error" id="tourIntro.errors"></span>
+			</div>
+			
+			<div>
+			<label>行程價格:</label>
+			<input type="text" th:field="*{tourPrice}" onclick="hideContent('tourPrice.errors');" /><br/>
+			<span  th:if="${#fields.hasErrors('tourPrice')}" th:errors="*{tourPrice}" class="error" id="tourPrice.errors"></span>
+			</div>
+			
+			
+			
+			
+			
+			
+			
 			
 			<div>
 			<label>行程天數:</label>

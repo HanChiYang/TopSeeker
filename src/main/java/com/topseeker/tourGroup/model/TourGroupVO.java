@@ -42,7 +42,7 @@ public class TourGroupVO implements java.io.Serializable {
 	private Integer groupBal;
 	private Integer groupMin;
 	private Integer groupMax;
-	private Integer groupStatus;
+//	private Integer groupStatus;
 	
 
 	public TourGroupVO() { //必需有一個不傳參數建構子(JavaBean基本知識)
@@ -196,20 +196,20 @@ public class TourGroupVO implements java.io.Serializable {
 
 
 
-	@Column(name = "group_status")
-	@NotNull(message="開團狀態: 請勿空白")
-//	@Min(value = 1, message = "狀態只能輸入(1上架 2下架 3取消 4延期 )")
-//	@Min(value = 4, message = "狀態只能輸入(1上架 2下架 3取消 4延期 )")
-	public Integer getGroupStatus() {
-		return groupStatus;
-	}
+//	@Column(name = "group_status")
+////	@NotNull(message="開團狀態: 請勿空白")
+////	@Min(value = 1, message = "狀態只能輸入(1上架 2下架 3取消 4延期 )")
+////	@Min(value = 4, message = "狀態只能輸入(1上架 2下架 3取消 4延期 )")
+//	public Integer getGroupStatus() {
+//		return groupStatus;
+//	}
 
 
 
 
-	public void setGroupStatus(Integer groupStatus) {
-		this.groupStatus = groupStatus;
-	}
+//	public void setGroupStatus(Integer groupStatus) {
+//		this.groupStatus = groupStatus;
+//	}
 
 
 
