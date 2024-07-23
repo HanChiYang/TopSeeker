@@ -17,23 +17,36 @@
 <head th:insert="~{/back-end/tour/included-fragment}"></head>
 <style type="text/css">
 	
+    /* 設定整體字體大小 */
+    body {
+        font-size: 3rem; /* 提高字體大小 */
+    }
+
+
+
     span {
-		display: inline-block;
-		width: 150px;
-		text-align: left;
-		font-weight: bold;
-	}
+        display: block;
+        font-weight: bold;
+        font-size: 1.5rem; /* 增大標題字體 */
+        margin-bottom: 10px;
+    }
+
+    span + span {
+        font-size: 60px; /* 增大內容字體 */
+    }
+
 </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
-		 <div align="center"> <h2>行程個人資料 - listOneTour.html</h2>
-		 <h3><a class="navbar-brand" th:href="@{/tour/select_page}"><img th:src="@{/images/back1.gif}">回查詢頁<label th:text="${success}"></label></a></h3></div>
-</nav>
+<!-- <nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center"> -->
+<!-- 		 <div align="center"> <h2>行程個人資料 - listOneTour.html</h2> -->
+<!-- 		 <h3><a class="navbar-brand" th:href="@{/tour/select_page}"><img th:src="@{/images/back1.gif}">回查詢頁<label th:text="${success}"></label></a></h3></div> -->
+<!-- </nav> -->
 
 	<div align="center" th:fragment="listOneTour-div"> <!-- 此div被select_page.html第158行insert用 -->
 		<h3><span>查詢結果 :</span></h3>
+		<div class="text">
 		<span>行程編號:</span><span th:text="${tourVO.tourNo}"></span><br/>
 		<span>行程名稱:</span><span th:text="${tourVO.tourName}"></span><br/>
 		<span>行程天數:</span><span th:text="${tourVO.tourDays}"></span><br/>
@@ -41,7 +54,8 @@
 		<span>行程星數:</span><span th:text="${tourVO.tourStar}"></span><br/>
 		<span>行程狀態:</span><span th:text="${tourVO.tourStatus}"></span><br/>
 		<span>行程地區:</span><span th:text="${tourVO.tourAreaVO.areaNo} + '-[' + ${tourVO.tourAreaVO.areaName} + ']'"></span><br/>
-		<span>圖片:</span><span><img th:src="@{/tour/DBGifReader} + '?tourNo=' + ${tourVO.tourNo}" width="100px"></span><br/>
+		<span>圖片:</span><span><img th:src="@{/tour/DBGifReader} + '?tourNo=' + ${tourVO.tourNo}" ></span><br/>
+		</div>
 	</div>
 
 
