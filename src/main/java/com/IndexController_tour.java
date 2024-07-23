@@ -65,9 +65,9 @@ public class IndexController_tour {
 		return "front-end/tour/test";
 	}
     
-    @GetMapping("/tour/test2")
+    @GetMapping("/tourOrder/historical_Order")
 	public String test2(Model model) {
-		return "front-end/tour/test2";
+		return "front-end/tourOrder/historical_Order";
 	}
     
     @GetMapping("/tour/indexTour")
@@ -92,6 +92,12 @@ public class IndexController_tour {
     
     
 //    =================    後台    =================
+    @GetMapping("/tour/backindextour")
+	public String backindextour(Model model) {
+		return "back-end/tour/backindextour";
+	}
+    
+    
     
     @GetMapping("/tour/select_page")
 	public String select_page(Model model) {
