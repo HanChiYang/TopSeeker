@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -71,7 +72,8 @@ public class NewsController {
 	 */
 	@PostMapping("insert")
 	public String insert(@Valid NewsVO newsVO, BindingResult result, ModelMap model,
-			@RequestParam("picSet") MultipartFile[] parts) throws IOException {
+			@RequestParam("picSet") MultipartFile[] parts
+			) throws IOException {
 		
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
@@ -96,7 +98,6 @@ public class NewsController {
 			
 		}
 		if (result.hasErrors()) {
-//			System.out.println(result);
 			return "back-end/news/addNews";
 		}
 		/*************************** 2.開始新增資料 *****************************************/
@@ -105,9 +106,9 @@ public class NewsController {
 		/*************************** 3.新增完成,準備轉交(Send the Success view) **************/
 		List<NewsVO> list = newsSvc.getAll();
 		model.addAttribute("newsListData", list);
-		model.addAttribute("success", "- (新增成功)");
-		return "redirect:/news/newsBackEnd"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/emp/listAllEmp")
+		return "redirect:/news/newsBackEnd?success=insert";
 	}
+	
 
 	/*
 	 * This method will be called on listAllEmp.html form submission, handling POST request
@@ -116,17 +117,13 @@ public class NewsController {
 	public String getOne_For_Update(@RequestParam("newsNo") String newsNo, ModelMap model) {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		/*************************** 2.開始查詢資料 *****************************************/
-		// EmpService empSvc = new EmpService();
 		NewsVO newsVO = newsSvc.getOneNews(Integer.valueOf(newsNo));
 
 		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("newsVO", newsVO);
-		return "front-end/news/update_news_input"; // 查詢完成後轉交update_emp_input.html
+		return "back-end/news/update_news_input";
 	}
 
-	/*
-	 * This method will be called on update_emp_input.html form submission, handling POST request It also validates the user input
-	 */
 	@PostMapping("update")
 	public String update(@Valid NewsVO newsVO, BindingResult result, ModelMap model,
 			@RequestParam("picSet") MultipartFile[] parts) throws IOException {
@@ -152,14 +149,13 @@ public class NewsController {
 		    newsVO.setNewsPic(picSet); // 設置商品的圖片集合
 		}
 		/*************************** 2.開始修改資料 *****************************************/
-		// EmpService empSvc = new EmpService();
 		newsSvc.updateNews(newsVO);
 
 		/*************************** 3.修改完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("success", "- (修改成功)");
 		newsVO = newsSvc.getOneNews(Integer.valueOf(newsVO.getNewsNo()));
 		model.addAttribute("newsVO", newsVO);
-		return "back-end/news/newsBackEnd"; // 修改成功後轉交listOneEmp.html
+		return "redirect:/news/newsBackEnd?success=update";// 修改成功後重定向到新聞列表頁面
 	}
 
 	/*

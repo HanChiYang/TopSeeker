@@ -19,11 +19,11 @@
         body {
             font-family: 'Noto Sans TC', sans-serif;
             line-height: 1.6;
-            background-color: #f4f4f4;
             color: #333;
             display: flex;
             flex-direction: column;
-            margin: 80px 0;
+            margin: 80px 0 0;
+            background-color: #CEDEBD;
         }
         .main-content {
             flex-grow: 1;
@@ -68,7 +68,7 @@
         }
         .content {
             flex-grow: 1;
-            background: #fff;
+            background: #EEEDEB;
             padding: 1rem;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -76,7 +76,8 @@
         .sticky-card {
             position: -webkit-sticky;
             position: sticky;
-            top: 100px; /* 根據您的需要調整此值 */
+            top: 100px;
+            background-color: #EEEDEB;
         }
         #filterButton {
             display: block;
@@ -111,10 +112,9 @@
         .card-clickable:hover {
             transform: scale(1.05);
         }
-        
-       nav.navbar {
-        padding:0;
-        }
+        .bg-light {
+		    color: black;
+		}
     </style>
 </head>
 <body>
@@ -124,13 +124,13 @@
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <header>
-        <nav th:insert="~{/front-end/navbar.html}"></nav>
-    </header>
+    <script src="/js/common.js"></script>
+    <nav th:insert="~{/front-end/navbar2.html}"></nav>
+    <div th:insert="~{/front-end/notification/notification.html}"></div>
     <div class="container-fluid main-content">
         <div class="row">
             <div class="col-md-3">
-                <div class="card mb-3 sticky-card">
+                <div class="card mb-3 sticky-card shadow">
                     <div class="card-body">
                         <h3 class="card-title bi bi-binoculars-fill">探索活動</h3>
                         <form method="post" id="searchForm" th:action="@{/act/ajaxSearch}">
@@ -149,15 +149,15 @@
                                 </div>
                             </div>
                             <div class="form-group mb-3 bi bi-card-heading">
-                                <label>活動標題:</label>
+                                <label>活動標題</label>
                                 <input type="text" name="actTitle" class="form-control">
                             </div>
                             <div class="form-group mb-3 bi bi-pin-map">
-                                <label>活動地點:</label>
+                                <label>活動地點</label>
                                 <input type="text" name="actPlace" class="form-control">
                             </div>
                             <div class="form-group mb-3 bi bi-calendar-range">
-                                <label>活動開始日範圍:</label>
+                                <label>活動開始日範圍</label>
                                 <input name="actStart" type="date" class="form-control">
                             </div>
                             <div class="form-group mb-3">
@@ -169,7 +169,7 @@
                 </div>
             </div>
             <div class="col-md-9">
-                <div class="content">
+                <div class="content shadow">
                     <ul id="resultsBlock" class="list-group">
                         <!-- 活動項目將動態生成 -->
                     </ul>
@@ -177,6 +177,7 @@
             </div>
         </div>
     </div>
+    
     
     <script> 
         $(document).ready(function() {
@@ -225,11 +226,10 @@
 			//卡片在初始加載時就綁定好點擊事件
             bindCardClickEvent(); 
         });
-        
     </script>
     
-    <footer>
-        <p>&copy; 2024 登山網站. 版權所有.</p>
-    </footer>
+<footer class="bg-light text-center py-4 mt-5">
+    <p>&copy; 2024 TopSeeker. 版權所有.</p>
+</footer>
 </body>
 </html>

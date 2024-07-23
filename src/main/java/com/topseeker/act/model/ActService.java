@@ -65,7 +65,7 @@ public class ActService {
 		return repository.findAll();
 	}
 
-	//取會員的開團活動(未使用)
+	//取會員的開團活動
 	public List<ActVO> getActsByMem(Integer memNo) {
 		return repository.findActByMem(memNo);
 	}
