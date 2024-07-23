@@ -169,6 +169,23 @@ function previewImages(event) {
     }
 }
 
+document.querySelector('form.add-article').addEventListener('submit', function(event) {
+    validateForm(event);
+    if (event.defaultPrevented) {
+        return;
+    }
+    // Perform AJAX submission if needed or simulate submission success
+    Swal.fire({
+        icon: 'success',
+        title: '送出成功',
+        text: '您的文章已成功新增!',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('articleForm').submit(); // Use actual form submission after SweetAlert
+        }
+    });
+});
+
 function validateForm(event) {
     const artTitle = document.getElementById('artTitle').value.trim();
     const artContent = document.getElementById('artContent').value.trim();
@@ -189,23 +206,6 @@ function validateForm(event) {
     }
 }
 
-document.querySelector('form.add-article').addEventListener('submit', function(event) {
-    event.preventDefault();
-    validateForm(event);
-    if (event.defaultPrevented) {
-        return;
-    }
-    // Perform AJAX submission if needed or simulate submission success
-    Swal.fire({
-        icon: 'success',
-        title: '送出成功',
-        text: '您的文章已成功新增!',
-    }).then((result) => {
-        if (result.isConfirmed) {
-            document.getElementById('articleForm').submit(); // Use actual form submission after SweetAlert
-        }
-    });
-});
 </script>
 
 </body>

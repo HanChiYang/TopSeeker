@@ -198,6 +198,14 @@
 
 
 
+<div class="container2 content-item">
+    <h2 class="animate__animated animate__backInLeft">商城最新促銷</h2>
+    <div class="news-item" th:each="shopInfoVO : ${shopInfoListData}" th:data-info-no="${shopInfoVO.infoNo}">
+        <div class="info-date" th:text="'發布日期：' + ${#dates.format(shopInfoVO.infoDate, 'yyyy-MM-dd')}"></div>
+        <h2 th:text="${shopInfoVO.infoHead}"></h2>
+        <p th:text="${shopInfoVO.infoContent}"></p>
+    </div>
+</div>
 
 
 

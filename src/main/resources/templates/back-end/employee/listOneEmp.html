@@ -1,89 +1,99 @@
-
-
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>員工資料 - listOneEmp.html</title>
-
-<head th:insert="~{/back-end/employee/included-fragment}"></head>
+<link rel="stylesheet" th:href="@{/css/back_end.css}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" />
 <style type="text/css">
     body {
-        background-color: #2f2f2f;
-        color: #d3d3d3;
-        font-family: 'Arial', sans-serif;
-        margin: 1rem;
+        background-color: #f0e6d6; /* 奶茶色背景 */
+        color: #5b3e31; /* 深棕色文字 */
+        font-family: Arial, sans-serif;
     }
 
-    .navbar {
-        background-color: #4a4a4a;
-        border-bottom: 2px solid #555;
-        height: 80px;
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: white; /* 确保导航栏背景为白色，以便与内容区分 */
+        z-index: 1000; /* 确保在其他内容之上 */
     }
 
-    .navbar h2, .navbar h3 {
-        font-size: 1.5rem;
-        color: #d3d3d3;
-    }
-
-    .navbar .navbar-brand img {
-        height: 30px;
+    nav {
+        padding: 0px;
     }
 
     .content {
-        background-color: #3a3a3a;
-        padding: 1rem;
-        margin-top: 100px;
-        border: 1px solid #555;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
+        margin-top: 120px; /* 给内容部分添加足够的上边距，以防被导航栏遮盖 */
+        padding: 20px;
+        max-width: 800px;
+        margin: auto;
     }
 
-    span {
-        display: inline-block;
-        width: 150px;
-        text-align: left;
-        font-weight: bold;
+    h3 {
+        color: #5b3e31;
+        text-align: center;
+        margin-bottom: 20px;
     }
 
-    span.result {
-        color: #ffc107; /* 調整查詢結果顏色 */
+    .card {
+        background-color: #fff;
+        border: 1px solid #d2b48c; /* 卡其色边框 */
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+            margin-top: 180px;
+    }
+
+    .card span {
+        display: flex;
+        justify-content: space-between; /* 标签和值在一行中分开 */
+        margin-bottom: 10px; /* 标签和值之间的垂直间距 */
+    }
+
+    .label {
+        color: #5b3e31;
+        width: 30%; /* 标签部分宽度 */
+    }
+
+    .value {
+        color: #3e2723; /* 更深的棕色以增强对比 */
+        width: 70%; /* 值部分宽度 */
     }
 </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
-		 <div align="center"> <h2>員工權限資料 - listOneEmp.html</h2>
-		 <h3><a class="navbar-brand" th:href="@{/employee/select_page}"><img th:src="@{/images/tomcat.gif}">回查詢頁<label th:text="${success}"></label></a></h3></div>
-</nav>
+<header>
+    <nav th:insert="~{/back-end/back_end_navbar.html}"></nav>
+</header>
 
-	<div align="center" th:fragment="listOneEmp-div"> <!-- 此div被select_page.html第158行insert用 -->
-		<h3><span>查詢結果 :</span></h3>
-		<span>員工編號:</span><span th:text="${empVO.empNo}"></span><br/>
-		<!-- <span>權限編號:</span><span th:text="${empVO.empAuthVO.authorityVO.authNo}"></span><br/> -->
-<!-- 		<span>權限名稱:</span><span th:text="${empauthVO.authVO.authName}"></span><br/> -->
-		<span>員工姓名:</span><span th:text="${empVO.empName}"></span><br/>
-		<span>員工帳號:</span><span th:text="${empVO.empAccount}"></span><br/>
-		<span>員工密碼:</span><span th:text="${empVO.empPassword}"></span><br/>
-		<span>員工到職日:</span><span th:text="${empVO.empHiredate}"></span><br/>
-		<span>員工狀態:</span>
-		<span th:if="${empVO.empStatus == 1}">在職</span>
-		<span th:if="${empVO.empStatus == 0}">離職</span>
-		
-	</div>
+<div class="content">
+    <div class="card" th:fragment="listOneEmp-div"> <!-- 此div被select_page.html第158行insert用 -->
+        <h3>查詢結果 :</h3>
+        <span><span class="label">員工編號:</span><span class="value" th:text="${empVO.empNo}"></span></span>
+        <span><span class="label">員工姓名:</span><span class="value" th:text="${empVO.empName}"></span></span>
+        <span><span class="label">員工帳號:</span><span class="value" th:text="${empVO.empAccount}"></span></span>
+        <span><span class="label">員工密碼:</span><span class="value" th:text="${empVO.empPassword}"></span></span>
+        <span><span class="label">員工到職日:</span><span class="value" th:text="${empVO.empHiredate}"></span></span>
+        <span>
+            <span class="label">員工狀態:</span>
+            <span class="value">
+                <span th:if="${empVO.empStatus == 1}">在職</span>
+                <span th:if="${empVO.empStatus == 0}">離職</span>
+            </span>
+        </span>
+    </div>
+</div>
 
-
+<!-- Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

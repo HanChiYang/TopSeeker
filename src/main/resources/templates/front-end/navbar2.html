@@ -86,11 +86,6 @@
             <i class="fas fa-user-plus"></i> 註冊
           </a>
         </li>
-        
-        
-        
-        
-        
         <li th:if="${session.loggedInMember != null}" class="nav-item">
           <span th:if="${session.hasNewNotifications == true}">
             <a class="nav-link bellIcon">
