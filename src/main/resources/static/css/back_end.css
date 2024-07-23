@@ -16,9 +16,14 @@ body {
     max-width: 75px;
 }
 h1 {
-/*     text-align: center; */
     margin-top: 2rem;
 }
+
+
+
+
+
+
 .card {
     background-color: #CEDEBD;
     border: none;
@@ -32,6 +37,8 @@ h1 {
     font-size: 1.25rem;
     text-align: center;
 }
+
+
 .card-body {
     padding: 1.5rem;
 }
