@@ -71,8 +71,12 @@ public class TourDetailController {
 		TourVO tourVO = tourSvc.getOneTour(tourNo);
 		// 檢查是否已經存在相同的 tourNo 和 detailDay
 		
+		System.out.println("detailDay" + detailDay);
 		
-		
+		if (detailDay == null) {
+			model.addAttribute("errorMessage", "第幾天請勿空白");
+			return "back-end/tourDetail/addTourDetail";  // 回到新增頁面
+		}
         if (tourDetailSvc.existsByTourVOAndDetailDay(tourVO, detailDay)) {
             model.addAttribute("errorMessage", "已經有相同的資料");
             return "back-end/tourDetail/addTourDetail";  // 回到新增頁面
