@@ -31,7 +31,7 @@ public class HibernateUtil_CompositeQuery_TourOrder {
 //			predicate = builder.like(root.get(columnName), "%" + value + "%");
 //		else if ("tourStatus".equals(columnName) ) // 用於varchar
 //			predicate = builder.like(root.get(columnName),  value );
-		else if ("orderDate".equals(columnName) || "departureDate".equals(columnName)) // 用於date
+		else if ("orderDate".equals(columnName) || "groupBegin".equals(columnName) || "groupEnd".equals(columnName)) // 用於date
 			predicate = builder.equal(root.get(columnName), java.sql.Date.valueOf(value));
 		else if("orderPay".equals(columnName) || "orderStatus".equals(columnName))
 			predicate = builder.equal(root.get(columnName), Byte.valueOf(value));
