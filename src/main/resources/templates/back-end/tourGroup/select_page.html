@@ -95,7 +95,7 @@
         font-weight: bold;
         margin-bottom: 10px;
         text-align: left;
-        font-size: 30px;
+        font-size: 20px;
     }
 
     .content-inner span + span {
@@ -116,7 +116,8 @@
 <div class="sidebar">
     <h4>資料查詢:</h4>
     <div class="errorblock" th:utext="${errorMessage}">${errorMessage}</div><br>
-
+	
+	<h4>行程開團:</h4>
     <div class="header-buttons">
         <div>
             <a href='listAllTourGroup'>查詢全部資料</a>
@@ -139,7 +140,7 @@
     </form><br>
 
     <form method="post" th:action="@{listTourGroups_ByCompositeQuery}">
-        <font color=blue>萬用複合查詢:</font><br>
+        <font color=blue>複合查詢資料:</font><br>
         選擇行程: 
         <select th:field="*{tourVO.tourNo}">
             <option value="">
@@ -154,8 +155,8 @@
         <input type="text" name="groupPrice" value="16888"><br>    
         輸入開團剩餘名額: 
         <input type="text" name="groupBal" value="5"><br>
-        輸入行程開團狀態: 
-        <input type="text" name="groupStatus" value="2"><br>
+<!--         輸入行程開團狀態:  -->
+<!--         <input type="text" name="groupStatus" value="2"><br> -->
 
         <input type="submit" value="送出">
     </form>

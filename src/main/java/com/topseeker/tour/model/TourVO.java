@@ -157,8 +157,8 @@ public class TourVO implements java.io.Serializable {
 	}
 
 	@Column(name = "tour_status")
-	@NotEmpty(message="行程狀態: 請勿空白")
-	@Pattern(regexp = "^[(TF)]$", message = "行程狀態: 只能是T或F，T為上架，F為下架")
+//	@NotEmpty(message="行程狀態: 請勿空白")
+//	@Pattern(regexp = "^[(TF)]$", message = "行程狀態: 只能是T或F，T為上架，F為下架")
 	public String getTourStatus() {
 		return tourStatus;
 	}

@@ -85,10 +85,10 @@
 		<th>行程開團剩餘人數</th>
 		<th>行程開團成行人數</th>
 		<th>行程開團最大人數</th>
-		<th>行程開團狀態</th>
+<!-- 		<th>行程開團狀態</th> -->
 		<th>圖片</th>
 		<th>修改</th>
-<!-- 		<th>刪除</th> -->
+		<th>刪除</th>
 	</tr>
   </thead>
 	
@@ -105,7 +105,7 @@
 				<td th:text="${tourGroupVO.groupBal}"></td>
 				<td th:text="${tourGroupVO.groupMin}"></td>
 				<td th:text="${tourGroupVO.groupMax}"></td>
-				<td th:text="${tourGroupVO.groupStatus}"></td>
+<!-- 				<td th:text="${tourGroupVO.groupStatus}"></td> -->
 <!-- 				<td><img th:src="@{/tour/DBGifReader} + '?tourNo=' + ${tourVO.tourNo}" width="100px"></td> -->
 				
 				<td><img th:src="@{/tour/DBGifReader} + '?tourNo=' + ${tourGroupVO.tourVO.tourNo}" width="100px"></td>
@@ -117,12 +117,12 @@
 			     <input type="hidden" name="groupNo" th:value="${tourGroupVO.groupNo}"></form>
 			
 			</td>
-<!-- 			<td> -->
-<!-- 			  <form method="post" th:action="@{/tourGroup/delete}" style="margin-bottom: 0px;"> -->
-<!-- 			     <input type="submit" value="刪除"> -->
-<!-- 			     <input type="hidden" name="groupNo" th:value="${tourGroupVO.groupNo}"></form> -->
+			<td>
+			  <form method="post" th:action="@{/tourGroup/delete}" style="margin-bottom: 0px;">
+			     <input type="submit" value="刪除">
+			     <input type="hidden" name="groupNo" th:value="${tourGroupVO.groupNo}"></form>
 			
-<!-- 			</td> -->
+			</td>
 			</tr>
 		</th:block>
   </tbody>
