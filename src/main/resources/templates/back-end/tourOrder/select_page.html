@@ -151,7 +151,6 @@ html, body {
 }
 
 
-
 </style>
 </head>
 <body>
@@ -182,6 +181,7 @@ html, body {
 
 <!-- 主要內容區域 -->
 <div class="main-content container">
+
     <div id="orderDetail" class="content" th:if="${getOne_For_Display}">
         <div th:insert="~{/back-end/tourOrder/listOneOrder :: listOneOrder-div}"></div>
     </div>
