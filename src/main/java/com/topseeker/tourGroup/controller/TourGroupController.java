@@ -79,11 +79,11 @@ public class TourGroupController {
 	public String getOne_For_Update(@RequestParam("groupNo") String groupNo, ModelMap model) {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		/*************************** 2.開始查詢資料 *****************************************/
-		// tourGroupService tourGroupSvc = new tourGroupService();
 		TourGroupVO tourGroupVO = tourGroupSvc.getOneTourGroup(Integer.valueOf(groupNo));
-
+//		TourVO tourVO = tourSvc
 		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("tourGroupVO", tourGroupVO);
+//		model.addAttribute("tourVO", tourVO);
 		return "back-end/tourGroup/update_tourGroup_input"; // 查詢完成後轉交update_tourGroup_input.html
 	}
 
@@ -95,27 +95,12 @@ public class TourGroupController {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		// 去除BindingResult中tourPic欄位的FieldError紀錄 --> 見第172行
-//		result = removeFieldError(tourGroupVO, result, "tourPic");
-
-//		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的新圖片時
-//			// tourGroupService tourGroupSvc = new tourGroupService();
-//			byte[] tourPic = tourGroupSvc.getOneTourGroup(tourGroupVO.getgroupNo()).gettourPic();
-//			tourVO.setTourPic(tourPic);
-//		} else {
-//			for (MultipartFile multipartFile : parts) {
-//				byte[] tourPic = multipartFile.getBytes();
-//				tourVO.setTourPic(tourPic);
-//			}
-//		}
-//		if (result.hasErrors()) {
-//			return "back-end/tourGroup/update_tourGroup_input";
-//		}
-		/*************************** 2.開始修改資料 *****************************************/
-		// tourGroupService tourGroupSvc = new tourGroupService();
+		if (result.hasErrors()) {
+			return "back-end/tourGroup/update_tourGroup_input";
+		}
 		tourGroupSvc.updateTourGroup(tourGroupVO);
 
 		/*************************** 3.修改完成,準備轉交(Send the Success view) **************/
-		model.addAttribute("success", "- (修改成功)");
 		tourGroupVO = tourGroupSvc.getOneTourGroup(Integer.valueOf(tourGroupVO.getGroupNo()));
 		model.addAttribute("tourGroupVO", tourGroupVO);
 		return "back-end/tourGroup/listOneTourGroup"; // 修改成功後轉交listOnetourGroup.html
