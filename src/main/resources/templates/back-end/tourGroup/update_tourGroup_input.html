@@ -122,9 +122,8 @@
 			
 <!-- 			<div> -->
 <!-- 			<label>圖片:</label> -->
-<!-- 			<input type="file" th:field="*{tourVO.tourPic}" onclick="previewImage()" multiple="multiple" /> -->
-<!--             可以不修改圖片 <span  th:if="${#fields.hasErrors('tourVO.tourPic')}" th:errors="*{tourVO.tourPic}" class="error" id="tourVO.tourPic.errors"></span> -->
-<!-- 			<div id="blob_holder"><img th:src="@{/tour/DBGifReader} + '?tourNo=' + ${tourVO.tourNo}" width="100px"></div> -->
+<!-- 			<input type="file" th:field="*{tourVO}" onclick="previewImage()" multiple="multiple" /> -->
+<!-- 			<div id="blob_holder"><img th:src="@{/tour/DBGifReader} + '?tourNo=' + ${tourGroupVO.tourVO.tourNo}" width="100px"></div> -->
 <!-- 			</div> -->
 			
 			<div>
@@ -155,7 +154,7 @@ acceptedTypes = {
 		'image/gif' : true
 };
 function previewImage() {
-	var upfile1 = document.getElementById("tourPic");
+	var upfile1 = document.getElementById("tourVO");
 	upfile1.addEventListener("change", function(event) {
 		var files = event.target.files || event.dataTransfer.files;
 		for (var i = 0; i < files.length; i++) {
