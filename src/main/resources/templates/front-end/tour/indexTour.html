@@ -191,9 +191,7 @@
 			    align-items: center; /* 垂直置中 */
 			}
 			
-			.all img {
-			       height: 200px;
-			   }
+			
 			
 			.col-form-label{
 				font-size:20px;
@@ -255,6 +253,10 @@
     			width:180px;
     		}
     		
+    		.all img {
+			    height: 200px;
+			}
+    		
     
     </style>
 </head>
@@ -274,21 +276,21 @@
     </ol>
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img th:src="@{/tour/DBGifReader} + '?tourNo=1'" class="d-block w-100" alt="...">
+            <img th:src="@{/tour/DBGifReader} + '?tourNo=2'" class="d-block w-100" alt="...">
             <div class="carousel-caption d-none d-md-block">
-                <h5>北海道六日遊</h5>
+                <h5>東京富士山六日遊</h5>
                 <p>簡介 1</p>
             </div>
         </div>
         <div class="carousel-item">
-            <img th:src="@{/tour/DBGifReader} + '?tourNo=2'" class="d-block w-100" alt="...">
+            <img th:src="@{/tour/DBGifReader} + '?tourNo=1'" class="d-block w-100" alt="...">
             <div class="carousel-caption d-none d-md-block">
-                <h5>麗江古城六日遊</h5>
+                <h5>北海道六日遊</h5>
                 <p>簡介 2</p>
             </div>
         </div>
         <div class="carousel-item">
-            <img th:src="@{/tour/DBGifReader} + '?tourNo=3'" class="d-block w-100" alt="...">
+            <img th:src="@{/tour/DBGifReader} + '?tourNo=13'" class="d-block w-100" alt="...">
             <div class="carousel-caption d-none d-md-block">
                 <h5>阿爾卑斯山九日遊</h5>
                 <p>簡介 3</p>
@@ -375,8 +377,8 @@
             <p>行程內容簡介...</p>
         </div>
         <div class="tour">
-            <a th:href="@{/tour/getTourNo_For_Display(tourNo=3)}">
-                <img th:src="@{/tour/DBGifReader} + '?tourNo=3'" alt="行程3">
+            <a th:href="@{/tour/getTourNo_For_Display(tourNo=11)}">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=11'" alt="行程3">
             </a>
             <h3>熱門行程 3</h3>
             <p>行程內容簡介...</p>
@@ -547,20 +549,20 @@
     <h2 class="name">專業導遊</h2>
     <div class="tours">
         <div class="tour10">
-            <a th:href="@{/tour/getTourNo_For_Display(tourNo=8)}">
-                <img th:src="@{/tour/DBGifReader} + '?tourNo=8'" alt="行程13">
+            <a th:href="@{/tour/getTourNo_For_Display(tourNo=16)}">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=16'" alt="行程13">
             </a>
             <h3>大吳老師</h3>
         </div>
         <div class="tour11">
-            <a th:href="@{/tour/getTourNo_For_Display(tourNo=9)}">
-                <img th:src="@{/tour/DBGifReader} + '?tourNo=9'" alt="行程14">
+            <a th:href="@{/tour/getTourNo_For_Display(tourNo=17)}">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=17'" alt="行程14">
             </a>
             <h3>陳興傑</h3>
         </div>
         <div class="tour11">
-            <a th:href="@{/tour/getTourNo_For_Display(tourNo=10)}">
-                <img th:src="@{/tour/DBGifReader} + '?tourNo=10'" alt="行程15">
+            <a th:href="@{/tour/getTourNo_For_Display(tourNo=18)}">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=18'" alt="行程15">
             </a>
             <h3>彭宥騏</h3>
         </div>
