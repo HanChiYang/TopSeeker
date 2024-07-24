@@ -2,9 +2,9 @@
 
         $(".bellIcon").on("click", function(event){
             event.preventDefault();
+			event.stopPropagation()
             var path = $(this).data("new-src");
             $(this).attr("src", path);
-
             // 加載通知數據
             $.ajax({
                 url: '/notification/listNewNoti',
@@ -23,7 +23,6 @@
             });
 
         });
-
 
         $('#notification').DataTable({
             "lengthMenu": [10],

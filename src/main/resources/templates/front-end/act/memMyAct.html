@@ -13,10 +13,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     <style>
      body{
-        margin-top: 7rem;
+        margin-top: 6rem;
         font-family: 'Noto Sans TC', sans-serif;
+        background-color: #CEDEBD;
      }
-
      .dataTables_wrapper .dataTables_filter,
      .dataTables_wrapper .dataTables_length,
      .dataTables_wrapper .dataTables_info,
@@ -32,18 +32,13 @@
 
      .card {
         padding: 1rem;
+/*         background-color: #FAF1E4; */
      }
      
      table {
         border: 1px solid black; /* 新增邊框樣式 */
         border-collapse: collapse;
      }
-     
-     
-/*      table.dataTable.row-border tbody tr:first-child th, table.dataTable.row-border tbody tr:first-child td, table.dataTable.display tbody tr:first-child th, table.dataTable.display tbody tr:first-child td { */
-/* 	    border-top: none; */
-/* 	    white-space: nowrap; */
-/* 	 } */
      
      /* 彈窗美化 */
     .modal-header {
@@ -66,7 +61,7 @@
         white-space: normal; /* 使內容正常換行 */
     }
     .current-title-column{
-        width: 35px;        
+        width: 40px;        
     }
     .check-title-column{
     	width: 45px;
@@ -76,23 +71,26 @@
         width: 25px;        
     }
     .date-title-column {
-    	width: 40px;
+    	width: 50px;
         white-space: nowrap;        
     }
     .count-column {
         width: 15px;        
     }
     .edit-column {
-        max-width: 40px;        
+        width: 45px;        
     }
     .status-column {
         width: 40px;        
+    }
+    .rating-column {
+        width: 35px;        
     }
     
     div.container {
 	    max-width: 96%;
 	    padding: 20px;
-	    background-color: #CEDEBD;
+	    background-color: #EEEDEB;
 	    border-radius: 10px;
 	    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 	    margin-bottom: -30px;
@@ -131,15 +129,16 @@
       background-color: #dc3545; /* 紅色 */
       color: #ffffff;
   }
-   nav.navbar {
-      padding:0;
-   }
     </style>    
 </head>
 <body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="/js/common.js"></script>
+<nav th:insert="~{/front-end/navbar2.html}"></nav>
+<div th:insert="~{/front-end/notification/notification.html}"></div>
 
 <!-- jQuery DataTables 設定 -->
 <script th:inline="none">
@@ -251,11 +250,9 @@
         });
     });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
-<header>
-    <nav th:insert="~{/front-end/navbar2.html}"></nav>
-</header>
+
+
 <div class="container">我的開團列表</div>
 <div class="container mt-5">
     
@@ -282,7 +279,7 @@
                             <th class="date-title-column">活動開始</th>
                             <th class="date-title-column">活動結束</th>
                             <th class="status-column">狀態</th>
-                            <th>評價</th> 
+                            <th class="rating-column">評價</th> 
                             <th class="edit-column">修改</th>
                             <th class="edit-column">取消</th>
                         </tr>
@@ -322,7 +319,7 @@
                                 
                                 <td>
                                     <form method="post" th:action="@{/act/updateActByMem}">
-                                        <button type="submit" class="btn btn-warning modify-btn" th:classappend="${actVO.actStatus != 0} ? 'btn-secondary' : 'btn-warning'" th:disabled="${actVO.actStatus == 2 || actVO.actStatus == 3}" th:data-status="${actVO.actStatus}">修改</button>
+                                        <button type="submit" class="btn btn-warning modify-btn" th:classappend="${actVO.actStatus != 0} ? 'btn-secondary' : 'btn-warning'" th:disabled="${actVO.actStatus !=0 || actVO.actStatus == 3}" th:data-status="${actVO.actStatus}">修改</button>
                                         <input type="hidden" name="actNo" th:value="${actVO.actNo}">
                                     </form>
                                 </td>
@@ -357,7 +354,7 @@
                             <th class="date-title-column">活動開始</th>
                             <th class="date-title-column">活動結束</th>
                             <th class="status-column">狀態</th>
-                            <th>評價</th>
+                            <th class="rating-column">評價</th>
                             <th class="edit-column">修改</th>
                             <th class="edit-column">取消</th>
                         </tr>
@@ -388,11 +385,8 @@
     </div>
   </div>
 </div>
-<div th:insert="~{/front-end/notification/notification.html}"></div>
-<script src="/js/common.js"></script>
-
 <footer class="bg-light text-center py-4 mt-5">
-    <p>&copy; 2024 登山網站. 版權所有.</p>
+    <p>&copy; 2024 TopSeeker. 版權所有.</p>
 </footer>
 
 </body>

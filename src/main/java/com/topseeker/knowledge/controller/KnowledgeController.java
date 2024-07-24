@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.topseeker.knowledge.model.KnowledgeService;
 import com.topseeker.knowledge.model.KnowledgeVO;
+import com.topseeker.shop.info.model.ShopInfoVO;
 
 @Controller
 @RequestMapping("/knowledge")
@@ -175,6 +176,21 @@ public class KnowledgeController {
 		model.addAttribute("knowledgeVO", knowledgeVO);
 		return "back-end/knowledge/listOneKnow"; // 修改成功後轉交listOneEmp.html
 	}
+	
+	// 刪除新手知識
+		@PostMapping("/deleteKnow")
+		public String delete(@RequestParam("knowNo") String knowNo, ModelMap model) {
+			/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
+
+			/*************************** 2.開始刪除資料 *****************************************/
+
+			knowledgeSvc.deleteKnowledgeVO(Integer.valueOf(knowNo));
+			/*************************** 3.刪除完成,準備轉交(Send the Success view) **************/
+			List<KnowledgeVO> list = knowledgeSvc.getAll();
+			model.addAttribute("knowListData", list);
+			model.addAttribute("success", "刪除成功");
+			return "back-end/knowledge/listAllKnow";
+		}
 
 	// ============圖片錯誤訊息刪除用===========
 	// 去除BindingResult中某個欄位的FieldError紀錄

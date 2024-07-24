@@ -70,7 +70,7 @@
 							<th>內容</th>
 							<th width="150px">消息狀態</th>
 							<th>修改</th>
-							<!-- 					<th>刪除</th> -->
+							<th>刪除</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -127,13 +127,15 @@
 											th:value="${shopInfoVO.infoNo}">
 									</form>
 								</td>
-								<!-- 						<td> -->
-								<!-- 							<form method="post" th:action="@{/shop/shopManagement/delete}" -->
-								<!-- 								style="margin-bottom: 0px;"> -->
-								<!-- 								<input type="submit" value="刪除"> <input type="hidden" -->
-								<!-- 									name="prodNo" th:value="${shopProductVO.prodNo}"> -->
-								<!-- 							</form> -->
-								<!-- 						</td> -->
+								<td width="100px">
+									<form method="post" th:action="@{/shop/shopManagement/deleteInfo}"
+										style="margin-bottom: 0px;">
+										<button type="submit" class="btn btn-danger text-white">
+										刪除
+										</button> <input type="hidden"
+											name="infoNo" th:value="${shopInfoVO.infoNo}">
+									</form>
+								</td>
 							</tr>
 						</th:block>
 					</tbody>

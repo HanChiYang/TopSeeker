@@ -45,7 +45,7 @@ import com.topseeker.tourOrder.model.TourOrderVO;
 
 @Controller
 @Validated
-@RequestMapping("/tour")
+@RequestMapping("tour")
 public class TourNoController {
 	
 	@Autowired

@@ -150,10 +150,6 @@ html, body {
     padding: 20px;
 }
 
- #compositeQuery{ 
- 
-} 
-
 
 </style>
 </head>
@@ -185,6 +181,10 @@ html, body {
 
 <!-- 主要內容區域 -->
 <div class="main-content container">
+
+    <div id="orderDetail" class="content" th:if="${getOne_For_Display}">
+        <div th:insert="~{/back-end/tourOrder/listOneOrder :: listOneOrder-div}"></div>
+    </div>
     <div id="singleOrder" class="content" style="display:none;">
         <div class="card">
             <div class="card-header">訂單查詢</div>
@@ -236,10 +236,6 @@ html, body {
 </div>
 
     <!-- 顯示單一訂單詳細資訊區 -->
-    <div id="orderDetail" class="content" th:if="${getOne_For_Display}">
-        <div th:insert="~{/back-end/tourOrder/listOneOrder :: listOneOrder-div}"></div>
-    </div>
-</div>
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

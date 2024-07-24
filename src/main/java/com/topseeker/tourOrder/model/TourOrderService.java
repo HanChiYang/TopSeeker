@@ -50,8 +50,8 @@ public class TourOrderService {
 	}
 	
 	
-	public void insertByGOO(Integer memNo, Integer groupNo, Integer orderNums, Byte orderPay, Byte orderStatus, Date orderDate, Integer orderPrice) {
-		repository.insertByGOO(memNo, groupNo, orderNums, orderPay, orderStatus, orderDate, orderPrice);
+	public void insertByGOO(Integer memNo, Integer groupNo, Integer orderNums, Byte orderPay, Byte orderStatus, Date orderDate, Integer orderPrice, Date departureDate) {
+		repository.insertByGOO(memNo, groupNo, orderNums, orderPay, orderStatus, orderDate, orderPrice, departureDate);
 	}
 
 	public List<TourOrderVO> getAll(Map<String, String[]> map) {

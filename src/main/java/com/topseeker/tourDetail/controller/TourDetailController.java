@@ -1,8 +1,8 @@
 package com.topseeker.tourDetail.controller;
-
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.topseeker.tour.model.TourService;
 import com.topseeker.tour.model.TourVO;
 import com.topseeker.tourDetail.model.TourDetailService;
+import com.topseeker.tourDetail.model.TourDetailService.DuplicateTourDetailException;
 import com.topseeker.tourDetail.model.TourDetailVO;
 
 @Controller
@@ -67,12 +68,25 @@ public class TourDetailController {
 		result = removeFieldError(tourDetailVO, result, "tourVO");
 		
 		System.out.println("Tourno" + tourNo);
-		
+		TourVO tourVO = tourSvc.getOneTour(tourNo);
 		// 檢查是否已經存在相同的 tourNo 和 detailDay
-//        if (tourDetailSvc.existsByTourNoAndDetailDay(tourNo, detailDay)) {
-//            model.addAttribute("errorMessage", "已經有相同的資料");
-//            return "back-end/tourDetail/addTourDetail";  // 回到新增頁面
-//        }
+		
+		System.out.println("detailDay" + detailDay);
+		
+		if (detailDay == null) {
+			model.addAttribute("errorMessage", "第幾天請勿空白");
+			return "back-end/tourDetail/addTourDetail";  // 回到新增頁面
+		}
+        if (tourDetailSvc.existsByTourVOAndDetailDay(tourVO, detailDay)) {
+            model.addAttribute("errorMessage", "已經有相同的資料");
+            return "back-end/tourDetail/addTourDetail";  // 回到新增頁面
+        }
+		
+		
+	    
+		
+		
+		
 
 		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
 			model.addAttribute("errorMessage", "行程詳情照片: 請上傳照片");
@@ -93,7 +107,7 @@ public class TourDetailController {
 		// 假設這裡從 tourDetailVO 中獲取 tour_no 的值
 //	    Integer tourNo = tourDetailVO.getTourNo();
 //	    // 確保 tour_no 不為空，根據你的邏輯來確定如何獲取這個值
-		TourVO tourVO=tourSvc.getOneTour(tourNo);
+//		TourVO tourVO=tourSvc.getOneTour(tourNo);
 	    if (tourVO != null) {
 	    	// 設置 tour_no 到 tourDetailVO 對象	中
 	    	tourDetailVO.setTourVO(tourVO);
@@ -360,10 +374,8 @@ public class TourDetailController {
 //		return "back-end/tourDetail/listAllTourDetail";
 //	}
 	@PostMapping("listTourDetails_ByCompositeQuery")
-	public String listAllTourDetail(HttpServletRequest req, Model model) {
-		Map<String, String[]> map = req.getParameterMap();
-		List<TourVO> list = tourSvc.getAll(map);
-//		List<TourDetailVO> list = tourDetailSvc.getAll(map);
+	public String listAllTourDetail(HttpServletRequest req, Model model,@RequestParam("tourNo")Integer tourNo) {
+		List<TourDetailVO> list = tourDetailSvc.findByOthers(tourNo);
 		model.addAttribute("tourDetailListData", list); // for listAllTour.html 第85行用
 		return "back-end/tourDetail/listAllTourDetail";
 	}

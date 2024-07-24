@@ -150,6 +150,7 @@ public class TourOrderProtectController {
 			,@RequestParam("orderNums") Integer orderNums
 			,@RequestParam("orderPay") Byte orderPay
 			,@RequestParam("orderPrice") Integer orderPrice
+			,@RequestParam("departureDate") String departureDate	
 			, ModelMap model) throws IOException {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
@@ -163,6 +164,7 @@ public class TourOrderProtectController {
 		Byte orderStatus = null;
 		LocalDate orderDate = LocalDate.now(); 
 		Date sqlDate = Date.valueOf(orderDate);
+		Date sqlDepartureDate = Date.valueOf(departureDate);
 		
 		System.out.println(sqlDate);
 		if (orderPay == 1) {
@@ -173,7 +175,7 @@ public class TourOrderProtectController {
 		Integer loggedInMemberNo = loggedInMember.getMemNo();
 		
 		/*************************** 2.開始新增資料 *****************************************/
-		tourOrderSvc.insertByGOO(loggedInMemberNo, groupNo, orderNums, orderPay, orderStatus, sqlDate, orderPrice);
+		tourOrderSvc.insertByGOO(loggedInMemberNo, groupNo, orderNums, orderPay, orderStatus, sqlDate, orderPrice, sqlDepartureDate);
 		
 		tourGroupSvc.updateGroupBal(groupNo, orderNums);
 		

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.topseeker.tour.model.TourVO;
-import com.topseeker.tourGroup.model.TourGroupVO;
 
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_TourDetail3;
 
@@ -53,13 +52,13 @@ public class TourDetailService {
         return repository.findAllByTourVOAndDetailDay(tourVO, detailDay);
     }
     
-//    public List<TourDetailVO> existsByTourNoAndDetailDay(Integer tourNo, Integer detailDay) {
-//        return repository.findAllByTourNoAndDetailDay(tourNo, detailDay);
-//    }
+    public Boolean existsByTourVOAndDetailDay(TourVO tourVO, Integer detailDay) {
+        return repository.findAllByTourVOAndDetailDay(tourVO, detailDay).size() > 0;
+    }
 
-//    public List<TourDetailVO> getOneTourDetailsByTourNo(Integer tourNo) {
-//        return repository.findByTourNo(tourNo);
-//    }
+    public List<TourDetailVO> findByOthers(Integer tourNo) {
+        return repository.findByOthers(tourNo);
+    }
     public List<TourDetailVO> getByTourNo(TourVO tourVO) {
         return repository.findAllByTourVO(tourVO);
     }
@@ -91,7 +90,21 @@ public class TourDetailService {
     }
 	
 
-
+	public void add(TourDetailVO tourDetail) {
+        boolean exists = repository.existsByTourVO_TourNoAndDetailDay(
+            tourDetail.getTourVO().getTourNo(), tourDetail.getDetailDay());
+        if (exists) {
+            throw new DuplicateTourDetailException("行程: " + tourDetail.getTourVO().getTourName() + "，第" + tourDetail.getDetailDay() +" 日 "+ " 已經存在。");
+        }
+        repository.save(tourDetail);
+    }
+	
+	
+	public class DuplicateTourDetailException extends RuntimeException {
+	    public DuplicateTourDetailException(String message) {
+	        super(message);
+	    }
+	}
 
 }
 

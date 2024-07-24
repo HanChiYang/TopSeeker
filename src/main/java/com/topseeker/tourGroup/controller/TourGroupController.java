@@ -60,44 +60,30 @@ public class TourGroupController {
 	public String insert(@Valid TourGroupVO tourGroupVO, BindingResult result, ModelMap model) throws IOException {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		// 去除BindingResult中tourPic欄位的FieldError紀錄 --> 見第172行
-//		result = removeFieldError(tourGroupVO, result, "tourPic");
-//
-//		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
-//			model.addAttribute("errorMessage", "行程圖片: 請上傳圖片");
-//		} else {
-//			for (MultipartFile multipartFile : parts) {
-//				byte[] buf = multipartFile.getBytes();
-//				tourGroupVO.getTourVO().setTourPic(buf);
-//			}
-//		}
-//		if (result.hasErrors() || parts[0].isEmpty()) {
-//			return "back-end/tourGroup/addTourGroup";
-//		}
+		if (result.hasErrors()) {
+			return "back-end/tourGroup/addTourGroup";
+		}
+		tourGroupVO.setGroupStatus(2);
+
 		/*************************** 2.開始新增資料 *****************************************/
-//		 TourGroupService tourGroupSvc = new tourGroupService();
 		tourGroupSvc.addTourGroup(tourGroupVO);
+
 		/*************************** 3.新增完成,準備轉交(Send the Success view) **************/
 		List<TourGroupVO> list = tourGroupSvc.getAll();
 		model.addAttribute("tourGroupListData", list);
-		model.addAttribute("success", "- (新增成功)");
-		return "redirect:/tourGroup/listAllTourGroup"; // 新增成功後重導至IndexController_inSpringBoot.java的第58行@GetMapping("/tourGroup/listAlltourGroup")
+		return "redirect:/tourGroup/listAllTourGroup";
 	}
-
-	/*
-	 * This method will be called on listAlltourGroup.html form submission, handling POST request
-	 */
 	
 	
 	@PostMapping("getOne_For_Update")
 	public String getOne_For_Update(@RequestParam("groupNo") String groupNo, ModelMap model) {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		/*************************** 2.開始查詢資料 *****************************************/
-		// tourGroupService tourGroupSvc = new tourGroupService();
 		TourGroupVO tourGroupVO = tourGroupSvc.getOneTourGroup(Integer.valueOf(groupNo));
-
+//		TourVO tourVO = tourSvc
 		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("tourGroupVO", tourGroupVO);
+//		model.addAttribute("tourVO", tourVO);
 		return "back-end/tourGroup/update_tourGroup_input"; // 查詢完成後轉交update_tourGroup_input.html
 	}
 
@@ -109,27 +95,12 @@ public class TourGroupController {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		// 去除BindingResult中tourPic欄位的FieldError紀錄 --> 見第172行
-//		result = removeFieldError(tourGroupVO, result, "tourPic");
-
-//		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的新圖片時
-//			// tourGroupService tourGroupSvc = new tourGroupService();
-//			byte[] tourPic = tourGroupSvc.getOneTourGroup(tourGroupVO.getgroupNo()).gettourPic();
-//			tourVO.setTourPic(tourPic);
-//		} else {
-//			for (MultipartFile multipartFile : parts) {
-//				byte[] tourPic = multipartFile.getBytes();
-//				tourVO.setTourPic(tourPic);
-//			}
-//		}
-//		if (result.hasErrors()) {
-//			return "back-end/tourGroup/update_tourGroup_input";
-//		}
-		/*************************** 2.開始修改資料 *****************************************/
-		// tourGroupService tourGroupSvc = new tourGroupService();
+		if (result.hasErrors()) {
+			return "back-end/tourGroup/update_tourGroup_input";
+		}
 		tourGroupSvc.updateTourGroup(tourGroupVO);
 
 		/*************************** 3.修改完成,準備轉交(Send the Success view) **************/
-		model.addAttribute("success", "- (修改成功)");
 		tourGroupVO = tourGroupSvc.getOneTourGroup(Integer.valueOf(tourGroupVO.getGroupNo()));
 		model.addAttribute("tourGroupVO", tourGroupVO);
 		return "back-end/tourGroup/listOneTourGroup"; // 修改成功後轉交listOnetourGroup.html

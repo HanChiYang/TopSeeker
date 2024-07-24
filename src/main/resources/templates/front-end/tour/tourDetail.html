@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+	<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -44,7 +44,7 @@
             margin-top: 20px;
         }
         .tour-summary {
-            height: 480px;
+            height: 550px;
             margin-top:-10px;
         }
         .left-section {
@@ -185,7 +185,9 @@
     .info-detail{
     	font-size:22px;
     }
-    
+    body > div.container > div.main-content {
+    margin-top: 200px;
+    }
     
     
     
@@ -199,7 +201,7 @@
 
 	<div class="nav2">
         <ul>
-            <a th:href="@{/tourOrder/historical_Order}"><i class="fas fa-file-alt"></i> 訂單管理</a>
+            <a th:href="@{/protected/tourOrder/historical_Order}"><i class="fas fa-file-alt"></i> 訂單管理</a>
             <a th:href="@{/tourCol/tourCol}"><i class="fas fa-heart"></i> 行程收藏</a>
         </ul>
     </div>

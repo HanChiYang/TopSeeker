@@ -192,9 +192,8 @@
 			}
 			
 			.all img {
-			    width: 280px;
-			    height: 200px;
-			}
+			       height: 200px;
+			   }
 			
 			.col-form-label{
 				font-size:20px;
@@ -240,7 +239,22 @@
 /* 				justify-content: center; */
 				align-items: center;
 			}   
-    
+    		
+    		.name {
+			    text-indent: 2em; /* 縮排兩個字元 */
+			}
+    		
+    		
+    		.tour10 img{
+    			height:250px;
+    			width:250px;
+    		}
+    		
+    		.tour11  img{
+    			height:250px;
+    			width:180px;
+    		}
+    		
     
     </style>
 </head>
@@ -260,21 +274,21 @@
     </ol>
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img th:src="@{/tourPic/DBGifReader} + '?picNo=1'" class="d-block w-100" alt="...">
+            <img th:src="@{/tour/DBGifReader} + '?tourNo=1'" class="d-block w-100" alt="...">
             <div class="carousel-caption d-none d-md-block">
                 <h5>北海道六日遊</h5>
                 <p>簡介 1</p>
             </div>
         </div>
         <div class="carousel-item">
-            <img th:src="@{/tourPic/DBGifReader} + '?picNo=2'" class="d-block w-100" alt="...">
+            <img th:src="@{/tour/DBGifReader} + '?tourNo=2'" class="d-block w-100" alt="...">
             <div class="carousel-caption d-none d-md-block">
                 <h5>麗江古城六日遊</h5>
                 <p>簡介 2</p>
             </div>
         </div>
         <div class="carousel-item">
-            <img th:src="@{/tourPic/DBGifReader} + '?picNo=3'" class="d-block w-100" alt="...">
+            <img th:src="@{/tour/DBGifReader} + '?tourNo=3'" class="d-block w-100" alt="...">
             <div class="carousel-caption d-none d-md-block">
                 <h5>阿爾卑斯山九日遊</h5>
                 <p>簡介 3</p>
@@ -333,7 +347,7 @@
 <!-- <div class searchnav -->
 <div class="nav2">
     <ul>
-        <a th:href="@{/tourOrder/historical_Order}"><i class="fas fa-file-alt"></i> 訂單管理</a>
+        <a th:href="@{/protected/tourOrder/historical_Order}"><i class="fas fa-file-alt"></i> 訂單管理</a>
         <a th:href="@{/tourCol/tourCol}"><i class="fas fa-heart"></i> 行程收藏</a>
     </ul>
 </div>
@@ -348,21 +362,21 @@
     <div class="tours">
         <div class="tour">
             <a th:href="@{/tour/getTourNo_For_Display(tourNo=1)}">
-                <img th:src="@{/tourPic/DBGifReader} + '?picNo=1'" alt="行程1">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=1'" alt="行程1">
             </a>
             <h3>熱門行程 1</h3>
             <p>行程內容簡介...</p>
         </div>
         <div class="tour">
             <a th:href="@{/tour/getTourNo_For_Display(tourNo=2)}">
-                <img th:src="@{/tourPic/DBGifReader} + '?picNo=2'" alt="行程2">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=2'" alt="行程2">
             </a>
             <h3>熱門行程 2</h3>
             <p>行程內容簡介...</p>
         </div>
         <div class="tour">
             <a th:href="@{/tour/getTourNo_For_Display(tourNo=3)}">
-                <img th:src="@{/tourPic/DBGifReader} + '?picNo=3'" alt="行程3">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=3'" alt="行程3">
             </a>
             <h3>熱門行程 3</h3>
             <p>行程內容簡介...</p>
@@ -387,21 +401,21 @@
     <div class="tours">
         <div class="tour">
             <a th:href="@{/tour/getTourNo_For_Display(tourNo=1)}">
-                <img th:src="@{/tourPic/DBGifReader} + '?picNo=1'" alt="行程1">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=1'" alt="行程1">
             </a>
             <h3>日本行程 1</h3>
             <p>行程內容簡介...</p>
         </div>
         <div class="tour">
             <a th:href="@{/tour/getTourNo_For_Display(tourNo=2)}">
-                <img th:src="@{/tourPic/DBGifReader} + '?picNo=2'" alt="行程2">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=2'" alt="行程2">
             </a>
             <h3>日本行程 2</h3>
             <p>行程內容簡介...</p>
         </div>
         <div class="tour">
             <a th:href="@{/tour/getTourNo_For_Display(tourNo=3)}">
-                <img th:src="@{/tourPic/DBGifReader} + '?picNo=3'" alt="行程3">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=3'" alt="行程3">
             </a>
             <h3>日本行程 3</h3>
             <p>行程內容簡介...</p>
@@ -417,21 +431,21 @@
     <div class="tours">
         <div class="tour">
             <a th:href="@{/tour/getTourNo_For_Display(tourNo=4)}">
-                <img th:src="@{/tourPic/DBGifReader} + '?picNo=4'" alt="行程4">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=4'" alt="行程4">
             </a>
             <h3>韓國行程 1</h3>
             <p>行程內容簡介...</p>
         </div>
         <div class="tour">
             <a th:href="@{/tour/getTourNo_For_Display(tourNo=5)}">
-                <img th:src="@{/tourPic/DBGifReader} + '?picNo=5'" alt="行程5">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=5'" alt="行程5">
             </a>
             <h3>韓國行程 2</h3>
             <p>行程內容簡介...</p>
         </div>
         <div class="tour">
-            <a th:href="@{/tour/getTourNo_For_Display(tourNo=1)}">
-                <img th:src="@{/tourPic/DBGifReader} + '?picNo=1'" alt="行程6">
+            <a th:href="@{/tour/getTourNo_For_Display(tourNo=6)}">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=6'" alt="行程6">
             </a>
             <h3>韓國行程 3</h3>
             <p>行程內容簡介...</p>
@@ -444,22 +458,22 @@
     <h2 class="taiwan1">台灣行程</h2>
     <div class="tours">
         <div class="tour">
-            <a th:href="@{/tour/getTourNo_For_Display(tourNo=1)}">
-                <img th:src="@{/tourPic/DBGifReader} + '?picNo=1'" alt="行程7">
+            <a th:href="@{/tour/getTourNo_For_Display(tourNo=7)}">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=7'" alt="行程7">
             </a>
             <h3>台灣行程 1</h3>
             <p>行程內容簡介...</p>
         </div>
         <div class="tour">
-            <a th:href="@{/tour/getTourNo_For_Display(tourNo=2)}">
-                <img th:src="@{/tourPic/DBGifReader} + '?picNo=2'" alt="行程8">
+            <a th:href="@{/tour/getTourNo_For_Display(tourNo=8)}">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=8'" alt="行程8">
             </a>
             <h3>台灣行程 2</h3>
             <p>行程內容簡介...</p>
         </div>
         <div class="tour">
-            <a th:href="@{/tour/getTourNo_For_Display(tourNo=3)}">
-                <img th:src="@{/tourPic/DBGifReader} + '?picNo=3'" alt="行程9">
+            <a th:href="@{/tour/getTourNo_For_Display(tourNo=9)}">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=9'" alt="行程9">
             </a>
             <h3>台灣行程 3</h3>
             <p>行程內容簡介...</p>
@@ -472,22 +486,22 @@
     <h2 class="china1">中國行程</h2>
     <div class="tours">
         <div class="tour">
-            <a th:href="@{/tour/getTourNo_For_Display(tourNo=1)}">
-                <img th:src="@{/tourPic/DBGifReader} + '?picNo=1'" alt="行程10">
+            <a th:href="@{/tour/getTourNo_For_Display(tourNo=10)}">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=10'" alt="行程10">
             </a>
             <h3>中國行程 1</h3>
             <p>行程內容簡介...</p>
         </div>
         <div class="tour">
-            <a th:href="@{/tour/getTourNo_For_Display(tourNo=1)}">
-                <img th:src="@{/tourPic/DBGifReader} + '?picNo=1'" alt="行程11">
+            <a th:href="@{/tour/getTourNo_For_Display(tourNo=11)}">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=11'" alt="行程11">
             </a>
             <h3>中國行程 2</h3>
             <p>行程內容簡介...</p>
         </div>
         <div class="tour">
-            <a th:href="@{/tour/getTourNo_For_Display(tourNo=1)}">
-                <img th:src="@{/tourPic/DBGifReader} + '?picNo=1'" alt="行程12">
+            <a th:href="@{/tour/getTourNo_For_Display(tourNo=12)}">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=12'" alt="行程12">
             </a>
             <h3>中國行程 3</h3>
             <p>行程內容簡介...</p>
@@ -500,31 +514,59 @@
     <h2 class="europe1">歐洲行程</h2>
     <div class="tours">
         <div class="tour">
-            <a th:href="@{/tour/getTourNo_For_Display(tourNo=3)}">
-                <img th:src="@{/tourPic/DBGifReader} + '?picNo=3'" alt="行程13">
+            <a th:href="@{/tour/getTourNo_For_Display(tourNo=13)}">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=13'" alt="行程13">
             </a>
             <h3>歐洲行程 1</h3>
             <p>行程內容簡介...</p>
         </div>
         <div class="tour">
-            <a th:href="@{/tour/getTourNo_For_Display(tourNo=4)}">
-                <img th:src="@{/tourPic/DBGifReader} + '?picNo=4'" alt="行程14">
+            <a th:href="@{/tour/getTourNo_For_Display(tourNo=14)}">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=14'" alt="行程14">
             </a>
             <h3>歐洲行程 2</h3>
             <p>行程內容簡介...</p>
         </div>
         <div class="tour">
-            <a th:href="@{/tour/getTourNo_For_Display(tourNo=5)}">
-                <img th:src="@{/tourPic/DBGifReader} + '?picNo=5'" alt="行程15">
+            <a th:href="@{/tour/getTourNo_For_Display(tourNo=15)}">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=15'" alt="行程15">
             </a>
             <h3>歐洲行程 3</h3>
             <p>行程內容簡介...</p>
         </div>
     </div>
 </div>
-	
+	<!-- 歐洲旅遊行程 -->
 
+<br>
+<br>
+<br>
+<br>
 </div>   <!--all  -->
+<div class="name">
+    <h2 class="name">專業導遊</h2>
+    <div class="tours">
+        <div class="tour10">
+            <a th:href="@{/tour/getTourNo_For_Display(tourNo=8)}">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=8'" alt="行程13">
+            </a>
+            <h3>大吳老師</h3>
+        </div>
+        <div class="tour11">
+            <a th:href="@{/tour/getTourNo_For_Display(tourNo=9)}">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=9'" alt="行程14">
+            </a>
+            <h3>陳興傑</h3>
+        </div>
+        <div class="tour11">
+            <a th:href="@{/tour/getTourNo_For_Display(tourNo=10)}">
+                <img th:src="@{/tour/DBGifReader} + '?tourNo=10'" alt="行程15">
+            </a>
+            <h3>彭宥騏</h3>
+        </div>
+    </div>
+</div>
+
 
     
 
@@ -570,6 +612,8 @@
             });
         });
     });
+
+	
 	
 	
 	
