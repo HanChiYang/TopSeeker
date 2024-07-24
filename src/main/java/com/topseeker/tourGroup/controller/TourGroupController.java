@@ -80,10 +80,8 @@ public class TourGroupController {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		/*************************** 2.開始查詢資料 *****************************************/
 		TourGroupVO tourGroupVO = tourGroupSvc.getOneTourGroup(Integer.valueOf(groupNo));
-//		TourVO tourVO = tourSvc
 		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("tourGroupVO", tourGroupVO);
-//		model.addAttribute("tourVO", tourVO);
 		return "back-end/tourGroup/update_tourGroup_input"; // 查詢完成後轉交update_tourGroup_input.html
 	}
 
@@ -96,6 +94,7 @@ public class TourGroupController {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		// 去除BindingResult中tourPic欄位的FieldError紀錄 --> 見第172行
 		if (result.hasErrors()) {
+			System.out.println("123");
 			return "back-end/tourGroup/update_tourGroup_input";
 		}
 		tourGroupSvc.updateTourGroup(tourGroupVO);
