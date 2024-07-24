@@ -144,6 +144,7 @@ public class TourGroupVO implements java.io.Serializable {
 		this.groupMax = groupMax;
 	}
 	
+	@NotNull(message="請勿空白")
 	@Column(name = "group_status")
 	public Integer getGroupStatus() {
 		return groupStatus;
@@ -157,5 +158,3 @@ public class TourGroupVO implements java.io.Serializable {
 		return serialVersionUID;
 	}
 }
-
-
