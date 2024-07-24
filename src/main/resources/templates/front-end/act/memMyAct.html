@@ -81,7 +81,8 @@
         width: 45px;        
     }
     .status-column {
-        width: 40px;        
+        width: 40px;
+        white-space: nowrap;        
     }
     .rating-column {
         width: 35px;        
@@ -325,7 +326,7 @@
                                 </td>
                                 <td>
                                     <form method="post" th:action="@{/act/delete}">
-                                        <button type="submit" class="btn btn-danger cancel-btn" th:disabled="${actVO.actStatus == 2 || actVO.actStatus == 3}">取消</button>
+                                        <button type="submit" class="btn btn-danger cancel-btn" th:disabled="${actVO.actStatus != 0}">取消</button>
                                         <input type="hidden" name="actNo" th:value="${actVO.actNo}">
                                     </form>
                                 </td>
