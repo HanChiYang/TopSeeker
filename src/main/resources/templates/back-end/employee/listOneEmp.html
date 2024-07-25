@@ -60,7 +60,7 @@
 
     .label {
         color: #5b3e31;
-        width: 30%; /* 标签部分宽度 */
+        width: 25%; /* 标签部分宽度 */
     }
 
     .value {
@@ -88,6 +88,18 @@
             <span class="value">
                 <span th:if="${empVO.empStatus == 1}">在職</span>
                 <span th:if="${empVO.empStatus == 0}">離職</span>
+            </span>
+        </span>
+        
+        
+        <span>
+            <span class="label">員工權限:</span>
+            <span class="value">
+                <ul>
+                    <li th:each="empAuth : ${empVO.empAuthVO}">
+                        <span th:text="${empAuth.authorityVO.authName}"></span>
+                    </li>
+                </ul>
             </span>
         </span>
     </div>
