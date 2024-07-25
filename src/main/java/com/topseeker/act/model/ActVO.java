@@ -54,9 +54,6 @@ public class ActVO implements java.io.Serializable {
 	@JoinColumn(name = "mem_no")
 	private MemberVO memberVO;
 
-//	@Column(name = "mem_no")
-//	private Integer memNo;
-	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="actVO")
 //	@NotEmpty(message="活動圖片: 請勿空白")
 	@OrderBy("actPicNo asc")

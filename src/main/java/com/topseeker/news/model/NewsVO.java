@@ -62,12 +62,12 @@ public class NewsVO implements java.io.Serializable {
 	
 	@Column(name = "news_title")
 	@NotEmpty(message="新聞標題: 請勿空白")
-//	@Pattern(regexp = "^[(\u4e00-\u9fa5)(a-zA-Z0-9_)]{2,20}$", message = "活動標題: 只能是中、英文字母、數字和_ , 且長度必需在2到10之間")
+	@Pattern(regexp = "^[(\u4e00-\u9fa5)(a-zA-Z0-9_)]{2,30}$", message = "活動標題: 只能是中、英文字母、數字和_ , 且長度必需在2到30之間")
 	private String newsTitle;
 	
 	@Column(name = "news_content")
 	@NotEmpty(message="新聞內容: 請勿空白")
-//	@Size(min=1,max=1000,message="活動內容: 長度必需在{min}到{max}之間")
+	@Size(min=10,max=1000,message="活動內容: 長度必需在{min}到{max}之間")
 	private String newsContent;	
 	
 	@Column(name = "news_publish_time", updatable=false)

@@ -98,6 +98,7 @@ public class NewsController {
 			
 		}
 		if (result.hasErrors()) {
+			model.addAttribute("newsVO", newsVO);
 			return "back-end/news/addNews";
 		}
 		/*************************** 2.開始新增資料 *****************************************/
@@ -147,6 +148,10 @@ public class NewsController {
 		        picSet.add(newsPicVO); // 添加到集合中
 		    }
 		    newsVO.setNewsPic(picSet); // 設置商品的圖片集合
+		}
+		if (result.hasErrors()) {
+			model.addAttribute("newsVO", newsVO);
+			return "back-end/news/update_news_input";
 		}
 		/*************************** 2.開始修改資料 *****************************************/
 		newsSvc.updateNews(newsVO);
