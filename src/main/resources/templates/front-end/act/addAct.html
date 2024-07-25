@@ -54,18 +54,21 @@
                     <label class="form-label">活動標題:</label>
                     <input type="text" class="form-control" th:field="*{actTitle}" required>
                     <div class="invalid-feedback">請填寫活動標題</div>
+                    <div class="error" th:if="${#fields.hasErrors('actTitle')}" th:errors="*{actTitle}"></div>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">活動地點:</label>
                     <input type="text" class="form-control" th:field="*{actPlace}" required>
                     <div class="invalid-feedback">請填寫活動地點</div>
+                    <div class="error" th:if="${#fields.hasErrors('actPlace')}" th:errors="*{actPlace}"></div>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">活動內容:</label>
                     <textarea class="form-control" th:field="*{actContent}" rows="6" required></textarea>
                     <div class="invalid-feedback">請填寫活動內容</div>
+                    <div class="error" th:if="${#fields.hasErrors('actContent')}" th:errors="*{actContent}"></div>
                 </div>
                 
                 <div class="mb-3">
@@ -78,12 +81,14 @@
                     <label class="form-label">活動人數上限:</label>
                     <input type="number" class="form-control" id="actMaxCount" th:field="*{actMaxCount}" required>
                     <div class="invalid-feedback">請填寫活動人數上限</div>
+                    <div class="error" th:if="${#fields.hasErrors('actMaxCount')}" th:errors="*{actMaxCount}"></div>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">活動最少人數:</label>
                     <input type="number" class="form-control" id="actMinCount" th:field="*{actMinCount}" required>
                     <div class="invalid-feedback">請填寫活動最少人數</div>
+                    <div class="error" th:if="${#fields.hasErrors('actMinCount')}" th:errors="*{actMinCount}"></div>
                 </div>
                 
                 <div class="mb-3">

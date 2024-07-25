@@ -64,22 +64,22 @@ public class ActVO implements java.io.Serializable {
 	
 	@Column(name = "act_title")
 	@NotEmpty(message="活動標題: 請勿空白")
-	@Pattern(regexp = "^.{2,20}$", message = "活動標題: 長度必需在2到20之間")
+	@Pattern(regexp = "^.{2,20}$", message = "活動標題: 長度必需在2到20之間", groups = {MemGroup.class})
 	private String actTitle;
 	
 	@Column(name = "act_content")
 	@NotEmpty(message="活動內容: 請勿空白")
-	@Size(min=1,max=800,message="活動內容: 長度必需在{min}到{max}之間")
+	@Size(min=10,max=800,message="活動內容: 長度必需在{min}到{max}之間", groups = {MemGroup.class})
 	private String actContent;
 	
 	@Column(name = "act_max_count")
 	@NotNull(message="可參與最多人數: 請勿空白")
-	@Min(value = 2, message = "可參與最少人數: 必須至少為2")
+	@Min(value = 1, message = "可參與最多人數: 必須至少為1", groups = {MemGroup.class})
 	private Integer actMaxCount;
 	
 	@Column(name = "act_min_count")
 	@NotNull(message="可參與最少人數: 請勿空白")
-	@Min(value = 1, message = "可參與最少人數: 必須至少為1")
+	@Min(value = 1, message = "可參與最少人數: 必須至少為1", groups = {MemGroup.class})
 	private Integer actMinCount;
 	
 	//當前參與人數
