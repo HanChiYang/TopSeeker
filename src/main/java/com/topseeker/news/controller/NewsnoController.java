@@ -28,6 +28,7 @@ import java.util.*;
 import com.topseeker.act.model.ActVO;
 import com.topseeker.news.model.NewsService;
 import com.topseeker.news.model.NewsVO;
+import com.topseeker.news.model.RedisService;
 
 
 
@@ -39,71 +40,62 @@ public class NewsnoController {
 	@Autowired
 	NewsService newsSvc;
 	
-//	@Autowired
-//	MemberService memberSvc;
-
-	/*
-	 * This method will be called on select_page.html form submission, handling POST
-	 * request It also validates the user input
-	 */
-	@PostMapping("getOne_For_Display")
-	public String getOne_For_Display(
-		/***************************1.接收請求參數 - 輸入格式的錯誤處理*************************/
-		@NotEmpty(message="新聞編號: 請勿空白")
-		@Digits(integer = 4, fraction = 0, message = "新聞編號: 請填數字-請勿超過{integer}位數")
-		@Min(value = 1, message = "活動編號: 不能小於{value}")
-		@Max(value = 9999, message = "活動編號: 不能超過{value}")
-		@RequestParam("newsNo") String newsNo,
-		ModelMap model) {
-		
-		/***************************2.開始查詢資料*********************************************/
-//		EmpService empSvc = new EmpService();
-		NewsVO newsVO = newsSvc.getOneNews(Integer.valueOf(newsNo));
-		
-		List<NewsVO> list = newsSvc.getAll();
-		model.addAttribute("newsListData", list);     // for select_page.html 第97 109行用
-//		model.addAttribute("memberVO", new MemberVO());  // for select_page.html 第133行用
-//		List<MemberVO> list2 = memberSvc.getAll();
-//    	model.addAttribute("memberListData",list2);    // for select_page.html 第135行用
-		
-		if (newsVO == null) {
-			model.addAttribute("errorMessage", "查無資料");
-			return "front-end/news/select_page";
-		}
-		
-		/***************************3.查詢完成,準備轉交(Send the Success view)*****************/
-		model.addAttribute("newsVO", newsVO);
-		model.addAttribute("getOne_For_Display", "true"); // 旗標getOne_For_Display見select_page.html的第156行 -->
-		
-//		return "back-end/emp/listOneEmp";  // 查詢完成後轉交listOneEmp.html
-		return "front-end/news/select_page"; // 查詢完成後轉交select_page.html由其第158行insert listOneEmp.html內的th:fragment="listOneEmp-div
-	}
+	@Autowired
+    RedisService redisService;
+	
+//	@PostMapping("getOne_For_Display")
+//	public String getOne_For_Display(
+//		/***************************1.接收請求參數 - 輸入格式的錯誤處理*************************/
+//		@NotEmpty(message="新聞編號: 請勿空白")
+//		@Digits(integer = 4, fraction = 0, message = "新聞編號: 請填數字-請勿超過{integer}位數")
+//		@Min(value = 1, message = "活動編號: 不能小於{value}")
+//		@Max(value = 9999, message = "活動編號: 不能超過{value}")
+//		@RequestParam("newsNo") String newsNo,
+//		ModelMap model) {
+//		
+//		/***************************2.開始查詢資料*********************************************/
+//		NewsVO newsVO = newsSvc.getOneNews(Integer.valueOf(newsNo));
+//		
+//		List<NewsVO> list = newsSvc.getAll();
+//		model.addAttribute("newsListData", list);
+//		
+//		if (newsVO == null) {
+//			model.addAttribute("errorMessage", "查無資料");
+//			return "front-end/news/select_page";
+//		}
+//		
+//		/***************************3.查詢完成,準備轉交(Send the Success view)*****************/
+//		model.addAttribute("newsVO", newsVO);
+//		model.addAttribute("getOne_For_Display", "true");
+//		
+//		return "front-end/news/select_page";
+//	}
 
 	
-	@ExceptionHandler(value = { ConstraintViolationException.class })
-	//@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	public ModelAndView handleError(HttpServletRequest req,ConstraintViolationException e,Model model) {
-	    Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
-	    StringBuilder strBuilder = new StringBuilder();
-	    for (ConstraintViolation<?> violation : violations ) {
-	          strBuilder.append(violation.getMessage() + "<br>");
-	    }
-	    //==== 以下第92~96行是當前面第77行返回 /src/main/resources/templates/back-end/emp/select_page.html用的 ====   
-//	    model.addAttribute("empVO", new EmpVO());
-//    	EmpService empSvc = new EmpService();
-		List<NewsVO> list = newsSvc.getAll();
-		model.addAttribute("newsListData", list);     // for select_page.html 第97 109行用
-//		model.addAttribute("memberVO", new MemberVO());  // for select_page.html 第133行用
-//		List<MemberVO> list2 = memberSvc.getAll();
-//    	model.addAttribute("memberListData",list2);    // for select_page.html 第135行用
-		String message = strBuilder.toString();
-	    return new ModelAndView("back-end/news/select_page", "errorMessage", "請修正以下錯誤:<br>"+message);
-	}
+//	@ExceptionHandler(value = { ConstraintViolationException.class })
+//	public ModelAndView handleError(HttpServletRequest req,ConstraintViolationException e,Model model) {
+//	    Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
+//	    StringBuilder strBuilder = new StringBuilder();
+//	    for (ConstraintViolation<?> violation : violations ) {
+//	          strBuilder.append(violation.getMessage() + "<br>");
+//	    }
+//		List<NewsVO> list = newsSvc.getAll();
+//		model.addAttribute("newsListData", list);
+//		String message = strBuilder.toString();
+//	    return new ModelAndView("back-end/news/select_page", "errorMessage", "請修正以下錯誤:<br>"+message);
+//	}
 	
 	@GetMapping("newsDetails")
     public String getNewsDetails(@RequestParam("newsNo") String newsNo, Model model) {
-		System.out.println(newsNo);
 		NewsVO newsVO = newsSvc.getOneNews(Integer.valueOf(newsNo));
+		
+		// 增加觀看次數
+        redisService.incrementViewCount(Integer.valueOf(newsNo));
+        
+        // 獲取觀看次數並添加到模型中
+        Integer viewCount = redisService.getViewCount(Integer.valueOf(newsNo));
+        model.addAttribute("viewCount", viewCount);
+        
         model.addAttribute("newsVO", newsVO);
         return "front-end/news/listOneNews";
     }

@@ -34,6 +34,7 @@ import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
 import com.topseeker.news.model.NewsService;
 import com.topseeker.news.model.NewsVO;
+import com.topseeker.news.model.RedisService;
 import com.topseeker.newspic.model.NewsPicService;
 import com.topseeker.newspic.model.NewsPicVO;
 import com.topseeker.shop.productpic.model.ShopProductPicVO;
@@ -56,6 +57,9 @@ public class NewsController {
 
 	@Autowired
     private SessionFactory sessionFactory;
+	
+	@Autowired
+    RedisService redisService;
 
 	/*
 	 * This method will serve as addEmp.html handler.
@@ -212,7 +216,21 @@ public class NewsController {
     
     @GetMapping("/listAllNews")
     public String newsIndex(Model model) {
-    	return "front-end/news/listAllNews";
+    	List<NewsVO> list = newsSvc.getAll();
+        model.addAttribute("newsListData", list);
+
+        // 準備一個 Map 存放每則新聞的觀看次數
+        Map<Integer, Integer> viewCounts = new HashMap<>();
+        if (list != null && !list.isEmpty()) {
+	        for (NewsVO news : list) {
+	        	Integer viewCount = redisService.getViewCount(news.getNewsNo());
+	            viewCounts.put(news.getNewsNo(), viewCount);
+	            System.out.println("newsVO.newsNo: " + news.getNewsNo() + " (Type: " + news.getNewsNo().getClass().getName() + ")");
+	        }
+        }
+        model.addAttribute("viewCounts", viewCounts);
+        System.out.println(viewCounts);
+        return "front-end/news/listAllNews";
     } 
     
     @PostMapping("newsSearch")
