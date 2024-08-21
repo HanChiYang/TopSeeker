@@ -1,7 +1,7 @@
 package com.topseeker.news.controller;
 
 import javax.servlet.http.HttpServletRequest;
-
+import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Digits;
@@ -86,11 +86,17 @@ public class NewsnoController {
 //	}
 	
 	@GetMapping("newsDetails")
-    public String getNewsDetails(@RequestParam("newsNo") String newsNo, Model model) {
+    public String getNewsDetails(@RequestParam("newsNo") String newsNo, HttpSession session, Model model) {
 		NewsVO newsVO = newsSvc.getOneNews(Integer.valueOf(newsNo));
 		
-		// 增加觀看次數
-        redisService.incrementViewCount(Integer.valueOf(newsNo));
+		// 檢查此新聞是否已在此 session 中被查看
+	    String sessionKey = "viewedNews_" + newsNo;
+	    if (session.getAttribute(sessionKey) == null) {
+	        // 如果沒有被查看過，增加觀看次數
+	        redisService.incrementViewCount(Integer.valueOf(newsNo));
+	        // 將此新聞標記為已查看
+	        session.setAttribute(sessionKey, true);
+	    }
         
         // 獲取觀看次數並添加到模型中
         Integer viewCount = redisService.getViewCount(Integer.valueOf(newsNo));

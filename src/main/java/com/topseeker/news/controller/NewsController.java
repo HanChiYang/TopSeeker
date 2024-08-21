@@ -248,9 +248,21 @@ public class NewsController {
         }
         Session session = sessionFactory.openSession();
         List<NewsVO> list = HibernateUtil_CompositeQuery_News.getAllC(queryParams, session);
-        model.addAttribute("newsListData", list);       
+        
+        // 準備一個 Map 存放每則新聞的觀看次數
+        Map<Integer, Integer> viewCounts = new HashMap<>();
+        if (list != null && !list.isEmpty()) {
+            for (NewsVO news : list) {
+                Integer viewCount = redisService.getViewCount(news.getNewsNo());
+                viewCounts.put(news.getNewsNo(), viewCount);
+            }
+        }
+        
+        model.addAttribute("newsListData", list);
+        model.addAttribute("viewCounts", viewCounts);
         return "front-end/news/newsFragment :: resultsList";
 	}
+    
     //進入新聞頁面先自動載入全部新聞
     @GetMapping("newsSearch")
     public String getAllNews(HttpServletRequest req,Model model) {
@@ -258,7 +270,17 @@ public class NewsController {
         Map<String, String[]> queryParams = new HashMap<>(map);
         Session session = sessionFactory.openSession();
         List<NewsVO> newslist = HibernateUtil_CompositeQuery_News.getAllC(queryParams, session);        
+        
+        // 準備一個 Map 存放每則新聞的觀看次數
+        Map<Integer, Integer> viewCounts = new HashMap<>();
+        if (newslist != null && !newslist.isEmpty()) {
+            for (NewsVO news : newslist) {
+                Integer viewCount = redisService.getViewCount(news.getNewsNo());
+                viewCounts.put(news.getNewsNo(), viewCount);
+            }
+        }
         model.addAttribute("newsListData", newslist);
+        model.addAttribute("viewCounts", viewCounts);
         return "front-end/news/newsFragment :: resultsList";
     }
     // 處理篩選日期區間的方法
