@@ -50,6 +50,7 @@ body {
             <h2 th:text="${newsVO.newsTitle}">新聞資料</h2>
         </div>
         <div class="card-body">
+        	<p><i class="fa-regular fa-eye"></i> <span th:text="${viewCount}">0</span></p>
             <div class="mb-3">
                 <h4>新聞圖片</h4>
                 <div th:each="pic, iterStat : ${newsVO.newsPic}" th:id="'pic-' + ${iterStat.index}" class="img-container">

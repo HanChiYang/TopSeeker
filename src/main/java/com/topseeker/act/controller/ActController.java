@@ -60,11 +60,7 @@ public class ActController {
 	
 	@Autowired
     private SessionFactory sessionFactory;
-	
 
-	/*
-	 * This method will serve as addEmp.html handler.
-	 */
 	@GetMapping("addAct")
 	public String addAct(ModelMap model,HttpSession session) {
 		ActVO actVO = new ActVO();
@@ -76,10 +72,6 @@ public class ActController {
 		return "front-end/act/addAct";
 	}
 
-	/*
-	 * This method will be called on addEmp.html form submission, handling POST request It also validates the user input
-	 */
-	
 	@PostMapping("/insert")
     public String insert(
             @Validated(MemGroup.class) ActVO actVO, BindingResult result, ModelMap model,
@@ -127,19 +119,15 @@ public class ActController {
         return "redirect:/act/memMyAct?success=true";
     }
 
-	/*
-	 * This method will be called on listAllEmp.html form submission, handling POST request
-	 */
 	@PostMapping("updateActByMem")
 	public String getOne_For_Update(@RequestParam("actNo") String actNo, ModelMap model) {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		/*************************** 2.開始查詢資料 *****************************************/
-		// EmpService empSvc = new EmpService();
 		ActVO actVO = actSvc.getOneAct(Integer.valueOf(actNo));
 
 		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("actVO", actVO);
-		return "front-end/act/updateActByMem"; // 查詢完成後轉交update_emp_input.html
+		return "front-end/act/updateActByMem"; 
 	}
 	
 	@PostMapping("updateActByEmp")
@@ -150,19 +138,15 @@ public class ActController {
 
 		/*************************** 3.查詢完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("actVO", actVO);
-		return "back-end/act/updateActByEmp"; // 查詢完成後轉交updateActByEmp.html
+		return "back-end/act/updateActByEmp"; 
 	}
 
-	/*
-	 * This method will be called on update_emp_input.html form submission, handling POST request It also validates the user input
-	 */
 	@PostMapping("update")
 	public String update(
 			@Validated(MemGroup.class)ActVO actVO, BindingResult result, ModelMap model,
 			@RequestParam("picSet") MultipartFile[] parts) throws IOException {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
 				result = removeFieldError(actVO, result, "actPic");
 				if (result.hasErrors()) {
 			        model.addAttribute("actVO", actVO);
@@ -213,7 +197,7 @@ public class ActController {
 		model.addAttribute("success", "- (修改成功)");
 		actVO = actSvc.getOneAct(Integer.valueOf(actVO.getActNo()));
 		model.addAttribute("actVO", actVO);
-		return "front-end/act/updateOneAct"; // 修改成功後轉交updateOneAct.html
+		return "front-end/act/updateOneAct"; 
 	}
 	@PostMapping("updateByEmp")
 	public String updateByEmp(@Valid ActVO actVO, BindingResult result, ModelMap model
@@ -222,30 +206,25 @@ public class ActController {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		
 		/*************************** 2.開始修改資料 *****************************************/
-		// EmpService empSvc = new EmpService();
 		actSvc.updateAct(actVO);
 		
 		/*************************** 3.修改完成,準備轉交(Send the Success view) **************/
 		model.addAttribute("success", "- (修改成功)");
 		actVO = actSvc.getOneAct(Integer.valueOf(actVO.getActNo()));
 		model.addAttribute("actVO", actVO);
-		return "back-end/act/updateOneActByEmp"; // 修改成功後轉交updateOneActByEmp.html
+		return "back-end/act/updateOneActByEmp";
 	}
 
-	/*
-	 * This method will be called on listAllEmp.html form submission, handling POST request
-	 */
 	@PostMapping("delete")
 	public String delete(@Valid ActVO actVO, BindingResult result,@RequestParam("actNo") String actNo, ModelMap model) {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		// 從資料庫中檢索活動以獲取完整的 `actVO`
+		// 從資料庫中檢索活動以獲取完整的actVO
 	    ActVO actVO1 = actSvc.getOneAct(Integer.valueOf(actNo));
 	    if (actVO1 == null) {
 	        model.addAttribute("errorMessage", "活動不存在");
 	        return "redirect:/act/memMyAct";
 	    }
 		/*************************** 2.開始刪除資料 *****************************************/
-		// EmpService empSvc = new EmpService();
 		actSvc.deleteAct(Integer.valueOf(actNo));
 		// 獲取所有參與該活動的會員
 	    List<ParticipantVO> participants = participantSvc.findParticipantsByActNo(actVO1.getActNo());
@@ -281,13 +260,8 @@ public class ActController {
 		return "back-end/act/actBackEnd"; // 刪除完成後轉交actBackEnd.html
 	}
 
-	/*
-	 * 第一種作法 Method used to populate the List Data in view. 如 : 
-	 * <form:select path="deptno" id="deptno" items="${deptListData}" itemValue="deptno" itemLabel="dname" />
-	 */
 	@ModelAttribute("memberListData")
 	protected List<MemberVO> referenceListData() {
-		// DeptService deptSvc = new DeptService();
 		List<MemberVO> list = memberSvc.getAll();
 		return list;
 	}
@@ -304,9 +278,6 @@ public class ActController {
 		return result;
 	}
 	
-	/*
-	 * This method will be called on select_page.html form submission, handling POST request
-	 */
 	@PostMapping("listActs_ByCompositeQuery")
 	public String listAllAct(HttpServletRequest req, Model model) {
         Map<String, String[]> map = req.getParameterMap();
@@ -326,8 +297,6 @@ public class ActController {
         return "front-end/act/listAllAct";
     }
 
-	//copy from IndexController	
-    
     @GetMapping("/listAllAct")
 	public String listAllAct(Model model) {
 		return "front-end/act/listAllAct";
@@ -344,7 +313,6 @@ public class ActController {
 	    List<ActVO> list = actSvc.getAll().stream()
 	    		//判斷登入的會員
 	            .filter(p -> p.getMemberVO().getMemNo().equals(loggedInMember.getMemNo()))
-	            
 	            .collect(Collectors.toList());//加入集合
 
 	    Map<Integer, Double> ratingMap = new HashMap<>();
@@ -383,7 +351,6 @@ public class ActController {
     	
     }
  
-    
 	@ModelAttribute("memberListData") // for select_page.html 第135行用
 	protected List<MemberVO> referenceListData_Member(Model model) {
 		model.addAttribute("memberVO", new MemberVO()); // for select_page.html 第133行用
@@ -406,7 +373,7 @@ public class ActController {
 
         Session session = sessionFactory.openSession();
         List<ActVO> list = HibernateUtil_CompositeQuery_Act.getAllC(queryParams, session);
-     // 按報名截止日升序排列
+        // 按報名截止日升序排列
         list.sort((a, b) -> a.getActEnrollEnd().compareTo(b.getActEnrollEnd()));
         model.addAttribute("actListData", list);
         return "front-end/act/listAllActFragment :: resultsList";

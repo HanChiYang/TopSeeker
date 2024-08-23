@@ -22,7 +22,9 @@
                     <h5 class="card-title text-dark" th:text="${newsVO.newsTitle}">新聞標題</h5>
                     <p class="card-text text-dark" th:if="${newsVO.newsContent.length() > 100}" th:text="${#strings.substring(newsVO.newsContent, 0, 100) + '...'}">新聞內容</p>
                     <p class="card-text text-dark" th:unless="${newsVO.newsContent.length() > 100}" th:utext="${newsVO.newsContent}">新聞內容</p>
-                    <p class="card-text"><small class="text-muted" th:text="${newsVO.newsPublishTime}">發布日期</small></p>
+                    <p class="card-text"><small class="text-muted"><i class="fa-regular fa-clock"></i> <span th:text="${newsVO.newsPublishTime}">發布日期</span></small>
+                    <small class="text-muted"><i class="fa-regular fa-eye"></i> <span th:text="${viewCounts[newsVO.newsNo]}"></span></small>
+                    </p>
                   </div>
                 </div>
               </div>

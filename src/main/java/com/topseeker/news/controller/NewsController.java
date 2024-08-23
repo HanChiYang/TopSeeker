@@ -34,15 +34,13 @@ import com.topseeker.member.model.MemberService;
 import com.topseeker.member.model.MemberVO;
 import com.topseeker.news.model.NewsService;
 import com.topseeker.news.model.NewsVO;
+import com.topseeker.news.model.RedisService;
 import com.topseeker.newspic.model.NewsPicService;
 import com.topseeker.newspic.model.NewsPicVO;
 import com.topseeker.shop.productpic.model.ShopProductPicVO;
 
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_Act;
 import hibernate.util.CompositeQuery.HibernateUtil_CompositeQuery_News;
-
-
-
 
 @Controller
 @RequestMapping("/news")
@@ -56,10 +54,10 @@ public class NewsController {
 
 	@Autowired
     private SessionFactory sessionFactory;
+	
+	@Autowired
+    RedisService redisService;
 
-	/*
-	 * This method will serve as addEmp.html handler.
-	 */
 	@GetMapping("addNews")
 	public String addNews(ModelMap model) {
 		NewsVO newsVO = new NewsVO();
@@ -67,16 +65,12 @@ public class NewsController {
 		return "back-end/news/addNews";
 	}
 
-	/*
-	 * This method will be called on addEmp.html form submission, handling POST request It also validates the user input
-	 */
 	@PostMapping("insert")
 	public String insert(@Valid NewsVO newsVO, BindingResult result, ModelMap model,
 			@RequestParam("picSet") MultipartFile[] parts
 			) throws IOException {
 		
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
 		result = removeFieldError(newsVO, result, "newsPic");
 	    
 		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
@@ -102,18 +96,13 @@ public class NewsController {
 			return "back-end/news/addNews";
 		}
 		/*************************** 2.開始新增資料 *****************************************/
-		// EmpService empSvc = new EmpService();
 		newsSvc.addNews(newsVO);
 		/*************************** 3.新增完成,準備轉交(Send the Success view) **************/
 		List<NewsVO> list = newsSvc.getAll();
 		model.addAttribute("newsListData", list);
 		return "redirect:/news/newsBackEnd?success=insert";
 	}
-	
 
-	/*
-	 * This method will be called on listAllEmp.html form submission, handling POST request
-	 */
 	@PostMapping("getOne_For_Update")
 	public String getOne_For_Update(@RequestParam("newsNo") String newsNo, ModelMap model) {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
@@ -130,7 +119,6 @@ public class NewsController {
 			@RequestParam("picSet") MultipartFile[] parts) throws IOException {
 
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
-		// 去除BindingResult中upFiles欄位的FieldError紀錄 --> 見第172行
 		result = removeFieldError(newsVO, result, "newsImg");
 
 		if (parts[0].isEmpty()) { // 使用者未選擇要上傳的圖片時
@@ -143,11 +131,11 @@ public class NewsController {
 		        
 		        NewsPicVO newsPicVO = new NewsPicVO();
 		        newsPicVO.setNewsImg(buf);
-		        newsPicVO.setNewsVO(newsVO); // 設置關聯到商品
+		        newsPicVO.setNewsVO(newsVO); // 設置關聯到新聞
 		        
 		        picSet.add(newsPicVO); // 添加到集合中
 		    }
-		    newsVO.setNewsPic(picSet); // 設置商品的圖片集合
+		    newsVO.setNewsPic(picSet); // 設置新聞的圖片集合
 		}
 		if (result.hasErrors()) {
 			model.addAttribute("newsVO", newsVO);
@@ -160,25 +148,20 @@ public class NewsController {
 		model.addAttribute("success", "- (修改成功)");
 		newsVO = newsSvc.getOneNews(Integer.valueOf(newsVO.getNewsNo()));
 		model.addAttribute("newsVO", newsVO);
-		return "redirect:/news/newsBackEnd?success=update";// 修改成功後重定向到新聞列表頁面
+		return "redirect:/news/newsBackEnd?success=update";// 修改成功後重導到新聞列表頁面
 	}
 
-	/*
-	 * This method will be called on listAllEmp.html form submission, handling POST request
-	 */
 	@PostMapping("delete")
 	public String delete(@RequestParam("newsNo") String newsNo, ModelMap model) {
 		/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 ************************/
 		/*************************** 2.開始刪除資料 *****************************************/
-		// EmpService empSvc = new EmpService();
 		newsSvc.deleteNews(Integer.valueOf(newsNo));
 		/*************************** 3.刪除完成,準備轉交(Send the Success view) **************/
 		List<NewsVO> list = newsSvc.getAll();
 		model.addAttribute("newsListData", list);
 		model.addAttribute("success", "- (刪除成功)");
-		return "back-end/news/newsBackEnd"; // 刪除完成後轉交listAllEmp.html
+		return "back-end/news/newsBackEnd";
 	}
-
 
 	// 去除BindingResult中某個欄位的FieldError紀錄
 	public BindingResult removeFieldError(NewsVO newsVO, BindingResult result, String removedFieldname) {
@@ -202,7 +185,6 @@ public class NewsController {
   		return "back-end/news/newsBackEnd";
   	}
     
-   
     @ModelAttribute("newsListData")
   	protected List<NewsVO> referenceNewsListData(Model model) {
   		
@@ -212,7 +194,21 @@ public class NewsController {
     
     @GetMapping("/listAllNews")
     public String newsIndex(Model model) {
-    	return "front-end/news/listAllNews";
+    	List<NewsVO> list = newsSvc.getAll();
+        model.addAttribute("newsListData", list);
+
+        //存放每則新聞的觀看次數
+        Map<Integer, Integer> viewCounts = new HashMap<>();
+        if (list != null && !list.isEmpty()) {
+	        for (NewsVO news : list) {
+	        	Integer viewCount = redisService.getViewCount(news.getNewsNo());
+	            viewCounts.put(news.getNewsNo(), viewCount);
+	            System.out.println("newsVO.newsNo: " + news.getNewsNo() + " (Type: " + news.getNewsNo().getClass().getName() + ")");
+	        }
+        }
+        model.addAttribute("viewCounts", viewCounts);
+        System.out.println(viewCounts);
+        return "front-end/news/listAllNews";
     } 
     
     @PostMapping("newsSearch")
@@ -230,9 +226,19 @@ public class NewsController {
         }
         Session session = sessionFactory.openSession();
         List<NewsVO> list = HibernateUtil_CompositeQuery_News.getAllC(queryParams, session);
-        model.addAttribute("newsListData", list);       
+        
+        Map<Integer, Integer> viewCounts = new HashMap<>();
+        if (list != null && !list.isEmpty()) {
+            for (NewsVO news : list) {
+                Integer viewCount = redisService.getViewCount(news.getNewsNo());
+                viewCounts.put(news.getNewsNo(), viewCount);
+            }
+        }
+        model.addAttribute("newsListData", list);
+        model.addAttribute("viewCounts", viewCounts);
         return "front-end/news/newsFragment :: resultsList";
 	}
+    
     //進入新聞頁面先自動載入全部新聞
     @GetMapping("newsSearch")
     public String getAllNews(HttpServletRequest req,Model model) {
@@ -240,7 +246,16 @@ public class NewsController {
         Map<String, String[]> queryParams = new HashMap<>(map);
         Session session = sessionFactory.openSession();
         List<NewsVO> newslist = HibernateUtil_CompositeQuery_News.getAllC(queryParams, session);        
+        
+        Map<Integer, Integer> viewCounts = new HashMap<>();
+        if (newslist != null && !newslist.isEmpty()) {
+            for (NewsVO news : newslist) {
+                Integer viewCount = redisService.getViewCount(news.getNewsNo());
+                viewCounts.put(news.getNewsNo(), viewCount);
+            }
+        }
         model.addAttribute("newsListData", newslist);
+        model.addAttribute("viewCounts", viewCounts);
         return "front-end/news/newsFragment :: resultsList";
     }
     // 處理篩選日期區間的方法
