@@ -35,14 +35,10 @@ import com.topseeker.actpicture.model.ActPictureVO;
 import com.topseeker.message.model.MessageVO;
 import com.topseeker.participant.model.ParticipantVO;
 import com.topseeker.member.model.MemberVO;
-/*
- * 註1: classpath必須有javax.persistence-api-x.x.jar 
- * 註2: Annotation可以添加在屬性上，也可以添加在getXxx()方法之上
- */
 
 
-@Entity  //要加上@Entity才能成為JPA的一個Entity類別
-@Table(name = "act") //代表這個class是對應到資料庫的實體table，目前對應的table是EMP2 
+@Entity
+@Table(name = "act")
 public class ActVO implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id  

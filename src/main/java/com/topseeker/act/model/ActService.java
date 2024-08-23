@@ -46,8 +46,6 @@ public class ActService {
 	}
 	//刪除
 	public void deleteAct(Integer actNo) {
-//		if (repository.existsById(actNo))
-//			repository.deleteByActNo(actNo);
 	    ActVO act = repository.findById(actNo)
 	            .orElseThrow(() -> new IllegalArgumentException("Invalid article ID: " + actNo));
 	    
@@ -57,7 +55,6 @@ public class ActService {
 
 	public ActVO getOneAct(Integer actNo) {
 		Optional<ActVO> optional = repository.findById(actNo);
-//		return optional.get();
 		return optional.orElse(null);  // public T orElse(T other) : 如果值存在就回傳其值，否則回傳other的值，簡化if語法
 	}
 	
@@ -74,7 +71,6 @@ public class ActService {
 		return HibernateUtil_CompositeQuery_Act.getAllC(map,sessionFactory.openSession());
 	}
 	
-
 	public List<ActVO> findMyOpenGroup(Integer memNoA) {
 		return repository.findMyOpenGroup(memNoA);
 	}

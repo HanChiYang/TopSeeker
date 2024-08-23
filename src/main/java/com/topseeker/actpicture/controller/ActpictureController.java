@@ -29,9 +29,6 @@ import com.topseeker.actpicture.model.ActPictureService;
 import com.topseeker.actpicture.model.ActPictureVO;
 
 
-
-
-
 @Controller
 @RequestMapping("/actpicture")
 public class ActpictureController {
@@ -42,9 +39,6 @@ public class ActpictureController {
 	@Autowired
 	ActService actSvc;
 
-	/*
-	 * This method will serve as addEmp.html handler.
-	 */
 	@GetMapping("addActPic")
 	public String addAct(ModelMap model) {
 		ActPictureVO actPictureVO = new ActPictureVO();
@@ -52,9 +46,6 @@ public class ActpictureController {
 		return "front-end/actpicture/addActPic";
 	}
 
-	/*
-	 * This method will be called on addEmp.html form submission, handling POST request It also validates the user input
-	 */
 	@PostMapping("insert")
 	public String insert(@Valid ActPictureVO actPictureVO, BindingResult result, ModelMap model,
 			@RequestParam("actPic") MultipartFile[] parts) throws IOException {
@@ -170,7 +161,6 @@ public class ActpictureController {
 	//for addActPic.html 活動編號取值
 	@ModelAttribute("actListData")
 	protected List<ActVO> referenceListData() {
-		// DeptService deptSvc = new DeptService();
 		List<ActVO> list = actSvc.getAll();
 		return list;
 	}
